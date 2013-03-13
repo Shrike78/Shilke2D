@@ -170,6 +170,24 @@ function Shilke2D:start()
 		end
 	end
 	
+	---[[
+	local mainJuggler = MOAICoroutine.new()
+	mainJuggler:run(
+		function()
+			local elapsedTime = 0
+			local prevElapsedTime = 0
+			coroutine.yield()
+			while (true) do
+				coroutine.yield()
+
+				local currElapsedTime = MOAISim.getElapsedTime()
+				elapsedTime = currElapsedTime - prevElapsedTime
+				prevElapsedTime = currElapsedTime
+				self.juggler:advanceTime(elapsedTime)
+			end
+		end
+	)		
+	--]]
 	--setup main loop
 	local thread = MOAICoroutine.new()
 	thread:run(
@@ -185,7 +203,7 @@ function Shilke2D:start()
 			local currElapsedTime = MOAISim.getElapsedTime()
 			elapsedTime = currElapsedTime - prevElapsedTime
 			prevElapsedTime = currElapsedTime
-			self.juggler:advanceTime(elapsedTime)
+			--self.juggler:advanceTime(elapsedTime)
 			update(elapsedTime)
 			if(self._showStats) then
 			    local fps = MOAISim.getPerformance()
