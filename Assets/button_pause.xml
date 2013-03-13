@@ -1,0 +1,7 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!-- Created with TexturePacker http://texturepacker.com-->
+<!-- $TexturePacker:SmartUpdate:b418c6dd5242d7d99a816071347450ba$ -->
+<TextureAtlas imagePath="button_pause.png">
+    <SubTexture name="button_pause_down" x="1" y="1" width="40" height="40"/>
+    <SubTexture name="button_pause_up" x="1" y="42" width="40" height="40"/>
+</TextureAtlas>

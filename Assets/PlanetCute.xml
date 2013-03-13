@@ -1,0 +1,60 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!-- Created with TexturePacker http://texturepacker.com-->
+<!-- $TexturePacker:SmartUpdate:134d36c48d119a6633f9044c914be929$ -->
+<TextureAtlas imagePath="PlanetCute.png">
+    <SubTexture name="Brown Block" x="1" y="1" width="101" height="171"/>
+    <SubTexture name="Character Boy" x="103" y="1" width="101" height="171"/>
+    <SubTexture name="Character Cat Girl" x="205" y="1" width="101" height="171"/>
+    <SubTexture name="Character Horn Girl" x="307" y="1" width="101" height="171"/>
+    <SubTexture name="Character Pink Girl" x="409" y="1" width="101" height="171"/>
+    <SubTexture name="Character Princess Girl" x="1" y="173" width="101" height="171"/>
+    <SubTexture name="Chest Closed" x="103" y="173" width="101" height="171"/>
+    <SubTexture name="Chest Lid" x="205" y="173" width="101" height="171"/>
+    <SubTexture name="Chest Open" x="307" y="173" width="101" height="171"/>
+    <SubTexture name="Dirt Block" x="409" y="173" width="101" height="171"/>
+    <SubTexture name="Door Tall Closed" x="1" y="345" width="101" height="171"/>
+    <SubTexture name="Door Tall Open" x="103" y="345" width="101" height="171"/>
+    <SubTexture name="Enemy Bug" x="205" y="345" width="101" height="171"/>
+    <SubTexture name="Gem Blue" x="307" y="345" width="101" height="171"/>
+    <SubTexture name="Gem Green" x="409" y="345" width="101" height="171"/>
+    <SubTexture name="Gem Orange" x="1" y="517" width="101" height="171"/>
+    <SubTexture name="Grass Block" x="103" y="517" width="101" height="171"/>
+    <SubTexture name="Heart" x="205" y="517" width="101" height="171"/>
+    <SubTexture name="Key" x="307" y="517" width="101" height="171"/>
+    <SubTexture name="Plain Block" x="409" y="517" width="101" height="171"/>
+    <SubTexture name="Ramp East" x="1" y="689" width="101" height="171"/>
+    <SubTexture name="Ramp North" x="103" y="689" width="101" height="171"/>
+    <SubTexture name="Ramp South" x="205" y="689" width="101" height="171"/>
+    <SubTexture name="Ramp West" x="307" y="689" width="101" height="171"/>
+    <SubTexture name="Rock" x="409" y="689" width="101" height="171"/>
+    <SubTexture name="Roof East" x="1" y="861" width="101" height="171"/>
+    <SubTexture name="Roof North East" x="103" y="861" width="101" height="171"/>
+    <SubTexture name="Roof North West" x="205" y="861" width="101" height="171"/>
+    <SubTexture name="Roof North" x="307" y="861" width="101" height="171"/>
+    <SubTexture name="Roof South East" x="409" y="861" width="101" height="171"/>
+    <SubTexture name="Roof South West" x="1" y="1033" width="101" height="171"/>
+    <SubTexture name="Roof South" x="103" y="1033" width="101" height="171"/>
+    <SubTexture name="Roof West" x="205" y="1033" width="101" height="171"/>
+    <SubTexture name="Selector" x="307" y="1033" width="101" height="171"/>
+    <SubTexture name="Shadow East" x="409" y="1033" width="101" height="171"/>
+    <SubTexture name="Shadow North East" x="1" y="1205" width="101" height="171"/>
+    <SubTexture name="Shadow North West" x="103" y="1205" width="101" height="171"/>
+    <SubTexture name="Shadow North" x="205" y="1205" width="101" height="171"/>
+    <SubTexture name="Shadow Side West" x="307" y="1205" width="101" height="171"/>
+    <SubTexture name="Shadow South East" x="409" y="1205" width="101" height="171"/>
+    <SubTexture name="Shadow South West" x="1" y="1377" width="101" height="171"/>
+    <SubTexture name="Shadow South" x="103" y="1377" width="101" height="171"/>
+    <SubTexture name="Shadow West" x="205" y="1377" width="101" height="171"/>
+    <SubTexture name="SpeechBubble" x="307" y="1377" width="101" height="171"/>
+    <SubTexture name="Star" x="409" y="1377" width="101" height="171"/>
+    <SubTexture name="Stone Block Tall" x="1" y="1549" width="101" height="171"/>
+    <SubTexture name="Stone Block" x="103" y="1549" width="101" height="171"/>
+    <SubTexture name="Tree Short" x="205" y="1549" width="101" height="171"/>
+    <SubTexture name="Tree Tall" x="307" y="1549" width="101" height="171"/>
+    <SubTexture name="Tree Ugly" x="409" y="1549" width="101" height="171"/>
+    <SubTexture name="Wall Block Tall" x="1" y="1721" width="101" height="171"/>
+    <SubTexture name="Wall Block" x="103" y="1721" width="101" height="171"/>
+    <SubTexture name="Water Block" x="205" y="1721" width="101" height="171"/>
+    <SubTexture name="Window Tall" x="307" y="1721" width="101" height="171"/>
+    <SubTexture name="Wood Block" x="409" y="1721" width="101" height="171"/>
+</TextureAtlas>
