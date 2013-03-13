@@ -117,3 +117,18 @@ end
 function Juggler:onRemoveEvent(event)
     self:remove(event.sender)
 end
+
+function Juggler:clear()
+	--stop all the pending add operation
+	for i = #self.pendingList,1,-1 do
+		local a = self.pendingList[i]
+		if a.action == Pending.ADD then
+			self.pendingList[i] = nil
+		end
+	end
+	--request for remove all the other objects
+	for _,v in ipairs(self.animatedObjs) do
+		self:remove(v)
+	end
+	-- the real clear will be done at next frame, whene all the 'pending remove' will be completed
+end
