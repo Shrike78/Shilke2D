@@ -37,14 +37,11 @@ function TweenLoop:onRemoveEvent(e)
     if self.currentCount < self.repeatCount then
         self.currentCount = self.currentCount + 1
     end
+	self.tween:reset()
 end
 
 function TweenLoop:_update(deltaTime)
     self.tween:advanceTime(deltaTime)
-end
-
-function TweenLoop:_complete()
-    self.currentCount = 0
 end
 
 function TweenLoop:_isCompleted()

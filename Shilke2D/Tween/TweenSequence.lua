@@ -42,10 +42,6 @@ function TweenSequence:_update(deltaTime)
     self.list[self.currentIndex]:advanceTime(deltaTime)
 end
 
-function TweenSequence:_complete()
-    self.currentIndex = 1
-end
-
 function TweenSequence:_isCompleted()
     return (self.currentIndex > #self.list)
 end

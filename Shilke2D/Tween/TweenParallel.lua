@@ -50,11 +50,6 @@ function TweenParallel:_update(deltaTime)
     end
 end
 
-function TweenParallel:_complete()
-    table.clear(self.completed)
-    self.numOfCompleted = 0
-end
-
 function TweenParallel:_isCompleted()
     return (self.numOfCompleted == #self.list)
 end

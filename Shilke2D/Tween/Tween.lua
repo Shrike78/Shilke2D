@@ -22,9 +22,17 @@ will do that for you, and will remove the tween when it is finished.
 
 Tween = class(EventDispatcher,IAnimatable)
 
+--cannot be used in setup method
+function waitTween(t)
+	while not t.finished do
+		coroutine.yield()
+	end
+end
+
 function Tween:init()
     EventDispatcher.init(self)
     self.currentTime = 0
+	self.finished = false
 end
 
 -- public methods
@@ -37,6 +45,7 @@ end
 
 function Tween:reset()
 	self.currentTime = 0
+	self.finished = false
 end
 
 --Set a callback function with arguments that will be called 
@@ -96,7 +105,8 @@ function Tween:advanceTime(deltaTime)
     end
     
     if self:_isCompleted() then
-        self.currentTime = 0
+        --self.currentTime = 0
+		self.finished = true
         self:_complete()
         if self._onComplete then
             self._onComplete()
