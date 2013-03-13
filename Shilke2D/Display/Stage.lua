@@ -30,10 +30,10 @@ function Stage:_createProp()
 end
 
 function Stage:showDebugLines(showOrientedBounds,showAABounds)
-	local showDebug = showOrientedBounds or showAABounds
+	self._showOrientedBounds = showOrientedBounds or false
+	self._showAABounds = showAABounds or true
 	
-	self._showOrientedBounds = showOrientedBounds
-	self._showAABounds = showAABounds
+	local showDebug = self._showOrientedBounds or self._showAABounds
 	
 	if showDebug and not self._rt[2] then
 		self._rt[2] = self._debugProp
@@ -43,11 +43,20 @@ function Stage:showDebugLines(showOrientedBounds,showAABounds)
 	end
 end
 
+--with moai 1.4 clearColor funciton was moved to frameBuffer and removed from GfxDevice.
+local function __setClearColor(r,g,b,a)
+	if MOAIGfxDevice.getFrameBuffer then
+		MOAIGfxDevice.getFrameBuffer():setClearColor(r,g,b,a)
+	else
+		MOAIGfxDevice.setClearColor(r,g,b,a)
+	end
+end
+
 function Stage:setBackground(r,g,b)
 	if class_type(r) == Color then
-		MOAIGfxDevice.getFrameBuffer():setClearColor(r:unpack_normalized())
+		__setClearColor(r:unpack_normalized())
 	else
-		MOAIGfxDevice.getFrameBuffer():setClearColor(r/255,g/255,b/255,1)
+		__setClearColor(r/255,g/255,b/255,1)
 	end
 end
 
