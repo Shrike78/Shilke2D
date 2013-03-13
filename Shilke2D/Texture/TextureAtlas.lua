@@ -19,6 +19,9 @@ texture that share a prefix in the name.
 TextureAtlas = class()
 
 --[[
+texture can be a resource or a path. If path is provided the texture is loaded
+without requiring cache logic
+
 automatic creation of a tilest starting from a texture, where all 
 the regions have the same size, are packed sequentially and have
 no hole in the middle of the sequence.
@@ -40,9 +43,18 @@ prefix003
 --]]
 function TextureAtlas.fromTexture(texture,regionWidth,regionHeight,
             margin,spacing,prefix,padding)
-            
-    local atlas = TextureAtlas(texture)
-    
+	
+    local texture = type(texture) == "string" and Assets.getTexture(texture) or texture
+	
+	local atlas = TextureAtlas(texture)
+	
+	--default values
+	local margin = margin or 0
+	local spacing = spacing or 0
+	local padding = padding or "0"
+	local prefix = prefix or "image_"
+	local _format = prefix.."%0"..padding.."d"
+   
     --remove margin left/right and add 1 spacing value, because
     --num of spacing is numOfTiles-1, so adding one spacing value
     --allows to divide for (regionAidth+spacing) to find out
@@ -62,15 +74,13 @@ function TextureAtlas.fromTexture(texture,regionWidth,regionHeight,
     local mw = margin / texture.width
     local mh = margin / texture.height
     
-    local padding = padding or "0"
-    local format = prefix.."%0"..padding.."d"
     local counter = 1
     for j = 1,numY do
         for i = 1,numX do
             --each region start after one margin plus n*(tile+spacing)
             local region = Rect(mw+(i-1)*(w+sw),mh+(numY-j)*(h+sh),w,h)
 			region.y = 1 - (region.y+region.h) 
-            local frameName = string.format(format,counter)
+            local frameName = string.format(_format,counter)
             atlas:addRegion(frameName,region)
             counter = counter + 1
         end
