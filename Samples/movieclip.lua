@@ -30,68 +30,43 @@ function setup()
 	shilke:showStats(true)
     
     --if not set, the default color is (0,0,0,255)
-    stage:setBackground(10,10,10)
+    stage:setBackground(128,128,128)
 	
     --the juggler is the animator of all the animated objs, like
     --movieclips, tweens or other jugglers too.
     juggler = shilke.juggler
     
-	--create an Image, a static image object.
-	--By default the pivot is set in the center of the image
-	local moaiImg = Image(Assets.getTexture("moai.png"))
-	moaiImg:setPosition(WIDTH/2,HEIGHT/2)
+	--it's possible to load an image and automatically create sub regions if the regions
+	--have all the same size and the margin and spacign between the regions are known
+	--it's also possible to specify a prefix and a padding to format the textures name
+	local atlas = TextureAtlas.fromTexture("numbers.png",32,32,0,0,"numbers_",2)
 	
-	--it's possible to create differente jugglers. That allows to have different animator for specific logics
-	animJuggler = Juggler()
-	
-	--it's possible to create different animation and to play them sequentially, in parallel or in loop.
-	--Each displayObj allows to create an animation that can be combined with other like in the following
-	--example:
-	
-	--only one animation is added to the juggler, that is the group of 3 other animations.
-	--the third one is again a combination, a sequence this time, of two different animation
-	animJuggler:add(
-		Tween.parallel(
-			moaiImg:seekRotation(-20*math.pi,5),
-			moaiImg:seekColor(Color(255,0,0),2),
-			Tween.sequence(
-				moaiImg:movePosition(0,HEIGHT/2,2),
-				moaiImg:movePosition(WIDTH/2,-HEIGHT,2)
-			)
-		)
-	)
-	
-	--each displayObj need to be connected to the stage to be rendered
-	stage:addChild(moaiImg)
-	
-	local moaiImg2 = moaiImg:clone()
-	stage:addChild(moaiImg2)
-	moaiImg2:setPosition(0,0)
-	
-	animJuggler:add(moaiImg2:seekTarget(moaiImg,5))
-			
-	juggler:add(
-		Tween.loop(
-			Tween.sequence(
-				moaiImg2:seekScale(0.5,0.5,.2),
-				moaiImg2:seekScale(1.5,1.5,.2)
-			),
-			-1
-		)
-	)
-	
-	juggler:add(animJuggler)
+	--MovieClip inherits from Image and is the most simple way to put an animated obj, with a fixed frametime,
+	--into the screen. It's initialized with the sequence of textures that will compose the animation and with
+	--the animation fps value. Must be added to a juggler to be player and can be played starting from
+	--a frame by choice and for an option number of times. negative values (like in the example) means 
+	--"infinite loop"	
+	mc = MovieClip(atlas:getTextures(),12)
+	mc:setPosition(WIDTH/2,HEIGHT/2)
+	stage:addChild(mc)
+	juggler:add(mc)
+	mc:play(1,-1)
 end
 
 --update is called once per frame and allows to logically update status of objects
 function update(elapsedTime)
 end
 
---called when no object handle the current touch. if stage touch is disabled every touch is 
--- redirected here
+--called when no hittable object is hit by the current touch. By default each object added to the stage
+--is hittable. a displayObjContainer by default forward the hit test to the children, unless is requested to handle
+--the hit test directly. If a displayObjContainer is set as "not touchable" all his children will not be touchable.
+--Therefore if the stage is set as not touchable every touch is redirected here
 function touched(touch)
 	if touch.state == Touch.BEGAN then
-		animJuggler:setPause(not animJuggler:isPaused())
+		--the order of frames is inverted each time the screen is 'touched'
+		mc:stop()
+		mc:invertFrames()
+		mc:play(1,-1)
 	end
 end
 
