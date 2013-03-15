@@ -247,4 +247,7 @@ function Shilke2D:stopDrag(touch,obj)
     self.ownedTouches[touch.id] = nil
 end
 
+function Shilke2D:getDraggedObj(touch)
+	return self.ownedTouches[touch.id]
+end
 
