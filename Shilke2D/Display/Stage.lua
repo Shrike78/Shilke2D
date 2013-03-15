@@ -30,8 +30,8 @@ function Stage:_createProp()
 end
 
 function Stage:showDebugLines(showOrientedBounds,showAABounds)
-	self._showOrientedBounds = showOrientedBounds or false
-	self._showAABounds = showAABounds or true
+	self._showOrientedBounds = showOrientedBounds ~= nil and showOrientedBounds or true
+	self._showAABounds = showAABounds ~= nil and showAABounds or false
 	
 	local showDebug = self._showOrientedBounds or self._showAABounds
 	
