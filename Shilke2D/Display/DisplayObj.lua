@@ -515,7 +515,8 @@ function DisplayObj:getGlobalPosition()
 end
 
 function DisplayObj:globalTranslate(dx,dy)
-	local x,y = self:localToGlobal(0,0)
+	local px,py = self._prop:getPiv()
+	local x,y = self:localToGlobal(px,py)
 	x = x + dx
 	y = y + dy
 	self:setGlobalPosition(x,y)
