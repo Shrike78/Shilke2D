@@ -64,8 +64,6 @@ end
 --called when no object handle the current touch. if stage touch is disabled every touch is 
 --redirected here
 function touched(touch)
-	if touch.state == Touch.BEGAN then
-	end
 end
 
 --shilke2D initialization. it requires width, height and fps. Optional a scale value for x / y.

@@ -31,6 +31,9 @@ function setup()
 	--show as overaly fps and memory allocation
 	shilke:showStats(true)
     
+	--show debug lines around displayObjs. show both aabbox and oriented bbox lines
+	stage:showDebugLines(true,true)
+
 	--we load the atlas descriptor created with TexturePacker. The data was created with the
 	--sparrow format so we make use of the TexturePacker helper function. Helpers also for corona and 
 	--moai format exists.
@@ -74,8 +77,6 @@ function setup()
 		)
 	)
 	
-	--show debug lines around displayObjs. show both aabbox and oriented bbox lines
-	stage:showDebugLines(true,true)
 end
 
 --update is called once per frame and allows to logically update status of objects
