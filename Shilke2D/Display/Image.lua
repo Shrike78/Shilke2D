@@ -29,7 +29,7 @@ end
 function Image:setPixelPreciseHitTest(enabled,alphaLevel)
 	self.ppHitTest = enabled
 	if enabled then
-		self.ppAlphaLevel = alphaLevel ~= nil and alphaLevel or 0
+		self.ppAlphaLevel = alphaLevel ~= nil and alphaLevel/255 or 0
 	end
 end
 
@@ -45,7 +45,12 @@ function Image:hitTest(x,y,targetSpace,forTouch)
 		local r = self:getBounds(self,__helperRect)
 		if r:containsPoint(_x,_y) then
 			if self.ppHitTest then
-				local _,_,_,a = self.texture:getRGBA(_x-r.x, _y-r.y)
+				local a
+				if __USE_SIMULATION_COORDS__ then
+					_,_,_,a = self.texture:getRGBA(_x-r.x, -_y-r.y)
+				else
+					_,_,_,a = self.texture:getRGBA(_x-r.x, _y-r.y)
+				end
 				if a > self.ppAlphaLevel then
 					return self
 				else
