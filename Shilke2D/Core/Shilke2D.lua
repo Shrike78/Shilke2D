@@ -45,7 +45,7 @@ function Shilke2D.isDesktop()
     return not Shilke2D.isMobile()
 end
 
-function Shilke2D:init(w,h,fps,scaleX,scaleY)
+function Shilke2D:init(w,h,fps, scaleX,scaleY, soundSampleRate, soundFrames)
 
 	self.w = w
 	self.h = h
@@ -114,7 +114,8 @@ else
 end	
 	self.info_stats._prop:setAlignment(MOAITextBox.CENTER_JUSTIFY)
 	self._showStats = false
-	MOAIUntzSystem.initialize()
+	
+	MOAIUntzSystem.initialize(soundSampleRate, soundFrames)
 end
 
 function Shilke2D:start()
