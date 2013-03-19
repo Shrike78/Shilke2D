@@ -120,7 +120,7 @@ function Rect:intersection(r2)
 end
 
 function Rect:draw()
-    rect(self.x, self.y, self.w, self.h)
+    MOAIDraw.drawRect(self.x, self.y, self.x + self.w, self.y+self.h)
 end
 
 -- Circle
@@ -161,5 +161,5 @@ function Circle:intersects(s2)
 end
 
 function Circle:draw()
-    ellipse(self.x, self.y, self.r*2)
+	MOAIDraw.drawCircle(self.x, self.y, self.r)
 end
