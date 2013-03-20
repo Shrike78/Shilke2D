@@ -208,21 +208,6 @@ end
 
 -- public Setter and Getter
 
--- Seek and Move Helpers
-function DisplayObj:seekProp(setter,getter,endValue,time,transition)
-	local transition = transition or Transition.LINEAR
-	local tween = Tween.ease(self,time,transition)
-	tween:seekEx(setter,getter,endValue)
-	return tween
-end
-
-function DisplayObj:moveProp(setter,getter,deltaValue,time,transition)	
-	local transition = transition or Transition.LINEAR
-	local tween = Tween.ease(self,time,transition)
-	tween:moveEx(setter,getter,deltaValue)
-	return tween
-end
-
 --alpha [0..255]
 function DisplayObj:setAlpha(a)
     self._alpha = math.clamp(a,0,255)
@@ -231,14 +216,6 @@ end
 
 function DisplayObj:getAlpha()
    return self._alpha
-end
-
-function DisplayObj:seekAlpha(a,time,transition)
-	return self:seekProp(self.setAlpha,self.getAlpha,a,time,transition)
-end
-
-function DisplayObj:moveAlpha(a,time,transition)
-	return self:moveProp(self.setAlpha,self.getAlpha,a,time,transition)
 end
 
 -- it's possible to set only r,g,b value or also alpha value overriding the setAlpha method
@@ -265,14 +242,6 @@ function DisplayObj:getColor()
 	local g = self._prop:getAttr(MOAIColor.ATTR_G_COL)  
 	local b = self._prop:getAttr(MOAIColor.ATTR_B_COL)  
 	return Color(r*255,g*255,b*255, self._alpha)
-end
-
-function DisplayObj:seekColor(c,time,transition)
-	return self:seekProp(self.setColor,self.getColor,c,time,transition)
-end
-
-function DisplayObj:moveColor(c,time,transition)
-	return self:moveProp(self.setColor,self.getColor,c,time,transition)
 end
 
 function DisplayObj:setPivot(x,y)
@@ -345,24 +314,6 @@ function DisplayObj:translate(x,y)
     self._prop:addLoc(x,y,0)
 end
 
-function DisplayObj:seekPosition(x,y,time,transition)
-	return self:seekProp(self.setPosition_v2,self.getPosition_v2,vec2(x,y),time,transition)
-end
-
-function DisplayObj:movePosition(x,y,time,transition)
-	return self:moveProp(self.setPosition_v2,self.getPosition_v2,vec2(x,y),time,transition)
-end
-
--- used to follow another displayobj
-function DisplayObj:seekTarget(target,time,transition)
-	local transition = transition or Transition.LINEAR
-	local juggler = juggler or Shilke2D.current.juggler
-	local tween = Tween.ease(self,time,transition)
-	tween:followEx(self.setPosition_v2,self.getPosition_v2,target,target.getPosition_v2)
-	--juggler:add(tween)
-	return tween
-end
-
 -- rotation angle is expressed in radians
 function DisplayObj:setRotation(r)
     --move into range [-180 deg, +180 deg]
@@ -373,14 +324,6 @@ end
 
 function DisplayObj:getRotation()
     return RAD(self._prop:getAttr(MOAITransform.ATTR_Z_ROT))
-end
-
-function DisplayObj:seekRotation(r,time,transition)
-	return self:seekProp(self.setRotation,self.getRotation,r,time,transition)
-end
-
-function DisplayObj:moveRotation(r,time,transition)
-	return self:moveProp(self.setRotation,self.getRotation,r,time,transition)
 end
 
 function DisplayObj:setScale(x,y)
@@ -417,20 +360,11 @@ function DisplayObj:getScaleY()
     return self._prop:getAttr(MOAITransform.ATTR_Y_SCL)
 end
 
-function DisplayObj:seekScale(sx,sy,time,transition)
-	return self:seekProp(self.setScale_v2,self.getScale_v2,vec2(sx,sy),time,transition)
-end
-
-function DisplayObj:moveScale(sx,sy,time,transition)
-	return self:moveProp(self.setScale_v2,self.getScale_v2,vec2(sx,sy),time,transition)
-end
-
-
 --[[
     
-    Note: if the passed obj is not an ancestor an error occurs
+    Note: Target space could be self, nil or an ancestor displayObj. 
     
-    to have the same functionality of flash/shilke2D is it possible 
+    to have the same functionality of flash/Starling is it possible 
     to expose a specific function like "find common ancestor" or 
     similar, calculate the transf matrix of both the objs related 
     to the common ancestor, and use them to calculate the final
