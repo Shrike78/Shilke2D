@@ -52,11 +52,11 @@ function setup()
 	--the third one is again a combination, a sequence this time, of two different animation
 	animJuggler:add(
 		Tween.parallel(
-			moaiImg:seekRotation(-20*math.pi,5),
-			moaiImg:seekColor(Color(255,0,0),2),
+			DisplayObjTweener.seekRotation(moaiImg,-20*math.pi,5),
+			DisplayObjTweener.seekColor(moaiImg,Color(255,0,0),2),
 			Tween.sequence(
-				moaiImg:movePosition(0,HEIGHT/2,2),
-				moaiImg:movePosition(WIDTH/2,-HEIGHT,2)
+				DisplayObjTweener.movePosition(moaiImg,0,HEIGHT/2,2),
+				DisplayObjTweener.movePosition(moaiImg,WIDTH/2,-HEIGHT,2)
 			)
 		)
 	)
@@ -68,13 +68,13 @@ function setup()
 	stage:addChild(moaiImg2)
 	moaiImg2:setPosition(0,0)
 	
-	animJuggler:add(moaiImg2:seekTarget(moaiImg,5))
+	animJuggler:add(DisplayObjTweener.seekTarget(moaiImg2,moaiImg,5))
 			
 	juggler:add(
 		Tween.loop(
 			Tween.sequence(
-				moaiImg2:seekScale(0.5,0.5,.2),
-				moaiImg2:seekScale(1.5,1.5,.2)
+				DisplayObjTweener.seekScale(moaiImg2,0.5,0.5,.2),
+				DisplayObjTweener.seekScale(moaiImg2,1.5,1.5,.2)
 			),
 			-1
 		)
