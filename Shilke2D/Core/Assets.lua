@@ -10,7 +10,7 @@ Assets = {}
 local __imageCache = {}
 local __textureCache = {}
 
-local __defaultUseCache = false
+Assets.__defaultUseCache = true
 
 function Assets.getSound(fileName)
 	local sound = MOAIUntzSound.new ()
@@ -25,7 +25,7 @@ end
 
 function Assets.getRawImage(fileName, useCache)
 	
-	local useCache = (useCache ~= nil) and useCache or __defaultUseCache
+	local useCache = (useCache ~= nil) and useCache or Assets.__defaultUseCache
 	
 	local cacheName = IO.getAbsolutePath(fileName)
 	
@@ -57,7 +57,7 @@ end
 --created first time
 function Assets.getTexture(fileName,useCache)
 	
-	local useCache = (useCache ~= nil) and useCache or __defaultUseCache
+	local useCache = (useCache ~= nil) and useCache or Assets.__defaultUseCache
 	
 	local cacheName = IO.getAbsolutePath(fileName)
 	
