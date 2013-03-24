@@ -1,4 +1,11 @@
---KEY_CTRL_DIFF = 96 ???
+--[[---
+KeyMap definition based on GLUT host keymap
+
+Special keys (like UP,DOWN,LEFT,RIGHT) are enabled only on custom GLUT MOAI hosts
+
+Moreover some utilities are provided to handle keys
+--]]
+
 KEY_DEL = 8
 KEY_RETURN = 13
 KEY_ESC = 27
@@ -23,15 +30,22 @@ KEY_DOWN = 359
 KEY_PAGE_UP = 360
 KEY_PAGE_DOWN = 361
 
-function KEY(k)
-	return string.byte(k)
+---Translate a character into a keycode
+-- @param c the character to convert
+-- @return the key code of the character
+function KEY(c)
+	return string.byte(c)
 end
 
+---Check if a given key is UP
+-- @param k the key to check the status
 function isKeyUp(k)
 	local k = type(k) == 'number' and string.char(k) or k
 	return MOAIInputMgr.device.keyboard:keyIsUp(k)
 end
 
+---Check if a given key is DOWN
+-- @param k the key to check the status
 function isKeyDown(k)
 	local k = type(k) == 'number' and string.char(k) or k
 	return MOAIInputMgr.device.keyboard:keyIsDown(k)

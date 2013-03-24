@@ -1,20 +1,23 @@
--- Image
-
---[[ 
+--[[--- 
 An Image is the Shilke2D equivalent of Flash's Bitmap class. 
 Instead of BitmapData, Shilke2D uses textures to represent the 
 pixels of an image.
 --]]
 
-Image = class(FixedSizeObject)
+Image = class(BaseQuad)
 
+--[[---
+At init phase it's possible to set a texture and a pivotMode.
+@param texture a Texture or nil.
+@param pivotMode default pivotMode is CENTER
+--]]
 function Image:init(texture, pivotMode)
 	if texture then
-		FixedSizeObject.init(self,texture.width,texture.height,pivotMode)
+		BaseQuad.init(self,texture.width,texture.height,pivotMode)
 		self.texture = texture
 		self._prop:setDeck(texture:_getQuad())
 	else
-		FixedSizeObject.init(self,0,0,pivotMode)
+		BaseQuad.init(self,0,0,pivotMode)
 		self.texture = nil
 	end
 	self.ppHitTest = false
@@ -22,10 +25,14 @@ function Image:init(texture, pivotMode)
 end
 
 function Image:dispose()
-	FixedSizeObject.dispose(self)
+	BaseQuad.dispose(self)
 	self.texture = nil
 end
 
+---For images is possible to force the hitTest to be pixel precise on texture pixels
+--@param enabled boolean enable/disable pixelPrecise hitTest
+--@param alphaLevel if prixelPrecise hitTest is enabled this value define the alpha treshold to consider
+--pixel transparent. Default value is 0
 function Image:setPixelPreciseHitTest(enabled,alphaLevel)
 	self.ppHitTest = enabled
 	if enabled then
@@ -33,6 +40,15 @@ function Image:setPixelPreciseHitTest(enabled,alphaLevel)
 	end
 end
 
+--[[---
+If pixelPrecise hitTest is enabled the hitTest is made on texture pixel alpha value
+else using normal point into box test
+@param x coordinate in targetSpace system
+@param y coordinate in targetSpace system
+@param targetSpace the referred coorindate system. If nil the top most container / stage
+@param forTouch boolean. If true the check is done only for visible and touchable object
+@return self if the hitTest is positive else nil 
+--]]
 function Image:hitTest(x,y,targetSpace,forTouch)
 	if not forTouch or (self._visible and self._touchable) then
 		local _x,_y
@@ -64,10 +80,14 @@ function Image:hitTest(x,y,targetSpace,forTouch)
 	return nil	
 end
 
--- public 
---the clone method return a new Image that shares the same texture
---of the original image. It's possible to clone also
---pivot mode / position
+-- public methods
+
+--[[---
+Return a new Image that shares the same texture
+@param bClonePivot boolean if true set the same pivotMode / pivot point, 
+else set defaul pivotMode CENTER
+@return Image
+--]]
 function Image:clone(bClonePivot)
     if not bClonePivot then
         return Image(self.texture)
@@ -80,15 +100,16 @@ function Image:clone(bClonePivot)
     end
 end
 
---[[
+--[[---
+Set a new texture.
+
 If the new and the old textures shared the same textureData
 the switch is just an uv switch, else a full texture switch
 
 It would be preferrable that all the textures that can 
 be assigned to a specific image belongs to the same 
-texture atlas, to avoid texturedata switch at container level
-that requires mesh quads pool management, possible creation of 
-a new quad, a forced updategeometry, ecc. 
+texture atlas.
+@param texture the new texture to be set for the image
 --]]
 function Image:setTexture(texture)
     if self.texture ~= texture then
@@ -114,6 +135,8 @@ function Image:setTexture(texture)
 	end
 end
 
+---Returns the current texture
+--@return texture
 function Image:getTexture()
 	return self.texture
 end

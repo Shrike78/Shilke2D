@@ -21,7 +21,6 @@ r = ratio = t/d
 
 v = f(r)*c + b
 
-----
 
 easing functions thankfully taken from 
 

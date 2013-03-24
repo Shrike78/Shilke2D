@@ -26,7 +26,7 @@ function setup()
 	--or anyway transformed geometrically.
 	local stage = shilke.stage 
 	
-	--show as overaly fps and memory allocation
+	--show as overlay fps and memory allocation
 	shilke:showStats(true)
     
     --if not set, the default color is (0,0,0,255)

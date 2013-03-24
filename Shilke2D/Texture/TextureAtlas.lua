@@ -1,36 +1,23 @@
--- TextureAtlas
-
---[[
+--[[---
 A texture atlas is a collection of many smaller textures in one big 
 image. This class is used to access textures from such an atlas. 
 
 Using a texture atlas for your textures solves two problems: avoid 
-frequent texture switches and reduce memory consuption because not
-power of 2 images waste memory once loaded, and a well formed
-texture atlas may reduce the problem
+frequent texture switches and reduce memory consuption
 
 A texture atlas is meant as a single image subdivided into logical 
 named regions. Once a atlas is created is possible to add new named 
 regions, having a 1:1 between regions and subtextures. It's then 
-possible to queru for single named texure, or for a group of sorted
+possible to query for single named texure, or for a group of sorted
 texture that share a prefix in the name.
 --]]
 
 TextureAtlas = class()
 
---[[
-texture can be a resource or a path. If path is provided the texture is loaded
-without requiring cache logic
-
-automatic creation of a tilest starting from a texture, where all 
+--[[---
+Automatic creation of a tilest starting from a texture, where all 
 the regions have the same size, are packed sequentially and have
 no hole in the middle of the sequence.
-
-- regionWidth,regionHeight: size of single tile
-
-- margin: num of pixel on the boundary of the texture 
-
-- spacing: num of pixel between tiles
 
 The name of each regions will be in the form of prefix%0'padding'd, 
 where padding is optional. if not provided there will be no padding.
@@ -39,7 +26,16 @@ ie: padding 3 will produce a sequence like:
 prefix001
 prefix002
 prefix003
-[..]
+
+@param texture can be a Texture or a path, in that case the texture 
+is loaded using Assets.getTexture function, using defaul cache logic
+@param regionWidth width of a single tile
+@param regionHeight height of single tile
+@param margin num of pixel on the boundary of the texture 
+@param spacing num of pixel between tiles
+@param prefix the prefix name to be applied to each subtexture
+@param padding number of ciphers to be used to enumerate subtextures
+@return TextureAtlas
 --]]
 function TextureAtlas.fromTexture(texture,regionWidth,regionHeight,
             margin,spacing,prefix,padding)
@@ -88,28 +84,34 @@ function TextureAtlas.fromTexture(texture,regionWidth,regionHeight,
     return atlas
 end
 
+---A texture atlas is always built over a texture
 function TextureAtlas:init(texture)
-    --[[
-    assert(texture:is_a(Texture))
-    assert(not(texture:is_a(SubTexture)), 
-        "SebTexture of Subtexture is not supported at now")
-    --]]
     self.baseTexture = texture
     self.regions = {}
 end
 
+---Dispose also the texture is using as atlas
 function TextureAtlas:dispose()
-	if self.baseTexture then self.baseTexture:dispose() end
+	if self.baseTexture then 
+		self.baseTexture:dispose() 
+	end
 	table.clear(self.regions)
 end
 
---named region are uv map rect, so x,y,w,h are in the range [0..1]
+
+--[[---
+Add a new named region.
+Named regions are uv map rect, so x,y,w,h are in the range [0,1]
+@param name the name of the new region
+@param rect a rect with uvmap values [0,1]
+--]]
 function TextureAtlas:addRegion(name,rect)
-    --assert(rect:is_a(Rect))
     self.regions[name] = rect
 end
 
---return a subtexture that wrap a specific named region
+---Returns a subtexture that wrap a specific named region
+--@param name the name of the region to use to build the sub texture
+--@return SubTexture. nil if the region name doesn't belong to current atlas
 function TextureAtlas:getTexture(name)
     local region = self.regions[name]
     if region then
@@ -118,7 +120,12 @@ function TextureAtlas:getTexture(name)
     return nil
 end
 
---if no prefix is provided it returns all the sorted regions name
+--[[---
+Returns all the regions sorted by name, that begin with "prefix". 
+If no prefix is provided it returns all the regions
+@param prefix optional, prefix to select region names
+@return list of regions
+--]]
 function TextureAtlas:getSortedNames(prefix)
     local sortedRegions = {}
     if prefix then
@@ -134,14 +141,18 @@ function TextureAtlas:getSortedNames(prefix)
         end
     end
     table.sort(sortedRegions)
-    return sortedRegions
+	return sortedRegions
 end
 
---if no prefix is provided it returns all the subtextures sorted 
---by name
+--[[---
+Returns all the textures sorted by region name, that begin with "prefix". 
+If no prefix is provided it returns all the textures.
+@param prefix optional, prefix to select region names
+@return list of textures
+--]]
 function TextureAtlas:getTextures(prefix) 
     local textures = {}
-    
+	
     local sortedRegions = self:getSortedNames(prefix)
  
     for i,v in ipairs(sortedRegions) do

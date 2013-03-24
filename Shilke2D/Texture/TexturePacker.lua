@@ -1,6 +1,4 @@
---TexturePacker exported files parser
-
---[[
+--[[---
 There are several ways to create a texture atlas. 
 
 One solution is the commercial software Texture Packer, that can 
@@ -12,18 +10,9 @@ of this descriptors.
 
 TexturePacker = {}
 
-
---[[
-Parser for the Sparrow/Starling xml descriptor
-The descriptor must be an XmlNode and the xml should be in the form:
-
-<TextureAtlas imagePath='atlas.png'>
-    <SubTexture name='texture_1' x='0'  y='0' width='50' height='50'/>
-    <SubTexture name='texture_2' x='50' y='0' width='20' height='30'/>
-</TextureAtlas>
-
-It doesn't support for now rotation and trim
---]]
+---Load an xml file and automatically calls parseSparrowFormat and returns a texture atlas
+--@param xmlFileName the path of the Sparrow/Starling xml descriptor
+--@return TextureAtlas
 function TexturePacker.loadSparrowFormat(xmlFileName)
 	local dir = string.getFileDir(xmlFileName)
 	local atlasXml, err = Assets.getXml(xmlFileName)
@@ -33,17 +22,41 @@ function TexturePacker.loadSparrowFormat(xmlFileName)
 	return TexturePacker.parseSparrowFormat(atlasXml,dir)
 end
 
-function TexturePacker.parseSparrowFormat(atlasXml, dir)
+--[[---
+Parser for the Sparrow/Starling xml descriptor
+The descriptor must be an XmlNode and the xml should be in the form:
+
+<TextureAtlas imagePath='atlas.png'>
+    <SubTexture name='texture_1' x='0'  y='0' width='50' height='50'/>
+    <SubTexture name='texture_2' x='50' y='0' width='20' height='30'/>
+</TextureAtlas>
+
+It doesn't support trimming
+
+NB: in Starling format subtexture's names are without original image extension.
+By design choice, the name of each subtexture once loaded append as extension the 
+extension of the atlas resource.
+
+@param atlasXml the xml with the atlas descriptor in Sparrow/Starling format
+@param dir by default texture resources are loaded from working directory. 
+If dir is provided it load the image referred by atlasXml from dir
+@param texture it's possible to provide an already created texture to the method,
+avoiding the load (or even for using an alternative image)
+--]]
+function TexturePacker.parseSparrowFormat(atlasXml, dir, texture)
 	
---	local dir = dir ~= nil and (dir):gsub("//","/") or ""
-	local dir = dir or ""
-	if dir ~= "" then
-		dir = (dir .. "/"):gsub("//","/")
-	end
-    local imgName = atlasXml:getAttribute("imagePath")
+	local imgName = atlasXml:getAttribute("imagePath")
 	local extension = "." .. string.getFileExtension(imgName)
-    local texture = Assets.getTexture(dir .. imgName)
-    
+	local texture = texture	
+	
+	if not texture then
+		local dir = dir or ""
+		if dir ~= "" then
+			dir = (dir .. "/"):gsub("//","/")
+		end
+		texture = Assets.getTexture(dir .. imgName)
+	end
+
     local atlas = TextureAtlas(texture)
                
     for _,subTex in pairs(atlasXml:getChildren("SubTexture")) do
@@ -67,6 +80,10 @@ function TexturePacker.parseSparrowFormat(atlasXml, dir)
 end
 
 --[[
+--TODO: implement logic for loading lua file, like for 'sparrow format', using 'return' ecc.
+--function TexturePacker.loadMoaiFormat(luaFileName)
+--end
+
 --return {
 atlasDescriptor = {
     texture = 'atlas.png',
@@ -95,17 +112,28 @@ atlasDescriptor = {
     }
     --]]
 
---TODO: implement logic for loading lua file, like for 'sparrow format', using 'return' ecc.
---function TexturePacker.loadMoaiFormat(luaFileName)
---end
+--[[---
+Parser for the MOAI lua descriptor
+The descriptor must be a lua table with MOAI texture packer export info
 
-function TexturePacker.parseMoaiFormat(descriptor, dir)
+@param descriptor the lua table with the atlas descriptor in MOAI format
+@param dir by default texture resources are loaded from working directory. 
+If dir is provided it load the image referred by atlasXml from dir
+@param texture it's possible to provide an already created texture to the method,
+avoiding the load (or even for using an alternative image)
+--]]
+function TexturePacker.parseMoaiFormat(descriptor, dir, texture)
     
-	local dir = ((dir ~= nil) and dir .. "/" or ""):gsub("//","/")
+	local texture = texture
+	if not texture then
+		local dir = dir or ""
+		if dir ~= "" then
+			dir = (dir .. "/"):gsub("//","/")
+		end
+		local imgName = descriptor.texture
+		texture = Assets.getTexture(dir .. imgName)
+	end
 	
-    local imgName = descriptor.texture
-    local texture = Assets.getTexture(dir .. imgName)
-    
     local atlas = TextureAtlas(texture)
 	
     for _,subTex in pairs(descriptor.frames) do
@@ -121,7 +149,14 @@ function TexturePacker.parseMoaiFormat(descriptor, dir)
     return atlas
 end
 
-function TexturePacker.parseCoronaFormat(texture,descriptor)
+--[[---
+Parser for the Corona lua descriptor
+The descriptor must be a lua table with Corona texture packer export info
+
+@param descriptor the lua table with the atlas descriptor in Corona format
+@param texture it's necessary to provide an already created texture to the method
+--]]
+function TexturePacker.parseCoronaFormat(descriptor,texture)
 	local atlas = TextureAtlas(texture)
     for _,subTex in pairs(descriptor.frames) do
         local x = subTex.textureRect.x / texture.width

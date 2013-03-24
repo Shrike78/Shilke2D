@@ -28,7 +28,7 @@ function setup()
 	
 	local juggler = shilke.juggler 
 	
-	--show as overaly fps and memory allocation
+	--show as overlay fps and memory allocation
 	shilke:showStats(true)
 	
 	--show debug lines. by default only oriented bboxes
@@ -63,9 +63,10 @@ function setup()
 	girl:addEventListener(Event.TOUCH,onSpriteTouched)
 	stage:addChild(girl)
 	
-	local info = TextField(500, 300, nil, 20, "Drag and Drop example\n\nTry to draw around the two characters:\n" ..
+	local info = TextField(500, 300, "Drag and Drop example\n\nTry to draw around the two characters:\n" ..
 		"\n-The boy hitTest is based on his oriented bounding box\n" ..
 		"\n-The girl hitTest is a pixel perfect check on the image, using alphaLevel set to 0", 
+		nil, 20, 
 		PivotMode.TOP_LEFT)
 	info:setPosition(20,40)
 	--we don't want the info box stealing touch events from the 2 sprites

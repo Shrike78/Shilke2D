@@ -17,7 +17,6 @@ class(nil, interface1,..,interfacen)
 
 implements interfaces but without inheritance, so is_a is true only for self name and i plements is true for all the interfaces
 
----
 
 pay attention to symbol redefinition. in init phase a warning is logged when a symbol is redefined but no more
 --]]

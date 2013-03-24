@@ -1,13 +1,22 @@
--- Stage
-
+ --[[---
+Stage is a particular DisplayObjContainer, root node of the displayList tree.
+It's initialized by Shilke2D and only object connected to it are rendered. 
+A stage cannot be geometrically transformed or moved, so all the related method 
+are override and raise errors if called.
+--]]
 Stage = class(DisplayObjContainer)
 
+--[[---
+Called from Shilke2D, it sets the viewport for the scene, the renderTable and 
+initializes the 'debug' drawCallback used to show bounding boxes of objects in 
+the displayList 
+@param viewport the viewport of the scene
+--]]
 function Stage:init(viewport)
 	DisplayObjContainer.init(self)
     self._prop:setViewport(viewport)
     
     self._debugDeck = MOAIScriptDeck.new ()
-    --self._debugDeck:setRect ( -64, -64, 64, 64 )
     self._debugDeck:setDrawCallback ( function()
 			if self._showAABounds then
 				self:drawAABounds(false)
@@ -24,11 +33,14 @@ function Stage:init(viewport)
     self._rt = {self._renderTable}
 end
 
---Stage is a Layer not a 'generic' prop like ALL the others displayObjs
+---Stage prop is a MOAILayer, not a generic MOAIProp like all the others displayObjs
 function Stage:_createProp()
     return MOAILayer.new()
 end
 
+---Debug function. Used to show bounding box while rendering.
+--@param showOrientedBounds boolean. if nil is set to true
+--@param showAABounds boolean. if nil is set to false
 function Stage:showDebugLines(showOrientedBounds,showAABounds)
 	self._showOrientedBounds = showOrientedBounds ~= nil and showOrientedBounds or true
 	self._showAABounds = showAABounds ~= nil and showAABounds or false
@@ -43,7 +55,15 @@ function Stage:showDebugLines(showOrientedBounds,showAABounds)
 	end
 end
 
---with moai 1.4 clearColor funciton was moved to frameBuffer and removed from GfxDevice.
+--[[---
+Inner method.
+With moai 1.4 clearColor funciton has been moved to frameBuffer and removed from GfxDevice.
+The call checks which method is available and make the proper moai call.
+@param r red component [0..1]
+@param g green component [0..1]
+@param b blue component [0..1]
+@param a alpha component [0..1]
+--]]
 local function __setClearColor(r,g,b,a)
 	if MOAIGfxDevice.getFrameBuffer then
 		MOAIGfxDevice.getFrameBuffer():setClearColor(r,g,b,a)
@@ -52,6 +72,12 @@ local function __setClearColor(r,g,b,a)
 	end
 end
 
+--[[---
+Set background color.
+@param r red component [0..255] or Color
+@param g green component [0..255] or nil
+@param b blue component [0..255] or nil
+--]]
 function Stage:setBackground(r,g,b)
 	if class_type(r) == Color then
 		__setClearColor(r:unpack_normalized())
@@ -60,61 +86,82 @@ function Stage:setBackground(r,g,b)
 	end
 end
 
---the method is called by a DisplayObjContainer when the DisplayObj is
---added as child
+---Raise error if called because stage cannot be added as child to other containers
 function Stage:_setParent(parent)
     error("Stage cannot be child of another DisplayObjContainer")
 end
 
+---Raise error if called because stage cannot be geometrically trasnformed
 function Stage:setPivot(x,y)
     error("It's not possible to set geometric properties of a Stage")
 end
 
+---Raise error if called because stage cannot be geometrically trasnformed
 function Stage:setPivotX(x)
     error("It's not possible to set geometric properties of a Stage")
 end
 
+---Raise error if called because stage cannot be geometrically trasnformed
 function Stage:setPivotY(y)
     error("It's not possible to set geometric properties of a Stage")
 end
 
+---Raise error if called because stage cannot be geometrically trasnformed
 function Stage:setPosition(x,y)
     error("It's not possible to set geometric properties of a Stage")
 end
 
+---Raise error if called because stage cannot be geometrically trasnformed
 function Stage:setPosition_v2(v)
     error("It's not possible to set geometric properties of a Stage")
 end
 
+---Raise error if called because stage cannot be geometrically trasnformed
 function Stage:setPositionX(x)
     error("It's not possible to set geometric properties of a Stage")
 end
 
+---Raise error if called because stage cannot be geometrically trasnformed
 function Stage:setPositionY(y)
     error("It's not possible to set geometric properties of a Stage")
 end
 
+---Raise error if called because stage cannot be geometrically trasnformed
 function Stage:translate(x,y)
     error("It's not possible to set geometric properties of a Stage")
 end
 
--- rotation angle is expressed in radians
+---Raise error if called because stage cannot be geometrically trasnformed
 function Stage:setRotation(r)
     error("It's not possible to set geometric properties of a Stage")
 end
 
+---Raise error if called because stage cannot be geometrically trasnformed
 function Stage:setScale(x,y)
     error("It's not possible to set geometric properties of a Stage")
 end
 
+---Raise error if called because stage cannot be geometrically trasnformed
 function Stage:setScale_v2(v)
     error("It's not possible to set geometric properties of a Stage")
 end
 
+---Raise error if called because stage cannot be geometrically trasnformed
 function Stage:setScaleX(s)
     error("It's not possible to set geometric properties of a Stage")
 end
 
+---Raise error if called because stage cannot be geometrically trasnformed
 function Stage:setScaleY(s)
+    error("It's not possible to set geometric properties of a Stage")
+end
+
+---Raise error if called because stage cannot be geometrically trasnformed
+function Stage:setGlobalPosition(x,y,targetSpace)
+    error("It's not possible to set geometric properties of a Stage")
+end
+
+---Raise error if called because stage cannot be geometrically trasnformed
+function Stage:globalTranslate(dx,dy,targetSpace)	
     error("It's not possible to set geometric properties of a Stage")
 end

@@ -28,7 +28,7 @@ function setup()
 	
 	local juggler = shilke.juggler
 	
-	--show as overaly fps and memory allocation
+	--show as overlay fps and memory allocation
 	shilke:showStats(true)
     
 	--show debug lines around displayObjs. show both aabbox and oriented bbox lines
@@ -53,8 +53,8 @@ function setup()
 	--infinite loop of opposite scaling of x,y direction
 	juggler:add(Tween.loop(
 			Tween.sequence(
-				img1:seekScale(1.5,.5,2),
-				img1:seekScale(0.5,1.5,2)
+				DisplayObjTweener.seekScale(img1,1.5,.5,2),
+				DisplayObjTweener.seekScale(img1,0.5,1.5,2)
 			),
 			-1
 		)
@@ -72,7 +72,7 @@ function setup()
 	--infinite loop of rotation around pivot (bottom left point)
 	juggler:add(
 		Tween.loop(
-			img2:seekRotation(2*math.pi,5),
+			DisplayObjTweener.seekRotation(img2,2*math.pi,5),
 			-1
 		)
 	)

@@ -1,25 +1,28 @@
--- Quad
-
---[[ 
-
+--[[---
 A Quad represents a rectangle with a uniform color or a color gradient.
 It's possible to set one color per vertex. The colors will smoothly 
 fade into each other over the area of the quad. To display a simple 
 linear color gradient, assign one color to vertices 1 and 2 and 
 another color to vertices 3 and 4. 
 
-The indices of the vertices are arranged like this:
+if __USE_SIMULATION_COORDS__ is nil or false then vertex 1 is the top left one, 
+and the vertices follow clockwise order.
 
-4 - 3
-| / |
-1 - 2
-    
+if __USE_SIMULATION_COORDS__ is true then vertex 1 is the bottom left one, 
+and the vertices follow counter clockwise order.
+
 --]]
 
-Quad = class(FixedSizeObject)
+Quad = class(BaseQuad)
 
+--[[---
+Constructor.
+@param width quad width
+@param height quad height
+@param pivotMode optional, defaul value is CENTER
+--]]
 function Quad:init(width,height,pivotMode)
-	FixedSizeObject.init(self,width,height,pivotMode)
+	BaseQuad.init(self,width,height,pivotMode)
 	
 	self._colors = {{1,1,1,1},
 					{1,1,1,1},
@@ -32,6 +35,7 @@ function Quad:init(width,height,pivotMode)
 	self._prop:setDeck(self._mesh)
 end
 
+---Inner method. It creates the quad mesh that will be displayed
 function Quad:_createMesh()
 		
 	local vertexFormat = MOAIVertexFormat.new ()
@@ -61,6 +65,9 @@ function Quad:_createMesh()
 	self._mesh:setShader(shader)
 end
 
+---Inner methods. 
+--Called everytime geometric or color information are changed, 
+--to update mesh vertices infos.
 function Quad:_updateVertexBuffer()
 	
 	local vcoords = {{ -self._width/2, -self._height/2 },
@@ -81,22 +88,31 @@ function Quad:_updateVertexBuffer()
 	self._vbo:bless ()	
 end
 
+---Set the size of the quad
+--@param width quad width
+--@param height quad height
 function Quad:setSize(width,height)
-	FixedSizeObject.setSize(self,width,height)
+	BaseQuad.setSize(self,width,height)
 	self:_updateVertexBuffer()
 end
 
--- public Setter and Getter
-
+---Override base method. It calls _updateVertexBuffer
+--@param a alpha value [0,255]
 function Quad:_setMultiplyAlpha(a)
     self._multiplyAlpha = a / 255
     self:_updateVertexBuffer()
 end
 
+---Returns the multiplied alpha value as applied to the first vertex. 
+--If alpha values is different per vertices the return value has no real meaning
+--@return alpha value [0,255]
 function Quad:_getMultipliedAlpha()
    return self._multiplyAlpha * (self._colors[1][4] * 255)
 end
 
+
+---Override base method. It calls _updateVertexBuffer
+--@param a alpha value [0,255]
 function Quad:setAlpha(a)
     for i = 1,4 do
         self._colors[i][4] = a/255
@@ -104,19 +120,40 @@ function Quad:setAlpha(a)
     self:_updateVertexBuffer()
 end
 
+---Returns the alpha value as set at the first vertex. 
+--If alpha values is different per vertices the return value has no real meaning
+--@return alpha value [0,255]
 function Quad:getAlpha()
    return self._colors[1][4]*255
 end
 
+
+---Set alpha value for a single vertex
+--@param v index of the vertex [1,4]
+--@param a alpha value [0,255]
 function Quad:setVertexAlpha(v,a) 
     self._colors[v][4] = a/255
 	self:_updateVertexBuffer()
 end
 
+---Returns alpha value of a single vertex
+--@param v index of the vertex [1,4]
+--@return alpha value [0,255]
 function Quad:getVertexAlpha(v)
    return self._colors[v][4]*255
 end
 
+--[[---
+Override base method. It calls _updateVertexBuffer
+The following calls are valid:
+- setColor(r,g,b)
+- setColor(r,g,b,a)
+- setColor(color)
+@param r red value [0,255] or a Color
+@param g green value [0,255] or nil
+@param b blue value [0,255] or nil
+@param a alpha value [0,255] or nil
+--]]
 function Quad:setColor(r,g,b,a)
 	local _r,_g,_b,_a
 	if type(r) == 'number' then
@@ -136,13 +173,26 @@ function Quad:setColor(r,g,b,a)
 	self:_updateVertexBuffer()
 end
 
-
+---Returns the color of the first vertex. 
+--If color value is per vertices the return value has no real meaning
+--@return Color
 function Quad:getColor()
   local r,g,b,a = self._colors[1][1],self._colors[1][2],self._colors[1][3],self._colors[1][4]
   return Color(r*255,g*255,b*255,a*255)
 end
 
-
+--[[---
+Set color of a single vertex
+The following calls are valid:
+- setVertexColor(v,r,g,b)
+- setVertexColor(v,r,g,b,a)
+- setVertexColor(v,color)
+@param v index of the vertex [1,4]
+@param r red value [0,255] or a Color
+@param g green value [0,255] or nil
+@param b blue value [0,255] or nil
+@param a alpha value [0,255] or nil
+--]]
 function Quad:setVertexColor(v,r,g,b,a) 
 	local col = self._colors[v]
 	
@@ -158,11 +208,19 @@ function Quad:setVertexColor(v,r,g,b,a)
 	self:_updateVertexBuffer()
 end
 
+---Returns vertext color of a single vertex
+--@param v index of the vertex [1,4]
+--@return Color
 function Quad:getVertexColor(v)
   local r,g,b,a = self._colors[v][1],self._colors[v][2],self._colors[v][3],self._colors[v][4]
   return Color(r*255,g*255,b*255,a*255)
 end
 
+---Sets all the colors of the 4 vertices
+--@param c1 Color of vertex1
+--@param c2 Color of vertex2
+--@param c3 Color of vertex3
+--@param c4 Color of vertex4
 function Quad:setColors(c1,c2,c3,c4)
 	local colors = {c1,c2,c3,c4} 
 	local r,g,b,a

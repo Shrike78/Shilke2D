@@ -30,7 +30,7 @@ function setup()
 	
 	local juggler = shilke.juggler 
 	
-	--show as overaly fps and memory allocation
+	--show as overlay fps and memory allocation
 	shilke:showStats(true)
 		
 	--we load the atlas descriptor created with TexturePacker. The data was created with the
@@ -62,24 +62,24 @@ function setup()
 	girl:setPixelPreciseHitTest(true,128)
 	stage:addChild(girl)
 	
-	local info = TextField(WIDTH-40, 300, nil, 20, 
+	local info = TextField(WIDTH-40, 300,
 		"Drag and Drop with collision detection sample:\n" ..
 		"\n-Textures in Shilke2D are equivalent to BitmapData in flash and have a similar "..
 		"\n hitTest() method that make a per pixel comparison given 2 texures, space positions "..
 		"\n and alpha thresholds to identify transparent pixels"..
 		"\n\n-If 2 images are not scaled and not rotated it's possibile to use the texture:hitTest()"..		
 		"\n method to compare the images",	
+		nil, 20, 
 		PivotMode.TOP_LEFT)
 	info:setPosition(20,40)
 	info:setTouchable(false)
 	stage:addChild(info)
 
-	local info2 = TextField(400,20, nil, 16,
-			"Drag the characters and make them overlap")
+	local info2 = TextField(400,20,"Drag the characters and make them overlap")
 	info2:setPosition(WIDTH/2,HEIGHT-120)
 	stage:addChild(info2)
 
-	collisionInfo = TextField(150,20, nil, 16, "")
+	collisionInfo = TextField(150,20, "")
 	collisionInfo:setPosition(WIDTH/2,HEIGHT-100)
 	stage:addChild(collisionInfo)
 end

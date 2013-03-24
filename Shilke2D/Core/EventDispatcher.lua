@@ -1,10 +1,7 @@
--- EventDispatcher
-
---[[
-The EventDispatcher class is the base class for all classes that 
-dispatch events. This is the Shilke2D version of the Flash 
-class with the same name. Objects can communicate with each other 
-through events. 
+--[[---
+EventDispatcher is the base class for all classes that dispatch events. 
+This is the Shilke2D version of the Flash class with the same name. 
+Objects can communicate with each other through events. 
 
 Compared the the Flash event system, Shilke2D's event system 
 was highly simplified. They are simply dispatched at the target. 
@@ -12,19 +9,7 @@ As in the conventional Flash classes, display objects inherit
 from EventDispatcher and can thus dispatch events. 
 
 It's possible to register a function or a method as event listenr 
-of a specific event type for an object that derived from 
-EventDispatcher:
-
---register a function
--function onEventFunc(event)
-obj:addEventListener(Event.COMPLETED,onEventFunc)
-
---register a method
-Listener = class()
--function Listener:onEvent(event)
-    
-listener = Listener()
-obj:addEventListener(Event.COMPLETED,Listener.onEvent,listener)
+of a specific event type for an object that derived from EventDispatcher
 --]]
 
 EventDispatcher = class()
@@ -37,27 +22,30 @@ function EventDispatcher:init()
     self.eventListenersFunc = {}
     self.eventListenersMethods = {}
     self.dispatching = false
-    
     self.pendingList = {}
 end
 
 --create a single event shared between every EventDispatcher, to avoid fragmentation
 local __event_remove_from_juggler = Event(Event.REMOVE_FROM_JUGGLER)
 
---TODO: implement release logic for all the descendant of EventDispatcher (the whole displayList)
+--[[---
+First it dispatches a REMOVE_FROM_JUGGLER event to be safely detatched by jugglers. 
+Then it remove all the event listeners.
+--]]
 function EventDispatcher:dispose()
 	self:dispatchEvent(__event_remove_from_juggler)
 	self:removeEventListeners()
 end
 
---[[
-register/deregister a function or a method as listener of "type" 
-event if listenerObj is nil, listenerFunc is considered as a 
-normal function. if listenerObj is provided, listenerFunc is meant 
-as a method of the class of listenerObj
+--[[---
+Register a function or a method as listener of a certain type of event.
+@param eventType the type of event for which the listener is registering
+@param listenerFunc function registered as callback for the event
+@param listenerObj if provided, listenerFunc is considered as a method of listenerObj. 
+If nil listenerFunc is considered as a function
 --]]
 function EventDispatcher:addEventListener(eventType, listenerFunc, 
-        listenerObj)
+		listenerObj)
         
     if self.dispatching then
         table.insert(self.pendingList,{
@@ -82,8 +70,15 @@ function EventDispatcher:addEventListener(eventType, listenerFunc,
     end
 end
 
+--[[---
+Deregister a function or a method as listener of a certain type of event.
+@param eventType the type of event for which the stop listening
+@param listenerFunc function registered as callback for the event
+@param listenerObj if provided, listenerFunc is considered as a method of listenerObj. 
+If nil listenerFunc is considered as a function
+--]]
 function EventDispatcher:removeEventListener(eventType, listenerFunc, 
-        listenerObj)
+		listenerObj)
     
     if self.dispatching then
         table.insert(self.pendingList,{
@@ -107,8 +102,11 @@ function EventDispatcher:removeEventListener(eventType, listenerFunc,
     end
 end
 
---if eventType is provided remove all the listeners of this type event.
---if eventType is nil remove all the eventListeners, of all types
+--[[---
+Remove all the listeners for a specific event
+@param eventType the type of Event for which we want to deregister all the listeners.
+If nil all the listeners of all types of events will be removed.
+--]]
 function EventDispatcher:removeEventListeners(eventType)
     if self.dispatching then
         table.insert(self.pendingList,{
@@ -137,7 +135,11 @@ function EventDispatcher:removeEventListeners(eventType)
     end
 end
 
---check if there's at least one eventListener for a specific type
+--[[---
+Check if there's at least one eventListener for a specific type of event
+@param eventType 
+@return bool
+--]]
 function EventDispatcher:hasEventListener(eventType)
     if self.eventListenersFunc[eventType] and 
         #self.eventListeners[eventType]>0 then
@@ -150,12 +152,14 @@ function EventDispatcher:hasEventListener(eventType)
     return false
 end
 
---[[
-dispatch an event to all the registered listeners. While 
-dispatching, the lists of listener could be modified by 
-action of a listener callback, so to avoid problem in this 
+--[[---
+Dispatch an event to all the registered listeners. 
+While dispatching, the lists of listener could be modified by 
+actions of a listener callback, so to avoid problem in this 
 phase add and remove operation are queued in a specific list
 and then apply in the same order that were requested.
+@param event the event that will be dispatch to all the registered listener 
+for this type of event
 --]]
 function EventDispatcher:dispatchEvent(event)
     --Set itself as sender of the event

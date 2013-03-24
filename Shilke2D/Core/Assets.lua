@@ -1,17 +1,21 @@
--- Assets
-
---[[
-Assets namespace provides facilities to load and cache different 
+--[[---
+Assets namespace provides facilities to load different 
 type of resources.
 --]]
-
 Assets = {}
 
-local __imageCache = {}
 local __textureCache = {}
 
-Assets.__defaultUseCache = true
+---
+-- by default texture are cached. It's possibile to change this value.
+Assets.__defaultCacheTexture = true
 
+--[[---
+Load a sound.
+@param fileName the name of the sound to load, relative to the working dir or absolute (starting with /)
+@return MOAIUntzSound if fileName is a valid path, else nil
+@return an error message if fileName is not a valid path
+--]]
 function Assets.getSound(fileName)
 	local sound = MOAIUntzSound.new ()
 	if string.starts(fileName,"/") then
@@ -20,18 +24,36 @@ function Assets.getSound(fileName)
 	else
 		sound:load(fileName)
 	end
+	--if the file doesn't exist the getLength method returns nil
+	if sound:getLength() == nil then
+		return nil, fileName .. " is not a valid path"
+	end
 	return sound
 end
 
-function Assets.getRawImage(fileName, useCache)
-	
-	local useCache = (useCache ~= nil) and useCache or Assets.__defaultUseCache
-	
-	local cacheName = IO.getAbsolutePath(fileName)
-	
-	if __imageCache[cacheName] then
-		return __imageCache[cacheName]
+
+--[[---
+Load an Xml.
+@param fileName the name of the xml to load, relative to the working dir or absolute (starting with /)
+@return an XmlNode if fileName is a valid path, else nil
+@return an error message if fileName is not a valid path
+--]]
+function Assets.getXml(fileName)
+	local xmlFile, err = IO.getFile(fileName)
+	if not xmlFile then 
+		return nil, err
 	end
+	return XmlNode.fromString(xmlFile)
+end
+
+
+--[[---
+Load a raw image.
+@param fileName the name of the raw image to load, relative to the working dir or absolute (starting with /)
+@return a MOAIImage if fileName is a valid path, else nil
+@return an error message if fileName is not a valid path
+--]]
+function Assets.getRawImage(fileName)
 	
 	local img = MOAIImage.new()
 	-- if the file is "absolute" we need to load the image with absolute 'asDevice' file Name
@@ -43,21 +65,21 @@ function Assets.getRawImage(fileName, useCache)
 	local w,h = img:getSize()
 	if w == 0 and h == 0 then
 		return nil, fileName .. " is not a valid path"
-	end
-	
-	if useCache then
-		__imageCache[cacheName] = img
-	end
-	
+	end	
     return img
 end
 
 
---return a Texture starting from a raw Image, and caches it once 
---created first time
+--[[---
+Load a Texture.
+@param fileName the name of the texture to load, relative to the working dir or absolute (starting with /)
+@param useCache override the default beahviour for caching logic
+@return a Texture if fileName is a valid path, else nil
+@return an error message if fileName is not a valid path
+--]]
 function Assets.getTexture(fileName,useCache)
 	
-	local useCache = (useCache ~= nil) and useCache or Assets.__defaultUseCache
+	local useCache = (useCache ~= nil) and useCache or Assets.__defaultCacheTexture
 	
 	local cacheName = IO.getAbsolutePath(fileName)
 	
@@ -65,7 +87,7 @@ function Assets.getTexture(fileName,useCache)
 		return __textureCache[cacheName]
 	end
 	
-	local rawImage, err = Assets.getRawImage(fileName,useCache)
+	local rawImage, err = Assets.getRawImage(fileName)
 	if not rawImage then
 		return nil, err
 	end
@@ -77,22 +99,16 @@ function Assets.getTexture(fileName,useCache)
     return txt
 end
 
---No meaning in storing xml files, do it manually if needed
-function Assets.getXml(fileName)
-	local xmlFile, err = IO.getFile(fileName)
-	if not xmlFile then 
-		return nil, err
-	end
-	return XmlNode.fromString(xmlFile)
-end
 
-
---clear the cache for a specific file or the whole cache if no fileName is provided
-function Assets.clearCache(texture)
+--[[---
+Clear the texture cache.
+@param texture can be a Texture or a string (the name of the asset on which the Texture was created).
+If no param is provided it clears the whole textureCache
+--]]
+function Assets.clearTextureCache(texture)
 	if texture then
 		if type(texture) == 'string' then
 			local cacheName = IO.getAbsolutePath(texture)
-			if __imageCache[cacheName] then __imageCache[cacheName] = nil end
 			if __textureCache[cacheName] then
 				__textureCache[cacheName]:dispose()
 				__textureCache[cacheName] = nil 
@@ -107,7 +123,6 @@ function Assets.clearCache(texture)
 			end
 		end
 	else
-		table.clear(__imageCache)
 		for _,v in pairs(__textureCache) do
 			v:dispose()
 		end

@@ -30,34 +30,29 @@ function setup()
 	shilke:showStats(true)
     
     --if not set, the default color is (0,0,0,255)
-    stage:setBackground(10,10,10)
-    
-	--create an Image, a static image object.
-	--By default the pivot is set in the center of the image
-	local moaiImg = Image(Assets.getTexture("moai.png"))
+    stage:setBackground(128,128,128)
 	
-	--if not set, default position of a displyaObj is 0,0
-	--we put the image in the centre of the screen
-	moaiImg:setPosition(WIDTH/2,HEIGHT/2)
+	--PlanetCute atlas is mounted at workingDir/"PlanetCute", that means "/Assets/PlanetCute"
+	--All the resources of PlanetCute atlas will then be available as normal resources under the
+	--PlanetCute directory. If empty string is provided instead of "PlanetCute" all the resources
+	--became available in current working dir.
+	TextureManager.mountAtlas("PlanetCute",TexturePacker.loadSparrowFormat("PlanetCute.xml"))
+    	
+	--We can now retrieve Character Boy.png without caring if it's a real texture or a
+	--atlas resource
+	local boyTexture = TextureManager.getTexture("PlanetCute/Character Boy.png") 
+	--we create a static img setting the Pivot in bottom center position
+	local boyImg = Image(boyTexture)
+	boyImg:setPosition(WIDTH/3,HEIGHT/2)
 	
-	--each displayObj need to be connected to the stage to be rendered
+	--moai.png is a real texture and can be retrieved by TextureManager.
+	--TextureManager redirects to Assets the load of the texure
+	local moaiTexture = TextureManager.getTexture("moai.png") 
+	local moaiImg = Image(moaiTexture)
+	moaiImg:setPosition(2*WIDTH/3,HEIGHT/2)
+	
+	stage:addChild(boyImg)
 	stage:addChild(moaiImg)
-	
-	--The Assets.getTexture call by default caches the texture that is retrieved so making several
-	--Assets.getTexture call over the same texture is the same to retrieve it once and use it 
-	--several times
-	--This time we created an img with TOP_LEFT pivot
-	--by default image position is 0,0, so top left coord of the screen
-	--so we are placing the top left point of the img into the top left point of the screen
-	local moaiImg2 = Image(Assets.getTexture("moai.png"),PivotMode.TOP_LEFT)
-	stage:addChild(moaiImg2)
-	
-	--This time we created an img with BOTTOM_RIGHT pivot
-	local moaiImg3 = Image(Assets.getTexture("moai.png"),PivotMode.BOTTOM_RIGHT)
-	--we are placing the bottom right point of the img into the bottom right point of the screen
-	moaiImg3:setPosition(WIDTH,HEIGHT)
-	stage:addChild(moaiImg3)
-		
 end
 
 --update is called once per frame and allows to logically update status of objects
@@ -65,7 +60,7 @@ function update(elapsedTime)
 end
 
 --called when no object handle the current touch. if stage touch is disabled every touch is 
--- redirected here
+--redirected here
 function touched(touch)
 end
 

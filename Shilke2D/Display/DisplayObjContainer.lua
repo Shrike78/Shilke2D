@@ -1,6 +1,4 @@
--- DisplayObjContainer
-
---[[
+--[[---
 A DisplayObjectContainer represents a collection of display objects.
 It is the base class of all display objects that act as a container 
 for other objects. By maintaining an ordered list of children, it
@@ -10,31 +8,22 @@ display tree.
 A container does not a have size in itself. The width and height 
 properties represent the extents of its children. 
 
-It can handle 2 type of displayObj: geometrical shapes or anyway objs
-that have their own draw logic, and images tha are not handled 
-directly, but remapped on quad of meshes shared between images with 
-the same texture (or super texture when speaking of texture atlas)
-
 - Adding and removing children
 
 The class defines methods that allow you to add or remove children.
 
 When you add a child, it will be added at the frontmost position, 
 possibly occluding a child that was added before.
-
-That is not always true for images/mesh quads: to optimize mesh usage
-all the quads are managed by a pool so, once an image is removed
-from the container, the relative quad is collapsed and stored in the 
-pool, and used again for the next image added to the container (with 
-the same texture). In that way an Image added last can be draw before 
-image added previously. The only way to guarantee mesh draw order is 
-to avoid remove operations
 --]]
 
 DisplayObjContainer = class(DisplayObj)
 
---iterator for DisplayObjContainer children. It's possible to retrieve only children of 
---a given 'typeFilter' type
+--[[---iterator for DisplayObjContainer children. 
+It's possible to retrieve only children of a given 'typeFilter' type
+@param displayObjContainer the container of which children must be iterated
+@param typeFilter filter on the type of the children
+@return next iterator
+--]]
 function children(displayObjContainer,typeFilter)
 	local i = 0
 	local n = displayObjContainer:getNumChildren()
@@ -58,8 +47,13 @@ function children(displayObjContainer,typeFilter)
 	end
 end
 	
---reverse iterator for DisplayObjContainer children. It's possible to retrieve only children of 
---a given 'typeFilter' type
+--[[---
+Reverse iterator for DisplayObjContainer children. 
+It's possible to retrieve only children of a given 'typeFilter' type
+@param displayObjContainer the container of which children must be iterated
+@param typeFilter filter on the type of the children
+@return next (reverse) iterator
+--]]
 function reverse_children(displayObjContainer,typeFilter)
 	local i = displayObjContainer:getNumChildren() + 1
 	if typeFilter then
@@ -82,6 +76,10 @@ function reverse_children(displayObjContainer,typeFilter)
 	end
 end
 
+--[[---
+Initialization method.
+Children displayObj list is built as well as objRenderTalbe list.
+--]]
 function DisplayObjContainer:init()
     DisplayObj.init(self)
     self._displayObjs = {}
@@ -90,12 +88,18 @@ function DisplayObjContainer:init()
     self._hittable = false
 end
 
+--[[---
+When an objectContainer is disposed it realease all his children. 
+All the children are themself disposed
+--]]
 function DisplayObjContainer:dispose()
 	self:removeChildren(nil,nil,true)
 	DisplayObj.dispose(self)
 end
 
--- Debug Infos and __tostring redefinition
+---Debug Infos
+--@param recursive boolean, if true dbgInfo will be called also for all the children
+--@return string
 function DisplayObjContainer:dbgInfo(recursive)
     local sb = StringBuilder()
     sb:write(DisplayObj.dbgInfo(self,recursive))
@@ -107,14 +111,15 @@ function DisplayObjContainer:dbgInfo(recursive)
     return sb:toString(true)
 end
 
---Do not display itself if it's a container
---TODO: verify a possible logic to draw also containers
+---Draws oriented bounds for all his children
 function DisplayObjContainer:drawOrientedBounds()
     for _,o in ipairs(self._displayObjs) do
         o:drawOrientedBounds(drawContainer)
     end
 end
 
+---Draws axis aligned bounds for all his children.
+--@param drawContainer boolean, if true also container bounds will be drawn
 function DisplayObjContainer:drawAABounds(drawContainer)
     if drawContainer then
         DisplayObj.drawAABounds(self,false)
@@ -124,7 +129,9 @@ function DisplayObjContainer:drawAABounds(drawContainer)
     end
 end
 
---returns the first child with a given name, or nil
+---Returns the first child with a given name, if it exists, or nil
+--@param name of the child to be searched
+--@return displayObj or nil
 function DisplayObjContainer:getChildByName(name)
     for _,o in pairs(self._displayObjs) do
         if o._name == name then
@@ -134,6 +141,13 @@ function DisplayObjContainer:getChildByName(name)
     return nil
 end
 
+--[[---
+Add a displayObj to the children list.
+The child is add at the end of the children list so it's the top most of the drawn children.
+If the obj already has a parent, first is removed from the parent and then added to the new 
+parent container.
+@param obj the obj to be added as child
+--]]
 function DisplayObjContainer:addChild(obj)
 	local parent = obj:getParent()
     if parent then
@@ -148,6 +162,13 @@ function DisplayObjContainer:addChild(obj)
     obj:_setParent(self)
 end
 
+--[[---
+Remove an obj from children list.
+if the object is not a child do nothing
+@param obj the obj to be removed
+@param dispose if to dispose after removal
+@return the obj if removed, nil if the obj is not a child
+--]]
 function DisplayObjContainer:removeChild(obj,dispose)
     local pos = table.find(self._displayObjs, obj)
     if pos then
@@ -162,10 +183,15 @@ function DisplayObjContainer:removeChild(obj,dispose)
 	return nil
 end
 
+---Return the number of children
+--@return size of displayObj list
 function DisplayObjContainer:getNumChildren()
 	return #self._displayObjs
 end
 
+---Add a child at given position 
+--@param obj the obj o be added
+--@param index the desired position
 function DisplayObjContainer:addChildAt(obj,index)
     if(obj.parent) then
         obj.parent:removeChild(obj)
@@ -179,6 +205,10 @@ function DisplayObjContainer:addChildAt(obj,index)
     obj:_setParent(self)
 end
 
+---Remove a child at a given position
+--@param index the position of the obj to be removed
+--@param dispose boolean, if to dispose the obj after removal
+--@return the obj if the index is valid or nil
 function DisplayObjContainer:removeChildAt(index,dispose)
     local obj = self._displayObjs[index]
     if obj then
@@ -192,6 +222,10 @@ function DisplayObjContainer:removeChildAt(index,dispose)
 	return obj
 end
 
+---Remove all the children between two indices
+--@param beginIndex index of the first object to be removed
+--@param endIndex index of the last object to be removed
+--@param dispose if to dispose the objects after removal
 function DisplayObjContainer:removeChildren(beginIndex, endIndex, dispose)
 	local beginIndex = beginIndex or 1
 	local endIndex = endIndex or #self._displayObjs
@@ -205,62 +239,79 @@ function DisplayObjContainer:removeChildren(beginIndex, endIndex, dispose)
 	end
 end
 		
---returns the index of a given displayObj, if contained, or 0 if not. 
+---Returns the index of a given displayObj, if contained, or 0 if not. 
+--@param obj the obj to be searched
+--@return obj position in children list or 0 if obj is not a child 
 function DisplayObjContainer:getChildIndex(obj)
     return table.find(self._displayObjs,obj)
 end
 
---returns the displayObj at the given index. 
+---Returns the displayObj at the given index. 
+--@param index the index of the obj to be returned
+--@return the obj at position 'index' or nil if it doesn't exist
 function DisplayObjContainer:getChildAt(index)
     return self._displayObjs[index]
 end
 
---Swap two given children in the displayList. doesn't work with
---quads and derived classes
+---Swap two given children in the displayList.
+--If both the object are children, swap the positions
+--@param obj1 first object to be moved
+--@param obj2 second object to be moved
 function DisplayObjContainer:swapChildren(obj1,obj2)
     local index1 = table.find(self._displayObjs,obj1)
     local index2 = table.find(self._displayObjs,obj2)
     
     assert(index1>0 and index2>0)
-  
-    self._displayObjs[index1] = obj2
-    self._displayObjs[index2] = obj1
-    
-    local tmp = self._objRenderTable[index1]
-    
-    self._objRenderTable[index1] = self._objRenderTable[index2]
-    self._objRenderTable[index2] = tmp
+	if (index1>0 and index2>0) then
+		self._displayObjs[index1] = obj2
+		self._displayObjs[index2] = obj1
+
+		local tmp = self._objRenderTable[index1]
+		
+		self._objRenderTable[index1] = self._objRenderTable[index2]
+		self._objRenderTable[index2] = tmp
+	end
 end
 
---Swap the two children at the given positions in the displayList 
+---Swap two children at given positions in the displayList
+--If both the indices are valid, swap the relative objects
+--@param index1 index of the first object to be moved
+--@param index2 index of the second object to be moved
 function DisplayObjContainer:swapChildrenAt(index1,index2)
     local obj1 = self._displayObjs[index1]
     local obj2 = self._displayObjs[index2]
     
     assert(obj1 and obj2)
-    
-    self._displayObjs[index1] = obj2
-    self._displayObjs[index2] = obj1
+    if obj1 and obj2 then
+		self._displayObjs[index1] = obj2
+		self._displayObjs[index2] = obj1
 
-    local tmp = self._objRenderTable[index1]
-    
-    self._objRenderTable[index1] = self._objRenderTable[index2]
-    self._objRenderTable[index2] = tmp
+		local tmp = self._objRenderTable[index1]
+		
+		self._objRenderTable[index1] = self._objRenderTable[index2]
+		self._objRenderTable[index2] = tmp
+	end
 end
 
+---Set container alpha value
+--@param a [0,255]
 function DisplayObjContainer:setAlpha(a)
-    --DisplayObj.setAlpha(self,a)
-    self._alpha = a
+    self._alpha = math.clamp(a,0,255)
     self:_updateChildrenAlpha()
 end
 
+--[[---
+Inner method. Called by parent container, setMultiplyAlpha set the alpha value of the parent container (already
+modified by his current multiplyalpha value)
+@param a alpha value [0,255]
+--]]
 function DisplayObjContainer:_setMultiplyAlpha(a)
     --DisplayObj.setMultiplyAlpha(self,a)
     self._multiplyAlpha = a / 255
     self:_updateChildrenAlpha()
 end
 
---propagate alpha to all children
+---Inner method. Propagate alpha value to all children, setting "multiplied alpha" value
 function DisplayObjContainer:_updateChildrenAlpha()
     local a = self._alpha * self._multiplyAlpha
     
@@ -270,17 +321,24 @@ function DisplayObjContainer:_updateChildrenAlpha()
 end
 
 
---By default the hitTet over a DisplayObjContainer is an hitTest over
---all its children. It's possible anyway to set itself as target of
---an hitTest, without going deep in the displayList
+--[[---
+By default the hitTet over a DisplayObjContainer is an hitTest over
+all its children. It's possible anyway to set itself as target of
+an hitTest, without going deep in the displayList
+--@param hittable boolean
+--]]
 function DisplayObjContainer:setHittable(hittable)
     self._hittable = hittable
 end
 
+---Returns if a DisplayObjContainer can be direct target of a touch event
+--@return boolean
 function DisplayObjContainer:isHittable()
     return self._hittable
 end
 
+---Change visibility status of the container
+--@param visible boolean
 function DisplayObjContainer:setVisible(visible)
 	if self._visible ~= visible then
 		DisplayObj.setVisible(self,visible)
@@ -298,6 +356,10 @@ local max = math.max
 local MAX_VALUE = math.huge
 local MIN_VALUE = -math.huge
 
+---Return a rect obtained by children rect
+--Iterates over all the children and calculates a rectangle that enclose them all.
+--@param resultRect it's possibile to pass a Rect helper to store results
+--@return a rect filled with bound infos
 function DisplayObjContainer:getRect(resultRect)
 	local r = resultRect or Rect()
 	if #self._displayObjs == 0 then
@@ -325,12 +387,18 @@ function DisplayObjContainer:getRect(resultRect)
     return r
 end
 
---[[
-If the container is set as hittable, the hitTest will be done only
-on its own boundary without hittesting all the children, and the 
-resulting target will be itself. If not hittable instead, the hitTest
-will bendone on children, ustarting from then topmost 
+--[[---
+Given a x,y point in targetSpace coordinates it check if it falls inside local bounds.
+If the container is set as hittable, the hitTest will be done only on its own boundary 
+without testing all the children, and the resulting target will be itself. If not 
+hittable instead, the hitTest will be done on children, starting from then topmost 
 displayObjContainer.
+
+@param x coordinate in targetSpace system
+@param y coordinate in targetSpace system
+@param targetSpace the referred coorindate system. if nil the top most container / stage
+@param forTouch boolean. If true the check is done only for visible and touchable object
+@return self if the hitTest is positive else nil 
 --]]
 function DisplayObjContainer:hitTest(x,y,targetSpace,forTouch)
     if self._hittable then

@@ -1,6 +1,16 @@
-__STARLING_TWEEN__ = true
-__STARLING_TILEMAP__ = true
-__STARLING_CONTROLLER__ = true
+--[[---
+Shilke2D/include is the entry point for each project based on Shilke2D
+--]]
+
+---
+if __STARLING_TWEEN__ == nil then
+	---Used to selective include tween library.
+	--By default tween library is loaded. 
+	--Define __STARLING_TWEEN__ = false before include to disable it
+	__STARLING_TWEEN__ = true
+end
+
+
 
 require("Shilke2D/Utils/ClassEx")
 require("Shilke2D/Utils/Callbacks")
@@ -43,7 +53,7 @@ require("Shilke2D/Core/Keymap")
 require("Shilke2D/Display/DisplayObj")
 require("Shilke2D/Display/DisplayObjContainer")
 require("Shilke2D/Display/Stage")
-require("Shilke2D/Display/FixedSizeObject")
+require("Shilke2D/Display/BaseQuad")
 require("Shilke2D/Display/Quad")
 require("Shilke2D/Display/Image")
 require("Shilke2D/Display/MovieClip")
@@ -57,6 +67,7 @@ require("Shilke2D/Texture/SubTexture")
 require("Shilke2D/Texture/TextureAtlas")
 require("Shilke2D/Texture/BigTextureAtlas")
 require("Shilke2D/Texture/TexturePacker")
+require("Shilke2D/Texture/TextureManager")
 
 --Shilke2D/Tween
 require("Shilke2D/Tween/Tween")

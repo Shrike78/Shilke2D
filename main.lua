@@ -2,6 +2,7 @@
 
 require("Samples/image")
 --require("Samples/textureAtlas")
+--require("Samples/textureManager")
 --require("Samples/movieclip")
 --require("Samples/debugLines")
 --require("Samples/dragndrop")
