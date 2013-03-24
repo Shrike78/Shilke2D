@@ -1,0 +1,333 @@
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Strict//EN"
+   "http://www.w3.org/TR/xhtml1/DTD/xhtml1-strict.dtd">
+<html>
+<meta http-equiv="Content-Type" content="text/html; charset=UTF-8"/>
+<head>
+    <title>Reference</title>
+    <link rel="stylesheet" href="../ldoc.css" type="text/css" />
+</head>
+<body>
+
+<div id="container">
+
+<div id="product">
+	<div id="product_logo"></div>
+	<div id="product_name"><big><b></b></big></div>
+	<div id="product_description"></div>
+</div> <!-- id="product" -->
+
+
+<div id="main">
+
+
+<!-- Menu -->
+
+<div id="navigation">
+<br/>
+<h1>Shilke2D</h1>
+
+<ul>
+  <li><a href="../index.html">Index</a></li>
+</ul>
+
+<h2>Contents</h2>
+<ul>
+<li><a href="#Functions">Functions</a></li>
+</ul>
+
+
+<h2>Modules</h2>
+<ul>
+  <li><a href="../modules/Core.Assets.html">Core.Assets</a></li>
+  <li><a href="../modules/Core.Event.html">Core.Event</a></li>
+  <li><a href="../modules/Core.EventDispatcher.html">Core.EventDispatcher</a></li>
+  <li><a href="../modules/Core.IAnimatable.html">Core.IAnimatable</a></li>
+  <li><a href="../modules/Core.Juggler.html">Core.Juggler</a></li>
+  <li><a href="../modules/Core.Keymap.html">Core.Keymap</a></li>
+  <li><a href="../modules/Core.Shilke2D.html">Core.Shilke2D</a></li>
+  <li><a href="../modules/Core.Timer.html">Core.Timer</a></li>
+  <li><a href="../modules/Core.TouchSensor.html">Core.TouchSensor</a></li>
+  <li><a href="../modules/Display.BaseQuad.html">Display.BaseQuad</a></li>
+  <li><strong>Display.Button</strong></li>
+  <li><a href="../modules/Display.DisplayObj.html">Display.DisplayObj</a></li>
+  <li><a href="../modules/Display.DisplayObjContainer.html">Display.DisplayObjContainer</a></li>
+  <li><a href="../modules/Display.DrawableObject.html">Display.DrawableObject</a></li>
+  <li><a href="../modules/Display.Image.html">Display.Image</a></li>
+  <li><a href="../modules/Display.MovieClip.html">Display.MovieClip</a></li>
+  <li><a href="../modules/Display.Quad.html">Display.Quad</a></li>
+  <li><a href="../modules/Display.Stage.html">Display.Stage</a></li>
+  <li><a href="../modules/Display.TextField.html">Display.TextField</a></li>
+  <li><a href="../modules/Texture.BigTextureAtlas.html">Texture.BigTextureAtlas</a></li>
+  <li><a href="../modules/Texture.SubTexture.html">Texture.SubTexture</a></li>
+  <li><a href="../modules/Texture.Texture.html">Texture.Texture</a></li>
+  <li><a href="../modules/Texture.TextureAtlas.html">Texture.TextureAtlas</a></li>
+  <li><a href="../modules/Texture.TextureManager.html">Texture.TextureManager</a></li>
+  <li><a href="../modules/Texture.TexturePacker.html">Texture.TexturePacker</a></li>
+  <li><a href="../modules/include.html">include</a></li>
+</ul>
+
+</div>
+
+<div id="content">
+
+<h1>Module <code>Display.Button</code></h1>
+
+<p>A simple button composed of an image and, optionally, text.</p>
+<p>
+<p>It's possible to set a texture for up and downstate of the button.
+If a down state is not provided the button is simply scaled a
+little when it is touched.
+<p>In addition, you can overlay a text on the button. To customize the
+text, almost the same options as those of text fields are provided.
+
+To react on touches on a button, there is special triggered-event type,
+dispatched when the touch.state is ENDED and the button was hitted</p>
+
+
+<h2><a href="#Functions">Functions</a></h2>
+<table class="function_list">
+	<tr>
+	<td class="name" nowrap><a href="#Button:init">Button:init&nbsp;(upState, downState, label)</a></td>
+	<td class="summary">Creates a button with textures for upState, downState or text.</td>
+	</tr>
+	<tr>
+	<td class="name" nowrap><a href="#Button:resetContents">Button:resetContents&nbsp;()</a></td>
+	<td class="summary">Resets button state at default values</td>
+	</tr>
+	<tr>
+	<td class="name" nowrap><a href="#Button:getTextField">Button:getTextField&nbsp;()</a></td>
+	<td class="summary">Returns the textfield (if it exists)</td>
+	</tr>
+	<tr>
+	<td class="name" nowrap><a href="#Button:getScaleWhenDown">Button:getScaleWhenDown&nbsp;()</a></td>
+	<td class="summary">The scale factor of the button on touch.</td>
+	</tr>
+	<tr>
+	<td class="name" nowrap><a href="#Button:setScaleWhenDown">Button:setScaleWhenDown&nbsp;(value)</a></td>
+	<td class="summary">The scale factor of the button on touch.</td>
+	</tr>
+	<tr>
+	<td class="name" nowrap><a href="#Button:getAlphaWhenDisabled">Button:getAlphaWhenDisabled&nbsp;()</a></td>
+	<td class="summary">The alpha value of the button when it is disabled.</td>
+	</tr>
+	<tr>
+	<td class="name" nowrap><a href="#Button:setAlphaWhenDisabled">Button:setAlphaWhenDisabled&nbsp;(value)</a></td>
+	<td class="summary">The alpha value of the button when it is disabled.</td>
+	</tr>
+	<tr>
+	<td class="name" nowrap><a href="#Button:isEnabled">Button:isEnabled&nbsp;()</a></td>
+	<td class="summary">Indicates if the button can be triggered.</td>
+	</tr>
+	<tr>
+	<td class="name" nowrap><a href="#Button:setEnabled">Button:setEnabled&nbsp;(value)</a></td>
+	<td class="summary">Enable/Disable button.</td>
+	</tr>
+	<tr>
+	<td class="name" nowrap><a href="#Button:onTouch">Button:onTouch&nbsp;(e)</a></td>
+	<td class="summary">Inner method used to handle touch event and translate it into a trigger event when
+touch is released</td>
+	</tr>
+</table>
+
+<br/>
+<br/>
+
+
+    <h2><a name="Functions"></a>Functions</h2>
+    <dl class="function">
+    <dt>
+    <a name = "Button:init"></a>
+    <strong>Button:init&nbsp;(upState, downState, label)</strong>
+    </dt>
+    <dd>
+    Creates a button with textures for upState, downState or text.
+
+    <h3>Parameters:</h3>
+    <ul>
+      <li><span class="parameter">upState</span>
+       a texture to be used for the up state</li>
+      <li><span class="parameter">downState</span>
+       (optional) a texture to be used for the down state. If nil
+the upState texture will be used, but scaled of a factor of 0.9</li>
+      <li><span class="parameter">label</span>
+       (optional) a text to be added to the button</li>
+    </ul>
+
+
+
+
+
+</dd>
+    <dt>
+    <a name = "Button:resetContents"></a>
+    <strong>Button:resetContents&nbsp;()</strong>
+    </dt>
+    <dd>
+    Resets button state at default values
+
+
+
+
+
+
+</dd>
+    <dt>
+    <a name = "Button:getTextField"></a>
+    <strong>Button:getTextField&nbsp;()</strong>
+    </dt>
+    <dd>
+    Returns the textfield (if it exists)
+
+
+    <h3>Returns:</h3>
+    <ol>
+
+        TextField or nil
+    </ol>
+
+
+
+
+</dd>
+    <dt>
+    <a name = "Button:getScaleWhenDown"></a>
+    <strong>Button:getScaleWhenDown&nbsp;()</strong>
+    </dt>
+    <dd>
+    The scale factor of the button on touch.  Per default,
+a button with a down state texture won't scale.
+
+
+    <h3>Returns:</h3>
+    <ol>
+
+        scale value
+    </ol>
+
+
+
+
+</dd>
+    <dt>
+    <a name = "Button:setScaleWhenDown"></a>
+    <strong>Button:setScaleWhenDown&nbsp;(value)</strong>
+    </dt>
+    <dd>
+    The scale factor of the button on touch.  Per default,
+a button with a down state texture won't scale.
+
+    <h3>Parameters:</h3>
+    <ul>
+      <li><span class="parameter">value</span>
+       scale value</li>
+    </ul>
+
+
+
+
+
+</dd>
+    <dt>
+    <a name = "Button:getAlphaWhenDisabled"></a>
+    <strong>Button:getAlphaWhenDisabled&nbsp;()</strong>
+    </dt>
+    <dd>
+    The alpha value of the button when it is disabled.
+default = 128
+
+
+    <h3>Returns:</h3>
+    <ol>
+
+        alpha value [0,255]
+    </ol>
+
+
+
+
+</dd>
+    <dt>
+    <a name = "Button:setAlphaWhenDisabled"></a>
+    <strong>Button:setAlphaWhenDisabled&nbsp;(value)</strong>
+    </dt>
+    <dd>
+    The alpha value of the button when it is disabled.
+default = 128
+
+    <h3>Parameters:</h3>
+    <ul>
+      <li><span class="parameter">value</span>
+       [0,255]</li>
+    </ul>
+
+
+
+
+
+</dd>
+    <dt>
+    <a name = "Button:isEnabled"></a>
+    <strong>Button:isEnabled&nbsp;()</strong>
+    </dt>
+    <dd>
+    Indicates if the button can be triggered.
+
+
+    <h3>Returns:</h3>
+    <ol>
+
+        bool
+    </ol>
+
+
+
+
+</dd>
+    <dt>
+    <a name = "Button:setEnabled"></a>
+    <strong>Button:setEnabled&nbsp;(value)</strong>
+    </dt>
+    <dd>
+    Enable/Disable button.
+
+    <h3>Parameters:</h3>
+    <ul>
+      <li><span class="parameter">value</span>
+       boolean</li>
+    </ul>
+
+
+
+
+
+</dd>
+    <dt>
+    <a name = "Button:onTouch"></a>
+    <strong>Button:onTouch&nbsp;(e)</strong>
+    </dt>
+    <dd>
+    Inner method used to handle touch event and translate it into a trigger event when
+touch is released
+
+    <h3>Parameters:</h3>
+    <ul>
+      <li><span class="parameter">e</span>
+       touch event</li>
+    </ul>
+
+
+
+
+
+</dd>
+</dl>
+
+
+</div> <!-- id="content" -->
+</div> <!-- id="main" -->
+<div id="about">
+<i>generated by <a href="http://github.com/stevedonovan/LDoc">LDoc 1.3</a></i>
+</div> <!-- id="about" -->
+</div> <!-- id="container" -->
+</body>
+</html>

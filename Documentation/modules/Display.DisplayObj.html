@@ -1,0 +1,1506 @@
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Strict//EN"
+   "http://www.w3.org/TR/xhtml1/DTD/xhtml1-strict.dtd">
+<html>
+<meta http-equiv="Content-Type" content="text/html; charset=UTF-8"/>
+<head>
+    <title>Reference</title>
+    <link rel="stylesheet" href="../ldoc.css" type="text/css" />
+</head>
+<body>
+
+<div id="container">
+
+<div id="product">
+	<div id="product_logo"></div>
+	<div id="product_name"><big><b></b></big></div>
+	<div id="product_description"></div>
+</div> <!-- id="product" -->
+
+
+<div id="main">
+
+
+<!-- Menu -->
+
+<div id="navigation">
+<br/>
+<h1>Shilke2D</h1>
+
+<ul>
+  <li><a href="../index.html">Index</a></li>
+</ul>
+
+<h2>Contents</h2>
+<ul>
+<li><a href="#Functions">Functions</a></li>
+</ul>
+
+
+<h2>Modules</h2>
+<ul>
+  <li><a href="../modules/Core.Assets.html">Core.Assets</a></li>
+  <li><a href="../modules/Core.Event.html">Core.Event</a></li>
+  <li><a href="../modules/Core.EventDispatcher.html">Core.EventDispatcher</a></li>
+  <li><a href="../modules/Core.IAnimatable.html">Core.IAnimatable</a></li>
+  <li><a href="../modules/Core.Juggler.html">Core.Juggler</a></li>
+  <li><a href="../modules/Core.Keymap.html">Core.Keymap</a></li>
+  <li><a href="../modules/Core.Shilke2D.html">Core.Shilke2D</a></li>
+  <li><a href="../modules/Core.Timer.html">Core.Timer</a></li>
+  <li><a href="../modules/Core.TouchSensor.html">Core.TouchSensor</a></li>
+  <li><a href="../modules/Display.BaseQuad.html">Display.BaseQuad</a></li>
+  <li><a href="../modules/Display.Button.html">Display.Button</a></li>
+  <li><strong>Display.DisplayObj</strong></li>
+  <li><a href="../modules/Display.DisplayObjContainer.html">Display.DisplayObjContainer</a></li>
+  <li><a href="../modules/Display.DrawableObject.html">Display.DrawableObject</a></li>
+  <li><a href="../modules/Display.Image.html">Display.Image</a></li>
+  <li><a href="../modules/Display.MovieClip.html">Display.MovieClip</a></li>
+  <li><a href="../modules/Display.Quad.html">Display.Quad</a></li>
+  <li><a href="../modules/Display.Stage.html">Display.Stage</a></li>
+  <li><a href="../modules/Display.TextField.html">Display.TextField</a></li>
+  <li><a href="../modules/Texture.BigTextureAtlas.html">Texture.BigTextureAtlas</a></li>
+  <li><a href="../modules/Texture.SubTexture.html">Texture.SubTexture</a></li>
+  <li><a href="../modules/Texture.Texture.html">Texture.Texture</a></li>
+  <li><a href="../modules/Texture.TextureAtlas.html">Texture.TextureAtlas</a></li>
+  <li><a href="../modules/Texture.TextureManager.html">Texture.TextureManager</a></li>
+  <li><a href="../modules/Texture.TexturePacker.html">Texture.TexturePacker</a></li>
+  <li><a href="../modules/include.html">include</a></li>
+</ul>
+
+</div>
+
+<div id="content">
+
+<h1>Module <code>Display.DisplayObj</code></h1>
+
+<p>The DisplayObject derives from EventDispatcher and is the base class for all
+objects that are rendered on the screen.</p>
+<p>
+<p>- The Display Tree
+<p>All displayable objects are organized in a display tree.
+Only objects that are part of the display tree will be displayed (rendered).
+The display tree consists of leaf nodes that will be rendered directly to the
+screen, and of container nodes (instances or subclasses of
+	"DisplayObjectContainer").
+<p>A container is simply a display object that has child nodes, which can, again,
+be either leaf nodes or other containers.
+<p>A display object has properties that define its position in relation
+to its parent (x, y), as well as its rotation and scaling factors
+(scaleX, scaleY). Use the alpha and  visible properties to make an
+object translucent or invisible. Alpha value are affected by parent
+alpha values, with a multiply factor in the [0..1] range
+
+- Transforming coordinates
+<p>Within the display tree, each object has its own local coordinate
+system. If you rotate a container, you rotate that coordinate system
+and thus all the children of the container.
+<p>- Subclassing
+<p>Since DisplayObject is an abstract class, you cannot instantiate it
+directly, but have to use one of its subclasses instead.
+<p>You will need to implement the following method when you subclass
+DisplayObject:
+<p>function DisplayObj:getRect(targetSpace,resultRect)</p>
+
+
+<h2><a href="#Functions">Functions</a></h2>
+<table class="function_list">
+	<tr>
+	<td class="name" nowrap><a href="#DisplayObj:init">DisplayObj:init&nbsp;()</a></td>
+	<td class="summary">Initialization.</td>
+	</tr>
+	<tr>
+	<td class="name" nowrap><a href="#DisplayObj:dispose">DisplayObj:dispose&nbsp;()</a></td>
+	<td class="summary">If a derived object needs to clean up resources it must inherits this method, always remembering to
+call also parent dispose method</td>
+	</tr>
+	<tr>
+	<td class="name" nowrap><a href="#DisplayObj:_createProp">DisplayObj:_createProp&nbsp;()</a></td>
+	<td class="summary">create a MOAI prop that the current DisplayObj is going to wrap.</td>
+	</tr>
+	<tr>
+	<td class="name" nowrap><a href="#DisplayObj:dbgInfo">DisplayObj:dbgInfo&nbsp;(recursive)</a></td>
+	<td class="summary">Debug Infos.</td>
+	</tr>
+	<tr>
+	<td class="name" nowrap><a href="#DisplayObj:setName">DisplayObj:setName&nbsp;(name)</a></td>
+	<td class="summary">It's possible (but optional) to set a name to a display obj.</td>
+	</tr>
+	<tr>
+	<td class="name" nowrap><a href="#DisplayObj:getName">DisplayObj:getName&nbsp;()</a></td>
+	<td class="summary">Get the name of the current obj.</td>
+	</tr>
+	<tr>
+	<td class="name" nowrap><a href="#DisplayObj:_setParent">DisplayObj:_setParent&nbsp;(parent)</a></td>
+	<td class="summary">Internal methoed.</td>
+	</tr>
+	<tr>
+	<td class="name" nowrap><a href="#DisplayObj:getParent">DisplayObj:getParent&nbsp;()</a></td>
+	<td class="summary">Return the parent DisplayObjContainer
+return parent displayObjContainer or nil if not attached to any container</td>
+	</tr>
+	<tr>
+	<td class="name" nowrap><a href="#DisplayObj:removeFromParent">DisplayObj:removeFromParent&nbsp;()</a></td>
+	<td class="summary">Remove a displayObject from the parent container</td>
+	</tr>
+	<tr>
+	<td class="name" nowrap><a href="#DisplayObj:getRoot">DisplayObj:getRoot&nbsp;()</a></td>
+	<td class="summary">Return the top most displayObjContainer in the display tree.</td>
+	</tr>
+	<tr>
+	<td class="name" nowrap><a href="#DisplayObj:getStage">DisplayObj:getStage&nbsp;()</a></td>
+	<td class="summary">If the displayList containing the object is attached to the stage, return the stage, else nil</td>
+	</tr>
+	<tr>
+	<td class="name" nowrap><a href="#DisplayObj:setVisible">DisplayObj:setVisible&nbsp;(visible)</a></td>
+	<td class="summary">Set visibility status of this object</td>
+	</tr>
+	<tr>
+	<td class="name" nowrap><a href="#DisplayObj:isVisible">DisplayObj:isVisible&nbsp;()</a></td>
+	<td class="summary">Get visibility status of the displayObj</td>
+	</tr>
+	<tr>
+	<td class="name" nowrap><a href="#DisplayObj:setTouchable">DisplayObj:setTouchable&nbsp;(touchable)</a></td>
+	<td class="summary">Set touchable status of the obj.</td>
+	</tr>
+	<tr>
+	<td class="name" nowrap><a href="#DisplayObj:isTouchable">DisplayObj:isTouchable&nbsp;()</a></td>
+	<td class="summary">Get touchable status of the object</td>
+	</tr>
+	<tr>
+	<td class="name" nowrap><a href="#DisplayObj:_setMultiplyAlpha">DisplayObj:_setMultiplyAlpha&nbsp;(a)</a></td>
+	<td class="summary">Inner method.</td>
+	</tr>
+	<tr>
+	<td class="name" nowrap><a href="#DisplayObj:_getMultipliedAlpha">DisplayObj:_getMultipliedAlpha&nbsp;()</a></td>
+	<td class="summary">Return the alpha that the object has when displayed.</td>
+	</tr>
+	<tr>
+	<td class="name" nowrap><a href="#DisplayObj:setAlpha">DisplayObj:setAlpha&nbsp;(a)</a></td>
+	<td class="summary">Set alpha value of the object</td>
+	</tr>
+	<tr>
+	<td class="name" nowrap><a href="#DisplayObj:setColor">DisplayObj:setColor&nbsp;(r, g, b, a)</a></td>
+	<td class="summary">Set obj color.</td>
+	</tr>
+	<tr>
+	<td class="name" nowrap><a href="#DisplayObj:getColor">DisplayObj:getColor&nbsp;()</a></td>
+	<td class="summary">Return the current Color of the object</td>
+	</tr>
+	<tr>
+	<td class="name" nowrap><a href="#DisplayObj:setPivot">DisplayObj:setPivot&nbsp;(x, y)</a></td>
+	<td class="summary">Set pivot of the object.</td>
+	</tr>
+	<tr>
+	<td class="name" nowrap><a href="#DisplayObj:getPivot">DisplayObj:getPivot&nbsp;()</a></td>
+	<td class="summary">Return current pivot position</td>
+	</tr>
+	<tr>
+	<td class="name" nowrap><a href="#DisplayObj:setPivotX">DisplayObj:setPivotX&nbsp;(x)</a></td>
+	<td class="summary">Set Pivot x position</td>
+	</tr>
+	<tr>
+	<td class="name" nowrap><a href="#DisplayObj:getPivotX">DisplayObj:getPivotX&nbsp;()</a></td>
+	<td class="summary">Get Pivot x position</td>
+	</tr>
+	<tr>
+	<td class="name" nowrap><a href="#DisplayObj:setPivotY">DisplayObj:setPivotY&nbsp;(y)</a></td>
+	<td class="summary">Set Pivot y position</td>
+	</tr>
+	<tr>
+	<td class="name" nowrap><a href="#DisplayObj:getPivotY">DisplayObj:getPivotY&nbsp;()</a></td>
+	<td class="summary">Get Pivot y position</td>
+	</tr>
+	<tr>
+	<td class="name" nowrap><a href="#DisplayObj:setPosition">DisplayObj:setPosition&nbsp;(x, y)</a></td>
+	<td class="summary">Set object position</td>
+	</tr>
+	<tr>
+	<td class="name" nowrap><a href="#DisplayObj:getPosition">DisplayObj:getPosition&nbsp;()</a></td>
+	<td class="summary">Get object position</td>
+	</tr>
+	<tr>
+	<td class="name" nowrap><a href="#DisplayObj:setPosition_v2">DisplayObj:setPosition_v2&nbsp;(v)</a></td>
+	<td class="summary">Set object position using a vec2</td>
+	</tr>
+	<tr>
+	<td class="name" nowrap><a href="#DisplayObj:getPosition_v2">DisplayObj:getPosition_v2&nbsp;()</a></td>
+	<td class="summary">Get object position using a vec2</td>
+	</tr>
+	<tr>
+	<td class="name" nowrap><a href="#DisplayObj:setPositionX">DisplayObj:setPositionX&nbsp;(x)</a></td>
+	<td class="summary">Set x position</td>
+	</tr>
+	<tr>
+	<td class="name" nowrap><a href="#DisplayObj:getPositionX">DisplayObj:getPositionX&nbsp;()</a></td>
+	<td class="summary">Get x position</td>
+	</tr>
+	<tr>
+	<td class="name" nowrap><a href="#DisplayObj:setPositionY">DisplayObj:setPositionY&nbsp;(y)</a></td>
+	<td class="summary">Set y position</td>
+	</tr>
+	<tr>
+	<td class="name" nowrap><a href="#DisplayObj:getPositionY">DisplayObj:getPositionY&nbsp;()</a></td>
+	<td class="summary">Get y position</td>
+	</tr>
+	<tr>
+	<td class="name" nowrap><a href="#DisplayObj:translate">DisplayObj:translate&nbsp;(x, y)</a></td>
+	<td class="summary">Move the obj by x,y units</td>
+	</tr>
+	<tr>
+	<td class="name" nowrap><a href="#DisplayObj:setRotation">DisplayObj:setRotation&nbsp;(r)</a></td>
+	<td class="summary">Set rotation value.</td>
+	</tr>
+	<tr>
+	<td class="name" nowrap><a href="#DisplayObj:getRotation">DisplayObj:getRotation&nbsp;()</a></td>
+	<td class="summary">Get rotation value</td>
+	</tr>
+	<tr>
+	<td class="name" nowrap><a href="#DisplayObj:setScale">DisplayObj:setScale&nbsp;(x, y)</a></td>
+	<td class="summary">Set scale</td>
+	</tr>
+	<tr>
+	<td class="name" nowrap><a href="#DisplayObj:getScale">DisplayObj:getScale&nbsp;()</a></td>
+	<td class="summary">Get scale value</td>
+	</tr>
+	<tr>
+	<td class="name" nowrap><a href="#DisplayObj:setScale_v2">DisplayObj:setScale_v2&nbsp;(v)</a></td>
+	<td class="summary">Set scale using vec2</td>
+	</tr>
+	<tr>
+	<td class="name" nowrap><a href="#DisplayObj:getScale_v2">DisplayObj:getScale_v2&nbsp;()</a></td>
+	<td class="summary">Get scale using vec2</td>
+	</tr>
+	<tr>
+	<td class="name" nowrap><a href="#DisplayObj:setScaleX">DisplayObj:setScaleX&nbsp;(s)</a></td>
+	<td class="summary">Set scale x value</td>
+	</tr>
+	<tr>
+	<td class="name" nowrap><a href="#DisplayObj:getScaleX">DisplayObj:getScaleX&nbsp;()</a></td>
+	<td class="summary">Get scale x value</td>
+	</tr>
+	<tr>
+	<td class="name" nowrap><a href="#DisplayObj:setScaleY">DisplayObj:setScaleY&nbsp;(s)</a></td>
+	<td class="summary">Set scale y value</td>
+	</tr>
+	<tr>
+	<td class="name" nowrap><a href="#DisplayObj:getScaleY">DisplayObj:getScaleY&nbsp;()</a></td>
+	<td class="summary">Get scale y value</td>
+	</tr>
+	<tr>
+	<td class="name" nowrap><a href="#DisplayObj:updateTransformationMatrix">DisplayObj:updateTransformationMatrix&nbsp;(targetSpace)</a></td>
+	<td class="summary">Inner method, called to force update of transformation matrix used
+to calculate relative position into the displayList</td>
+	</tr>
+	<tr>
+	<td class="name" nowrap><a href="#DisplayObj:localToGlobal">DisplayObj:localToGlobal&nbsp;(x, y, targetSpace)</a></td>
+	<td class="summary">Transforms a point from the local coordinate system to
+global coordinates.</td>
+	</tr>
+	<tr>
+	<td class="name" nowrap><a href="#DisplayObj:globalToLocal">DisplayObj:globalToLocal&nbsp;(x, y, targetSpace)</a></td>
+	<td class="summary">Transforms a point from the global coordinate system to
+local coordinates system.</td>
+	</tr>
+	<tr>
+	<td class="name" nowrap><a href="#DisplayObj:setGlobalPosition">DisplayObj:setGlobalPosition&nbsp;(x, y, targetSpace)</a></td>
+	<td class="summary">Used to set an absolute position related to targetSpace
+container coordinates (usually the stage).</td>
+	</tr>
+	<tr>
+	<td class="name" nowrap><a href="#DisplayObj:getGlobalPosition">DisplayObj:getGlobalPosition&nbsp;(targetSpace)</a></td>
+	<td class="summary">Return global position of the object related to the targetSpace provided
+(usually the stage)</td>
+	</tr>
+	<tr>
+	<td class="name" nowrap><a href="#DisplayObj:globalTranslate">DisplayObj:globalTranslate&nbsp;(dx, dy, targetSpace)</a></td>
+	<td class="summary">Apply a translation based on targetSpace coordinates(usually the stage)</td>
+	</tr>
+	<tr>
+	<td class="name" nowrap><a href="#DisplayObj:getRect">DisplayObj:getRect&nbsp;(resultRect)</a></td>
+	<td class="summary">Bounding rect in local coordinates of the displayObj.</td>
+	</tr>
+	<tr>
+	<td class="name" nowrap><a href="#DisplayObj:getWidth">DisplayObj:getWidth&nbsp;()</a></td>
+	<td class="summary">Get object width related on parent trasnformation (so with scaling applied)</td>
+	</tr>
+	<tr>
+	<td class="name" nowrap><a href="#DisplayObj:getHeight">DisplayObj:getHeight&nbsp;()</a></td>
+	<td class="summary">Get object height related on parent trasnformation (so with scaling applied)</td>
+	</tr>
+	<tr>
+	<td class="name" nowrap><a href="#DisplayObj:getBounds">DisplayObj:getBounds&nbsp;(targetSpace, resultRect)</a></td>
+	<td class="summary">Returns a rectangle that completely encloses the object as it
+appears in another coordinate system.</td>
+	</tr>
+	<tr>
+	<td class="name" nowrap><a href="#DisplayObj:getOrientedBounds">DisplayObj:getOrientedBounds&nbsp;(targetSpace)</a></td>
+	<td class="summary">Returns an array of vertices describing a quad that rapresents object bounding rect as it appears into
+another coordinate system</td>
+	</tr>
+	<tr>
+	<td class="name" nowrap><a href="#DisplayObj:drawOrientedBounds">DisplayObj:drawOrientedBounds&nbsp;()</a></td>
+	<td class="summary">Draw the oriented bounding box.</td>
+	</tr>
+	<tr>
+	<td class="name" nowrap><a href="#DisplayObj:drawAABounds">DisplayObj:drawAABounds&nbsp;(drawContainer)</a></td>
+	<td class="summary">Draw the axis aligned bound of the object as appears into top most container / stage coords</td>
+	</tr>
+	<tr>
+	<td class="name" nowrap><a href="#DisplayObj:hitTest">DisplayObj:hitTest&nbsp;(x, y, targetSpace, forTouch)</a></td>
+	<td class="summary">Given a x,y point in targetSpace coordinates it check if it falls inside local bounds.</td>
+	</tr>
+</table>
+
+<br/>
+<br/>
+
+
+    <h2><a name="Functions"></a>Functions</h2>
+    <dl class="function">
+    <dt>
+    <a name = "DisplayObj:init"></a>
+    <strong>DisplayObj:init&nbsp;()</strong>
+    </dt>
+    <dd>
+    Initialization.
+
+
+
+
+
+
+</dd>
+    <dt>
+    <a name = "DisplayObj:dispose"></a>
+    <strong>DisplayObj:dispose&nbsp;()</strong>
+    </dt>
+    <dd>
+    If a derived object needs to clean up resources it must inherits this method, always remembering to
+call also parent dispose method
+
+
+
+
+
+
+</dd>
+    <dt>
+    <a name = "DisplayObj:_createProp"></a>
+    <strong>DisplayObj:_createProp&nbsp;()</strong>
+    </dt>
+    <dd>
+    create a MOAI prop that the current DisplayObj is going to wrap.
+Generic displayObjs create generic MOAIProps. If a specific prop is needed
+just override this method for specific DisplayObj class.
+
+
+
+
+
+
+</dd>
+    <dt>
+    <a name = "DisplayObj:dbgInfo"></a>
+    <strong>DisplayObj:dbgInfo&nbsp;(recursive)</strong>
+    </dt>
+    <dd>
+    Debug Infos.
+Can be used to create a description of the single displayObj or of a whole displayList
+
+    <h3>Parameters:</h3>
+    <ul>
+      <li><span class="parameter">recursive</span>
+       has meaning only if the displayObj is a DisplayObjContainer.</li>
+    </ul>
+
+    <h3>Returns:</h3>
+    <ol>
+
+        string
+    </ol>
+
+
+
+
+</dd>
+    <dt>
+    <a name = "DisplayObj:setName"></a>
+    <strong>DisplayObj:setName&nbsp;(name)</strong>
+    </dt>
+    <dd>
+    It's possible (but optional) to set a name to a display obj.
+
+    <h3>Parameters:</h3>
+    <ul>
+      <li><span class="parameter">name</span>
+       the name of the object. Can be nil</li>
+    </ul>
+
+
+
+
+
+</dd>
+    <dt>
+    <a name = "DisplayObj:getName"></a>
+    <strong>DisplayObj:getName&nbsp;()</strong>
+    </dt>
+    <dd>
+    Get the name of the current obj.
+return name (string) or nil if a name has not been set
+
+
+
+
+
+
+</dd>
+    <dt>
+    <a name = "DisplayObj:_setParent"></a>
+    <strong>DisplayObj:_setParent&nbsp;(parent)</strong>
+    </dt>
+    <dd>
+    Internal methoed.
+Called by a DisplayObjContainer when the DisplayObj is added as child
+
+    <h3>Parameters:</h3>
+    <ul>
+      <li><span class="parameter">parent</span>
+        <span class="types"><span class="type">assert(not parent or parent</span></span>
+      is_a(DisplayObjContainer))</li>
+    </ul>
+
+
+
+
+
+</dd>
+    <dt>
+    <a name = "DisplayObj:getParent"></a>
+    <strong>DisplayObj:getParent&nbsp;()</strong>
+    </dt>
+    <dd>
+    Return the parent DisplayObjContainer
+return parent displayObjContainer or nil if not attached to any container
+
+
+
+
+
+
+</dd>
+    <dt>
+    <a name = "DisplayObj:removeFromParent"></a>
+    <strong>DisplayObj:removeFromParent&nbsp;()</strong>
+    </dt>
+    <dd>
+    Remove a displayObject from the parent container
+
+
+
+
+
+
+</dd>
+    <dt>
+    <a name = "DisplayObj:getRoot"></a>
+    <strong>DisplayObj:getRoot&nbsp;()</strong>
+    </dt>
+    <dd>
+    Return the top most displayObjContainer in the display tree.
+For all the displayed object the root is Stage
+
+
+    <h3>Returns:</h3>
+    <ol>
+
+        root displayObject container or nil if the object has not parent
+    </ol>
+
+
+
+
+</dd>
+    <dt>
+    <a name = "DisplayObj:getStage"></a>
+    <strong>DisplayObj:getStage&nbsp;()</strong>
+    </dt>
+    <dd>
+    If the displayList containing the object is attached to the stage, return the stage, else nil
+
+
+    <h3>Returns:</h3>
+    <ol>
+
+        the stage or nil if the obj has not the stage as ancestor
+    </ol>
+
+
+
+
+</dd>
+    <dt>
+    <a name = "DisplayObj:setVisible"></a>
+    <strong>DisplayObj:setVisible&nbsp;(visible)</strong>
+    </dt>
+    <dd>
+    Set visibility status of this object
+
+    <h3>Parameters:</h3>
+    <ul>
+      <li><span class="parameter">visible</span>
+       boolean value to set visible or hidden the displayObj</li>
+    </ul>
+
+
+
+
+
+</dd>
+    <dt>
+    <a name = "DisplayObj:isVisible"></a>
+    <strong>DisplayObj:isVisible&nbsp;()</strong>
+    </dt>
+    <dd>
+    Get visibility status of the displayObj
+
+
+    <h3>Returns:</h3>
+    <ol>
+
+        bool
+    </ol>
+
+
+
+
+</dd>
+    <dt>
+    <a name = "DisplayObj:setTouchable"></a>
+    <strong>DisplayObj:setTouchable&nbsp;(touchable)</strong>
+    </dt>
+    <dd>
+    Set touchable status of the obj.
+Objects by default are touchable, this method is mainly use to remove touchable status.
+If objects or whole part of displayList doesn't need touch event handling is better to remove set
+this to false to increase performance. If a container is not touchable all its children are not
+tested too
+
+    <h3>Parameters:</h3>
+    <ul>
+      <li><span class="parameter">touchable</span>
+       boolean value to enable / disable touchable status</li>
+    </ul>
+
+
+
+
+
+</dd>
+    <dt>
+    <a name = "DisplayObj:isTouchable"></a>
+    <strong>DisplayObj:isTouchable&nbsp;()</strong>
+    </dt>
+    <dd>
+    Get touchable status of the object
+
+
+    <h3>Returns:</h3>
+    <ol>
+
+        bool
+    </ol>
+
+
+
+
+</dd>
+    <dt>
+    <a name = "DisplayObj:_setMultiplyAlpha"></a>
+    <strong>DisplayObj:_setMultiplyAlpha&nbsp;(a)</strong>
+    </dt>
+    <dd>
+    Inner method.
+Called by parent container, setMultiplyAlpha set the alpha value of the parent container (already
+modified by his current multiplyalpha value)
+
+    <h3>Parameters:</h3>
+    <ul>
+      <li><span class="parameter">a</span>
+       alpha value [0,255]</li>
+    </ul>
+
+
+
+
+
+</dd>
+    <dt>
+    <a name = "DisplayObj:_getMultipliedAlpha"></a>
+    <strong>DisplayObj:_getMultipliedAlpha&nbsp;()</strong>
+    </dt>
+    <dd>
+    Return the alpha that the object has when displayed.
+This value is obtained multiplying the obj alpha by the parent multiplyAlpha value
+
+
+    <h3>Returns:</h3>
+    <ol>
+
+        alpha value [0,255]
+    </ol>
+
+
+
+
+</dd>
+    <dt>
+    <a name = "DisplayObj:setAlpha"></a>
+    <strong>DisplayObj:setAlpha&nbsp;(a)</strong>
+    </dt>
+    <dd>
+    Set alpha value of the object
+
+    <h3>Parameters:</h3>
+    <ul>
+      <li><span class="parameter">a</span>
+       alpha value [0,255]</li>
+    </ul>
+
+
+
+
+
+</dd>
+    <dt>
+    <a name = "DisplayObj:setColor"></a>
+    <strong>DisplayObj:setColor&nbsp;(r, g, b, a)</strong>
+    </dt>
+    <dd>
+    Set obj color.
+The following calls are valid:
+- setColor(r,g,b)
+- setColor(r,g,b,a)
+- setColor(color)
+
+    <h3>Parameters:</h3>
+    <ul>
+      <li><span class="parameter">r</span>
+       red value [0,255] or a Color</li>
+      <li><span class="parameter">g</span>
+       green value [0,255] or nil</li>
+      <li><span class="parameter">b</span>
+       blue value [0,255] or nil</li>
+      <li><span class="parameter">a</span>
+       alpha value [0,255] or nil</li>
+    </ul>
+
+
+
+
+
+</dd>
+    <dt>
+    <a name = "DisplayObj:getColor"></a>
+    <strong>DisplayObj:getColor&nbsp;()</strong>
+    </dt>
+    <dd>
+    Return the current Color of the object
+
+
+    <h3>Returns:</h3>
+    <ol>
+
+        Color(r,g,b,a)
+    </ol>
+
+
+
+
+</dd>
+    <dt>
+    <a name = "DisplayObj:setPivot"></a>
+    <strong>DisplayObj:setPivot&nbsp;(x, y)</strong>
+    </dt>
+    <dd>
+    Set pivot of the object.
+Pivot point is the point to which transformation are applied, so position, scaling, rotation are all calculated
+keeping pivot point as center. By default pivot point is (0,0), depending on coordinats system
+
+    <h3>Parameters:</h3>
+    <ul>
+      <li><span class="parameter">x</span>
+       pivot x position</li>
+      <li><span class="parameter">y</span>
+       pivot y position</li>
+    </ul>
+
+
+
+
+
+</dd>
+    <dt>
+    <a name = "DisplayObj:getPivot"></a>
+    <strong>DisplayObj:getPivot&nbsp;()</strong>
+    </dt>
+    <dd>
+    Return current pivot position
+
+
+    <h3>Returns:</h3>
+    <ol>
+        <li>
+        x</li>
+        <li>
+        y</li>
+    </ol>
+
+
+
+
+</dd>
+    <dt>
+    <a name = "DisplayObj:setPivotX"></a>
+    <strong>DisplayObj:setPivotX&nbsp;(x)</strong>
+    </dt>
+    <dd>
+    Set Pivot x position
+
+    <h3>Parameters:</h3>
+    <ul>
+      <li><span class="parameter">x</span>
+      </li>
+    </ul>
+
+
+
+
+
+</dd>
+    <dt>
+    <a name = "DisplayObj:getPivotX"></a>
+    <strong>DisplayObj:getPivotX&nbsp;()</strong>
+    </dt>
+    <dd>
+    Get Pivot x position
+
+
+    <h3>Returns:</h3>
+    <ol>
+
+        x
+    </ol>
+
+
+
+
+</dd>
+    <dt>
+    <a name = "DisplayObj:setPivotY"></a>
+    <strong>DisplayObj:setPivotY&nbsp;(y)</strong>
+    </dt>
+    <dd>
+    Set Pivot y position
+
+    <h3>Parameters:</h3>
+    <ul>
+      <li><span class="parameter">y</span>
+      </li>
+    </ul>
+
+
+
+
+
+</dd>
+    <dt>
+    <a name = "DisplayObj:getPivotY"></a>
+    <strong>DisplayObj:getPivotY&nbsp;()</strong>
+    </dt>
+    <dd>
+    Get Pivot y position
+
+
+    <h3>Returns:</h3>
+    <ol>
+
+        y
+    </ol>
+
+
+
+
+</dd>
+    <dt>
+    <a name = "DisplayObj:setPosition"></a>
+    <strong>DisplayObj:setPosition&nbsp;(x, y)</strong>
+    </dt>
+    <dd>
+    Set object position
+
+    <h3>Parameters:</h3>
+    <ul>
+      <li><span class="parameter">x</span>
+      </li>
+      <li><span class="parameter">y</span>
+      </li>
+    </ul>
+
+
+
+
+
+</dd>
+    <dt>
+    <a name = "DisplayObj:getPosition"></a>
+    <strong>DisplayObj:getPosition&nbsp;()</strong>
+    </dt>
+    <dd>
+    Get object position
+
+
+    <h3>Returns:</h3>
+    <ol>
+        <li>
+        x</li>
+        <li>
+        y</li>
+    </ol>
+
+
+
+
+</dd>
+    <dt>
+    <a name = "DisplayObj:setPosition_v2"></a>
+    <strong>DisplayObj:setPosition_v2&nbsp;(v)</strong>
+    </dt>
+    <dd>
+    Set object position using a vec2
+
+    <h3>Parameters:</h3>
+    <ul>
+      <li><span class="parameter">v</span>
+       vec2(x,y)</li>
+    </ul>
+
+
+
+
+
+</dd>
+    <dt>
+    <a name = "DisplayObj:getPosition_v2"></a>
+    <strong>DisplayObj:getPosition_v2&nbsp;()</strong>
+    </dt>
+    <dd>
+    Get object position using a vec2
+
+
+    <h3>Returns:</h3>
+    <ol>
+
+        vec2(x,y)
+    </ol>
+
+
+
+
+</dd>
+    <dt>
+    <a name = "DisplayObj:setPositionX"></a>
+    <strong>DisplayObj:setPositionX&nbsp;(x)</strong>
+    </dt>
+    <dd>
+    Set x position
+
+    <h3>Parameters:</h3>
+    <ul>
+      <li><span class="parameter">x</span>
+      </li>
+    </ul>
+
+
+
+
+
+</dd>
+    <dt>
+    <a name = "DisplayObj:getPositionX"></a>
+    <strong>DisplayObj:getPositionX&nbsp;()</strong>
+    </dt>
+    <dd>
+    Get x position
+
+
+    <h3>Returns:</h3>
+    <ol>
+
+        x
+    </ol>
+
+
+
+
+</dd>
+    <dt>
+    <a name = "DisplayObj:setPositionY"></a>
+    <strong>DisplayObj:setPositionY&nbsp;(y)</strong>
+    </dt>
+    <dd>
+    Set y position
+
+    <h3>Parameters:</h3>
+    <ul>
+      <li><span class="parameter">y</span>
+      </li>
+    </ul>
+
+
+
+
+
+</dd>
+    <dt>
+    <a name = "DisplayObj:getPositionY"></a>
+    <strong>DisplayObj:getPositionY&nbsp;()</strong>
+    </dt>
+    <dd>
+    Get y position
+
+
+    <h3>Returns:</h3>
+    <ol>
+
+        y
+    </ol>
+
+
+
+
+</dd>
+    <dt>
+    <a name = "DisplayObj:translate"></a>
+    <strong>DisplayObj:translate&nbsp;(x, y)</strong>
+    </dt>
+    <dd>
+    Move the obj by x,y units
+
+    <h3>Parameters:</h3>
+    <ul>
+      <li><span class="parameter">x</span>
+      </li>
+      <li><span class="parameter">y</span>
+      </li>
+    </ul>
+
+
+
+
+
+</dd>
+    <dt>
+    <a name = "DisplayObj:setRotation"></a>
+    <strong>DisplayObj:setRotation&nbsp;(r)</strong>
+    </dt>
+    <dd>
+    Set rotation value.
+Rotation is expressed in radians and is applied clock wise.
+
+    <h3>Parameters:</h3>
+    <ul>
+      <li><span class="parameter">r</span>
+       radians</li>
+    </ul>
+
+
+
+
+
+</dd>
+    <dt>
+    <a name = "DisplayObj:getRotation"></a>
+    <strong>DisplayObj:getRotation&nbsp;()</strong>
+    </dt>
+    <dd>
+    Get rotation value
+
+
+    <h3>Returns:</h3>
+    <ol>
+
+        r [-math.pi, math.pi]
+    </ol>
+
+
+
+
+</dd>
+    <dt>
+    <a name = "DisplayObj:setScale"></a>
+    <strong>DisplayObj:setScale&nbsp;(x, y)</strong>
+    </dt>
+    <dd>
+    Set scale
+
+    <h3>Parameters:</h3>
+    <ul>
+      <li><span class="parameter">x</span>
+      </li>
+      <li><span class="parameter">y</span>
+      </li>
+    </ul>
+
+
+
+
+
+</dd>
+    <dt>
+    <a name = "DisplayObj:getScale"></a>
+    <strong>DisplayObj:getScale&nbsp;()</strong>
+    </dt>
+    <dd>
+    Get scale value
+
+
+    <h3>Returns:</h3>
+    <ol>
+        <li>
+        x</li>
+        <li>
+        y</li>
+    </ol>
+
+
+
+
+</dd>
+    <dt>
+    <a name = "DisplayObj:setScale_v2"></a>
+    <strong>DisplayObj:setScale_v2&nbsp;(v)</strong>
+    </dt>
+    <dd>
+    Set scale using vec2
+
+    <h3>Parameters:</h3>
+    <ul>
+      <li><span class="parameter">v</span>
+       vec2(x,y)</li>
+    </ul>
+
+
+
+
+
+</dd>
+    <dt>
+    <a name = "DisplayObj:getScale_v2"></a>
+    <strong>DisplayObj:getScale_v2&nbsp;()</strong>
+    </dt>
+    <dd>
+    Get scale using vec2
+
+
+    <h3>Returns:</h3>
+    <ol>
+
+        v vec2(x,y)
+    </ol>
+
+
+
+
+</dd>
+    <dt>
+    <a name = "DisplayObj:setScaleX"></a>
+    <strong>DisplayObj:setScaleX&nbsp;(s)</strong>
+    </dt>
+    <dd>
+    Set scale x value
+
+    <h3>Parameters:</h3>
+    <ul>
+      <li><span class="parameter">s</span>
+      </li>
+    </ul>
+
+
+
+
+
+</dd>
+    <dt>
+    <a name = "DisplayObj:getScaleX"></a>
+    <strong>DisplayObj:getScaleX&nbsp;()</strong>
+    </dt>
+    <dd>
+    Get scale x value
+
+
+    <h3>Returns:</h3>
+    <ol>
+
+        x
+    </ol>
+
+
+
+
+</dd>
+    <dt>
+    <a name = "DisplayObj:setScaleY"></a>
+    <strong>DisplayObj:setScaleY&nbsp;(s)</strong>
+    </dt>
+    <dd>
+    Set scale y value
+
+    <h3>Parameters:</h3>
+    <ul>
+      <li><span class="parameter">s</span>
+      </li>
+    </ul>
+
+
+
+
+
+</dd>
+    <dt>
+    <a name = "DisplayObj:getScaleY"></a>
+    <strong>DisplayObj:getScaleY&nbsp;()</strong>
+    </dt>
+    <dd>
+    Get scale y value
+
+
+    <h3>Returns:</h3>
+    <ol>
+
+        y
+    </ol>
+
+
+
+
+</dd>
+    <dt>
+    <a name = "DisplayObj:updateTransformationMatrix"></a>
+    <strong>DisplayObj:updateTransformationMatrix&nbsp;(targetSpace)</strong>
+    </dt>
+    <dd>
+    Inner method, called to force update of transformation matrix used
+to calculate relative position into the displayList
+
+    <h3>Parameters:</h3>
+    <ul>
+      <li><span class="parameter">targetSpace</span>
+       could be self, nil or an ancestor displayObj.</li>
+    </ul>
+
+
+
+
+
+</dd>
+    <dt>
+    <a name = "DisplayObj:localToGlobal"></a>
+    <strong>DisplayObj:localToGlobal&nbsp;(x, y, targetSpace)</strong>
+    </dt>
+    <dd>
+    Transforms a point from the local coordinate system to
+global coordinates.  targetSpace define the destination
+space of the transformation. If nil is considerede to be
+the top most container (for displayed object the
+screenspace / stage)
+<p>if nil refers to the top most container
+
+    <h3>Parameters:</h3>
+    <ul>
+      <li><span class="parameter">x</span>
+       coordinate in local system</li>
+      <li><span class="parameter">y</span>
+       coordinate in local system</li>
+      <li><span class="parameter">targetSpace</span>
+       destination space of the trasnformation</li>
+    </ul>
+
+
+
+
+
+</dd>
+    <dt>
+    <a name = "DisplayObj:globalToLocal"></a>
+    <strong>DisplayObj:globalToLocal&nbsp;(x, y, targetSpace)</strong>
+    </dt>
+    <dd>
+    Transforms a point from the global coordinate system to
+local coordinates system.  targetSpace define the source
+space of the transformation, to where x,y belongs.
+If nil is considered to be the the top most container
+(for displayed object the screenspace / stage)
+<p>If nil refers to the top most container
+
+    <h3>Parameters:</h3>
+    <ul>
+      <li><span class="parameter">x</span>
+       coordinate in global system</li>
+      <li><span class="parameter">y</span>
+       coordinate in global system</li>
+      <li><span class="parameter">targetSpace</span>
+       source space of the trasnformation </li>
+    </ul>
+
+
+
+
+
+</dd>
+    <dt>
+    <a name = "DisplayObj:setGlobalPosition"></a>
+    <strong>DisplayObj:setGlobalPosition&nbsp;(x, y, targetSpace)</strong>
+    </dt>
+    <dd>
+    Used to set an absolute position related to targetSpace
+container coordinates (usually the stage).
+Usefull for drag and drop features
+<p>If nil refers to the top most container
+
+    <h3>Parameters:</h3>
+    <ul>
+      <li><span class="parameter">x</span>
+       global coordinate</li>
+      <li><span class="parameter">y</span>
+       global coordinate</li>
+      <li><span class="parameter">targetSpace</span>
+       the coordinate system to which x,y belongs. </li>
+    </ul>
+
+
+
+
+
+</dd>
+    <dt>
+    <a name = "DisplayObj:getGlobalPosition"></a>
+    <strong>DisplayObj:getGlobalPosition&nbsp;(targetSpace)</strong>
+    </dt>
+    <dd>
+    Return global position of the object related to the targetSpace provided
+(usually the stage)
+If nil refers to the top most container
+
+    <h3>Parameters:</h3>
+    <ul>
+      <li><span class="parameter">targetSpace</span>
+       related to which position has to be transformed.</li>
+    </ul>
+
+    <h3>Returns:</h3>
+    <ol>
+        <li>
+        x</li>
+        <li>
+        y</li>
+    </ol>
+
+
+
+
+</dd>
+    <dt>
+    <a name = "DisplayObj:globalTranslate"></a>
+    <strong>DisplayObj:globalTranslate&nbsp;(dx, dy, targetSpace)</strong>
+    </dt>
+    <dd>
+    Apply a translation based on targetSpace coordinates(usually the stage)
+
+    <h3>Parameters:</h3>
+    <ul>
+      <li><span class="parameter">dx</span>
+       x translation</li>
+      <li><span class="parameter">dy</span>
+       y translation</li>
+      <li><span class="parameter">targetSpace</span>
+       in which translation has to been applied. If nil refers to the top most container</li>
+    </ul>
+
+
+
+
+
+</dd>
+    <dt>
+    <a name = "DisplayObj:getRect"></a>
+    <strong>DisplayObj:getRect&nbsp;(resultRect)</strong>
+    </dt>
+    <dd>
+    Bounding rect in local coordinates of the displayObj.
+Width, Height, hitTest, Bounds all rely on this method that must be
+defined for concrete displayObj classes.
+
+    <h3>Parameters:</h3>
+    <ul>
+      <li><span class="parameter">resultRect</span>
+       if provided is filled and returned</li>
+    </ul>
+
+    <h3>Returns:</h3>
+    <ol>
+
+        Rect
+    </ol>
+
+
+
+
+</dd>
+    <dt>
+    <a name = "DisplayObj:getWidth"></a>
+    <strong>DisplayObj:getWidth&nbsp;()</strong>
+    </dt>
+    <dd>
+    Get object width related on parent trasnformation (so with scaling applied)
+
+
+
+
+
+
+</dd>
+    <dt>
+    <a name = "DisplayObj:getHeight"></a>
+    <strong>DisplayObj:getHeight&nbsp;()</strong>
+    </dt>
+    <dd>
+    Get object height related on parent trasnformation (so with scaling applied)
+
+
+
+
+
+
+</dd>
+    <dt>
+    <a name = "DisplayObj:getBounds"></a>
+    <strong>DisplayObj:getBounds&nbsp;(targetSpace, resultRect)</strong>
+    </dt>
+    <dd>
+    Returns a rectangle that completely encloses the object as it
+appears in another coordinate system.
+
+    <h3>Parameters:</h3>
+    <ul>
+      <li><span class="parameter">targetSpace</span>
+       the object related to which we want to calculate bounds</li>
+      <li><span class="parameter">resultRect</span>
+       optional, if provided is filled and returned</li>
+    </ul>
+
+    <h3>Returns:</h3>
+    <ol>
+
+        Rect
+    </ol>
+
+
+
+
+</dd>
+    <dt>
+    <a name = "DisplayObj:getOrientedBounds"></a>
+    <strong>DisplayObj:getOrientedBounds&nbsp;(targetSpace)</strong>
+    </dt>
+    <dd>
+    Returns an array of vertices describing a quad that rapresents object bounding rect as it appears into
+another coordinate system
+The array can be directely used for rendering
+
+    <h3>Parameters:</h3>
+    <ul>
+      <li><span class="parameter">targetSpace</span>
+       the object related to which we want to calculate the oriented bounds</li>
+    </ul>
+
+    <h3>Returns:</h3>
+    <ol>
+
+        array of position [x,y,...] for 4 points plus first point replicated.
+    </ol>
+
+
+
+
+</dd>
+    <dt>
+    <a name = "DisplayObj:drawOrientedBounds"></a>
+    <strong>DisplayObj:drawOrientedBounds&nbsp;()</strong>
+    </dt>
+    <dd>
+    Draw the oriented bounding box.  Usefull for debug purpose
+
+
+
+
+
+
+</dd>
+    <dt>
+    <a name = "DisplayObj:drawAABounds"></a>
+    <strong>DisplayObj:drawAABounds&nbsp;(drawContainer)</strong>
+    </dt>
+    <dd>
+    Draw the axis aligned bound of the object as appears into top most container / stage coords
+
+    <h3>Parameters:</h3>
+    <ul>
+      <li><span class="parameter">drawContainer</span>
+      </li>
+    </ul>
+
+
+
+
+
+</dd>
+    <dt>
+    <a name = "DisplayObj:hitTest"></a>
+    <strong>DisplayObj:hitTest&nbsp;(x, y, targetSpace, forTouch)</strong>
+    </dt>
+    <dd>
+    Given a x,y point in targetSpace coordinates it check if it falls inside local bounds.
+
+    <h3>Parameters:</h3>
+    <ul>
+      <li><span class="parameter">x</span>
+       coordinate in targetSpace system</li>
+      <li><span class="parameter">y</span>
+       coordinate in targetSpace system</li>
+      <li><span class="parameter">targetSpace</span>
+       the referred coorindate system. If nil the top most container / stage</li>
+      <li><span class="parameter">forTouch</span>
+       boolean. If true the check is done only for visible and touchable object</li>
+    </ul>
+
+    <h3>Returns:</h3>
+    <ol>
+
+        self if the hitTest is positive else nil
+    </ol>
+
+
+
+
+</dd>
+</dl>
+
+
+</div> <!-- id="content" -->
+</div> <!-- id="main" -->
+<div id="about">
+<i>generated by <a href="http://github.com/stevedonovan/LDoc">LDoc 1.3</a></i>
+</div> <!-- id="about" -->
+</div> <!-- id="container" -->
+</body>
+</html>

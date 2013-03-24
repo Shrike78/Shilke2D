@@ -1,0 +1,593 @@
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Strict//EN"
+   "http://www.w3.org/TR/xhtml1/DTD/xhtml1-strict.dtd">
+<html>
+<meta http-equiv="Content-Type" content="text/html; charset=UTF-8"/>
+<head>
+    <title>Reference</title>
+    <link rel="stylesheet" href="../ldoc.css" type="text/css" />
+</head>
+<body>
+
+<div id="container">
+
+<div id="product">
+	<div id="product_logo"></div>
+	<div id="product_name"><big><b></b></big></div>
+	<div id="product_description"></div>
+</div> <!-- id="product" -->
+
+
+<div id="main">
+
+
+<!-- Menu -->
+
+<div id="navigation">
+<br/>
+<h1>Shilke2D</h1>
+
+<ul>
+  <li><a href="../index.html">Index</a></li>
+</ul>
+
+<h2>Contents</h2>
+<ul>
+<li><a href="#Functions">Functions</a></li>
+</ul>
+
+
+<h2>Modules</h2>
+<ul>
+  <li><a href="../modules/Core.Assets.html">Core.Assets</a></li>
+  <li><a href="../modules/Core.Event.html">Core.Event</a></li>
+  <li><a href="../modules/Core.EventDispatcher.html">Core.EventDispatcher</a></li>
+  <li><a href="../modules/Core.IAnimatable.html">Core.IAnimatable</a></li>
+  <li><a href="../modules/Core.Juggler.html">Core.Juggler</a></li>
+  <li><a href="../modules/Core.Keymap.html">Core.Keymap</a></li>
+  <li><a href="../modules/Core.Shilke2D.html">Core.Shilke2D</a></li>
+  <li><a href="../modules/Core.Timer.html">Core.Timer</a></li>
+  <li><a href="../modules/Core.TouchSensor.html">Core.TouchSensor</a></li>
+  <li><a href="../modules/Display.BaseQuad.html">Display.BaseQuad</a></li>
+  <li><a href="../modules/Display.Button.html">Display.Button</a></li>
+  <li><a href="../modules/Display.DisplayObj.html">Display.DisplayObj</a></li>
+  <li><a href="../modules/Display.DisplayObjContainer.html">Display.DisplayObjContainer</a></li>
+  <li><a href="../modules/Display.DrawableObject.html">Display.DrawableObject</a></li>
+  <li><a href="../modules/Display.Image.html">Display.Image</a></li>
+  <li><a href="../modules/Display.MovieClip.html">Display.MovieClip</a></li>
+  <li><a href="../modules/Display.Quad.html">Display.Quad</a></li>
+  <li><strong>Display.Stage</strong></li>
+  <li><a href="../modules/Display.TextField.html">Display.TextField</a></li>
+  <li><a href="../modules/Texture.BigTextureAtlas.html">Texture.BigTextureAtlas</a></li>
+  <li><a href="../modules/Texture.SubTexture.html">Texture.SubTexture</a></li>
+  <li><a href="../modules/Texture.Texture.html">Texture.Texture</a></li>
+  <li><a href="../modules/Texture.TextureAtlas.html">Texture.TextureAtlas</a></li>
+  <li><a href="../modules/Texture.TextureManager.html">Texture.TextureManager</a></li>
+  <li><a href="../modules/Texture.TexturePacker.html">Texture.TexturePacker</a></li>
+  <li><a href="../modules/include.html">include</a></li>
+</ul>
+
+</div>
+
+<div id="content">
+
+<h1>Module <code>Display.Stage</code></h1>
+
+<p>Stage is a particular DisplayObjContainer, root node of the displayList tree.</p>
+<p>
+It's initialized by Shilke2D and only object connected to it are rendered.
+A stage cannot be geometrically transformed or moved, so all the related method
+are override and raise errors if called.</p>
+
+
+<h2><a href="#Functions">Functions</a></h2>
+<table class="function_list">
+	<tr>
+	<td class="name" nowrap><a href="#Stage:init">Stage:init&nbsp;(viewport)</a></td>
+	<td class="summary">Called from Shilke2D, it sets the viewport for the scene, the renderTable and
+initializes the 'debug' drawCallback used to show bounding boxes of objects in
+the displayList</td>
+	</tr>
+	<tr>
+	<td class="name" nowrap><a href="#Stage:_createProp">Stage:_createProp&nbsp;()</a></td>
+	<td class="summary">Stage prop is a MOAILayer, not a generic MOAIProp like all the others displayObjs</td>
+	</tr>
+	<tr>
+	<td class="name" nowrap><a href="#Stage:showDebugLines">Stage:showDebugLines&nbsp;(showOrientedBounds, showAABounds)</a></td>
+	<td class="summary">Debug function.</td>
+	</tr>
+	<tr>
+	<td class="name" nowrap><a href="#__setClearColor">__setClearColor&nbsp;(r, g, b, a)</a></td>
+	<td class="summary">Inner method.</td>
+	</tr>
+	<tr>
+	<td class="name" nowrap><a href="#Stage:setBackground">Stage:setBackground&nbsp;(r, g, b)</a></td>
+	<td class="summary">Set background color.</td>
+	</tr>
+	<tr>
+	<td class="name" nowrap><a href="#Stage:_setParent">Stage:_setParent&nbsp;(parent)</a></td>
+	<td class="summary">Raise error if called because stage cannot be added as child to other containers</td>
+	</tr>
+	<tr>
+	<td class="name" nowrap><a href="#Stage:setPivot">Stage:setPivot&nbsp;(x, y)</a></td>
+	<td class="summary">Raise error if called because stage cannot be geometrically trasnformed</td>
+	</tr>
+	<tr>
+	<td class="name" nowrap><a href="#Stage:setPivotX">Stage:setPivotX&nbsp;(x)</a></td>
+	<td class="summary">Raise error if called because stage cannot be geometrically trasnformed</td>
+	</tr>
+	<tr>
+	<td class="name" nowrap><a href="#Stage:setPivotY">Stage:setPivotY&nbsp;(y)</a></td>
+	<td class="summary">Raise error if called because stage cannot be geometrically trasnformed</td>
+	</tr>
+	<tr>
+	<td class="name" nowrap><a href="#Stage:setPosition">Stage:setPosition&nbsp;(x, y)</a></td>
+	<td class="summary">Raise error if called because stage cannot be geometrically trasnformed</td>
+	</tr>
+	<tr>
+	<td class="name" nowrap><a href="#Stage:setPosition_v2">Stage:setPosition_v2&nbsp;(v)</a></td>
+	<td class="summary">Raise error if called because stage cannot be geometrically trasnformed</td>
+	</tr>
+	<tr>
+	<td class="name" nowrap><a href="#Stage:setPositionX">Stage:setPositionX&nbsp;(x)</a></td>
+	<td class="summary">Raise error if called because stage cannot be geometrically trasnformed</td>
+	</tr>
+	<tr>
+	<td class="name" nowrap><a href="#Stage:setPositionY">Stage:setPositionY&nbsp;(y)</a></td>
+	<td class="summary">Raise error if called because stage cannot be geometrically trasnformed</td>
+	</tr>
+	<tr>
+	<td class="name" nowrap><a href="#Stage:translate">Stage:translate&nbsp;(x, y)</a></td>
+	<td class="summary">Raise error if called because stage cannot be geometrically trasnformed</td>
+	</tr>
+	<tr>
+	<td class="name" nowrap><a href="#Stage:setRotation">Stage:setRotation&nbsp;(r)</a></td>
+	<td class="summary">Raise error if called because stage cannot be geometrically trasnformed</td>
+	</tr>
+	<tr>
+	<td class="name" nowrap><a href="#Stage:setScale">Stage:setScale&nbsp;(x, y)</a></td>
+	<td class="summary">Raise error if called because stage cannot be geometrically trasnformed</td>
+	</tr>
+	<tr>
+	<td class="name" nowrap><a href="#Stage:setScale_v2">Stage:setScale_v2&nbsp;(v)</a></td>
+	<td class="summary">Raise error if called because stage cannot be geometrically trasnformed</td>
+	</tr>
+	<tr>
+	<td class="name" nowrap><a href="#Stage:setScaleX">Stage:setScaleX&nbsp;(s)</a></td>
+	<td class="summary">Raise error if called because stage cannot be geometrically trasnformed</td>
+	</tr>
+	<tr>
+	<td class="name" nowrap><a href="#Stage:setScaleY">Stage:setScaleY&nbsp;(s)</a></td>
+	<td class="summary">Raise error if called because stage cannot be geometrically trasnformed</td>
+	</tr>
+	<tr>
+	<td class="name" nowrap><a href="#Stage:setGlobalPosition">Stage:setGlobalPosition&nbsp;(x, y, targetSpace)</a></td>
+	<td class="summary">Raise error if called because stage cannot be geometrically trasnformed</td>
+	</tr>
+	<tr>
+	<td class="name" nowrap><a href="#Stage:globalTranslate">Stage:globalTranslate&nbsp;(dx, dy, targetSpace)</a></td>
+	<td class="summary">Raise error if called because stage cannot be geometrically trasnformed</td>
+	</tr>
+</table>
+
+<br/>
+<br/>
+
+
+    <h2><a name="Functions"></a>Functions</h2>
+    <dl class="function">
+    <dt>
+    <a name = "Stage:init"></a>
+    <strong>Stage:init&nbsp;(viewport)</strong>
+    </dt>
+    <dd>
+    Called from Shilke2D, it sets the viewport for the scene, the renderTable and
+initializes the 'debug' drawCallback used to show bounding boxes of objects in
+the displayList
+
+    <h3>Parameters:</h3>
+    <ul>
+      <li><span class="parameter">viewport</span>
+       the viewport of the scene</li>
+    </ul>
+
+
+
+
+
+</dd>
+    <dt>
+    <a name = "Stage:_createProp"></a>
+    <strong>Stage:_createProp&nbsp;()</strong>
+    </dt>
+    <dd>
+    Stage prop is a MOAILayer, not a generic MOAIProp like all the others displayObjs
+
+
+
+
+
+
+</dd>
+    <dt>
+    <a name = "Stage:showDebugLines"></a>
+    <strong>Stage:showDebugLines&nbsp;(showOrientedBounds, showAABounds)</strong>
+    </dt>
+    <dd>
+    Debug function.  Used to show bounding box while rendering.
+
+    <h3>Parameters:</h3>
+    <ul>
+      <li><span class="parameter">showOrientedBounds</span>
+       boolean. if nil is set to true</li>
+      <li><span class="parameter">showAABounds</span>
+       boolean. if nil is set to false</li>
+    </ul>
+
+
+
+
+
+</dd>
+    <dt>
+    <a name = "__setClearColor"></a>
+    <strong>__setClearColor&nbsp;(r, g, b, a)</strong>
+    </dt>
+    <dd>
+    Inner method.
+With moai 1.4 clearColor funciton has been moved to frameBuffer and removed from GfxDevice.
+The call checks which method is available and make the proper moai call.
+
+    <h3>Parameters:</h3>
+    <ul>
+      <li><span class="parameter">r</span>
+       red component [0..1]</li>
+      <li><span class="parameter">g</span>
+       green component [0..1]</li>
+      <li><span class="parameter">b</span>
+       blue component [0..1]</li>
+      <li><span class="parameter">a</span>
+       alpha component [0..1]</li>
+    </ul>
+
+
+
+
+
+</dd>
+    <dt>
+    <a name = "Stage:setBackground"></a>
+    <strong>Stage:setBackground&nbsp;(r, g, b)</strong>
+    </dt>
+    <dd>
+    Set background color.
+
+    <h3>Parameters:</h3>
+    <ul>
+      <li><span class="parameter">r</span>
+       red component [0..255] or Color</li>
+      <li><span class="parameter">g</span>
+       green component [0..255] or nil</li>
+      <li><span class="parameter">b</span>
+       blue component [0..255] or nil</li>
+    </ul>
+
+
+
+
+
+</dd>
+    <dt>
+    <a name = "Stage:_setParent"></a>
+    <strong>Stage:_setParent&nbsp;(parent)</strong>
+    </dt>
+    <dd>
+    Raise error if called because stage cannot be added as child to other containers
+
+    <h3>Parameters:</h3>
+    <ul>
+      <li><span class="parameter">parent</span>
+      </li>
+    </ul>
+
+
+
+
+
+</dd>
+    <dt>
+    <a name = "Stage:setPivot"></a>
+    <strong>Stage:setPivot&nbsp;(x, y)</strong>
+    </dt>
+    <dd>
+    Raise error if called because stage cannot be geometrically trasnformed
+
+    <h3>Parameters:</h3>
+    <ul>
+      <li><span class="parameter">x</span>
+      </li>
+      <li><span class="parameter">y</span>
+      </li>
+    </ul>
+
+
+
+
+
+</dd>
+    <dt>
+    <a name = "Stage:setPivotX"></a>
+    <strong>Stage:setPivotX&nbsp;(x)</strong>
+    </dt>
+    <dd>
+    Raise error if called because stage cannot be geometrically trasnformed
+
+    <h3>Parameters:</h3>
+    <ul>
+      <li><span class="parameter">x</span>
+      </li>
+    </ul>
+
+
+
+
+
+</dd>
+    <dt>
+    <a name = "Stage:setPivotY"></a>
+    <strong>Stage:setPivotY&nbsp;(y)</strong>
+    </dt>
+    <dd>
+    Raise error if called because stage cannot be geometrically trasnformed
+
+    <h3>Parameters:</h3>
+    <ul>
+      <li><span class="parameter">y</span>
+      </li>
+    </ul>
+
+
+
+
+
+</dd>
+    <dt>
+    <a name = "Stage:setPosition"></a>
+    <strong>Stage:setPosition&nbsp;(x, y)</strong>
+    </dt>
+    <dd>
+    Raise error if called because stage cannot be geometrically trasnformed
+
+    <h3>Parameters:</h3>
+    <ul>
+      <li><span class="parameter">x</span>
+      </li>
+      <li><span class="parameter">y</span>
+      </li>
+    </ul>
+
+
+
+
+
+</dd>
+    <dt>
+    <a name = "Stage:setPosition_v2"></a>
+    <strong>Stage:setPosition_v2&nbsp;(v)</strong>
+    </dt>
+    <dd>
+    Raise error if called because stage cannot be geometrically trasnformed
+
+    <h3>Parameters:</h3>
+    <ul>
+      <li><span class="parameter">v</span>
+      </li>
+    </ul>
+
+
+
+
+
+</dd>
+    <dt>
+    <a name = "Stage:setPositionX"></a>
+    <strong>Stage:setPositionX&nbsp;(x)</strong>
+    </dt>
+    <dd>
+    Raise error if called because stage cannot be geometrically trasnformed
+
+    <h3>Parameters:</h3>
+    <ul>
+      <li><span class="parameter">x</span>
+      </li>
+    </ul>
+
+
+
+
+
+</dd>
+    <dt>
+    <a name = "Stage:setPositionY"></a>
+    <strong>Stage:setPositionY&nbsp;(y)</strong>
+    </dt>
+    <dd>
+    Raise error if called because stage cannot be geometrically trasnformed
+
+    <h3>Parameters:</h3>
+    <ul>
+      <li><span class="parameter">y</span>
+      </li>
+    </ul>
+
+
+
+
+
+</dd>
+    <dt>
+    <a name = "Stage:translate"></a>
+    <strong>Stage:translate&nbsp;(x, y)</strong>
+    </dt>
+    <dd>
+    Raise error if called because stage cannot be geometrically trasnformed
+
+    <h3>Parameters:</h3>
+    <ul>
+      <li><span class="parameter">x</span>
+      </li>
+      <li><span class="parameter">y</span>
+      </li>
+    </ul>
+
+
+
+
+
+</dd>
+    <dt>
+    <a name = "Stage:setRotation"></a>
+    <strong>Stage:setRotation&nbsp;(r)</strong>
+    </dt>
+    <dd>
+    Raise error if called because stage cannot be geometrically trasnformed
+
+    <h3>Parameters:</h3>
+    <ul>
+      <li><span class="parameter">r</span>
+      </li>
+    </ul>
+
+
+
+
+
+</dd>
+    <dt>
+    <a name = "Stage:setScale"></a>
+    <strong>Stage:setScale&nbsp;(x, y)</strong>
+    </dt>
+    <dd>
+    Raise error if called because stage cannot be geometrically trasnformed
+
+    <h3>Parameters:</h3>
+    <ul>
+      <li><span class="parameter">x</span>
+      </li>
+      <li><span class="parameter">y</span>
+      </li>
+    </ul>
+
+
+
+
+
+</dd>
+    <dt>
+    <a name = "Stage:setScale_v2"></a>
+    <strong>Stage:setScale_v2&nbsp;(v)</strong>
+    </dt>
+    <dd>
+    Raise error if called because stage cannot be geometrically trasnformed
+
+    <h3>Parameters:</h3>
+    <ul>
+      <li><span class="parameter">v</span>
+      </li>
+    </ul>
+
+
+
+
+
+</dd>
+    <dt>
+    <a name = "Stage:setScaleX"></a>
+    <strong>Stage:setScaleX&nbsp;(s)</strong>
+    </dt>
+    <dd>
+    Raise error if called because stage cannot be geometrically trasnformed
+
+    <h3>Parameters:</h3>
+    <ul>
+      <li><span class="parameter">s</span>
+      </li>
+    </ul>
+
+
+
+
+
+</dd>
+    <dt>
+    <a name = "Stage:setScaleY"></a>
+    <strong>Stage:setScaleY&nbsp;(s)</strong>
+    </dt>
+    <dd>
+    Raise error if called because stage cannot be geometrically trasnformed
+
+    <h3>Parameters:</h3>
+    <ul>
+      <li><span class="parameter">s</span>
+      </li>
+    </ul>
+
+
+
+
+
+</dd>
+    <dt>
+    <a name = "Stage:setGlobalPosition"></a>
+    <strong>Stage:setGlobalPosition&nbsp;(x, y, targetSpace)</strong>
+    </dt>
+    <dd>
+    Raise error if called because stage cannot be geometrically trasnformed
+
+    <h3>Parameters:</h3>
+    <ul>
+      <li><span class="parameter">x</span>
+      </li>
+      <li><span class="parameter">y</span>
+      </li>
+      <li><span class="parameter">targetSpace</span>
+      </li>
+    </ul>
+
+
+
+
+
+</dd>
+    <dt>
+    <a name = "Stage:globalTranslate"></a>
+    <strong>Stage:globalTranslate&nbsp;(dx, dy, targetSpace)</strong>
+    </dt>
+    <dd>
+    Raise error if called because stage cannot be geometrically trasnformed
+
+    <h3>Parameters:</h3>
+    <ul>
+      <li><span class="parameter">dx</span>
+      </li>
+      <li><span class="parameter">dy</span>
+      </li>
+      <li><span class="parameter">targetSpace</span>
+      </li>
+    </ul>
+
+
+
+
+
+</dd>
+</dl>
+
+
+</div> <!-- id="content" -->
+</div> <!-- id="main" -->
+<div id="about">
+<i>generated by <a href="http://github.com/stevedonovan/LDoc">LDoc 1.3</a></i>
+</div> <!-- id="about" -->
+</div> <!-- id="container" -->
+</body>
+</html>

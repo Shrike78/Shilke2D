@@ -1,0 +1,566 @@
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Strict//EN"
+   "http://www.w3.org/TR/xhtml1/DTD/xhtml1-strict.dtd">
+<html>
+<meta http-equiv="Content-Type" content="text/html; charset=UTF-8"/>
+<head>
+    <title>Reference</title>
+    <link rel="stylesheet" href="../ldoc.css" type="text/css" />
+</head>
+<body>
+
+<div id="container">
+
+<div id="product">
+	<div id="product_logo"></div>
+	<div id="product_name"><big><b></b></big></div>
+	<div id="product_description"></div>
+</div> <!-- id="product" -->
+
+
+<div id="main">
+
+
+<!-- Menu -->
+
+<div id="navigation">
+<br/>
+<h1>Shilke2D</h1>
+
+<ul>
+  <li><a href="../index.html">Index</a></li>
+</ul>
+
+<h2>Contents</h2>
+<ul>
+<li><a href="#Functions">Functions</a></li>
+<li><a href="#Fields">Fields</a></li>
+</ul>
+
+
+<h2>Modules</h2>
+<ul>
+  <li><a href="../modules/Core.Assets.html">Core.Assets</a></li>
+  <li><a href="../modules/Core.Event.html">Core.Event</a></li>
+  <li><a href="../modules/Core.EventDispatcher.html">Core.EventDispatcher</a></li>
+  <li><a href="../modules/Core.IAnimatable.html">Core.IAnimatable</a></li>
+  <li><a href="../modules/Core.Juggler.html">Core.Juggler</a></li>
+  <li><a href="../modules/Core.Keymap.html">Core.Keymap</a></li>
+  <li><a href="../modules/Core.Shilke2D.html">Core.Shilke2D</a></li>
+  <li><a href="../modules/Core.Timer.html">Core.Timer</a></li>
+  <li><a href="../modules/Core.TouchSensor.html">Core.TouchSensor</a></li>
+  <li><strong>Display.BaseQuad</strong></li>
+  <li><a href="../modules/Display.Button.html">Display.Button</a></li>
+  <li><a href="../modules/Display.DisplayObj.html">Display.DisplayObj</a></li>
+  <li><a href="../modules/Display.DisplayObjContainer.html">Display.DisplayObjContainer</a></li>
+  <li><a href="../modules/Display.DrawableObject.html">Display.DrawableObject</a></li>
+  <li><a href="../modules/Display.Image.html">Display.Image</a></li>
+  <li><a href="../modules/Display.MovieClip.html">Display.MovieClip</a></li>
+  <li><a href="../modules/Display.Quad.html">Display.Quad</a></li>
+  <li><a href="../modules/Display.Stage.html">Display.Stage</a></li>
+  <li><a href="../modules/Display.TextField.html">Display.TextField</a></li>
+  <li><a href="../modules/Texture.BigTextureAtlas.html">Texture.BigTextureAtlas</a></li>
+  <li><a href="../modules/Texture.SubTexture.html">Texture.SubTexture</a></li>
+  <li><a href="../modules/Texture.Texture.html">Texture.Texture</a></li>
+  <li><a href="../modules/Texture.TextureAtlas.html">Texture.TextureAtlas</a></li>
+  <li><a href="../modules/Texture.TextureManager.html">Texture.TextureManager</a></li>
+  <li><a href="../modules/Texture.TexturePacker.html">Texture.TexturePacker</a></li>
+  <li><a href="../modules/include.html">include</a></li>
+</ul>
+
+</div>
+
+<div id="content">
+
+<h1>Module <code>Display.BaseQuad</code></h1>
+
+<p>BaseQuad is a displayObj, base class for all the displayObject that can be rapresented by a quad
+(so Quad, Image, Movieclip and so on)
+<p>Is not a real 'renderable' because has no MOAIDeck binded to the main prop, it can be considered
+as a middle class that has no meeaning to be instantiated by itself.</p>
+<p>
+<p>BaseQuad allows different pivotMode. Default PivotMode is PivotMode.CENTER               </p>
+
+
+<h2><a href="#Functions">Functions</a></h2>
+<table class="function_list">
+	<tr>
+	<td class="name" nowrap><a href="#BaseQuad:init">BaseQuad:init&nbsp;(width, height, pivotMode)</a></td>
+	<td class="summary">Initialization.</td>
+	</tr>
+	<tr>
+	<td class="name" nowrap><a href="#BaseQuad:setSize">BaseQuad:setSize&nbsp;(width, height)</a></td>
+	<td class="summary">Set the size of the object.</td>
+	</tr>
+	<tr>
+	<td class="name" nowrap><a href="#BaseQuad:setPivotMode">BaseQuad:setPivotMode&nbsp;(pivotMode)</a></td>
+	<td class="summary">Set the pivotMode object.</td>
+	</tr>
+	<tr>
+	<td class="name" nowrap><a href="#BaseQuad:getPivotMode">BaseQuad:getPivotMode&nbsp;()</a></td>
+	<td class="summary">Returns current pivotMode.</td>
+	</tr>
+	<tr>
+	<td class="name" nowrap><a href="#BaseQuad:setPivot">BaseQuad:setPivot&nbsp;(x, y)</a></td>
+	<td class="summary">Set pivot coordinates.</td>
+	</tr>
+	<tr>
+	<td class="name" nowrap><a href="#BaseQuad:getPivot">BaseQuad:getPivot&nbsp;()</a></td>
+	<td class="summary">Return pivot coordinate
+return x
+return y</td>
+	</tr>
+	<tr>
+	<td class="name" nowrap><a href="#BaseQuad:setPivotX">BaseQuad:setPivotX&nbsp;(x)</a></td>
+	<td class="summary">Set Pivot x position</td>
+	</tr>
+	<tr>
+	<td class="name" nowrap><a href="#BaseQuad:getPivotX">BaseQuad:getPivotX&nbsp;()</a></td>
+	<td class="summary">Get Pivot x position</td>
+	</tr>
+	<tr>
+	<td class="name" nowrap><a href="#BaseQuad:setPivotY">BaseQuad:setPivotY&nbsp;(y)</a></td>
+	<td class="summary">Set Pivot y position</td>
+	</tr>
+	<tr>
+	<td class="name" nowrap><a href="#BaseQuad:getPivotY">BaseQuad:getPivotY&nbsp;()</a></td>
+	<td class="summary">Get Pivot y position</td>
+	</tr>
+	<tr>
+	<td class="name" nowrap><a href="#BaseQuad:getRect">BaseQuad:getRect&nbsp;(resultRect)</a></td>
+	<td class="summary">Returns the rect defined by obj widht and height, centered in 0,0</td>
+	</tr>
+	<tr>
+	<td class="name" nowrap><a href="#BaseQuad:getWidth">BaseQuad:getWidth&nbsp;()</a></td>
+	<td class="summary">Get object width related on parent trasnformation (so with scaling applied)</td>
+	</tr>
+	<tr>
+	<td class="name" nowrap><a href="#BaseQuad:getHeight">BaseQuad:getHeight&nbsp;()</a></td>
+	<td class="summary">Get object height related on parent trasnformation (so with scaling applied)</td>
+	</tr>
+</table>
+<h2><a href="#Fields">Fields</a></h2>
+<table class="function_list">
+	<tr>
+	<td class="name" nowrap><a href="#PivotMode.CUSTOM">PivotMode.CUSTOM</a></td>
+	<td class="summary">Manually set x,y coordinates</td>
+	</tr>
+	<tr>
+	<td class="name" nowrap><a href="#PivotMode.BOTTOM_LEFT">PivotMode.BOTTOM_LEFT</a></td>
+	<td class="summary">The pivotPoint is always the bottom left point of the bound rect</td>
+	</tr>
+	<tr>
+	<td class="name" nowrap><a href="#PivotMode.BOTTOM_CENTER">PivotMode.BOTTOM_CENTER</a></td>
+	<td class="summary">The pivotPoint is always the bottom center point of the bound rect</td>
+	</tr>
+	<tr>
+	<td class="name" nowrap><a href="#PivotMode.BOTTOM_RIGHT">PivotMode.BOTTOM_RIGHT</a></td>
+	<td class="summary">The pivotPoint is always the bottom right point of the bound rect</td>
+	</tr>
+	<tr>
+	<td class="name" nowrap><a href="#PivotMode.CENTER_LEFT">PivotMode.CENTER_LEFT</a></td>
+	<td class="summary">The pivotPoint is always the center left point of the bound rect</td>
+	</tr>
+	<tr>
+	<td class="name" nowrap><a href="#PivotMode.CENTER">PivotMode.CENTER</a></td>
+	<td class="summary">The pivotPoint is always the center point of the bound rect</td>
+	</tr>
+	<tr>
+	<td class="name" nowrap><a href="#PivotMode.CENTER_RIGHT">PivotMode.CENTER_RIGHT</a></td>
+	<td class="summary">The pivotPoint is always the center right point of the bound rect</td>
+	</tr>
+	<tr>
+	<td class="name" nowrap><a href="#PivotMode.TOP_LEFT">PivotMode.TOP_LEFT</a></td>
+	<td class="summary">The pivotPoint is always the top left point of the bound rect</td>
+	</tr>
+	<tr>
+	<td class="name" nowrap><a href="#PivotMode.TOP_CENTER">PivotMode.TOP_CENTER</a></td>
+	<td class="summary">The pivotPoint is always the top center point of the bound rect</td>
+	</tr>
+	<tr>
+	<td class="name" nowrap><a href="#PivotMode.TOP_RIGHT">PivotMode.TOP_RIGHT</a></td>
+	<td class="summary">The pivotPoint is always the top right point of the bound rect</td>
+	</tr>
+</table>
+
+<br/>
+<br/>
+
+
+    <h2><a name="Functions"></a>Functions</h2>
+    <dl class="function">
+    <dt>
+    <a name = "BaseQuad:init"></a>
+    <strong>BaseQuad:init&nbsp;(width, height, pivotMode)</strong>
+    </dt>
+    <dd>
+    Initialization.
+
+    <h3>Parameters:</h3>
+    <ul>
+      <li><span class="parameter">width</span>
+       widht of the quad</li>
+      <li><span class="parameter">height</span>
+       height of the quad</li>
+      <li><span class="parameter">pivotMode</span>
+       by default PivotMode.CENTER</li>
+    </ul>
+
+
+
+
+
+</dd>
+    <dt>
+    <a name = "BaseQuad:setSize"></a>
+    <strong>BaseQuad:setSize&nbsp;(width, height)</strong>
+    </dt>
+    <dd>
+    Set the size of the object.
+If pivotMode is not custom then it recalculate pivot depending on pivotMode logic / function
+
+    <h3>Parameters:</h3>
+    <ul>
+      <li><span class="parameter">width</span>
+       widht of the quad</li>
+      <li><span class="parameter">height</span>
+       height of the quad</li>
+    </ul>
+
+
+
+
+
+</dd>
+    <dt>
+    <a name = "BaseQuad:setPivotMode"></a>
+    <strong>BaseQuad:setPivotMode&nbsp;(pivotMode)</strong>
+    </dt>
+    <dd>
+    Set the pivotMode object.
+
+    <h3>Parameters:</h3>
+    <ul>
+      <li><span class="parameter">pivotMode</span>
+      </li>
+    </ul>
+
+
+
+
+
+</dd>
+    <dt>
+    <a name = "BaseQuad:getPivotMode"></a>
+    <strong>BaseQuad:getPivotMode&nbsp;()</strong>
+    </dt>
+    <dd>
+    Returns current pivotMode.
+
+
+    <h3>Returns:</h3>
+    <ol>
+
+        object pivotMode
+    </ol>
+
+
+
+
+</dd>
+    <dt>
+    <a name = "BaseQuad:setPivot"></a>
+    <strong>BaseQuad:setPivot&nbsp;(x, y)</strong>
+    </dt>
+    <dd>
+    Set pivot coordinates.
+That means to set a CUSTOM pivot defining pivot point, that will not change event if
+size of the object would be changed
+
+    <h3>Parameters:</h3>
+    <ul>
+      <li><span class="parameter">x</span>
+       pivot x coordinate</li>
+      <li><span class="parameter">y</span>
+       pivot y coordinate</li>
+    </ul>
+
+
+
+
+
+</dd>
+    <dt>
+    <a name = "BaseQuad:getPivot"></a>
+    <strong>BaseQuad:getPivot&nbsp;()</strong>
+    </dt>
+    <dd>
+    Return pivot coordinate
+return x
+return y
+
+
+
+
+
+
+</dd>
+    <dt>
+    <a name = "BaseQuad:setPivotX"></a>
+    <strong>BaseQuad:setPivotX&nbsp;(x)</strong>
+    </dt>
+    <dd>
+    Set Pivot x position
+
+    <h3>Parameters:</h3>
+    <ul>
+      <li><span class="parameter">x</span>
+      </li>
+    </ul>
+
+
+
+
+
+</dd>
+    <dt>
+    <a name = "BaseQuad:getPivotX"></a>
+    <strong>BaseQuad:getPivotX&nbsp;()</strong>
+    </dt>
+    <dd>
+    Get Pivot x position
+
+
+    <h3>Returns:</h3>
+    <ol>
+
+        x
+    </ol>
+
+
+
+
+</dd>
+    <dt>
+    <a name = "BaseQuad:setPivotY"></a>
+    <strong>BaseQuad:setPivotY&nbsp;(y)</strong>
+    </dt>
+    <dd>
+    Set Pivot y position
+
+    <h3>Parameters:</h3>
+    <ul>
+      <li><span class="parameter">y</span>
+      </li>
+    </ul>
+
+
+
+
+
+</dd>
+    <dt>
+    <a name = "BaseQuad:getPivotY"></a>
+    <strong>BaseQuad:getPivotY&nbsp;()</strong>
+    </dt>
+    <dd>
+    Get Pivot y position
+
+
+    <h3>Returns:</h3>
+    <ol>
+
+        y
+    </ol>
+
+
+
+
+</dd>
+    <dt>
+    <a name = "BaseQuad:getRect"></a>
+    <strong>BaseQuad:getRect&nbsp;(resultRect)</strong>
+    </dt>
+    <dd>
+    Returns the rect defined by obj widht and height, centered in 0,0
+
+    <h3>Parameters:</h3>
+    <ul>
+      <li><span class="parameter">resultRect</span>
+       helper rect that can be set avoiding creation of a new rect</li>
+    </ul>
+
+
+
+
+
+</dd>
+    <dt>
+    <a name = "BaseQuad:getWidth"></a>
+    <strong>BaseQuad:getWidth&nbsp;()</strong>
+    </dt>
+    <dd>
+    Get object width related on parent trasnformation (so with scaling applied)
+
+
+
+
+
+
+</dd>
+    <dt>
+    <a name = "BaseQuad:getHeight"></a>
+    <strong>BaseQuad:getHeight&nbsp;()</strong>
+    </dt>
+    <dd>
+    Get object height related on parent trasnformation (so with scaling applied)
+
+
+
+
+
+
+</dd>
+</dl>
+    <h2><a name="Fields"></a>Fields</h2>
+    <dl class="function">
+    <dt>
+    <a name = "PivotMode.CUSTOM"></a>
+    <strong>PivotMode.CUSTOM</strong>
+    </dt>
+    <dd>
+    Manually set x,y coordinates
+
+
+
+
+
+
+</dd>
+    <dt>
+    <a name = "PivotMode.BOTTOM_LEFT"></a>
+    <strong>PivotMode.BOTTOM_LEFT</strong>
+    </dt>
+    <dd>
+    The pivotPoint is always the bottom left point of the bound rect
+
+
+
+
+
+
+</dd>
+    <dt>
+    <a name = "PivotMode.BOTTOM_CENTER"></a>
+    <strong>PivotMode.BOTTOM_CENTER</strong>
+    </dt>
+    <dd>
+    The pivotPoint is always the bottom center point of the bound rect
+
+
+
+
+
+
+</dd>
+    <dt>
+    <a name = "PivotMode.BOTTOM_RIGHT"></a>
+    <strong>PivotMode.BOTTOM_RIGHT</strong>
+    </dt>
+    <dd>
+    The pivotPoint is always the bottom right point of the bound rect
+
+
+
+
+
+
+</dd>
+    <dt>
+    <a name = "PivotMode.CENTER_LEFT"></a>
+    <strong>PivotMode.CENTER_LEFT</strong>
+    </dt>
+    <dd>
+    The pivotPoint is always the center left point of the bound rect
+
+
+
+
+
+
+</dd>
+    <dt>
+    <a name = "PivotMode.CENTER"></a>
+    <strong>PivotMode.CENTER</strong>
+    </dt>
+    <dd>
+    The pivotPoint is always the center point of the bound rect
+
+
+
+
+
+
+</dd>
+    <dt>
+    <a name = "PivotMode.CENTER_RIGHT"></a>
+    <strong>PivotMode.CENTER_RIGHT</strong>
+    </dt>
+    <dd>
+    The pivotPoint is always the center right point of the bound rect
+
+
+
+
+
+
+</dd>
+    <dt>
+    <a name = "PivotMode.TOP_LEFT"></a>
+    <strong>PivotMode.TOP_LEFT</strong>
+    </dt>
+    <dd>
+    The pivotPoint is always the top left point of the bound rect
+
+
+
+
+
+
+</dd>
+    <dt>
+    <a name = "PivotMode.TOP_CENTER"></a>
+    <strong>PivotMode.TOP_CENTER</strong>
+    </dt>
+    <dd>
+    The pivotPoint is always the top center point of the bound rect
+
+
+
+
+
+
+</dd>
+    <dt>
+    <a name = "PivotMode.TOP_RIGHT"></a>
+    <strong>PivotMode.TOP_RIGHT</strong>
+    </dt>
+    <dd>
+    The pivotPoint is always the top right point of the bound rect
+
+
+
+
+
+
+</dd>
+</dl>
+
+
+</div> <!-- id="content" -->
+</div> <!-- id="main" -->
+<div id="about">
+<i>generated by <a href="http://github.com/stevedonovan/LDoc">LDoc 1.3</a></i>
+</div> <!-- id="about" -->
+</div> <!-- id="container" -->
+</body>
+</html>

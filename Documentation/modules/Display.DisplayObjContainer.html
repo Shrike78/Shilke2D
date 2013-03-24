@@ -1,0 +1,758 @@
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Strict//EN"
+   "http://www.w3.org/TR/xhtml1/DTD/xhtml1-strict.dtd">
+<html>
+<meta http-equiv="Content-Type" content="text/html; charset=UTF-8"/>
+<head>
+    <title>Reference</title>
+    <link rel="stylesheet" href="../ldoc.css" type="text/css" />
+</head>
+<body>
+
+<div id="container">
+
+<div id="product">
+	<div id="product_logo"></div>
+	<div id="product_name"><big><b></b></big></div>
+	<div id="product_description"></div>
+</div> <!-- id="product" -->
+
+
+<div id="main">
+
+
+<!-- Menu -->
+
+<div id="navigation">
+<br/>
+<h1>Shilke2D</h1>
+
+<ul>
+  <li><a href="../index.html">Index</a></li>
+</ul>
+
+<h2>Contents</h2>
+<ul>
+<li><a href="#Functions">Functions</a></li>
+</ul>
+
+
+<h2>Modules</h2>
+<ul>
+  <li><a href="../modules/Core.Assets.html">Core.Assets</a></li>
+  <li><a href="../modules/Core.Event.html">Core.Event</a></li>
+  <li><a href="../modules/Core.EventDispatcher.html">Core.EventDispatcher</a></li>
+  <li><a href="../modules/Core.IAnimatable.html">Core.IAnimatable</a></li>
+  <li><a href="../modules/Core.Juggler.html">Core.Juggler</a></li>
+  <li><a href="../modules/Core.Keymap.html">Core.Keymap</a></li>
+  <li><a href="../modules/Core.Shilke2D.html">Core.Shilke2D</a></li>
+  <li><a href="../modules/Core.Timer.html">Core.Timer</a></li>
+  <li><a href="../modules/Core.TouchSensor.html">Core.TouchSensor</a></li>
+  <li><a href="../modules/Display.BaseQuad.html">Display.BaseQuad</a></li>
+  <li><a href="../modules/Display.Button.html">Display.Button</a></li>
+  <li><a href="../modules/Display.DisplayObj.html">Display.DisplayObj</a></li>
+  <li><strong>Display.DisplayObjContainer</strong></li>
+  <li><a href="../modules/Display.DrawableObject.html">Display.DrawableObject</a></li>
+  <li><a href="../modules/Display.Image.html">Display.Image</a></li>
+  <li><a href="../modules/Display.MovieClip.html">Display.MovieClip</a></li>
+  <li><a href="../modules/Display.Quad.html">Display.Quad</a></li>
+  <li><a href="../modules/Display.Stage.html">Display.Stage</a></li>
+  <li><a href="../modules/Display.TextField.html">Display.TextField</a></li>
+  <li><a href="../modules/Texture.BigTextureAtlas.html">Texture.BigTextureAtlas</a></li>
+  <li><a href="../modules/Texture.SubTexture.html">Texture.SubTexture</a></li>
+  <li><a href="../modules/Texture.Texture.html">Texture.Texture</a></li>
+  <li><a href="../modules/Texture.TextureAtlas.html">Texture.TextureAtlas</a></li>
+  <li><a href="../modules/Texture.TextureManager.html">Texture.TextureManager</a></li>
+  <li><a href="../modules/Texture.TexturePacker.html">Texture.TexturePacker</a></li>
+  <li><a href="../modules/include.html">include</a></li>
+</ul>
+
+</div>
+
+<div id="content">
+
+<h1>Module <code>Display.DisplayObjContainer</code></h1>
+
+<p>A DisplayObjectContainer represents a collection of display objects.</p>
+<p>
+It is the base class of all display objects that act as a container
+for other objects. By maintaining an ordered list of children, it
+defines the back-to-front positioning of the children within the
+display tree.
+<p>A container does not a have size in itself. The width and height
+properties represent the extents of its children.
+<p>- Adding and removing children
+<p>The class defines methods that allow you to add or remove children.
+<p>When you add a child, it will be added at the frontmost position,
+possibly occluding a child that was added before.</p>
+
+
+<h2><a href="#Functions">Functions</a></h2>
+<table class="function_list">
+	<tr>
+	<td class="name" nowrap><a href="#children">children&nbsp;(displayObjContainer, typeFilter)</a></td>
+	<td class="summary">iterator for DisplayObjContainer children.</td>
+	</tr>
+	<tr>
+	<td class="name" nowrap><a href="#reverse_children">reverse_children&nbsp;(displayObjContainer, typeFilter)</a></td>
+	<td class="summary">Reverse iterator for DisplayObjContainer children.</td>
+	</tr>
+	<tr>
+	<td class="name" nowrap><a href="#DisplayObjContainer:init">DisplayObjContainer:init&nbsp;()</a></td>
+	<td class="summary">Initialization method.</td>
+	</tr>
+	<tr>
+	<td class="name" nowrap><a href="#DisplayObjContainer:dispose">DisplayObjContainer:dispose&nbsp;()</a></td>
+	<td class="summary">When an objectContainer is disposed it realease all his children.</td>
+	</tr>
+	<tr>
+	<td class="name" nowrap><a href="#DisplayObjContainer:dbgInfo">DisplayObjContainer:dbgInfo&nbsp;(recursive)</a></td>
+	<td class="summary">Debug Infos</td>
+	</tr>
+	<tr>
+	<td class="name" nowrap><a href="#DisplayObjContainer:drawOrientedBounds">DisplayObjContainer:drawOrientedBounds&nbsp;()</a></td>
+	<td class="summary">Draws oriented bounds for all his children</td>
+	</tr>
+	<tr>
+	<td class="name" nowrap><a href="#DisplayObjContainer:drawAABounds">DisplayObjContainer:drawAABounds&nbsp;(drawContainer)</a></td>
+	<td class="summary">Draws axis aligned bounds for all his children.</td>
+	</tr>
+	<tr>
+	<td class="name" nowrap><a href="#DisplayObjContainer:getChildByName">DisplayObjContainer:getChildByName&nbsp;(name)</a></td>
+	<td class="summary">Returns the first child with a given name, if it exists, or nil</td>
+	</tr>
+	<tr>
+	<td class="name" nowrap><a href="#DisplayObjContainer:addChild">DisplayObjContainer:addChild&nbsp;(obj)</a></td>
+	<td class="summary">Add a displayObj to the children list.</td>
+	</tr>
+	<tr>
+	<td class="name" nowrap><a href="#DisplayObjContainer:removeChild">DisplayObjContainer:removeChild&nbsp;(obj, dispose)</a></td>
+	<td class="summary">Remove an obj from children list.</td>
+	</tr>
+	<tr>
+	<td class="name" nowrap><a href="#DisplayObjContainer:getNumChildren">DisplayObjContainer:getNumChildren&nbsp;()</a></td>
+	<td class="summary">Return the number of children</td>
+	</tr>
+	<tr>
+	<td class="name" nowrap><a href="#DisplayObjContainer:addChildAt">DisplayObjContainer:addChildAt&nbsp;(obj, index)</a></td>
+	<td class="summary">Add a child at given position</td>
+	</tr>
+	<tr>
+	<td class="name" nowrap><a href="#DisplayObjContainer:removeChildAt">DisplayObjContainer:removeChildAt&nbsp;(index, dispose)</a></td>
+	<td class="summary">Remove a child at a given position</td>
+	</tr>
+	<tr>
+	<td class="name" nowrap><a href="#DisplayObjContainer:removeChildren">DisplayObjContainer:removeChildren&nbsp;(beginIndex, endIndex, dispose)</a></td>
+	<td class="summary">Remove all the children between two indices</td>
+	</tr>
+	<tr>
+	<td class="name" nowrap><a href="#DisplayObjContainer:getChildIndex">DisplayObjContainer:getChildIndex&nbsp;(obj)</a></td>
+	<td class="summary">Returns the index of a given displayObj, if contained, or 0 if not.</td>
+	</tr>
+	<tr>
+	<td class="name" nowrap><a href="#DisplayObjContainer:getChildAt">DisplayObjContainer:getChildAt&nbsp;(index)</a></td>
+	<td class="summary">Returns the displayObj at the given index.</td>
+	</tr>
+	<tr>
+	<td class="name" nowrap><a href="#DisplayObjContainer:swapChildren">DisplayObjContainer:swapChildren&nbsp;(obj1, obj2)</a></td>
+	<td class="summary">Swap two given children in the displayList.</td>
+	</tr>
+	<tr>
+	<td class="name" nowrap><a href="#DisplayObjContainer:swapChildrenAt">DisplayObjContainer:swapChildrenAt&nbsp;(index1, index2)</a></td>
+	<td class="summary">Swap two children at given positions in the displayList
+If both the indices are valid, swap the relative objects</td>
+	</tr>
+	<tr>
+	<td class="name" nowrap><a href="#DisplayObjContainer:setAlpha">DisplayObjContainer:setAlpha&nbsp;(a)</a></td>
+	<td class="summary">Set container alpha value</td>
+	</tr>
+	<tr>
+	<td class="name" nowrap><a href="#DisplayObjContainer:_setMultiplyAlpha">DisplayObjContainer:_setMultiplyAlpha&nbsp;(a)</a></td>
+	<td class="summary">Inner method.</td>
+	</tr>
+	<tr>
+	<td class="name" nowrap><a href="#DisplayObjContainer:_updateChildrenAlpha">DisplayObjContainer:_updateChildrenAlpha&nbsp;()</a></td>
+	<td class="summary">Inner method.</td>
+	</tr>
+	<tr>
+	<td class="name" nowrap><a href="#DisplayObjContainer:setHittable">DisplayObjContainer:setHittable&nbsp;(hittable)</a></td>
+	<td class="summary">By default the hitTet over a DisplayObjContainer is an hitTest over
+all its children.</td>
+	</tr>
+	<tr>
+	<td class="name" nowrap><a href="#DisplayObjContainer:isHittable">DisplayObjContainer:isHittable&nbsp;()</a></td>
+	<td class="summary">Returns if a DisplayObjContainer can be direct target of a touch event</td>
+	</tr>
+	<tr>
+	<td class="name" nowrap><a href="#DisplayObjContainer:setVisible">DisplayObjContainer:setVisible&nbsp;(visible)</a></td>
+	<td class="summary">Change visibility status of the container</td>
+	</tr>
+	<tr>
+	<td class="name" nowrap><a href="#DisplayObjContainer:getRect">DisplayObjContainer:getRect&nbsp;(resultRect)</a></td>
+	<td class="summary">Return a rect obtained by children rect
+Iterates over all the children and calculates a rectangle that enclose them all.</td>
+	</tr>
+	<tr>
+	<td class="name" nowrap><a href="#DisplayObjContainer:hitTest">DisplayObjContainer:hitTest&nbsp;(x, y, targetSpace, forTouch)</a></td>
+	<td class="summary">Given a x,y point in targetSpace coordinates it check if it falls inside local bounds.</td>
+	</tr>
+</table>
+
+<br/>
+<br/>
+
+
+    <h2><a name="Functions"></a>Functions</h2>
+    <dl class="function">
+    <dt>
+    <a name = "children"></a>
+    <strong>children&nbsp;(displayObjContainer, typeFilter)</strong>
+    </dt>
+    <dd>
+    iterator for DisplayObjContainer children.
+It's possible to retrieve only children of a given 'typeFilter' type
+
+    <h3>Parameters:</h3>
+    <ul>
+      <li><span class="parameter">displayObjContainer</span>
+       the container of which children must be iterated</li>
+      <li><span class="parameter">typeFilter</span>
+       filter on the type of the children</li>
+    </ul>
+
+    <h3>Returns:</h3>
+    <ol>
+
+        next iterator
+    </ol>
+
+
+
+
+</dd>
+    <dt>
+    <a name = "reverse_children"></a>
+    <strong>reverse_children&nbsp;(displayObjContainer, typeFilter)</strong>
+    </dt>
+    <dd>
+    Reverse iterator for DisplayObjContainer children.
+It's possible to retrieve only children of a given 'typeFilter' type
+
+    <h3>Parameters:</h3>
+    <ul>
+      <li><span class="parameter">displayObjContainer</span>
+       the container of which children must be iterated</li>
+      <li><span class="parameter">typeFilter</span>
+       filter on the type of the children</li>
+    </ul>
+
+    <h3>Returns:</h3>
+    <ol>
+
+        next (reverse) iterator
+    </ol>
+
+
+
+
+</dd>
+    <dt>
+    <a name = "DisplayObjContainer:init"></a>
+    <strong>DisplayObjContainer:init&nbsp;()</strong>
+    </dt>
+    <dd>
+    Initialization method.
+Children displayObj list is built as well as objRenderTalbe list.
+
+
+
+
+
+
+</dd>
+    <dt>
+    <a name = "DisplayObjContainer:dispose"></a>
+    <strong>DisplayObjContainer:dispose&nbsp;()</strong>
+    </dt>
+    <dd>
+    When an objectContainer is disposed it realease all his children.
+All the children are themself disposed
+
+
+
+
+
+
+</dd>
+    <dt>
+    <a name = "DisplayObjContainer:dbgInfo"></a>
+    <strong>DisplayObjContainer:dbgInfo&nbsp;(recursive)</strong>
+    </dt>
+    <dd>
+    Debug Infos
+
+    <h3>Parameters:</h3>
+    <ul>
+      <li><span class="parameter">recursive</span>
+       boolean, if true dbgInfo will be called also for all the children</li>
+    </ul>
+
+    <h3>Returns:</h3>
+    <ol>
+
+        string
+    </ol>
+
+
+
+
+</dd>
+    <dt>
+    <a name = "DisplayObjContainer:drawOrientedBounds"></a>
+    <strong>DisplayObjContainer:drawOrientedBounds&nbsp;()</strong>
+    </dt>
+    <dd>
+    Draws oriented bounds for all his children
+
+
+
+
+
+
+</dd>
+    <dt>
+    <a name = "DisplayObjContainer:drawAABounds"></a>
+    <strong>DisplayObjContainer:drawAABounds&nbsp;(drawContainer)</strong>
+    </dt>
+    <dd>
+    Draws axis aligned bounds for all his children.
+
+    <h3>Parameters:</h3>
+    <ul>
+      <li><span class="parameter">drawContainer</span>
+       boolean, if true also container bounds will be drawn</li>
+    </ul>
+
+
+
+
+
+</dd>
+    <dt>
+    <a name = "DisplayObjContainer:getChildByName"></a>
+    <strong>DisplayObjContainer:getChildByName&nbsp;(name)</strong>
+    </dt>
+    <dd>
+    Returns the first child with a given name, if it exists, or nil
+
+    <h3>Parameters:</h3>
+    <ul>
+      <li><span class="parameter">name</span>
+       of the child to be searched</li>
+    </ul>
+
+    <h3>Returns:</h3>
+    <ol>
+
+        displayObj or nil
+    </ol>
+
+
+
+
+</dd>
+    <dt>
+    <a name = "DisplayObjContainer:addChild"></a>
+    <strong>DisplayObjContainer:addChild&nbsp;(obj)</strong>
+    </dt>
+    <dd>
+    Add a displayObj to the children list.
+The child is add at the end of the children list so it's the top most of the drawn children.
+If the obj already has a parent, first is removed from the parent and then added to the new
+parent container.
+
+    <h3>Parameters:</h3>
+    <ul>
+      <li><span class="parameter">obj</span>
+       the obj to be added as child</li>
+    </ul>
+
+
+
+
+
+</dd>
+    <dt>
+    <a name = "DisplayObjContainer:removeChild"></a>
+    <strong>DisplayObjContainer:removeChild&nbsp;(obj, dispose)</strong>
+    </dt>
+    <dd>
+    Remove an obj from children list.
+if the object is not a child do nothing
+
+    <h3>Parameters:</h3>
+    <ul>
+      <li><span class="parameter">obj</span>
+       the obj to be removed</li>
+      <li><span class="parameter">dispose</span>
+       if to dispose after removal</li>
+    </ul>
+
+    <h3>Returns:</h3>
+    <ol>
+
+        the obj if removed, nil if the obj is not a child
+    </ol>
+
+
+
+
+</dd>
+    <dt>
+    <a name = "DisplayObjContainer:getNumChildren"></a>
+    <strong>DisplayObjContainer:getNumChildren&nbsp;()</strong>
+    </dt>
+    <dd>
+    Return the number of children
+
+
+    <h3>Returns:</h3>
+    <ol>
+
+        size of displayObj list
+    </ol>
+
+
+
+
+</dd>
+    <dt>
+    <a name = "DisplayObjContainer:addChildAt"></a>
+    <strong>DisplayObjContainer:addChildAt&nbsp;(obj, index)</strong>
+    </dt>
+    <dd>
+    Add a child at given position
+
+    <h3>Parameters:</h3>
+    <ul>
+      <li><span class="parameter">obj</span>
+       the obj o be added</li>
+      <li><span class="parameter">index</span>
+       the desired position</li>
+    </ul>
+
+
+
+
+
+</dd>
+    <dt>
+    <a name = "DisplayObjContainer:removeChildAt"></a>
+    <strong>DisplayObjContainer:removeChildAt&nbsp;(index, dispose)</strong>
+    </dt>
+    <dd>
+    Remove a child at a given position
+
+    <h3>Parameters:</h3>
+    <ul>
+      <li><span class="parameter">index</span>
+       the position of the obj to be removed</li>
+      <li><span class="parameter">dispose</span>
+       boolean, if to dispose the obj after removal</li>
+    </ul>
+
+    <h3>Returns:</h3>
+    <ol>
+
+        the obj if the index is valid or nil
+    </ol>
+
+
+
+
+</dd>
+    <dt>
+    <a name = "DisplayObjContainer:removeChildren"></a>
+    <strong>DisplayObjContainer:removeChildren&nbsp;(beginIndex, endIndex, dispose)</strong>
+    </dt>
+    <dd>
+    Remove all the children between two indices
+
+    <h3>Parameters:</h3>
+    <ul>
+      <li><span class="parameter">beginIndex</span>
+       index of the first object to be removed</li>
+      <li><span class="parameter">endIndex</span>
+       index of the last object to be removed</li>
+      <li><span class="parameter">dispose</span>
+       if to dispose the objects after removal</li>
+    </ul>
+
+
+
+
+
+</dd>
+    <dt>
+    <a name = "DisplayObjContainer:getChildIndex"></a>
+    <strong>DisplayObjContainer:getChildIndex&nbsp;(obj)</strong>
+    </dt>
+    <dd>
+    Returns the index of a given displayObj, if contained, or 0 if not.
+
+    <h3>Parameters:</h3>
+    <ul>
+      <li><span class="parameter">obj</span>
+       the obj to be searched</li>
+    </ul>
+
+    <h3>Returns:</h3>
+    <ol>
+
+        obj position in children list or 0 if obj is not a child
+    </ol>
+
+
+
+
+</dd>
+    <dt>
+    <a name = "DisplayObjContainer:getChildAt"></a>
+    <strong>DisplayObjContainer:getChildAt&nbsp;(index)</strong>
+    </dt>
+    <dd>
+    Returns the displayObj at the given index.
+
+    <h3>Parameters:</h3>
+    <ul>
+      <li><span class="parameter">index</span>
+       the index of the obj to be returned</li>
+    </ul>
+
+    <h3>Returns:</h3>
+    <ol>
+
+        the obj at position 'index' or nil if it doesn't exist
+    </ol>
+
+
+
+
+</dd>
+    <dt>
+    <a name = "DisplayObjContainer:swapChildren"></a>
+    <strong>DisplayObjContainer:swapChildren&nbsp;(obj1, obj2)</strong>
+    </dt>
+    <dd>
+    Swap two given children in the displayList.
+If both the object are children, swap the positions
+
+    <h3>Parameters:</h3>
+    <ul>
+      <li><span class="parameter">obj1</span>
+       first object to be moved</li>
+      <li><span class="parameter">obj2</span>
+       second object to be moved</li>
+    </ul>
+
+
+
+
+
+</dd>
+    <dt>
+    <a name = "DisplayObjContainer:swapChildrenAt"></a>
+    <strong>DisplayObjContainer:swapChildrenAt&nbsp;(index1, index2)</strong>
+    </dt>
+    <dd>
+    Swap two children at given positions in the displayList
+If both the indices are valid, swap the relative objects
+
+    <h3>Parameters:</h3>
+    <ul>
+      <li><span class="parameter">index1</span>
+       index of the first object to be moved</li>
+      <li><span class="parameter">index2</span>
+       index of the second object to be moved</li>
+    </ul>
+
+
+
+
+
+</dd>
+    <dt>
+    <a name = "DisplayObjContainer:setAlpha"></a>
+    <strong>DisplayObjContainer:setAlpha&nbsp;(a)</strong>
+    </dt>
+    <dd>
+    Set container alpha value
+
+    <h3>Parameters:</h3>
+    <ul>
+      <li><span class="parameter">a</span>
+       [0,255]</li>
+    </ul>
+
+
+
+
+
+</dd>
+    <dt>
+    <a name = "DisplayObjContainer:_setMultiplyAlpha"></a>
+    <strong>DisplayObjContainer:_setMultiplyAlpha&nbsp;(a)</strong>
+    </dt>
+    <dd>
+    Inner method.  Called by parent container, setMultiplyAlpha set the alpha value of the parent container (already
+modified by his current multiplyalpha value)
+
+    <h3>Parameters:</h3>
+    <ul>
+      <li><span class="parameter">a</span>
+       alpha value [0,255]</li>
+    </ul>
+
+
+
+
+
+</dd>
+    <dt>
+    <a name = "DisplayObjContainer:_updateChildrenAlpha"></a>
+    <strong>DisplayObjContainer:_updateChildrenAlpha&nbsp;()</strong>
+    </dt>
+    <dd>
+    Inner method.  Propagate alpha value to all children, setting "multiplied alpha" value
+
+
+
+
+
+
+</dd>
+    <dt>
+    <a name = "DisplayObjContainer:setHittable"></a>
+    <strong>DisplayObjContainer:setHittable&nbsp;(hittable)</strong>
+    </dt>
+    <dd>
+    By default the hitTet over a DisplayObjContainer is an hitTest over
+all its children.  It's possible anyway to set itself as target of
+an hitTest, without going deep in the displayList
+--@param hittable boolean
+
+    <h3>Parameters:</h3>
+    <ul>
+      <li><span class="parameter">hittable</span>
+      </li>
+    </ul>
+
+
+
+
+
+</dd>
+    <dt>
+    <a name = "DisplayObjContainer:isHittable"></a>
+    <strong>DisplayObjContainer:isHittable&nbsp;()</strong>
+    </dt>
+    <dd>
+    Returns if a DisplayObjContainer can be direct target of a touch event
+
+
+    <h3>Returns:</h3>
+    <ol>
+
+        boolean
+    </ol>
+
+
+
+
+</dd>
+    <dt>
+    <a name = "DisplayObjContainer:setVisible"></a>
+    <strong>DisplayObjContainer:setVisible&nbsp;(visible)</strong>
+    </dt>
+    <dd>
+    Change visibility status of the container
+
+    <h3>Parameters:</h3>
+    <ul>
+      <li><span class="parameter">visible</span>
+       boolean</li>
+    </ul>
+
+
+
+
+
+</dd>
+    <dt>
+    <a name = "DisplayObjContainer:getRect"></a>
+    <strong>DisplayObjContainer:getRect&nbsp;(resultRect)</strong>
+    </dt>
+    <dd>
+    Return a rect obtained by children rect
+Iterates over all the children and calculates a rectangle that enclose them all.
+
+    <h3>Parameters:</h3>
+    <ul>
+      <li><span class="parameter">resultRect</span>
+       it's possibile to pass a Rect helper to store results</li>
+    </ul>
+
+    <h3>Returns:</h3>
+    <ol>
+
+        a rect filled with bound infos
+    </ol>
+
+
+
+
+</dd>
+    <dt>
+    <a name = "DisplayObjContainer:hitTest"></a>
+    <strong>DisplayObjContainer:hitTest&nbsp;(x, y, targetSpace, forTouch)</strong>
+    </dt>
+    <dd>
+    Given a x,y point in targetSpace coordinates it check if it falls inside local bounds.
+If the container is set as hittable, the hitTest will be done only on its own boundary
+without testing all the children, and the resulting target will be itself. If not
+hittable instead, the hitTest will be done on children, starting from then topmost
+displayObjContainer.
+
+
+    <h3>Parameters:</h3>
+    <ul>
+      <li><span class="parameter">x</span>
+       coordinate in targetSpace system</li>
+      <li><span class="parameter">y</span>
+       coordinate in targetSpace system</li>
+      <li><span class="parameter">targetSpace</span>
+       the referred coorindate system. if nil the top most container / stage</li>
+      <li><span class="parameter">forTouch</span>
+       boolean. If true the check is done only for visible and touchable object</li>
+    </ul>
+
+    <h3>Returns:</h3>
+    <ol>
+
+        self if the hitTest is positive else nil
+    </ol>
+
+
+
+
+</dd>
+</dl>
+
+
+</div> <!-- id="content" -->
+</div> <!-- id="main" -->
+<div id="about">
+<i>generated by <a href="http://github.com/stevedonovan/LDoc">LDoc 1.3</a></i>
+</div> <!-- id="about" -->
+</div> <!-- id="container" -->
+</body>
+</html>

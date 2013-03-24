@@ -1,0 +1,305 @@
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Strict//EN"
+   "http://www.w3.org/TR/xhtml1/DTD/xhtml1-strict.dtd">
+<html>
+<meta http-equiv="Content-Type" content="text/html; charset=UTF-8"/>
+<head>
+    <title>Reference</title>
+    <link rel="stylesheet" href="../ldoc.css" type="text/css" />
+</head>
+<body>
+
+<div id="container">
+
+<div id="product">
+	<div id="product_logo"></div>
+	<div id="product_name"><big><b></b></big></div>
+	<div id="product_description"></div>
+</div> <!-- id="product" -->
+
+
+<div id="main">
+
+
+<!-- Menu -->
+
+<div id="navigation">
+<br/>
+<h1>Shilke2D</h1>
+
+<ul>
+  <li><a href="../index.html">Index</a></li>
+</ul>
+
+<h2>Contents</h2>
+<ul>
+<li><a href="#Functions">Functions</a></li>
+</ul>
+
+
+<h2>Modules</h2>
+<ul>
+  <li><a href="../modules/Core.Assets.html">Core.Assets</a></li>
+  <li><a href="../modules/Core.Event.html">Core.Event</a></li>
+  <li><a href="../modules/Core.EventDispatcher.html">Core.EventDispatcher</a></li>
+  <li><a href="../modules/Core.IAnimatable.html">Core.IAnimatable</a></li>
+  <li><a href="../modules/Core.Juggler.html">Core.Juggler</a></li>
+  <li><a href="../modules/Core.Keymap.html">Core.Keymap</a></li>
+  <li><a href="../modules/Core.Shilke2D.html">Core.Shilke2D</a></li>
+  <li><a href="../modules/Core.Timer.html">Core.Timer</a></li>
+  <li><a href="../modules/Core.TouchSensor.html">Core.TouchSensor</a></li>
+  <li><a href="../modules/Display.BaseQuad.html">Display.BaseQuad</a></li>
+  <li><a href="../modules/Display.Button.html">Display.Button</a></li>
+  <li><a href="../modules/Display.DisplayObj.html">Display.DisplayObj</a></li>
+  <li><a href="../modules/Display.DisplayObjContainer.html">Display.DisplayObjContainer</a></li>
+  <li><a href="../modules/Display.DrawableObject.html">Display.DrawableObject</a></li>
+  <li><a href="../modules/Display.Image.html">Display.Image</a></li>
+  <li><a href="../modules/Display.MovieClip.html">Display.MovieClip</a></li>
+  <li><a href="../modules/Display.Quad.html">Display.Quad</a></li>
+  <li><a href="../modules/Display.Stage.html">Display.Stage</a></li>
+  <li><a href="../modules/Display.TextField.html">Display.TextField</a></li>
+  <li><a href="../modules/Texture.BigTextureAtlas.html">Texture.BigTextureAtlas</a></li>
+  <li><a href="../modules/Texture.SubTexture.html">Texture.SubTexture</a></li>
+  <li><a href="../modules/Texture.Texture.html">Texture.Texture</a></li>
+  <li><strong>Texture.TextureAtlas</strong></li>
+  <li><a href="../modules/Texture.TextureManager.html">Texture.TextureManager</a></li>
+  <li><a href="../modules/Texture.TexturePacker.html">Texture.TexturePacker</a></li>
+  <li><a href="../modules/include.html">include</a></li>
+</ul>
+
+</div>
+
+<div id="content">
+
+<h1>Module <code>Texture.TextureAtlas</code></h1>
+
+<p>A texture atlas is a collection of many smaller textures in one big
+image.</p>
+<p> This class is used to access textures from such an atlas.
+<p>Using a texture atlas for your textures solves two problems: avoid
+frequent texture switches and reduce memory consuption
+<p>A texture atlas is meant as a single image subdivided into logical
+named regions. Once a atlas is created is possible to add new named
+regions, having a 1:1 between regions and subtextures. It's then
+possible to query for single named texure, or for a group of sorted
+texture that share a prefix in the name.</p>
+
+
+<h2><a href="#Functions">Functions</a></h2>
+<table class="function_list">
+	<tr>
+	<td class="name" nowrap><a href="#fromTexture">fromTexture&nbsp;(texture, regionWidth, regionHeight, margin, spacing, prefix, padding)</a></td>
+	<td class="summary">Automatic creation of a tilest starting from a texture, where all
+the regions have the same size, are packed sequentially and have
+no hole in the middle of the sequence.</td>
+	</tr>
+	<tr>
+	<td class="name" nowrap><a href="#TextureAtlas:init">TextureAtlas:init&nbsp;(texture)</a></td>
+	<td class="summary">A texture atlas is always built over a texture</td>
+	</tr>
+	<tr>
+	<td class="name" nowrap><a href="#TextureAtlas:dispose">TextureAtlas:dispose&nbsp;()</a></td>
+	<td class="summary">Dispose also the texture is using as atlas</td>
+	</tr>
+	<tr>
+	<td class="name" nowrap><a href="#TextureAtlas:addRegion">TextureAtlas:addRegion&nbsp;(name, rect)</a></td>
+	<td class="summary">Add a new named region.</td>
+	</tr>
+	<tr>
+	<td class="name" nowrap><a href="#TextureAtlas:getTexture">TextureAtlas:getTexture&nbsp;(name)</a></td>
+	<td class="summary">Returns a subtexture that wrap a specific named region</td>
+	</tr>
+	<tr>
+	<td class="name" nowrap><a href="#TextureAtlas:getSortedNames">TextureAtlas:getSortedNames&nbsp;(prefix)</a></td>
+	<td class="summary">Returns all the regions sorted by name, that begin with "prefix".</td>
+	</tr>
+	<tr>
+	<td class="name" nowrap><a href="#TextureAtlas:getTextures">TextureAtlas:getTextures&nbsp;(prefix)</a></td>
+	<td class="summary">Returns all the textures sorted by region name, that begin with "prefix".</td>
+	</tr>
+</table>
+
+<br/>
+<br/>
+
+
+    <h2><a name="Functions"></a>Functions</h2>
+    <dl class="function">
+    <dt>
+    <a name = "fromTexture"></a>
+    <strong>fromTexture&nbsp;(texture, regionWidth, regionHeight, margin, spacing, prefix, padding)</strong>
+    </dt>
+    <dd>
+    Automatic creation of a tilest starting from a texture, where all
+the regions have the same size, are packed sequentially and have
+no hole in the middle of the sequence.
+<p>The name of each regions will be in the form of prefix%0'padding'd,
+where padding is optional. if not provided there will be no padding.
+<p>ie: padding 3 will produce a sequence like:
+prefix001
+prefix002
+prefix003
+
+
+    <h3>Parameters:</h3>
+    <ul>
+      <li><span class="parameter">texture</span>
+       can be a Texture or a path, in that case the texture
+is loaded using Assets.getTexture function, using defaul cache logic</li>
+      <li><span class="parameter">regionWidth</span>
+       width of a single tile</li>
+      <li><span class="parameter">regionHeight</span>
+       height of single tile</li>
+      <li><span class="parameter">margin</span>
+       num of pixel on the boundary of the texture</li>
+      <li><span class="parameter">spacing</span>
+       num of pixel between tiles</li>
+      <li><span class="parameter">prefix</span>
+       the prefix name to be applied to each subtexture</li>
+      <li><span class="parameter">padding</span>
+       number of ciphers to be used to enumerate subtextures</li>
+    </ul>
+
+    <h3>Returns:</h3>
+    <ol>
+
+        TextureAtlas
+    </ol>
+
+
+
+
+</dd>
+    <dt>
+    <a name = "TextureAtlas:init"></a>
+    <strong>TextureAtlas:init&nbsp;(texture)</strong>
+    </dt>
+    <dd>
+    A texture atlas is always built over a texture
+
+    <h3>Parameters:</h3>
+    <ul>
+      <li><span class="parameter">texture</span>
+      </li>
+    </ul>
+
+
+
+
+
+</dd>
+    <dt>
+    <a name = "TextureAtlas:dispose"></a>
+    <strong>TextureAtlas:dispose&nbsp;()</strong>
+    </dt>
+    <dd>
+    Dispose also the texture is using as atlas
+
+
+
+
+
+
+</dd>
+    <dt>
+    <a name = "TextureAtlas:addRegion"></a>
+    <strong>TextureAtlas:addRegion&nbsp;(name, rect)</strong>
+    </dt>
+    <dd>
+    Add a new named region.
+Named regions are uv map rect, so x,y,w,h are in the range [0,1]
+
+    <h3>Parameters:</h3>
+    <ul>
+      <li><span class="parameter">name</span>
+       the name of the new region</li>
+      <li><span class="parameter">rect</span>
+       a rect with uvmap values [0,1]</li>
+    </ul>
+
+
+
+
+
+</dd>
+    <dt>
+    <a name = "TextureAtlas:getTexture"></a>
+    <strong>TextureAtlas:getTexture&nbsp;(name)</strong>
+    </dt>
+    <dd>
+    Returns a subtexture that wrap a specific named region
+
+    <h3>Parameters:</h3>
+    <ul>
+      <li><span class="parameter">name</span>
+       the name of the region to use to build the sub texture</li>
+    </ul>
+
+    <h3>Returns:</h3>
+    <ol>
+
+        SubTexture. nil if the region name doesn't belong to current atlas
+    </ol>
+
+
+
+
+</dd>
+    <dt>
+    <a name = "TextureAtlas:getSortedNames"></a>
+    <strong>TextureAtlas:getSortedNames&nbsp;(prefix)</strong>
+    </dt>
+    <dd>
+    Returns all the regions sorted by name, that begin with "prefix".
+If no prefix is provided it returns all the regions
+
+    <h3>Parameters:</h3>
+    <ul>
+      <li><span class="parameter">prefix</span>
+       optional, prefix to select region names</li>
+    </ul>
+
+    <h3>Returns:</h3>
+    <ol>
+
+        list of regions
+    </ol>
+
+
+
+
+</dd>
+    <dt>
+    <a name = "TextureAtlas:getTextures"></a>
+    <strong>TextureAtlas:getTextures&nbsp;(prefix)</strong>
+    </dt>
+    <dd>
+    Returns all the textures sorted by region name, that begin with "prefix".
+If no prefix is provided it returns all the textures.
+
+    <h3>Parameters:</h3>
+    <ul>
+      <li><span class="parameter">prefix</span>
+       optional, prefix to select region names</li>
+    </ul>
+
+    <h3>Returns:</h3>
+    <ol>
+
+        list of textures
+    </ol>
+
+
+
+
+</dd>
+</dl>
+
+
+</div> <!-- id="content" -->
+</div> <!-- id="main" -->
+<div id="about">
+<i>generated by <a href="http://github.com/stevedonovan/LDoc">LDoc 1.3</a></i>
+</div> <!-- id="about" -->
+</div> <!-- id="container" -->
+</body>
+</html>

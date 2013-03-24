@@ -1,0 +1,247 @@
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Strict//EN"
+   "http://www.w3.org/TR/xhtml1/DTD/xhtml1-strict.dtd">
+<html>
+<meta http-equiv="Content-Type" content="text/html; charset=UTF-8"/>
+<head>
+    <title>Reference</title>
+    <link rel="stylesheet" href="../ldoc.css" type="text/css" />
+</head>
+<body>
+
+<div id="container">
+
+<div id="product">
+	<div id="product_logo"></div>
+	<div id="product_name"><big><b></b></big></div>
+	<div id="product_description"></div>
+</div> <!-- id="product" -->
+
+
+<div id="main">
+
+
+<!-- Menu -->
+
+<div id="navigation">
+<br/>
+<h1>Shilke2D</h1>
+
+<ul>
+  <li><a href="../index.html">Index</a></li>
+</ul>
+
+<h2>Contents</h2>
+<ul>
+<li><a href="#Functions">Functions</a></li>
+<li><a href="#Tables">Tables</a></li>
+</ul>
+
+
+<h2>Modules</h2>
+<ul>
+  <li><a href="../modules/Core.Assets.html">Core.Assets</a></li>
+  <li><a href="../modules/Core.Event.html">Core.Event</a></li>
+  <li><a href="../modules/Core.EventDispatcher.html">Core.EventDispatcher</a></li>
+  <li><a href="../modules/Core.IAnimatable.html">Core.IAnimatable</a></li>
+  <li><a href="../modules/Core.Juggler.html">Core.Juggler</a></li>
+  <li><a href="../modules/Core.Keymap.html">Core.Keymap</a></li>
+  <li><a href="../modules/Core.Shilke2D.html">Core.Shilke2D</a></li>
+  <li><a href="../modules/Core.Timer.html">Core.Timer</a></li>
+  <li><a href="../modules/Core.TouchSensor.html">Core.TouchSensor</a></li>
+  <li><a href="../modules/Display.BaseQuad.html">Display.BaseQuad</a></li>
+  <li><a href="../modules/Display.Button.html">Display.Button</a></li>
+  <li><a href="../modules/Display.DisplayObj.html">Display.DisplayObj</a></li>
+  <li><a href="../modules/Display.DisplayObjContainer.html">Display.DisplayObjContainer</a></li>
+  <li><a href="../modules/Display.DrawableObject.html">Display.DrawableObject</a></li>
+  <li><a href="../modules/Display.Image.html">Display.Image</a></li>
+  <li><a href="../modules/Display.MovieClip.html">Display.MovieClip</a></li>
+  <li><a href="../modules/Display.Quad.html">Display.Quad</a></li>
+  <li><a href="../modules/Display.Stage.html">Display.Stage</a></li>
+  <li><a href="../modules/Display.TextField.html">Display.TextField</a></li>
+  <li><a href="../modules/Texture.BigTextureAtlas.html">Texture.BigTextureAtlas</a></li>
+  <li><a href="../modules/Texture.SubTexture.html">Texture.SubTexture</a></li>
+  <li><a href="../modules/Texture.Texture.html">Texture.Texture</a></li>
+  <li><a href="../modules/Texture.TextureAtlas.html">Texture.TextureAtlas</a></li>
+  <li><strong>Texture.TextureManager</strong></li>
+  <li><a href="../modules/Texture.TexturePacker.html">Texture.TexturePacker</a></li>
+  <li><a href="../modules/include.html">include</a></li>
+</ul>
+
+</div>
+
+<div id="content">
+
+<h1>Module <code>Texture.TextureManager</code></h1>
+
+<p>TextureManager allows to mount a texture atlas as a logical resource path.</p>
+<p>
+That means that calling TextureManager.getTexture() makes transparent the load
+of a real texture or of a subtexture of a texture atlas.
+<p>That allows to create code that doesn't depend on how data is packed.
+A use case is to always call TextureManager.getTexture() and, depending on how
+data is packed, add only at initialization phase a list of
+TextureManager.mountAtlas calls.
+<p>This list of atlas resources could be moreover defined by external data</p>
+
+
+<h2><a href="#Functions">Functions</a></h2>
+<table class="function_list">
+	<tr>
+	<td class="name" nowrap><a href="#mountAtlas">mountAtlas&nbsp;(mountDir, atlas)</a></td>
+	<td class="summary">Mount a texture atlas as logica resource at a specific path.</td>
+	</tr>
+	<tr>
+	<td class="name" nowrap><a href="#unmountAtlas">unmountAtlas&nbsp;(mountDir, atlas)</a></td>
+	<td class="summary">Unmount an atlas from given path</td>
+	</tr>
+	<tr>
+	<td class="name" nowrap><a href="#getTexture">getTexture&nbsp;(fileName, useCache)</a></td>
+	<td class="summary">Returns a texture given a fileName.</td>
+	</tr>
+	<tr>
+	<td class="name" nowrap><a href="#clearCache">clearCache&nbsp;(texture)</a></td>
+	<td class="summary">Remove a texture from the cache.</td>
+	</tr>
+</table>
+<h2><a href="#Tables">Tables</a></h2>
+<table class="function_list">
+	<tr>
+	<td class="name" nowrap><a href="#__atlasResources">__atlasResources</a></td>
+	<td class="summary">used to store all the mounted textureAtlases</td>
+	</tr>
+	<tr>
+	<td class="name" nowrap><a href="#__textureCache">__textureCache</a></td>
+	<td class="summary">used to cache the textures stored into the TextureAtlases</td>
+	</tr>
+</table>
+
+<br/>
+<br/>
+
+
+    <h2><a name="Functions"></a>Functions</h2>
+    <dl class="function">
+    <dt>
+    <a name = "mountAtlas"></a>
+    <strong>mountAtlas&nbsp;(mountDir, atlas)</strong>
+    </dt>
+    <dd>
+    Mount a texture atlas as logica resource at a specific path.
+It's possible to mount the same atlas at different paths.
+It's possible to mount multiple atlas at same path.
+
+    <h3>Parameters:</h3>
+    <ul>
+      <li><span class="parameter">mountDir</span>
+       the path where to mount the atlas</li>
+      <li><span class="parameter">atlas</span>
+       the texture atlas to be mounted</li>
+    </ul>
+
+
+
+
+
+</dd>
+    <dt>
+    <a name = "unmountAtlas"></a>
+    <strong>unmountAtlas&nbsp;(mountDir, atlas)</strong>
+    </dt>
+    <dd>
+    Unmount an atlas from given path
+
+    <h3>Parameters:</h3>
+    <ul>
+      <li><span class="parameter">mountDir</span>
+       the path where to unmount the atlas</li>
+      <li><span class="parameter">atlas</span>
+       the texture atlas to be unmounted</li>
+    </ul>
+
+
+
+
+
+</dd>
+    <dt>
+    <a name = "getTexture"></a>
+    <strong>getTexture&nbsp;(fileName, useCache)</strong>
+    </dt>
+    <dd>
+    Returns a texture given a fileName.  The texture can be a physical resource or a subtexture
+obtained from a texture atlas.
+Textures not stored in mounted atlas are loaded through Assets.getText internal call
+
+    <h3>Parameters:</h3>
+    <ul>
+      <li><span class="parameter">fileName</span>
+       name of the texture to be retrieved</li>
+      <li><span class="parameter">useCache</span>
+       if defined override default Assets.__defaultCacheTexture value</li>
+    </ul>
+
+
+
+
+
+</dd>
+    <dt>
+    <a name = "clearCache"></a>
+    <strong>clearCache&nbsp;(texture)</strong>
+    </dt>
+    <dd>
+    Remove a texture from the cache.  If texture is nil, clears the whole texture cache.
+It calls also Assets.clearCache method
+If nil the whole cache is cleared
+
+    <h3>Parameters:</h3>
+    <ul>
+      <li><span class="parameter">texture</span>
+       texture path or concrete resource to be removed from cache. </li>
+    </ul>
+
+
+
+
+
+</dd>
+</dl>
+    <h2><a name="Tables"></a>Tables</h2>
+    <dl class="function">
+    <dt>
+    <a name = "__atlasResources"></a>
+    <strong>__atlasResources</strong>
+    </dt>
+    <dd>
+    used to store all the mounted textureAtlases
+
+
+
+
+
+
+</dd>
+    <dt>
+    <a name = "__textureCache"></a>
+    <strong>__textureCache</strong>
+    </dt>
+    <dd>
+    used to cache the textures stored into the TextureAtlases
+
+
+
+
+
+
+</dd>
+</dl>
+
+
+</div> <!-- id="content" -->
+</div> <!-- id="main" -->
+<div id="about">
+<i>generated by <a href="http://github.com/stevedonovan/LDoc">LDoc 1.3</a></i>
+</div> <!-- id="about" -->
+</div> <!-- id="container" -->
+</body>
+</html>

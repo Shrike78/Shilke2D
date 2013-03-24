@@ -1,0 +1,265 @@
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Strict//EN"
+   "http://www.w3.org/TR/xhtml1/DTD/xhtml1-strict.dtd">
+<html>
+<meta http-equiv="Content-Type" content="text/html; charset=UTF-8"/>
+<head>
+    <title>Reference</title>
+    <link rel="stylesheet" href="../ldoc.css" type="text/css" />
+</head>
+<body>
+
+<div id="container">
+
+<div id="product">
+	<div id="product_logo"></div>
+	<div id="product_name"><big><b></b></big></div>
+	<div id="product_description"></div>
+</div> <!-- id="product" -->
+
+
+<div id="main">
+
+
+<!-- Menu -->
+
+<div id="navigation">
+<br/>
+<h1>Shilke2D</h1>
+
+<ul>
+  <li><a href="../index.html">Index</a></li>
+</ul>
+
+<h2>Contents</h2>
+<ul>
+<li><a href="#Functions">Functions</a></li>
+<li><a href="#Fields">Fields</a></li>
+</ul>
+
+
+<h2>Modules</h2>
+<ul>
+  <li><strong>Core.Assets</strong></li>
+  <li><a href="../modules/Core.Event.html">Core.Event</a></li>
+  <li><a href="../modules/Core.EventDispatcher.html">Core.EventDispatcher</a></li>
+  <li><a href="../modules/Core.IAnimatable.html">Core.IAnimatable</a></li>
+  <li><a href="../modules/Core.Juggler.html">Core.Juggler</a></li>
+  <li><a href="../modules/Core.Keymap.html">Core.Keymap</a></li>
+  <li><a href="../modules/Core.Shilke2D.html">Core.Shilke2D</a></li>
+  <li><a href="../modules/Core.Timer.html">Core.Timer</a></li>
+  <li><a href="../modules/Core.TouchSensor.html">Core.TouchSensor</a></li>
+  <li><a href="../modules/Display.BaseQuad.html">Display.BaseQuad</a></li>
+  <li><a href="../modules/Display.Button.html">Display.Button</a></li>
+  <li><a href="../modules/Display.DisplayObj.html">Display.DisplayObj</a></li>
+  <li><a href="../modules/Display.DisplayObjContainer.html">Display.DisplayObjContainer</a></li>
+  <li><a href="../modules/Display.DrawableObject.html">Display.DrawableObject</a></li>
+  <li><a href="../modules/Display.Image.html">Display.Image</a></li>
+  <li><a href="../modules/Display.MovieClip.html">Display.MovieClip</a></li>
+  <li><a href="../modules/Display.Quad.html">Display.Quad</a></li>
+  <li><a href="../modules/Display.Stage.html">Display.Stage</a></li>
+  <li><a href="../modules/Display.TextField.html">Display.TextField</a></li>
+  <li><a href="../modules/Texture.BigTextureAtlas.html">Texture.BigTextureAtlas</a></li>
+  <li><a href="../modules/Texture.SubTexture.html">Texture.SubTexture</a></li>
+  <li><a href="../modules/Texture.Texture.html">Texture.Texture</a></li>
+  <li><a href="../modules/Texture.TextureAtlas.html">Texture.TextureAtlas</a></li>
+  <li><a href="../modules/Texture.TextureManager.html">Texture.TextureManager</a></li>
+  <li><a href="../modules/Texture.TexturePacker.html">Texture.TexturePacker</a></li>
+  <li><a href="../modules/include.html">include</a></li>
+</ul>
+
+</div>
+
+<div id="content">
+
+<h1>Module <code>Core.Assets</code></h1>
+
+<p>Assets namespace provides facilities to load different
+type of resources.</p>
+<p></p>
+
+
+<h2><a href="#Functions">Functions</a></h2>
+<table class="function_list">
+	<tr>
+	<td class="name" nowrap><a href="#getSound">getSound&nbsp;(fileName)</a></td>
+	<td class="summary">Load a sound.</td>
+	</tr>
+	<tr>
+	<td class="name" nowrap><a href="#getXml">getXml&nbsp;(fileName)</a></td>
+	<td class="summary">Load an Xml.</td>
+	</tr>
+	<tr>
+	<td class="name" nowrap><a href="#getRawImage">getRawImage&nbsp;(fileName)</a></td>
+	<td class="summary">Load a raw image.</td>
+	</tr>
+	<tr>
+	<td class="name" nowrap><a href="#getTexture">getTexture&nbsp;(fileName, useCache)</a></td>
+	<td class="summary">Load a Texture.</td>
+	</tr>
+	<tr>
+	<td class="name" nowrap><a href="#clearTextureCache">clearTextureCache&nbsp;(texture)</a></td>
+	<td class="summary">Clear the texture cache.</td>
+	</tr>
+</table>
+<h2><a href="#Fields">Fields</a></h2>
+<table class="function_list">
+	<tr>
+	<td class="name" nowrap><a href="#__defaultCacheTexture">__defaultCacheTexture</a></td>
+	<td class="summary">by default texture are cached.</td>
+	</tr>
+</table>
+
+<br/>
+<br/>
+
+
+    <h2><a name="Functions"></a>Functions</h2>
+    <dl class="function">
+    <dt>
+    <a name = "getSound"></a>
+    <strong>getSound&nbsp;(fileName)</strong>
+    </dt>
+    <dd>
+    Load a sound.
+
+    <h3>Parameters:</h3>
+    <ul>
+      <li><span class="parameter">fileName</span>
+       the name of the sound to load, relative to the working dir or absolute (starting with /)</li>
+    </ul>
+
+    <h3>Returns:</h3>
+    <ol>
+        <li>
+        MOAIUntzSound if fileName is a valid path, else nil</li>
+        <li>
+        an error message if fileName is not a valid path</li>
+    </ol>
+
+
+
+
+</dd>
+    <dt>
+    <a name = "getXml"></a>
+    <strong>getXml&nbsp;(fileName)</strong>
+    </dt>
+    <dd>
+    Load an Xml.
+
+    <h3>Parameters:</h3>
+    <ul>
+      <li><span class="parameter">fileName</span>
+       the name of the xml to load, relative to the working dir or absolute (starting with /)</li>
+    </ul>
+
+    <h3>Returns:</h3>
+    <ol>
+        <li>
+        an XmlNode if fileName is a valid path, else nil</li>
+        <li>
+        an error message if fileName is not a valid path</li>
+    </ol>
+
+
+
+
+</dd>
+    <dt>
+    <a name = "getRawImage"></a>
+    <strong>getRawImage&nbsp;(fileName)</strong>
+    </dt>
+    <dd>
+    Load a raw image.
+
+    <h3>Parameters:</h3>
+    <ul>
+      <li><span class="parameter">fileName</span>
+       the name of the raw image to load, relative to the working dir or absolute (starting with /)</li>
+    </ul>
+
+    <h3>Returns:</h3>
+    <ol>
+        <li>
+        a MOAIImage if fileName is a valid path, else nil</li>
+        <li>
+        an error message if fileName is not a valid path</li>
+    </ol>
+
+
+
+
+</dd>
+    <dt>
+    <a name = "getTexture"></a>
+    <strong>getTexture&nbsp;(fileName, useCache)</strong>
+    </dt>
+    <dd>
+    Load a Texture.
+
+    <h3>Parameters:</h3>
+    <ul>
+      <li><span class="parameter">fileName</span>
+       the name of the texture to load, relative to the working dir or absolute (starting with /)</li>
+      <li><span class="parameter">useCache</span>
+       override the default beahviour for caching logic</li>
+    </ul>
+
+    <h3>Returns:</h3>
+    <ol>
+        <li>
+        a Texture if fileName is a valid path, else nil</li>
+        <li>
+        an error message if fileName is not a valid path</li>
+    </ol>
+
+
+
+
+</dd>
+    <dt>
+    <a name = "clearTextureCache"></a>
+    <strong>clearTextureCache&nbsp;(texture)</strong>
+    </dt>
+    <dd>
+    Clear the texture cache.
+If no param is provided it clears the whole textureCache
+
+    <h3>Parameters:</h3>
+    <ul>
+      <li><span class="parameter">texture</span>
+       can be a Texture or a string (the name of the asset on which the Texture was created).</li>
+    </ul>
+
+
+
+
+
+</dd>
+</dl>
+    <h2><a name="Fields"></a>Fields</h2>
+    <dl class="function">
+    <dt>
+    <a name = "__defaultCacheTexture"></a>
+    <strong>__defaultCacheTexture</strong>
+    </dt>
+    <dd>
+    by default texture are cached.  It's possibile to change this value.
+
+
+
+
+
+
+</dd>
+</dl>
+
+
+</div> <!-- id="content" -->
+</div> <!-- id="main" -->
+<div id="about">
+<i>generated by <a href="http://github.com/stevedonovan/LDoc">LDoc 1.3</a></i>
+</div> <!-- id="about" -->
+</div> <!-- id="container" -->
+</body>
+</html>
