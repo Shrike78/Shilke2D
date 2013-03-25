@@ -41,7 +41,7 @@
   <li><a href="../modules/Core.Assets.html">Core.Assets</a></li>
   <li><a href="../modules/Core.Event.html">Core.Event</a></li>
   <li><a href="../modules/Core.EventDispatcher.html">Core.EventDispatcher</a></li>
-  <li><strong>Core.IAnimatable</strong></li>
+  <li><a href="../modules/Core.IAnimatable.html">Core.IAnimatable</a></li>
   <li><a href="../modules/Core.Juggler.html">Core.Juggler</a></li>
   <li><a href="../modules/Core.Keymap.html">Core.Keymap</a></li>
   <li><a href="../modules/Core.Shilke2D.html">Core.Shilke2D</a></li>
@@ -74,7 +74,7 @@
   <li><a href="../modules/Tween.TweenParallel.html">Tween.TweenParallel</a></li>
   <li><a href="../modules/Tween.TweenSequence.html">Tween.TweenSequence</a></li>
   <li><a href="../modules/Utils.Callbacks.html">Utils.Callbacks</a></li>
-  <li><a href="../modules/Utils.ClassEx.html">Utils.ClassEx</a></li>
+  <li><strong>Utils.ClassEx</strong></li>
   <li><a href="../modules/Utils.CollisionKit.html">Utils.CollisionKit</a></li>
   <li><a href="../modules/Utils.Color.html">Utils.Color</a></li>
   <li><a href="../modules/Utils.Coroutines.html">Utils.Coroutines</a></li>
@@ -87,25 +87,70 @@
 
 <div id="content">
 
-<h1>Module <code>Core.IAnimatable</code></h1>
+<h1>Module <code>Utils.ClassEx</code></h1>
 
-<p>The IAnimatable interface describes objects that are animated depending on the passed time.</p>
+<p>Class.lua
+Compatible with Lua 5.1 (not 5.0).</p>
 <p>
-Any object that implements this interface can be added to a juggler.
-<p>When an object should no longer be animated, it has to be removed from
-the juggler. To do this, you can manually remove it via the method
-juggler.remove(object), or the object can request to be removed by
-dispatching an event with the type Event.REMOVE_FROM_JUGGLER.
-<p>The "Tween" and the "DelayedCall" classes are an example of a class
-that dispatches such an event; you don't have to remove tweens or
-delayedCalls manually from the juggler.</p>
+<p>Used to implements simple object oriented logic in lua, with single inheritance
+and interface implementation.
+</p>
+    <h3>Usage:</h3>
+    <ul>
+        <pre class="example">
+
+- class can be used to define base classes and derived classes:
+
+A = class()
+B = class(A)
+
+b = B()
+b:is_a(A) == true
+class_type(b) == A -&gt; false
+class_type(b) == B -&gt; true
+
+- Multiple inheritance is not allowed, but it&apos;s possible to define
+interfaces (always using class) and to require that a class implements them:
+
+iC = class()
+D = class(B,iC)
+
+d = D()
+d:is_a(A) = true
+d:is_a(B) = true
+d:is_a(iC) = false
+d:is_a(D) = true
+d:implements(iC) = true
+
+- It&apos;s also possible to implements one or more interfaces without inheritance:
+
+iE = class()
+F = class(nil,iC,iE)
+
+f = F()
+f:is_a(iC) = false
+f:implements(iC) = true
+f:implements(iE) = true</pre>
+    </ul>
 
 
 <h2><a href="#Functions">Functions</a></h2>
 <table class="function_list">
 	<tr>
-	<td class="name" nowrap><a href="#IAnimatable:advanceTime">IAnimatable:advanceTime&nbsp;(deltaTime)</a></td>
-	<td class="summary">Advance the time by a number of seconds.</td>
+	<td class="name" nowrap><a href="#class_type">class_type&nbsp;(o)</a></td>
+	<td class="summary">Offers a way to check if an obj is of a specific class</td>
+	</tr>
+	<tr>
+	<td class="name" nowrap><a href="#class">class&nbsp;(...)</a></td>
+	<td class="summary">Creates a new class type, allowing single inheritance and multiple interface implementation</td>
+	</tr>
+	<tr>
+	<td class="name" nowrap><a href="#c.is_a">c.is_a&nbsp;(self, klass)</a></td>
+	<td class="summary">allows to check if a class inherits from another</td>
+	</tr>
+	<tr>
+	<td class="name" nowrap><a href="#c.implements">c.implements&nbsp;(self, interface)</a></td>
+	<td class="summary">allows to check if a class implements a specific interface</td>
 	</tr>
 </table>
 
@@ -116,23 +161,92 @@ delayedCalls manually from the juggler.</p>
     <h2><a name="Functions"></a>Functions</h2>
     <dl class="function">
     <dt>
-    <a name = "IAnimatable:advanceTime"></a>
-    <strong>IAnimatable:advanceTime&nbsp;(deltaTime)</strong>
+    <a name = "class_type"></a>
+    <strong>class_type&nbsp;(o)</strong>
     </dt>
     <dd>
-    Advance the time by a number of seconds.
+    Offers a way to check if an obj is of a specific class
 
     <h3>Parameters:</h3>
     <ul>
-      <li><span class="parameter">deltaTime</span>
-       the millisec elapsed from last call to advanceTime</li>
+      <li><span class="parameter">o</span>
+       the object to be testet</li>
     </ul>
 
     <h3>Returns:</h3>
     <ol>
 
-        nil
+        the 'type' of the object if is a class type
     </ol>
+
+
+
+    <h3>Usage:</h3>
+    <ul>
+        <pre class="example">
+A = class()
+B = class(A)
+
+b = B()
+
+class_type(b) == A -&gt; <span class="keyword">false</span>
+class_type(b) == B -&gt; <span class="keyword">true</span></pre>
+    </ul>
+
+</dd>
+    <dt>
+    <a name = "class"></a>
+    <strong>class&nbsp;(...)</strong>
+    </dt>
+    <dd>
+    Creates a new class type, allowing single inheritance and multiple interface implementation
+
+    <h3>Parameters:</h3>
+    <ul>
+      <li><span class="parameter">...</span>
+       p1 is a base class for inheritance (can be null), following are interface to implement</li>
+    </ul>
+
+
+
+
+
+</dd>
+    <dt>
+    <a name = "c.is_a"></a>
+    <strong>c.is_a&nbsp;(self, klass)</strong>
+    </dt>
+    <dd>
+    allows to check if a class inherits from another
+
+    <h3>Parameters:</h3>
+    <ul>
+      <li><span class="parameter">self</span>
+      </li>
+      <li><span class="parameter">klass</span>
+      </li>
+    </ul>
+
+
+
+
+
+</dd>
+    <dt>
+    <a name = "c.implements"></a>
+    <strong>c.implements&nbsp;(self, interface)</strong>
+    </dt>
+    <dd>
+    allows to check if a class implements a specific interface
+
+    <h3>Parameters:</h3>
+    <ul>
+      <li><span class="parameter">self</span>
+      </li>
+      <li><span class="parameter">interface</span>
+      Check we have all the target's callables</li>
+    </ul>
+
 
 
 

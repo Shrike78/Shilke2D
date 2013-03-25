@@ -68,7 +68,7 @@ function setup()
 	stage:addChild(moaiImg2)
 	moaiImg2:setPosition(0,0)
 	
-	animJuggler:add(DisplayObjTweener.seekTarget(moaiImg2,moaiImg,5))
+	animJuggler:add(DisplayObjTweener.seekTargetPosition(moaiImg2,moaiImg,5))
 			
 	juggler:add(
 		Tween.loop(

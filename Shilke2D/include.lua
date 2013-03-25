@@ -27,11 +27,7 @@ require("Shilke2D/Utils/XmlParser")
 require("Shilke2D/Utils/XmlNode")
 require("Shilke2D/Utils/IniParser")
 require("Shilke2D/Utils/IniFile")
-if __USE_SIMULATION_COORDS__ then
-	require("Shilke2D/Utils/CollisionKitSim")
-else	
-	require("Shilke2D/Utils/CollisionKit")
-end
+require("Shilke2D/Utils/CollisionKit")
 require("Shilke2D/Utils/Sound")
 
 require("Shilke2D/Utils/Polygon")

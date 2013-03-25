@@ -1,9 +1,7 @@
--- TweenSequence
-
---[[
+--[[---
 A TweenSequence is a group of tween executed sequentially.
 
-usage:
+@usage
 
 p = Tween.sequence(t1,t2,t3)
 
@@ -13,6 +11,8 @@ where t1,t2,t3 are different tweens
 local TweenSequence = class(Tween)
 Tween.sequence = TweenSequence
 
+---Constructor
+--@param ... list of tweens to be sequenced
 function TweenSequence:init(...)
     Tween.init(self)
     local args = {...}
@@ -26,6 +26,7 @@ function TweenSequence:init(...)
     self.currentIndex = 1
 end
 
+---Resets the tween and all the tweens it's handling
 function TweenSequence:reset()
 	Tween.reset(self)
 	self.currentIndex = 1

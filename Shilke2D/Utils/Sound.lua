@@ -1,5 +1,13 @@
---If MOAIUntzSystem is disabled, an stub interface is created to make the game run without any problem
+--[[---
+If MOAIUntzSystem is enabled Sound() call returns a MOAIUntzSound.new().
+If MOAIUntzSystem is disabled instead a stub interface is created to make 
+the game run consistently
+--]]
+
+
 if MOAIUntzSystem then
+---Returns a new sound object
+--@return MOAIUntzSound if MOAIUntzSystem is enabled, else a Sound stub class.
 	function Sound()
 		return MOAIUntzSound.new()
 	end

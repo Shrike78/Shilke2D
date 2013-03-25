@@ -1,6 +1,4 @@
--- TweenBezier
-
---[[
+--[[---
 A TweenBezier animates numeric properties of objects based on a bezier
 curve defined by a set of control points
 
@@ -11,10 +9,12 @@ animate; as long as the property you want to animate is numeric, the tween can h
 The property can be directly a numeric key of a table/class, or a 
 couple of setter and getter function/method of a table/class
     
-usage:
+@usage
 
 b = tween.bezier(obj,tweenTime)
+
 b:animate("x",x1,x2,x3)
+
 b:animateEx(obj.setR,r1,r2,r3)
 
 --]]
@@ -47,7 +47,7 @@ function TweenBezier:_createTweenInfo(...)
     return tweenInfo
 end
 
---[[
+--[[---
 Animates the property of an object following a bezier curve
 defined by a list of control points
 
@@ -65,13 +65,15 @@ function TweenBezier:animate(property, ...)
     return self
 end
 
---Work as animate but instead of a property it uses a setter method
+---Work as animate but instead of a property it uses a setter method
+--@see TweenBezier:animate
 function TweenBezier:animateEx(setter, ...)
     table.insert(self.setters,setter)
     self.tweenInfo[setter] = self:_createTweenInfo(...)
     return self
 end
 
+---Update method
 function TweenBezier:_update()
     
     local ratio = math.min(self.totalTime, self.currentTime) / 

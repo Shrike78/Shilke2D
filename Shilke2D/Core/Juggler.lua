@@ -17,7 +17,11 @@ so a Juggler can be add to another Juggler.
 
 Juggler = class(nil,IAnimatable)
 
-local Pending = {ADD = 0, REMOVE = 1}
+---Used internally to handle pending operation scheduled while "playing"
+local Pending = {
+	ADD = 0, 
+	REMOVE = 1
+}
 
 function Juggler:init()
     self.animatedObjs = {}

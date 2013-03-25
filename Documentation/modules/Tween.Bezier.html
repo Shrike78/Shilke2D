@@ -41,7 +41,7 @@
   <li><a href="../modules/Core.Assets.html">Core.Assets</a></li>
   <li><a href="../modules/Core.Event.html">Core.Event</a></li>
   <li><a href="../modules/Core.EventDispatcher.html">Core.EventDispatcher</a></li>
-  <li><strong>Core.IAnimatable</strong></li>
+  <li><a href="../modules/Core.IAnimatable.html">Core.IAnimatable</a></li>
   <li><a href="../modules/Core.Juggler.html">Core.Juggler</a></li>
   <li><a href="../modules/Core.Keymap.html">Core.Keymap</a></li>
   <li><a href="../modules/Core.Shilke2D.html">Core.Shilke2D</a></li>
@@ -63,7 +63,7 @@
   <li><a href="../modules/Texture.TextureAtlas.html">Texture.TextureAtlas</a></li>
   <li><a href="../modules/Texture.TextureManager.html">Texture.TextureManager</a></li>
   <li><a href="../modules/Texture.TexturePacker.html">Texture.TexturePacker</a></li>
-  <li><a href="../modules/Tween.Bezier.html">Tween.Bezier</a></li>
+  <li><strong>Tween.Bezier</strong></li>
   <li><a href="../modules/Tween.DisplayObjTweener.html">Tween.DisplayObjTweener</a></li>
   <li><a href="../modules/Tween.Transition.html">Tween.Transition</a></li>
   <li><a href="../modules/Tween.Tween.html">Tween.Tween</a></li>
@@ -87,25 +87,26 @@
 
 <div id="content">
 
-<h1>Module <code>Core.IAnimatable</code></h1>
+<h1>Module <code>Tween.Bezier</code></h1>
 
-<p>The IAnimatable interface describes objects that are animated depending on the passed time.</p>
+<p>Bezier curve implementation.</p>
 <p>
-Any object that implements this interface can be added to a juggler.
-<p>When an object should no longer be animated, it has to be removed from
-the juggler. To do this, you can manually remove it via the method
-juggler.remove(object), or the object can request to be removed by
-dispatching an event with the type Event.REMOVE_FROM_JUGGLER.
-<p>The "Tween" and the "DelayedCall" classes are an example of a class
-that dispatches such an event; you don't have to remove tweens or
-delayedCalls manually from the juggler.</p>
+Source ported from http://paulbourke.net/geometry/bezier/index2.html  </p>
 
 
 <h2><a href="#Functions">Functions</a></h2>
 <table class="function_list">
 	<tr>
-	<td class="name" nowrap><a href="#IAnimatable:advanceTime">IAnimatable:advanceTime&nbsp;(deltaTime)</a></td>
-	<td class="summary">Advance the time by a number of seconds.</td>
+	<td class="name" nowrap><a href="#bezier3">bezier3&nbsp;(mu, p)</a></td>
+	<td class="summary">Three control point Bezier interpolation</td>
+	</tr>
+	<tr>
+	<td class="name" nowrap><a href="#bezier4">bezier4&nbsp;(mu, p)</a></td>
+	<td class="summary">Four control point Bezier interpolation</td>
+	</tr>
+	<tr>
+	<td class="name" nowrap><a href="#bezier">bezier&nbsp;(mu, p)</a></td>
+	<td class="summary">n-control point Bezier interpolation</td>
 	</tr>
 </table>
 
@@ -116,23 +117,60 @@ delayedCalls manually from the juggler.</p>
     <h2><a name="Functions"></a>Functions</h2>
     <dl class="function">
     <dt>
-    <a name = "IAnimatable:advanceTime"></a>
-    <strong>IAnimatable:advanceTime&nbsp;(deltaTime)</strong>
+    <a name = "bezier3"></a>
+    <strong>bezier3&nbsp;(mu, p)</strong>
     </dt>
     <dd>
-    Advance the time by a number of seconds.
+    Three control point Bezier interpolation
 
     <h3>Parameters:</h3>
     <ul>
-      <li><span class="parameter">deltaTime</span>
-       the millisec elapsed from last call to advanceTime</li>
+      <li><span class="parameter">mu</span>
+       range [0,1], interpolation point between start and end of the curve</li>
+      <li><span class="parameter">p</span>
+       list of 3 control points for bezier definition</li>
     </ul>
 
-    <h3>Returns:</h3>
-    <ol>
 
-        nil
-    </ol>
+
+
+
+</dd>
+    <dt>
+    <a name = "bezier4"></a>
+    <strong>bezier4&nbsp;(mu, p)</strong>
+    </dt>
+    <dd>
+    Four control point Bezier interpolation
+
+    <h3>Parameters:</h3>
+    <ul>
+      <li><span class="parameter">mu</span>
+       range [0,1], interpolation point between start and end of the curve</li>
+      <li><span class="parameter">p</span>
+       list of 4 control points for bezier definition</li>
+    </ul>
+
+
+
+
+
+</dd>
+    <dt>
+    <a name = "bezier"></a>
+    <strong>bezier&nbsp;(mu, p)</strong>
+    </dt>
+    <dd>
+    n-control point Bezier interpolation
+
+    <h3>Parameters:</h3>
+    <ul>
+      <li><span class="parameter">mu</span>
+       range [0,1], interpolation point between start and end of the curve</li>
+      <li><span class="parameter">p</span>
+       list of n-control points for bezier definition, with n>4</li>
+    </ul>
+
 
 
 

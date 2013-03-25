@@ -41,7 +41,7 @@
   <li><a href="../modules/Core.Assets.html">Core.Assets</a></li>
   <li><a href="../modules/Core.Event.html">Core.Event</a></li>
   <li><a href="../modules/Core.EventDispatcher.html">Core.EventDispatcher</a></li>
-  <li><strong>Core.IAnimatable</strong></li>
+  <li><a href="../modules/Core.IAnimatable.html">Core.IAnimatable</a></li>
   <li><a href="../modules/Core.Juggler.html">Core.Juggler</a></li>
   <li><a href="../modules/Core.Keymap.html">Core.Keymap</a></li>
   <li><a href="../modules/Core.Shilke2D.html">Core.Shilke2D</a></li>
@@ -70,7 +70,7 @@
   <li><a href="../modules/Tween.TweenBezier.html">Tween.TweenBezier</a></li>
   <li><a href="../modules/Tween.TweenDelay.html">Tween.TweenDelay</a></li>
   <li><a href="../modules/Tween.TweenEase.html">Tween.TweenEase</a></li>
-  <li><a href="../modules/Tween.TweenLoop.html">Tween.TweenLoop</a></li>
+  <li><strong>Tween.TweenLoop</strong></li>
   <li><a href="../modules/Tween.TweenParallel.html">Tween.TweenParallel</a></li>
   <li><a href="../modules/Tween.TweenSequence.html">Tween.TweenSequence</a></li>
   <li><a href="../modules/Utils.Callbacks.html">Utils.Callbacks</a></li>
@@ -87,25 +87,29 @@
 
 <div id="content">
 
-<h1>Module <code>Core.IAnimatable</code></h1>
+<h1>Module <code>Tween.TweenLoop</code></h1>
 
-<p>The IAnimatable interface describes objects that are animated depending on the passed time.</p>
-<p>
-Any object that implements this interface can be added to a juggler.
-<p>When an object should no longer be animated, it has to be removed from
-the juggler. To do this, you can manually remove it via the method
-juggler.remove(object), or the object can request to be removed by
-dispatching an event with the type Event.REMOVE_FROM_JUGGLER.
-<p>The "Tween" and the "DelayedCall" classes are an example of a class
-that dispatches such an event; you don't have to remove tweens or
-delayedCalls manually from the juggler.</p>
+<p>TweenLoop is used to repeat n times (or infinite times) a specific
+tween</p>
+<p></p>
+    <h3>Usage:</h3>
+    <ul>
+        <pre class="example">
+
+l = Tween.loop(t,2) --repeat t 2 times
+l = Tween.loop(t,-1) --repeat t infinite times</pre>
+    </ul>
 
 
 <h2><a href="#Functions">Functions</a></h2>
 <table class="function_list">
 	<tr>
-	<td class="name" nowrap><a href="#IAnimatable:advanceTime">IAnimatable:advanceTime&nbsp;(deltaTime)</a></td>
-	<td class="summary">Advance the time by a number of seconds.</td>
+	<td class="name" nowrap><a href="#TweenLoop:init">TweenLoop:init&nbsp;(tween, repeatCount)</a></td>
+	<td class="summary">Constructor</td>
+	</tr>
+	<tr>
+	<td class="name" nowrap><a href="#TweenLoop:reset">TweenLoop:reset&nbsp;()</a></td>
+	<td class="summary">Resets the tween and the tween it's handling</td>
 	</tr>
 </table>
 
@@ -116,23 +120,33 @@ delayedCalls manually from the juggler.</p>
     <h2><a name="Functions"></a>Functions</h2>
     <dl class="function">
     <dt>
-    <a name = "IAnimatable:advanceTime"></a>
-    <strong>IAnimatable:advanceTime&nbsp;(deltaTime)</strong>
+    <a name = "TweenLoop:init"></a>
+    <strong>TweenLoop:init&nbsp;(tween, repeatCount)</strong>
     </dt>
     <dd>
-    Advance the time by a number of seconds.
+    Constructor
 
     <h3>Parameters:</h3>
     <ul>
-      <li><span class="parameter">deltaTime</span>
-       the millisec elapsed from last call to advanceTime</li>
+      <li><span class="parameter">tween</span>
+       the tween to repeat</li>
+      <li><span class="parameter">repeatCount</span>
+       number of times the loop must be executed. repeatCount <= 0 means infinite loop</li>
     </ul>
 
-    <h3>Returns:</h3>
-    <ol>
 
-        nil
-    </ol>
+
+
+
+</dd>
+    <dt>
+    <a name = "TweenLoop:reset"></a>
+    <strong>TweenLoop:reset&nbsp;()</strong>
+    </dt>
+    <dd>
+    Resets the tween and the tween it's handling
+
+
 
 
 

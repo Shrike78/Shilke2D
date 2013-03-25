@@ -1,26 +1,13 @@
--- Transition
-
---[[
-The Transitions class contains static methods that define easing 
+--[[---
+The Transitions namespace contains static methods that define easing 
 functions. Those functions will be used by the Tween class to 
 execute animations. 
     
 You can define your own transitions through the "registerTransition" 
 function. A transition function must have the following signature, 
-where "ratio" is in the range [0..1]:
+where "ratio" is in the range [0,1]:
 
 function myTransition(ratio)
-
-For all easing functions:
-t = time == current tweening time
-b = begin == starting property value
-c = change == ending - beginning
-d = duration == total time duration of the tween
-
-r = ratio = t/d
-
-v = f(r)*c + b
-
 
 easing functions thankfully taken from 
 
@@ -28,9 +15,21 @@ http://dojotoolkit.org,
 http://www.robertpenner.com/easing,
 https://github.com/EmmanuelOga/easing
 
+@usage
+
+For all easing functions:
+
+t = time == current tweening time
+b = begin == starting property value
+c = change == ending - beginning
+d = duration == total time duration of the tween
+
+r = ratio = t/d
+v = f(r)*c + b
+
 --]]
 
---default transition supported by tween class
+---default transition supported by tween class
 Transition = {
 
     LINEAR= "linear",
@@ -88,7 +87,7 @@ Transition = {
 
 local pow, sin, cos, pi, sqrt, abs, asin = math.pow, math.sin, math.cos, math.pi, math.sqrt, math.abs, math.asin
 
--- used to combine in & out ease functions
+---used to combine in & out ease functions
 local function easeCombined(startFunc, endFunc, ratio)
     if (ratio < 0.5) then
         return 0.5 * startFunc(ratio * 2)

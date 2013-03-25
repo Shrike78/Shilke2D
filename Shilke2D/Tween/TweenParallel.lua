@@ -1,9 +1,7 @@
--- TweenParallel
-
---[[
+--[[---
 A TweenParallel is a group of tween executed simultaneously.
 
-usage:
+@usage
 
 p = Tween.parallel(t1,t2,t3)
 
@@ -13,6 +11,8 @@ where t1,t2,t3 are different tweens
 local TweenParallel = class(Tween)
 Tween.parallel = TweenParallel
 
+---Constructor
+--@param ... list of tweens to be parallelized
 function TweenParallel:init(...)
     Tween.init(self)
     local args = {...}
@@ -28,6 +28,7 @@ function TweenParallel:init(...)
     end
 end
 
+---Resets the tween and all the tweens it's handling
 function TweenParallel:reset()
 	Tween.reset(self)
 	table.clear(self.completed)

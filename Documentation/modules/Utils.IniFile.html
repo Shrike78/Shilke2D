@@ -33,7 +33,6 @@
 <h2>Contents</h2>
 <ul>
 <li><a href="#Functions">Functions</a></li>
-<li><a href="#Tables">Tables</a></li>
 </ul>
 
 
@@ -62,7 +61,7 @@
   <li><a href="../modules/Texture.SubTexture.html">Texture.SubTexture</a></li>
   <li><a href="../modules/Texture.Texture.html">Texture.Texture</a></li>
   <li><a href="../modules/Texture.TextureAtlas.html">Texture.TextureAtlas</a></li>
-  <li><strong>Texture.TextureManager</strong></li>
+  <li><a href="../modules/Texture.TextureManager.html">Texture.TextureManager</a></li>
   <li><a href="../modules/Texture.TexturePacker.html">Texture.TexturePacker</a></li>
   <li><a href="../modules/Tween.Bezier.html">Tween.Bezier</a></li>
   <li><a href="../modules/Tween.DisplayObjTweener.html">Tween.DisplayObjTweener</a></li>
@@ -79,7 +78,7 @@
   <li><a href="../modules/Utils.CollisionKit.html">Utils.CollisionKit</a></li>
   <li><a href="../modules/Utils.Color.html">Utils.Color</a></li>
   <li><a href="../modules/Utils.Coroutines.html">Utils.Coroutines</a></li>
-  <li><a href="../modules/Utils.IniFile.html">Utils.IniFile</a></li>
+  <li><strong>Utils.IniFile</strong></li>
   <li><a href="../modules/Utils.Sound.html">Utils.Sound</a></li>
   <li><a href="../modules/include.html">include</a></li>
 </ul>
@@ -88,47 +87,43 @@
 
 <div id="content">
 
-<h1>Module <code>Texture.TextureManager</code></h1>
+<h1>Module <code>Utils.IniFile</code></h1>
 
-<p>TextureManager allows to mount a texture atlas as a logical resource path.</p>
+<p>Helper to read ini files.</p>
 <p>
-That means that calling TextureManager.getTexture() makes transparent the load
-of a real texture or of a subtexture of a texture atlas.
-<p>That allows to create code that doesn't depend on how data is packed.
-A use case is to always call TextureManager.getTexture() and, depending on how
-data is packed, add only at initialization phase a list of
-TextureManager.mountAtlas calls.
-<p>This list of atlas resources could be moreover defined by external data</p>
+Wraps a table obtained parsing a file ini and exposes functions to easily
+access and read data</p>
 
 
 <h2><a href="#Functions">Functions</a></h2>
 <table class="function_list">
 	<tr>
-	<td class="name" nowrap><a href="#mountAtlas">mountAtlas&nbsp;(mountDir, atlas)</a></td>
-	<td class="summary">Mount a texture atlas as logica resource at a specific path.</td>
+	<td class="name" nowrap><a href="#fromFile">fromFile&nbsp;(fileName)</a></td>
+	<td class="summary">Loads a file ini and parse it</td>
 	</tr>
 	<tr>
-	<td class="name" nowrap><a href="#unmountAtlas">unmountAtlas&nbsp;(mountDir, atlas)</a></td>
-	<td class="summary">Unmount an atlas from given path</td>
+	<td class="name" nowrap><a href="#fromText">fromText&nbsp;(text)</a></td>
+	<td class="summary">Create a IniFile object starting from text</td>
 	</tr>
 	<tr>
-	<td class="name" nowrap><a href="#getTexture">getTexture&nbsp;(fileName, useCache)</a></td>
-	<td class="summary">Returns a texture given a fileName.</td>
+	<td class="name" nowrap><a href="#IniFile:init">IniFile:init&nbsp;(t)</a></td>
+	<td class="summary">Constructor</td>
 	</tr>
 	<tr>
-	<td class="name" nowrap><a href="#clearCache">clearCache&nbsp;(texture)</a></td>
-	<td class="summary">Remove a texture from the cache.</td>
-	</tr>
-</table>
-<h2><a href="#Tables">Tables</a></h2>
-<table class="function_list">
-	<tr>
-	<td class="name" nowrap><a href="#__atlasResources">__atlasResources</a></td>
-	<td class="summary">used to store all the mounted textureAtlases</td>
+	<td class="name" nowrap><a href="#IniFile:hasSection">IniFile:hasSection&nbsp;(section)</a></td>
+	<td class="summary">Checks section existence</td>
 	</tr>
 	<tr>
-	<td class="name" nowrap><a href="#__textureCache">__textureCache</a></td>
-	<td class="summary">used to cache the textures stored into the TextureAtlases</td>
+	<td class="name" nowrap><a href="#IniFile:getValue">IniFile:getValue&nbsp;(section, key, default)</a></td>
+	<td class="summary">Returns a section/key value</td>
+	</tr>
+	<tr>
+	<td class="name" nowrap><a href="#IniFile:getValueN">IniFile:getValueN&nbsp;(section, key, default)</a></td>
+	<td class="summary">Returns a section/key value as number</td>
+	</tr>
+	<tr>
+	<td class="name" nowrap><a href="#IniFile:getValueBool">IniFile:getValueBool&nbsp;(section, key, default)</a></td>
+	<td class="summary">Returns a section/key value as bool</td>
 	</tr>
 </table>
 
@@ -139,82 +134,66 @@ TextureManager.mountAtlas calls.
     <h2><a name="Functions"></a>Functions</h2>
     <dl class="function">
     <dt>
-    <a name = "mountAtlas"></a>
-    <strong>mountAtlas&nbsp;(mountDir, atlas)</strong>
+    <a name = "fromFile"></a>
+    <strong>fromFile&nbsp;(fileName)</strong>
     </dt>
     <dd>
-    Mount a texture atlas as logica resource at a specific path.
-It's possible to mount the same atlas at different paths.
-It's possible to mount multiple atlas at same path.
-
-    <h3>Parameters:</h3>
-    <ul>
-      <li><span class="parameter">mountDir</span>
-       the path where to mount the atlas</li>
-      <li><span class="parameter">atlas</span>
-       the texture atlas to be mounted</li>
-    </ul>
-
-
-
-
-
-</dd>
-    <dt>
-    <a name = "unmountAtlas"></a>
-    <strong>unmountAtlas&nbsp;(mountDir, atlas)</strong>
-    </dt>
-    <dd>
-    Unmount an atlas from given path
-
-    <h3>Parameters:</h3>
-    <ul>
-      <li><span class="parameter">mountDir</span>
-       the path where to unmount the atlas</li>
-      <li><span class="parameter">atlas</span>
-       the texture atlas to be unmounted</li>
-    </ul>
-
-
-
-
-
-</dd>
-    <dt>
-    <a name = "getTexture"></a>
-    <strong>getTexture&nbsp;(fileName, useCache)</strong>
-    </dt>
-    <dd>
-    Returns a texture given a fileName.  The texture can be a physical resource or a subtexture
-obtained from a texture atlas.
-Textures not stored in mounted atlas are loaded through Assets.getText internal call
+    Loads a file ini and parse it
 
     <h3>Parameters:</h3>
     <ul>
       <li><span class="parameter">fileName</span>
-       name of the texture to be retrieved</li>
-      <li><span class="parameter">useCache</span>
-       if defined override default Assets.__defaultCacheTexture value</li>
+       the path of the file to load</li>
     </ul>
 
+    <h3>Returns:</h3>
+    <ol>
+        <li>
+        IniFile object or nil if the path is not valid</li>
+        <li>
+        nil or error if the path is not valid</li>
+    </ol>
 
 
 
 
 </dd>
     <dt>
-    <a name = "clearCache"></a>
-    <strong>clearCache&nbsp;(texture)</strong>
+    <a name = "fromText"></a>
+    <strong>fromText&nbsp;(text)</strong>
     </dt>
     <dd>
-    Remove a texture from the cache.  If texture is nil, clears the whole texture cache.
-It calls also Assets.clearCache method
-If nil the whole cache is cleared
+    Create a IniFile object starting from text
 
     <h3>Parameters:</h3>
     <ul>
-      <li><span class="parameter">texture</span>
-       texture path or concrete resource to be removed from cache. </li>
+      <li><span class="parameter">text</span>
+       the text of</li>
+    </ul>
+
+    <h3>Returns:</h3>
+    <ol>
+        <li>
+        IniFile object or nil if the path is not valid</li>
+        <li>
+        nil or error if the path is not valid</li>
+    </ol>
+
+
+
+
+</dd>
+    <dt>
+    <a name = "IniFile:init"></a>
+    <strong>IniFile:init&nbsp;(t)</strong>
+    </dt>
+    <dd>
+    Constructor
+
+    <h3>Parameters:</h3>
+    <ul>
+      <li><span class="parameter">t</span>
+       a table obtained parsing a ini file with IniParser</li>
     </ul>
 
 
@@ -222,30 +201,105 @@ If nil the whole cache is cleared
 
 
 </dd>
-</dl>
-    <h2><a name="Tables"></a>Tables</h2>
-    <dl class="function">
     <dt>
-    <a name = "__atlasResources"></a>
-    <strong>__atlasResources</strong>
+    <a name = "IniFile:hasSection"></a>
+    <strong>IniFile:hasSection&nbsp;(section)</strong>
     </dt>
     <dd>
-    used to store all the mounted textureAtlases
+    Checks section existence
 
+    <h3>Parameters:</h3>
+    <ul>
+      <li><span class="parameter">section</span>
+       name of the section</li>
+    </ul>
 
+    <h3>Returns:</h3>
+    <ol>
+
+        bool
+    </ol>
 
 
 
 
 </dd>
     <dt>
-    <a name = "__textureCache"></a>
-    <strong>__textureCache</strong>
+    <a name = "IniFile:getValue"></a>
+    <strong>IniFile:getValue&nbsp;(section, key, default)</strong>
     </dt>
     <dd>
-    used to cache the textures stored into the TextureAtlases
+    Returns a section/key value
+
+    <h3>Parameters:</h3>
+    <ul>
+      <li><span class="parameter">section</span>
+       name of the section</li>
+      <li><span class="parameter">key</span>
+       name of the key</li>
+      <li><span class="parameter">default</span>
+       default value to return if section/key has no value. (optional)</li>
+    </ul>
+
+    <h3>Returns:</h3>
+    <ol>
+
+        string value
+    </ol>
 
 
+
+
+</dd>
+    <dt>
+    <a name = "IniFile:getValueN"></a>
+    <strong>IniFile:getValueN&nbsp;(section, key, default)</strong>
+    </dt>
+    <dd>
+    Returns a section/key value as number
+
+    <h3>Parameters:</h3>
+    <ul>
+      <li><span class="parameter">section</span>
+       name of the section</li>
+      <li><span class="parameter">key</span>
+       name of the key</li>
+      <li><span class="parameter">default</span>
+       default value to return if section/key has no value. (optional)</li>
+    </ul>
+
+    <h3>Returns:</h3>
+    <ol>
+
+        number value
+    </ol>
+
+
+
+
+</dd>
+    <dt>
+    <a name = "IniFile:getValueBool"></a>
+    <strong>IniFile:getValueBool&nbsp;(section, key, default)</strong>
+    </dt>
+    <dd>
+    Returns a section/key value as bool
+
+    <h3>Parameters:</h3>
+    <ul>
+      <li><span class="parameter">section</span>
+       name of the section</li>
+      <li><span class="parameter">key</span>
+       name of the key</li>
+      <li><span class="parameter">default</span>
+       default value to return if section/key has no value. (optional)</li>
+    </ul>
+
+    <h3>Returns:</h3>
+    <ol>
+
+        bool value
+    </ol>
 
 
 

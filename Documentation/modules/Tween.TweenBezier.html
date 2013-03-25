@@ -41,7 +41,7 @@
   <li><a href="../modules/Core.Assets.html">Core.Assets</a></li>
   <li><a href="../modules/Core.Event.html">Core.Event</a></li>
   <li><a href="../modules/Core.EventDispatcher.html">Core.EventDispatcher</a></li>
-  <li><strong>Core.IAnimatable</strong></li>
+  <li><a href="../modules/Core.IAnimatable.html">Core.IAnimatable</a></li>
   <li><a href="../modules/Core.Juggler.html">Core.Juggler</a></li>
   <li><a href="../modules/Core.Keymap.html">Core.Keymap</a></li>
   <li><a href="../modules/Core.Shilke2D.html">Core.Shilke2D</a></li>
@@ -67,7 +67,7 @@
   <li><a href="../modules/Tween.DisplayObjTweener.html">Tween.DisplayObjTweener</a></li>
   <li><a href="../modules/Tween.Transition.html">Tween.Transition</a></li>
   <li><a href="../modules/Tween.Tween.html">Tween.Tween</a></li>
-  <li><a href="../modules/Tween.TweenBezier.html">Tween.TweenBezier</a></li>
+  <li><strong>Tween.TweenBezier</strong></li>
   <li><a href="../modules/Tween.TweenDelay.html">Tween.TweenDelay</a></li>
   <li><a href="../modules/Tween.TweenEase.html">Tween.TweenEase</a></li>
   <li><a href="../modules/Tween.TweenLoop.html">Tween.TweenLoop</a></li>
@@ -87,25 +87,46 @@
 
 <div id="content">
 
-<h1>Module <code>Core.IAnimatable</code></h1>
+<h1>Module <code>Tween.TweenBezier</code></h1>
 
-<p>The IAnimatable interface describes objects that are animated depending on the passed time.</p>
-<p>
-Any object that implements this interface can be added to a juggler.
-<p>When an object should no longer be animated, it has to be removed from
-the juggler. To do this, you can manually remove it via the method
-juggler.remove(object), or the object can request to be removed by
-dispatching an event with the type Event.REMOVE_FROM_JUGGLER.
-<p>The "Tween" and the "DelayedCall" classes are an example of a class
-that dispatches such an event; you don't have to remove tweens or
-delayedCalls manually from the juggler.</p>
+<p>A TweenBezier animates numeric properties of objects based on a bezier
+curve defined by a set of control points
+<p>The primary use of this class is to do standard animations like
+movement, fading, rotation, etc.</p>
+<p> But there are no limits on what to
+animate; as long as the property you want to animate is numeric, the tween can handle it.
+<p>The property can be directly a numeric key of a table/class, or a
+couple of setter and getter function/method of a table/class
+    </p>
+    <h3>Usage:</h3>
+    <ul>
+        <pre class="example">
+
+b = tween.bezier(obj,tweenTime)
+
+b:animate(&quot;x&quot;,x1,x2,x3)
+
+b:animateEx(obj.setR,r1,r2,r3)
+</pre>
+    </ul>
 
 
 <h2><a href="#Functions">Functions</a></h2>
 <table class="function_list">
 	<tr>
-	<td class="name" nowrap><a href="#IAnimatable:advanceTime">IAnimatable:advanceTime&nbsp;(deltaTime)</a></td>
-	<td class="summary">Advance the time by a number of seconds.</td>
+	<td class="name" nowrap><a href="#TweenBezier:animate">TweenBezier:animate&nbsp;(property, ...)</a></td>
+	<td class="summary">Animates the property of an object following a bezier curve
+defined by a list of control points
+<p>Is it possible to call this method multiple times on one tween,
+to animate different properties.</td>
+	</tr>
+	<tr>
+	<td class="name" nowrap><a href="#TweenBezier:animateEx">TweenBezier:animateEx&nbsp;(setter, ...)</a></td>
+	<td class="summary">Work as animate but instead of a property it uses a setter method</td>
+	</tr>
+	<tr>
+	<td class="name" nowrap><a href="#TweenBezier:_update">TweenBezier:_update&nbsp;()</a></td>
+	<td class="summary">Update method</td>
 	</tr>
 </table>
 
@@ -116,23 +137,62 @@ delayedCalls manually from the juggler.</p>
     <h2><a name="Functions"></a>Functions</h2>
     <dl class="function">
     <dt>
-    <a name = "IAnimatable:advanceTime"></a>
-    <strong>IAnimatable:advanceTime&nbsp;(deltaTime)</strong>
+    <a name = "TweenBezier:animate"></a>
+    <strong>TweenBezier:animate&nbsp;(property, ...)</strong>
     </dt>
     <dd>
-    Advance the time by a number of seconds.
+    Animates the property of an object following a bezier curve
+defined by a list of control points
+<p>Is it possible to call this method multiple times on one tween,
+to animate different properties.
+<p>- each control point must be of the same type of property (scalar or
+vector or any type that defines algebraic operations)
 
     <h3>Parameters:</h3>
     <ul>
-      <li><span class="parameter">deltaTime</span>
-       the millisec elapsed from last call to advanceTime</li>
+      <li><span class="parameter">property</span>
+      </li>
+      <li><span class="parameter">...</span>
+      </li>
     </ul>
 
-    <h3>Returns:</h3>
-    <ol>
 
-        nil
-    </ol>
+
+
+
+</dd>
+    <dt>
+    <a name = "TweenBezier:animateEx"></a>
+    <strong>TweenBezier:animateEx&nbsp;(setter, ...)</strong>
+    </dt>
+    <dd>
+    Work as animate but instead of a property it uses a setter method
+
+    <h3>Parameters:</h3>
+    <ul>
+      <li><span class="parameter">setter</span>
+      </li>
+      <li><span class="parameter">...</span>
+      </li>
+    </ul>
+
+
+
+    <h3>see also:</h3>
+    <ul>
+         <a href="../modules/Tween.TweenBezier.html#TweenBezier:animate">TweenBezier:animate</a>
+    </ul>
+
+
+</dd>
+    <dt>
+    <a name = "TweenBezier:_update"></a>
+    <strong>TweenBezier:_update&nbsp;()</strong>
+    </dt>
+    <dd>
+    Update method
+
+
 
 
 

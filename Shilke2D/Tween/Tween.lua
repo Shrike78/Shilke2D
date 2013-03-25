@@ -1,13 +1,11 @@
--- Tween
+--[[---
+A Tween is an IAnimatable object used to animate another object properties. 
+Tween is a base abstract class. It exposes also static functions in order to 
+create comcrete tweens. Each specific tween class must implement onStart, onUpdate, 
+onComplete and isComplete methods in order to define start, update, complete 
+(that means reset) logic and to define finish condition.
 
---[[
-A tween is an IAnimatable object used to animate another object
-properties. Tween is a base abstract class. It exposes also static functions in order to create comcrete tweens. Each specific tween 
-class must implement onStart, onUpdate, onComplete and isComplete
-methods in order to define start,update,complete (that means reset) 
-logic and to define finish condition.
-
-Specific tweens are Ease, Bezier. Tweens can also be delayed, looped
+Specific tweens are Ease and Bezier. Tweens can also be delayed, looped
 or grouped in parallel or in sequence. A combination of more tweens 
 is a tween itself.
 
@@ -22,7 +20,11 @@ will do that for you, and will remove the tween when it is finished.
 
 Tween = class(EventDispatcher,IAnimatable)
 
---cannot be used in setup method
+--[[---
+Used to wait for a tween execution ending.
+can be used only from coroutines, not in setup and not in update if juggler and update are
+on the same thread
+--]]
 function waitTween(t)
 	while not t.finished do
 		coroutine.yield()
@@ -37,58 +39,58 @@ end
 
 -- public methods
 
---retrieve the time that has passed since the tween is started.
---if the tween is already completed return 0
+---Returns the time that has passed since the tween is started.
 function Tween:getElapsedTime()
     return self.currentTime
 end
 
+---Resets tween status. Start can be called again safely after.
 function Tween:reset()
 	self.currentTime = 0
 	self.finished = false
 end
 
---Set a callback function with arguments that will be called 
+---Sets a callback function with arguments that will be called 
 --when the tween starts. 
 function Tween:callOnStart(func ,...)
     self._onStart = func and Callbacks.callback(func,...)
     return self
 end
 
---Set a callback function with arguments that will be called 
---each advanceTime
+--Sets a callback function with arguments that will be called 
+--each time advanceTime is called
 function Tween:callOnUpdate(func ,...)
     self._onUpdate = func and Callbacks.callback(func,...)
     return self
 end
 
---Set a callback function with arguments that will be called 
+---Sets a callback function with arguments that will be called 
 --when the tween is completed. 
 function Tween:callOnComplete(func ,...)
     self._onComplete = func and Callbacks.callback(func,...)
     return self
 end
 
---when override add initialization logic if needed
+---when override add initialization logic if needed
 function Tween:_start()
 end
 
---when override add update logic if needed
+---when override add update logic if needed
 function Tween:_update(deltaTime)
 end
 
---when override add reset logic if needed
+---when override add complete logic if needed
 function Tween:_complete()
 end
 
---this function must be implemented by any class that implements Tween
---because each Tween need an ending clause
+---This function must be implemented by any class that implements Tween
+--because each Tween has specific ending clause
 function Tween:_isCompleted()
     error("Tween is an abstract class. override me")
 end
 
 
---generic tween update function. 
+---Tween IAnimatable interface implementation. 
 function Tween:advanceTime(deltaTime)
     
     if self.currentTime == 0 then

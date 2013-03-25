@@ -8,32 +8,27 @@ as a middle class that has no meeaning to be instantiated by itself.
 BaseQuad allows different pivotMode. Default PivotMode is PivotMode.CENTER               
 --]]
 
-PivotMode = {}
 
----Manually set x,y coordinates
-PivotMode.CUSTOM = 1	
----The pivotPoint is always the bottom left point of the bound rect
-PivotMode.BOTTOM_LEFT = 2
----The pivotPoint is always the bottom center point of the bound rect
-PivotMode.BOTTOM_CENTER = 3
----The pivotPoint is always the bottom right point of the bound rect
-PivotMode.BOTTOM_RIGHT = 4
----The pivotPoint is always the center left point of the bound rect
-PivotMode.CENTER_LEFT = 5
----The pivotPoint is always the center point of the bound rect
-PivotMode.CENTER = 6 
----The pivotPoint is always the center right point of the bound rect
-PivotMode.CENTER_RIGHT = 7
----The pivotPoint is always the top left point of the bound rect
-PivotMode.TOP_LEFT = 8
----The pivotPoint is always the top center point of the bound rect
-PivotMode.TOP_CENTER = 9
----The pivotPoint is always the top right point of the bound rect
-PivotMode.TOP_RIGHT = 10
+---PivotMode function
+PivotMode = {
+
+	CUSTOM = 1,
+	
+	BOTTOM_LEFT = 2,
+	BOTTOM_CENTER = 3,
+	BOTTOM_RIGHT = 4,
+	
+	CENTER_LEFT = 5,
+	CENTER = 6,
+	CENTER_RIGHT = 7,
+	
+	TOP_LEFT = 8,
+	TOP_CENTER = 9,
+	TOP_RIGHT = 10
+}
 
 
 BaseQuad = class(DisplayObj)
-
 
 --[[
 The pivot can be custom (by calling setPivot/setPivotX,Y) or

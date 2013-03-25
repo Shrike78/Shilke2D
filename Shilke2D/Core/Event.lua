@@ -8,14 +8,16 @@ event type and the sender.
 --]]	 
 Event = class()
 
+---Used by MovieClip at end of each animation iteration
 Event.COMPLETED             = "__Completed__"
---- IAnimatable Objects raise this event when they need to be removed from a juggler
+---IAnimatable Objects that needs to be removed from juggler at the end of executions raise 
+--this event
 Event.REMOVE_FROM_JUGGLER   = "__RemoveFromJuggler__"
---- Used by DisplayObjs when hitTest for touch is true.
+---Used by DisplayObjs when hitTest for touch is true.
 Event.TOUCH                 = "__Touch__"
---- Used by buttons when pressed
+---Used by buttons when pressed
 Event.TRIGGERED             = "__Triggered__"
---- Used by Timer when timer reach zero
+---Used by Timer when timer reach zero
 Event.TIMER                 = "__timer_event__"
 
 --[[---

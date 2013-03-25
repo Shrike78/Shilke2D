@@ -7,6 +7,7 @@ Mouse left click and move are redirected as touch events with always the same id
 Touch phases are {BEGAN, MOVING, ENDED, CANCELLED}
 --]]
 
+---Touch states
 Touch = {
 	BEGAN		= "began",
 	MOVING		= "moving",

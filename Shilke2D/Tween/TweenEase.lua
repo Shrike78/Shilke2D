@@ -1,27 +1,32 @@
--- TweenEase
-
---[[
+--[[---
 A TweenEase animates numeric properties of objects. It uses different
 transition functions to give the animations various styles.
 
 The primary use of this class is to do standard animations like 
 movement, fading, rotation, etc. But there are no limits on what to 
-animate; as long as the property you want to animate is numeric, the tween can handle it. For a list of available Transition types, look 
+animate. As long as the property you want to animate is numeric, the 
+tween can handle it. For a list of available Transition types, look 
 at the "Transitions" class.
 
 The property can be directly a numeric key of a table/class, or a 
 couple of setter and getter function/method of a table/class
     
-usage:
+@usage
 
 e = Tween.ease(obj,tweenTime,Transition.LINEAR)
 e:seek("x",endValue)
-e:seekEx(obj.setR,endValue)
+e:seekEx(obj.setter,obj.getter,endValue)
 --]]
 
 local TweenEase = class(Tween)
 Tween.ease = TweenEase
 
+--[[---
+Constructor.
+@param target the object that will be animated
+@param time duration of the animation
+@param transitionName type of transition that will be applied
+--]]
 function TweenEase:init(target,time,transitionName)
     assert(transitionName,"a valid transition name must be provided")
     Tween.init(self)
@@ -38,16 +43,17 @@ function TweenEase:init(target,time,transitionName)
 end
 
 
---[[
-seek the property of an object to a target value. 
+--[[---
+seeks the property of an object to a target value. 
 Is it possible to call this method multiple times on one tween, 
 to animate different properties.
 
-- endValue is the value to which property will tween with a curve and 
-in a time configured when the tween was created.
-
-- roundToInt is optional, and if true force updated propery values
-to be rounded to int values
+@param property the property that will be animated
+@param endValue the value to which the property will tweened with 
+a curve and in a time configured when the tween was created.
+@param roundToInt if true force updated propery values
+to be rounded to int values. default is false
+@return self
 --]]
 function TweenEase:seek(property, endValue, roundToInt)	
     table.insert(self.properties,property)
@@ -58,7 +64,17 @@ function TweenEase:seek(property, endValue, roundToInt)
     return self
 end
 
---Work as seek but instead of a property it receives a pair of setter and getter methods. 
+--[[---
+Similar to seek but instead of a property it receives a pair of setter and getter methods.
+
+@param setter the setter of the property that will be animated
+@param getter the getter of the the property that will be animated
+@param endValue the value to which the property will tweened with 
+a curve and in a time configured when the tween was created.
+@param roundToInt if true force updated propery values
+to be rounded to int values. default is false
+@return self
+--]]
 function TweenEase:seekEx(setter, getter, endValue, roundToInt)
     table.insert(self.setters,setter)
     self.tweenInfo[setter] = {
@@ -69,8 +85,18 @@ function TweenEase:seekEx(setter, getter, endValue, roundToInt)
     return self
 end
 
---similar to seek but it receives a delta value instead of a target value,
---and the 'delta' is estimated on tween start
+--[[---
+move the property of an object of a delta value. 
+Is it possible to call this method multiple times on one tween, 
+to animate different properties.
+
+@param property the property that will be animated
+@param deltaValue the value of which the property will tweened with 
+a curve and in a time configured when the tween was created.
+@param roundToInt if true force updated propery values
+to be rounded to int values. default is false
+@return self
+--]]
 function TweenEase:move(property, deltaValue, roundToInt)
     assert(self.target[property],property..
         " is not a property of the target of this tween")
@@ -82,6 +108,17 @@ function TweenEase:move(property, deltaValue, roundToInt)
     return self
 end
 
+--[[---
+Similar to move but instead of a property it receives a pair of setter and getter methods.
+
+@param setter the setter of the property that will be animated
+@param getter the getter of the the property that will be animated
+@param deltaValue the value of which the property will tweened with 
+a curve and in a time configured when the tween was created.
+@param roundToInt if true force updated propery values
+to be rounded to int values. default is false
+@return self
+--]]
 function TweenEase:moveEx(setter, getter, deltaValue, roundToInt)
     table.insert(self.setters,setter)
     self.tweenInfo[setter] = {
@@ -93,8 +130,21 @@ function TweenEase:moveEx(setter, getter, deltaValue, roundToInt)
 end
 
 
--- instead of receiving a target value it receive a target object with property, that is
--- a dynamic variable that could change during time
+--[[---
+Instead of receiving a target value it receive a target object with property, 
+that is a dynamic variable that could change during time.
+
+Is it possible to call this method multiple times on one tween, 
+to animate different properties.
+
+@param property the property that will be animated
+@param target the object that has to be followed
+@param targetProp the property of the target object that we want to reach. 
+Can be also a getter method
+@param roundToInt if true force updated propery values
+to be rounded to int values. default is false
+@return self
+--]]
 function TweenEase:follow(property, target, targetProp, roundToInt)
     table.insert(self.setters,setter)
     self.tweenInfo[setter] = {
@@ -106,6 +156,18 @@ function TweenEase:follow(property, target, targetProp, roundToInt)
     return self
 end
 
+--[[---
+Similar to follow but instead of a property it receives a pair of setter and getter methods.
+
+@param setter the setter of the property that will be animated
+@param getter the getter of the the property that will be animated
+@param target the object that has to be followed
+@param targetProp the property of the target object that we want to reach. 
+Can be also a getter method
+@param roundToInt if true force updated propery values
+to be rounded to int values. default is false
+@return self
+--]]
 function TweenEase:followEx(setter, getter, target, targetProp, roundToInt)
     table.insert(self.setters,setter)
     self.tweenInfo[setter] = {

@@ -33,7 +33,6 @@
 <h2>Contents</h2>
 <ul>
 <li><a href="#Functions">Functions</a></li>
-<li><a href="#Tables">Tables</a></li>
 </ul>
 
 
@@ -62,7 +61,7 @@
   <li><a href="../modules/Texture.SubTexture.html">Texture.SubTexture</a></li>
   <li><a href="../modules/Texture.Texture.html">Texture.Texture</a></li>
   <li><a href="../modules/Texture.TextureAtlas.html">Texture.TextureAtlas</a></li>
-  <li><strong>Texture.TextureManager</strong></li>
+  <li><a href="../modules/Texture.TextureManager.html">Texture.TextureManager</a></li>
   <li><a href="../modules/Texture.TexturePacker.html">Texture.TexturePacker</a></li>
   <li><a href="../modules/Tween.Bezier.html">Tween.Bezier</a></li>
   <li><a href="../modules/Tween.DisplayObjTweener.html">Tween.DisplayObjTweener</a></li>
@@ -77,7 +76,7 @@
   <li><a href="../modules/Utils.Callbacks.html">Utils.Callbacks</a></li>
   <li><a href="../modules/Utils.ClassEx.html">Utils.ClassEx</a></li>
   <li><a href="../modules/Utils.CollisionKit.html">Utils.CollisionKit</a></li>
-  <li><a href="../modules/Utils.Color.html">Utils.Color</a></li>
+  <li><strong>Utils.Color</strong></li>
   <li><a href="../modules/Utils.Coroutines.html">Utils.Coroutines</a></li>
   <li><a href="../modules/Utils.IniFile.html">Utils.IniFile</a></li>
   <li><a href="../modules/Utils.Sound.html">Utils.Sound</a></li>
@@ -88,47 +87,57 @@
 
 <div id="content">
 
-<h1>Module <code>Texture.TextureManager</code></h1>
+<h1>Module <code>Utils.Color</code></h1>
 
-<p>TextureManager allows to mount a texture atlas as a logical resource path.</p>
+<p>Color class.</p>
 <p>
-That means that calling TextureManager.getTexture() makes transparent the load
-of a real texture or of a subtexture of a texture atlas.
-<p>That allows to create code that doesn't depend on how data is packed.
-A use case is to always call TextureManager.getTexture() and, depending on how
-data is packed, add only at initialization phase a list of
-TextureManager.mountAtlas calls.
-<p>This list of atlas resources could be moreover defined by external data</p>
+- Wraps r,g,b,a floating number. There is no real assumption about the range value, they can be
+also negative
+- the unpak_normalized() call is the only call that assumes values in the range of [0,255] and that
+returns a value divided by 255, so normalized in MOAI [0,1] color space</p>
 
 
 <h2><a href="#Functions">Functions</a></h2>
 <table class="function_list">
 	<tr>
-	<td class="name" nowrap><a href="#mountAtlas">mountAtlas&nbsp;(mountDir, atlas)</a></td>
-	<td class="summary">Mount a texture atlas as logica resource at a specific path.</td>
+	<td class="name" nowrap><a href="#Color:init">Color:init&nbsp;(r, g, b, a)</a></td>
+	<td class="summary">Constructor.</td>
 	</tr>
 	<tr>
-	<td class="name" nowrap><a href="#unmountAtlas">unmountAtlas&nbsp;(mountDir, atlas)</a></td>
-	<td class="summary">Unmount an atlas from given path</td>
+	<td class="name" nowrap><a href="#Color:unpack">Color:unpack&nbsp;()</a></td>
+	<td class="summary">Returns the 4 components</td>
 	</tr>
 	<tr>
-	<td class="name" nowrap><a href="#getTexture">getTexture&nbsp;(fileName, useCache)</a></td>
-	<td class="summary">Returns a texture given a fileName.</td>
+	<td class="name" nowrap><a href="#Color:unpack_normalized">Color:unpack_normalized&nbsp;()</a></td>
+	<td class="summary">Returns the 4 components normalized (it assumes values in range [0,255]</td>
 	</tr>
 	<tr>
-	<td class="name" nowrap><a href="#clearCache">clearCache&nbsp;(texture)</a></td>
-	<td class="summary">Remove a texture from the cache.</td>
-	</tr>
-</table>
-<h2><a href="#Tables">Tables</a></h2>
-<table class="function_list">
-	<tr>
-	<td class="name" nowrap><a href="#__atlasResources">__atlasResources</a></td>
-	<td class="summary">used to store all the mounted textureAtlases</td>
+	<td class="name" nowrap><a href="#__add">__add&nbsp;(c1, c2)</a></td>
+	<td class="summary">sum two color</td>
 	</tr>
 	<tr>
-	<td class="name" nowrap><a href="#__textureCache">__textureCache</a></td>
-	<td class="summary">used to cache the textures stored into the TextureAtlases</td>
+	<td class="name" nowrap><a href="#__sub">__sub&nbsp;(c1, c2)</a></td>
+	<td class="summary">subtract two color</td>
+	</tr>
+	<tr>
+	<td class="name" nowrap><a href="#__mul">__mul&nbsp;(c1, c2)</a></td>
+	<td class="summary">multiply a color by a number</td>
+	</tr>
+	<tr>
+	<td class="name" nowrap><a href="#__div">__div&nbsp;(c, d)</a></td>
+	<td class="summary">divide a color by a number</td>
+	</tr>
+	<tr>
+	<td class="name" nowrap><a href="#Color:__tostring">Color:__tostring&nbsp;()</a></td>
+	<td class="summary">print color components value</td>
+	</tr>
+	<tr>
+	<td class="name" nowrap><a href="#blend">blend&nbsp;(c1, c2, a)</a></td>
+	<td class="summary">blend 2 colors, taking the alpha of the first color</td>
+	</tr>
+	<tr>
+	<td class="name" nowrap><a href="#hsv2rgb">hsv2rgb&nbsp;(h, s, v)</a></td>
+	<td class="summary">color space conversion</td>
 	</tr>
 </table>
 
@@ -139,20 +148,23 @@ TextureManager.mountAtlas calls.
     <h2><a name="Functions"></a>Functions</h2>
     <dl class="function">
     <dt>
-    <a name = "mountAtlas"></a>
-    <strong>mountAtlas&nbsp;(mountDir, atlas)</strong>
+    <a name = "Color:init"></a>
+    <strong>Color:init&nbsp;(r, g, b, a)</strong>
     </dt>
     <dd>
-    Mount a texture atlas as logica resource at a specific path.
-It's possible to mount the same atlas at different paths.
-It's possible to mount multiple atlas at same path.
+    Constructor.
+if a param is not provided defaul value is 255
 
     <h3>Parameters:</h3>
     <ul>
-      <li><span class="parameter">mountDir</span>
-       the path where to mount the atlas</li>
-      <li><span class="parameter">atlas</span>
-       the texture atlas to be mounted</li>
+      <li><span class="parameter">r</span>
+      </li>
+      <li><span class="parameter">g</span>
+      </li>
+      <li><span class="parameter">b</span>
+      </li>
+      <li><span class="parameter">a</span>
+      </li>
     </ul>
 
 
@@ -161,18 +173,66 @@ It's possible to mount multiple atlas at same path.
 
 </dd>
     <dt>
-    <a name = "unmountAtlas"></a>
-    <strong>unmountAtlas&nbsp;(mountDir, atlas)</strong>
+    <a name = "Color:unpack"></a>
+    <strong>Color:unpack&nbsp;()</strong>
     </dt>
     <dd>
-    Unmount an atlas from given path
+    Returns the 4 components
+
+
+    <h3>Returns:</h3>
+    <ol>
+        <li>
+        r</li>
+        <li>
+        g</li>
+        <li>
+        b</li>
+        <li>
+        a</li>
+    </ol>
+
+
+
+
+</dd>
+    <dt>
+    <a name = "Color:unpack_normalized"></a>
+    <strong>Color:unpack_normalized&nbsp;()</strong>
+    </dt>
+    <dd>
+    Returns the 4 components normalized (it assumes values in range [0,255]
+
+
+    <h3>Returns:</h3>
+    <ol>
+        <li>
+        r/255</li>
+        <li>
+        g/255</li>
+        <li>
+        b/255</li>
+        <li>
+        a/255</li>
+    </ol>
+
+
+
+
+</dd>
+    <dt>
+    <a name = "__add"></a>
+    <strong>__add&nbsp;(c1, c2)</strong>
+    </dt>
+    <dd>
+    sum two color
 
     <h3>Parameters:</h3>
     <ul>
-      <li><span class="parameter">mountDir</span>
-       the path where to unmount the atlas</li>
-      <li><span class="parameter">atlas</span>
-       the texture atlas to be unmounted</li>
+      <li><span class="parameter">c1</span>
+      </li>
+      <li><span class="parameter">c2</span>
+      </li>
     </ul>
 
 
@@ -181,20 +241,18 @@ It's possible to mount multiple atlas at same path.
 
 </dd>
     <dt>
-    <a name = "getTexture"></a>
-    <strong>getTexture&nbsp;(fileName, useCache)</strong>
+    <a name = "__sub"></a>
+    <strong>__sub&nbsp;(c1, c2)</strong>
     </dt>
     <dd>
-    Returns a texture given a fileName.  The texture can be a physical resource or a subtexture
-obtained from a texture atlas.
-Textures not stored in mounted atlas are loaded through Assets.getText internal call
+    subtract two color
 
     <h3>Parameters:</h3>
     <ul>
-      <li><span class="parameter">fileName</span>
-       name of the texture to be retrieved</li>
-      <li><span class="parameter">useCache</span>
-       if defined override default Assets.__defaultCacheTexture value</li>
+      <li><span class="parameter">c1</span>
+      </li>
+      <li><span class="parameter">c2</span>
+      </li>
     </ul>
 
 
@@ -203,18 +261,18 @@ Textures not stored in mounted atlas are loaded through Assets.getText internal 
 
 </dd>
     <dt>
-    <a name = "clearCache"></a>
-    <strong>clearCache&nbsp;(texture)</strong>
+    <a name = "__mul"></a>
+    <strong>__mul&nbsp;(c1, c2)</strong>
     </dt>
     <dd>
-    Remove a texture from the cache.  If texture is nil, clears the whole texture cache.
-It calls also Assets.clearCache method
-If nil the whole cache is cleared
+    multiply a color by a number
 
     <h3>Parameters:</h3>
     <ul>
-      <li><span class="parameter">texture</span>
-       texture path or concrete resource to be removed from cache. </li>
+      <li><span class="parameter">c1</span>
+      </li>
+      <li><span class="parameter">c2</span>
+      </li>
     </ul>
 
 
@@ -222,15 +280,32 @@ If nil the whole cache is cleared
 
 
 </dd>
-</dl>
-    <h2><a name="Tables"></a>Tables</h2>
-    <dl class="function">
     <dt>
-    <a name = "__atlasResources"></a>
-    <strong>__atlasResources</strong>
+    <a name = "__div"></a>
+    <strong>__div&nbsp;(c, d)</strong>
     </dt>
     <dd>
-    used to store all the mounted textureAtlases
+    divide a color by a number
+
+    <h3>Parameters:</h3>
+    <ul>
+      <li><span class="parameter">c</span>
+      </li>
+      <li><span class="parameter">d</span>
+      </li>
+    </ul>
+
+
+
+
+
+</dd>
+    <dt>
+    <a name = "Color:__tostring"></a>
+    <strong>Color:__tostring&nbsp;()</strong>
+    </dt>
+    <dd>
+    print color components value
 
 
 
@@ -239,12 +314,43 @@ If nil the whole cache is cleared
 
 </dd>
     <dt>
-    <a name = "__textureCache"></a>
-    <strong>__textureCache</strong>
+    <a name = "blend"></a>
+    <strong>blend&nbsp;(c1, c2, a)</strong>
     </dt>
     <dd>
-    used to cache the textures stored into the TextureAtlases
+    blend 2 colors, taking the alpha of the first color
 
+    <h3>Parameters:</h3>
+    <ul>
+      <li><span class="parameter">c1</span>
+      </li>
+      <li><span class="parameter">c2</span>
+      </li>
+      <li><span class="parameter">a</span>
+      </li>
+    </ul>
+
+
+
+
+
+</dd>
+    <dt>
+    <a name = "hsv2rgb"></a>
+    <strong>hsv2rgb&nbsp;(h, s, v)</strong>
+    </dt>
+    <dd>
+    color space conversion
+
+    <h3>Parameters:</h3>
+    <ul>
+      <li><span class="parameter">h</span>
+      </li>
+      <li><span class="parameter">s</span>
+      </li>
+      <li><span class="parameter">v</span>
+      </li>
+    </ul>
 
 
 

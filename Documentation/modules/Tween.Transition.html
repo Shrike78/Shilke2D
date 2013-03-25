@@ -62,11 +62,11 @@
   <li><a href="../modules/Texture.SubTexture.html">Texture.SubTexture</a></li>
   <li><a href="../modules/Texture.Texture.html">Texture.Texture</a></li>
   <li><a href="../modules/Texture.TextureAtlas.html">Texture.TextureAtlas</a></li>
-  <li><strong>Texture.TextureManager</strong></li>
+  <li><a href="../modules/Texture.TextureManager.html">Texture.TextureManager</a></li>
   <li><a href="../modules/Texture.TexturePacker.html">Texture.TexturePacker</a></li>
   <li><a href="../modules/Tween.Bezier.html">Tween.Bezier</a></li>
   <li><a href="../modules/Tween.DisplayObjTweener.html">Tween.DisplayObjTweener</a></li>
-  <li><a href="../modules/Tween.Transition.html">Tween.Transition</a></li>
+  <li><strong>Tween.Transition</strong></li>
   <li><a href="../modules/Tween.Tween.html">Tween.Tween</a></li>
   <li><a href="../modules/Tween.TweenBezier.html">Tween.TweenBezier</a></li>
   <li><a href="../modules/Tween.TweenDelay.html">Tween.TweenDelay</a></li>
@@ -88,47 +88,51 @@
 
 <div id="content">
 
-<h1>Module <code>Texture.TextureManager</code></h1>
+<h1>Module <code>Tween.Transition</code></h1>
 
-<p>TextureManager allows to mount a texture atlas as a logical resource path.</p>
-<p>
-That means that calling TextureManager.getTexture() makes transparent the load
-of a real texture or of a subtexture of a texture atlas.
-<p>That allows to create code that doesn't depend on how data is packed.
-A use case is to always call TextureManager.getTexture() and, depending on how
-data is packed, add only at initialization phase a list of
-TextureManager.mountAtlas calls.
-<p>This list of atlas resources could be moreover defined by external data</p>
+<p>The Transitions namespace contains static methods that define easing
+functions.</p>
+<p> Those functions will be used by the Tween class to
+execute animations.
+
+You can define your own transitions through the "registerTransition"
+function. A transition function must have the following signature,
+where "ratio" is in the range [0,1]:
+<p>function myTransition(ratio)
+<p>easing functions thankfully taken from
+<p>http://dojotoolkit.org,
+http://www.robertpenner.com/easing,
+https://github.com/EmmanuelOga/easing
+</p>
+    <h3>Usage:</h3>
+    <ul>
+        <pre class="example">
+
+For all easing functions:
+
+t = time == current tweening time
+b = begin == starting property value
+c = change == ending - beginning
+d = duration == total time duration of the tween
+
+r = ratio = t/d
+v = f(r)*c + b
+</pre>
+    </ul>
 
 
 <h2><a href="#Functions">Functions</a></h2>
 <table class="function_list">
 	<tr>
-	<td class="name" nowrap><a href="#mountAtlas">mountAtlas&nbsp;(mountDir, atlas)</a></td>
-	<td class="summary">Mount a texture atlas as logica resource at a specific path.</td>
-	</tr>
-	<tr>
-	<td class="name" nowrap><a href="#unmountAtlas">unmountAtlas&nbsp;(mountDir, atlas)</a></td>
-	<td class="summary">Unmount an atlas from given path</td>
-	</tr>
-	<tr>
-	<td class="name" nowrap><a href="#getTexture">getTexture&nbsp;(fileName, useCache)</a></td>
-	<td class="summary">Returns a texture given a fileName.</td>
-	</tr>
-	<tr>
-	<td class="name" nowrap><a href="#clearCache">clearCache&nbsp;(texture)</a></td>
-	<td class="summary">Remove a texture from the cache.</td>
+	<td class="name" nowrap><a href="#easeCombined">easeCombined&nbsp;(startFunc, endFunc, ratio)</a></td>
+	<td class="summary">used to combine in & out ease functions</td>
 	</tr>
 </table>
 <h2><a href="#Tables">Tables</a></h2>
 <table class="function_list">
 	<tr>
-	<td class="name" nowrap><a href="#__atlasResources">__atlasResources</a></td>
-	<td class="summary">used to store all the mounted textureAtlases</td>
-	</tr>
-	<tr>
-	<td class="name" nowrap><a href="#__textureCache">__textureCache</a></td>
-	<td class="summary">used to cache the textures stored into the TextureAtlases</td>
+	<td class="name" nowrap><a href="#Transition">Transition</a></td>
+	<td class="summary">default transition supported by tween class</td>
 	</tr>
 </table>
 
@@ -139,82 +143,20 @@ TextureManager.mountAtlas calls.
     <h2><a name="Functions"></a>Functions</h2>
     <dl class="function">
     <dt>
-    <a name = "mountAtlas"></a>
-    <strong>mountAtlas&nbsp;(mountDir, atlas)</strong>
+    <a name = "easeCombined"></a>
+    <strong>easeCombined&nbsp;(startFunc, endFunc, ratio)</strong>
     </dt>
     <dd>
-    Mount a texture atlas as logica resource at a specific path.
-It's possible to mount the same atlas at different paths.
-It's possible to mount multiple atlas at same path.
+    used to combine in & out ease functions
 
     <h3>Parameters:</h3>
     <ul>
-      <li><span class="parameter">mountDir</span>
-       the path where to mount the atlas</li>
-      <li><span class="parameter">atlas</span>
-       the texture atlas to be mounted</li>
-    </ul>
-
-
-
-
-
-</dd>
-    <dt>
-    <a name = "unmountAtlas"></a>
-    <strong>unmountAtlas&nbsp;(mountDir, atlas)</strong>
-    </dt>
-    <dd>
-    Unmount an atlas from given path
-
-    <h3>Parameters:</h3>
-    <ul>
-      <li><span class="parameter">mountDir</span>
-       the path where to unmount the atlas</li>
-      <li><span class="parameter">atlas</span>
-       the texture atlas to be unmounted</li>
-    </ul>
-
-
-
-
-
-</dd>
-    <dt>
-    <a name = "getTexture"></a>
-    <strong>getTexture&nbsp;(fileName, useCache)</strong>
-    </dt>
-    <dd>
-    Returns a texture given a fileName.  The texture can be a physical resource or a subtexture
-obtained from a texture atlas.
-Textures not stored in mounted atlas are loaded through Assets.getText internal call
-
-    <h3>Parameters:</h3>
-    <ul>
-      <li><span class="parameter">fileName</span>
-       name of the texture to be retrieved</li>
-      <li><span class="parameter">useCache</span>
-       if defined override default Assets.__defaultCacheTexture value</li>
-    </ul>
-
-
-
-
-
-</dd>
-    <dt>
-    <a name = "clearCache"></a>
-    <strong>clearCache&nbsp;(texture)</strong>
-    </dt>
-    <dd>
-    Remove a texture from the cache.  If texture is nil, clears the whole texture cache.
-It calls also Assets.clearCache method
-If nil the whole cache is cleared
-
-    <h3>Parameters:</h3>
-    <ul>
-      <li><span class="parameter">texture</span>
-       texture path or concrete resource to be removed from cache. </li>
+      <li><span class="parameter">startFunc</span>
+      </li>
+      <li><span class="parameter">endFunc</span>
+      </li>
+      <li><span class="parameter">ratio</span>
+      </li>
     </ul>
 
 
@@ -226,25 +168,97 @@ If nil the whole cache is cleared
     <h2><a name="Tables"></a>Tables</h2>
     <dl class="function">
     <dt>
-    <a name = "__atlasResources"></a>
-    <strong>__atlasResources</strong>
+    <a name = "Transition"></a>
+    <strong>Transition</strong>
     </dt>
     <dd>
-    used to store all the mounted textureAtlases
+    default transition supported by tween class
 
-
-
-
-
-
-</dd>
-    <dt>
-    <a name = "__textureCache"></a>
-    <strong>__textureCache</strong>
-    </dt>
-    <dd>
-    used to cache the textures stored into the TextureAtlases
-
+    <h3>Fields:</h3>
+    <ul>
+      <li><span class="parameter">LINEAR</span>
+      </li>
+      <li><span class="parameter">IN_QUAD</span>
+      </li>
+      <li><span class="parameter">OUT_QUAD</span>
+      </li>
+      <li><span class="parameter">IN_OUT_QUAD</span>
+      </li>
+      <li><span class="parameter">OUT_IN_QUAD</span>
+      </li>
+      <li><span class="parameter">IN_CUBIC</span>
+      </li>
+      <li><span class="parameter">OUT_CUBIC</span>
+      </li>
+      <li><span class="parameter">IN_OUT_CUBIC</span>
+      </li>
+      <li><span class="parameter">OUT_IN_CUBIC</span>
+      </li>
+      <li><span class="parameter">IN_QUART</span>
+      </li>
+      <li><span class="parameter">OUT_QUART</span>
+      </li>
+      <li><span class="parameter">IN_OUT_QUART</span>
+      </li>
+      <li><span class="parameter">OUT_IN_QUART</span>
+      </li>
+      <li><span class="parameter">IN_QUINT</span>
+      </li>
+      <li><span class="parameter">OUT_QUINT</span>
+      </li>
+      <li><span class="parameter">IN_OUT_QUINT</span>
+      </li>
+      <li><span class="parameter">OUT_IN_QUINT</span>
+      </li>
+      <li><span class="parameter">IN_BACK</span>
+      </li>
+      <li><span class="parameter">OUT_BACK</span>
+      </li>
+      <li><span class="parameter">IN_OUT_BACK</span>
+      </li>
+      <li><span class="parameter">OUT_IN_BACK</span>
+      </li>
+      <li><span class="parameter">IN_ELASTIC</span>
+      </li>
+      <li><span class="parameter">OUT_ELASTIC</span>
+      </li>
+      <li><span class="parameter">IN_OUT_ELASTIC</span>
+      </li>
+      <li><span class="parameter">OUT_IN_ELASTIC</span>
+      </li>
+      <li><span class="parameter">IN_BOUNCE</span>
+      </li>
+      <li><span class="parameter">OUT_BOUNCE</span>
+      </li>
+      <li><span class="parameter">IN_OUT_BOUNCE</span>
+      </li>
+      <li><span class="parameter">OUT_IN_BOUNCE</span>
+      </li>
+      <li><span class="parameter">IN_SINE</span>
+      </li>
+      <li><span class="parameter">OUT_SINE</span>
+      </li>
+      <li><span class="parameter">IN_OUT_SINE</span>
+      </li>
+      <li><span class="parameter">OUT_IN_SINE</span>
+      </li>
+      <li><span class="parameter">IN_EXPO</span>
+      </li>
+      <li><span class="parameter">OUT_EXPO</span>
+      </li>
+      <li><span class="parameter">IN_OUT_EXPO</span>
+      </li>
+      <li><span class="parameter">OUT_IN_EXPO</span>
+      </li>
+      <li><span class="parameter">IN_CIRC</span>
+      </li>
+      <li><span class="parameter">OUT_CIRC</span>
+      </li>
+      <li><span class="parameter">IN_OUT_CIRC</span>
+      </li>
+      <li><span class="parameter">OUT_IN_CIRC</span>
+      </li>
+    </ul>
 
 
 

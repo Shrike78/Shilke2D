@@ -1,25 +1,46 @@
--- Class.lua
--- Compatible with Lua 5.1 (not 5.0).
+--[[---
+Class.lua
+Compatible with Lua 5.1 (not 5.0).
 
---[[ 
-class(ancestor, interfaces...)
+Used to implements simple object oriented logic in lua, with single inheritance 
+and interface implementation.
 
-examples:
-- class(base) 
-inherits from base, so is_a(base) is true
+@usage
 
-class(base, interface1,..,interfacen)
-inheriths from base and implements all the interfaces, so
-is_a is true only for base, while implements is true for all the interfaces, and also for base
+- class can be used to define base classes and derived classes:
 
+A = class()
+B = class(A)
 
-class(nil, interface1,..,interfacen)
+b = B()
+b:is_a(A) == true
+class_type(b) == A -> false
+class_type(b) == B -> true
 
-implements interfaces but without inheritance, so is_a is true only for self name and i plements is true for all the interfaces
+- Multiple inheritance is not allowed, but it's possible to define 
+interfaces (always using class) and to require that a class implements them:
 
+iC = class()
+D = class(B,iC)
 
-pay attention to symbol redefinition. in init phase a warning is logged when a symbol is redefined but no more
+d = D()
+d:is_a(A) = true
+d:is_a(B) = true
+d:is_a(iC) = false
+d:is_a(D) = true
+d:implements(iC) = true
+
+- It's also possible to implements one or more interfaces without inheritance:
+
+iE = class()
+F = class(nil,iC,iE)
+
+f = F()
+f:is_a(iC) = false
+f:implements(iC) = true
+f:implements(iE) = true
 --]]
+
 
 local reserved =
 {
@@ -30,12 +51,32 @@ local reserved =
     implements         = true
 }
 
+--[[---
+Offers a way to check if an obj is of a specific class
+@param o the object to be testet
+@return the 'type' of the object if is a class type
+@usage
+A = class()
+B = class(A)
+
+b = B()
+
+class_type(b) == A -> false
+class_type(b) == B -> true
+--]]
 function class_type(o)
 	local t = type(o)
+	--classes are tables
 	if t ~= 'table' then return nil end
+	--classes must have a is_a function defined
+	if not o.is_a then return nil end
 	return getmetatable(o)
 end
 
+--[[---
+Creates a new class type, allowing single inheritance and multiple interface implementation
+@param ... p1 is a base class for inheritance (can be null), following are interface to implement 
+--]]
 function class(...)
     
     local c = {}    -- a new class instance
@@ -92,6 +133,7 @@ function class(...)
         return obj
     end
 
+	---allows to check if a class inherits from another
     c.is_a = function(self, klass)
         local m = getmetatable(self)
         while m do 
@@ -101,6 +143,7 @@ function class(...)
         return false
     end
     
+	---allows to check if a class implements a specific interface
     c.implements = function(self, interface)
             -- Check we have all the target's callables
         for k, v in pairs(interface) do

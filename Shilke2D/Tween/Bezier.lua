@@ -1,11 +1,11 @@
--- Bezier
-
---[[
-source ported from http://paulbourke.net/geometry/bezier/index2.html  
+--[[---
+Bezier curve implementation.
+Source ported from http://paulbourke.net/geometry/bezier/index2.html  
 --]]
 
---Three control point Bezier interpolation
---mu ranges from 0 to 1, start to end of the curve
+---Three control point Bezier interpolation
+--@param mu range [0,1], interpolation point between start and end of the curve
+--@param p list of 3 control points for bezier definition
 function bezier3(mu,p)
     
     local mu2 = mu * mu
@@ -16,8 +16,9 @@ function bezier3(mu,p)
     return p
 end
 
---Four control point Bezier interpolation
---mu ranges from 0 to 1, start to end of curve
+---Four control point Bezier interpolation
+--@param mu range [0,1], interpolation point between start and end of the curve
+--@param p list of 4 control points for bezier definition
 function bezier4(mu,p)
 
     local mu3 = mu * mu * mu
@@ -29,6 +30,9 @@ function bezier4(mu,p)
     return p    
 end
 
+---n-control point Bezier interpolation
+--@param mu range [0,1], interpolation point between start and end of the curve
+--@param p list of n-control points for bezier definition, with n>4
 function bezier(mu,p)
     local n = #p
 

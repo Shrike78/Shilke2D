@@ -1,5 +1,7 @@
--- Coroutines helper
+---Coroutines helper
 
+---Can be called only in sub coroutine
+--@param time millisec to sleep
 function coroutine.sleep(time)
 	local t0 = MOAISim.getElapsedTime()
 	local t = 0

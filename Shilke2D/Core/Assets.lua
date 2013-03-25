@@ -13,7 +13,7 @@ Assets.__defaultCacheTexture = true
 --[[---
 Load a sound.
 @param fileName the name of the sound to load, relative to the working dir or absolute (starting with /)
-@return MOAIUntzSound if fileName is a valid path, else nil
+@return a sound object if fileName is a valid path, else nil
 @return an error message if fileName is not a valid path
 --]]
 function Assets.getSound(fileName)

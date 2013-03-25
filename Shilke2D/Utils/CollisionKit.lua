@@ -1,17 +1,20 @@
--- CollisionKit
+--[[---
+Helper for image collision detection.
+It's based on flash functions logic.
+--]]
 
---[[
-imageHitTest
+--[[---
+Checks pixel perfect overlap of 2 raw images (MOAIImage).
 
-check pixel perfect overlap of 2 images
+Depending on __USE_SIMULATION_COORDS__ the point 0,0 of the image is considered 
+the top or the bottom left point
 
-parameters
-    i1: image 1
-    p1: top left position (vec2) of image1
-    a1: alpha treshold to consider image1 pixel transparent
-    i2: image 2
-    p2: top left position (vec2) of image2
-    a2: alpha treshold to consider image2 pixel transparent
+@param i1 image 1
+@param p1 top/bottom left position (vec2) of image1
+@param a1 alpha treshold to consider image1 pixel transparent
+@param i2 image 2
+@param p2 top/bottom left position (vec2) of image2
+@param a2 alpha treshold to consider image2 pixel transparent
 --]]
 function imageHitTest(i1,p1,a1,i2,p2,a2)
 	
@@ -47,6 +50,7 @@ function imageHitTest(i1,p1,a1,i2,p2,a2)
     end
 	
 	if r1.w == 0 or r1.h == 0 then return false end
+if not __USE_SIMULATION_COORDS__ then
 	
 	for i = 1,r1.w do
 		for j = 1,r1.h do
@@ -59,27 +63,43 @@ function imageHitTest(i1,p1,a1,i2,p2,a2)
 			end
 		end
 	end
+else
+	r1.y = h1 - r1.y
+	r2.y = h2 - r2.y
+	
+	for i = 1,r1.w do
+		for j = 1,r1.h do
+			local _,_,_,a = i1:getRGBA(r1.x + i, r1.y -j)
+			if a > a1 then
+				_,_,_,a = i1:getRGBA(r2.x + i, r2.y - j)
+				if a > a2 then
+					return true
+				end
+			end
+		end
+	end
+
+end
     return false
 end
 
---[[
-imageHitTestEx
+--[[---
+Checks pixel perfect overlap of 2 images
 
-check pixel perfect overlap of 2 images
+Depending on __USE_SIMULATION_COORDS__ the point 0,0 of the image is considered 
+the top or the bottom left point
 
-parameters
-    i1: image 1
-    p1: top left position (vec2) of image1
-    a1: alpha treshold to consider image1 pixel transparent
-    i2: image 2
-    p2: top left position (vec2) of image2
-    a2: alpha treshold to consider image2 pixel transparent
-	
-	rect1: (optional) can define a sub region over image1 (position and size)
-	rect2: (optional) can define a sub region over image2 (position and size)
-	
-	rot1: (optional) if true rect1 must be considered rotated 90* anticlock wise
-	rot2 (optional) if true rect2 must be considered rotated 90* anticlock wise
+@param i1 image 1
+@param p1 top/bottom left position (vec2) of image1
+@param a1 alpha treshold to consider image1 pixel transparent
+@param i2 image 2
+@param p2 top/bottom left position (vec2) of image2
+@param a2 alpha treshold to consider image2 pixel transparent
+
+@param rect1 (optional) can define a sub region over image1 (position and size)
+@param rect2 (optional) can define a sub region over image2 (position and size)
+@param rot1 (optional) if true rect1 must be considered rotated 90* anticlock wise
+@param rot2 (optional) if true rect2 must be considered rotated 90* anticlock wise
 --]]
 function imageHitTestEx(i1,p1,a1,i2,p2,a2,rect1,rect2,rot1,rot2)
 	
@@ -138,6 +158,8 @@ function imageHitTestEx(i1,p1,a1,i2,p2,a2,rect1,rect2,rot1,rot2)
 	
 	if r1.w == 0 or r1.h == 0 then return false end
 
+if not __USE_SIMULATION_COORDS__ then
+
 	if not rot1 and not rot2 then
 		local _x1,_y1 = (o1x + r1.x), (o1y + r1.y)
 		local _x2,_y2 = (o2x + r2.x), (o2y + r2.y)
@@ -195,5 +217,65 @@ function imageHitTestEx(i1,p1,a1,i2,p2,a2,rect1,rect2,rot1,rot2)
 			end
 		end
 	end
+else
+	if not rot1 and not rot2 then
+		local _x1,_y1 = (o1x + r1.x), (o1y + h1 - r1.y)
+		local _x2,_y2 = (o2x + r2.x), (o2y + h2 - r2.y)
+		for i = 1,r1.w do
+			for j = 1,r1.h do
+				local _,_,_,a = i1:getRGBA(_x1 + i, _y1 -j)
+				if a > a1 then
+					_,_,_,a = i1:getRGBA(_x2 + i, _y2 - j)
+					if a > a2 then
+						return true
+					end
+				end
+			end
+		end
+	elseif not rot1 and rot2 then
+		local _x1,_y1 = (o1x + r1.x), (o1y + h1 - r1.y)
+		local _x2,_y2 = (o2x + r2.y), (o2y + r2.x)
+		for i = 1,r1.w do
+			for j = 1,r1.h do
+				local _,_,_,a = i1:getRGBA(_x1 + i, _y1 -j)
+				if a > a1 then
+					_,_,_,a = i2:getRGBA(_x2 + j, _y2 + i)
+					if a > a2 then
+						return true
+					end
+				end
+			end
+		end
+	elseif rot1 and not rot2 then
+		local _x1,_y1 = (o1x + r1.y), (o1y + r1.x)
+		local _x2,_y2 = (o2x + r2.x), (o2y + h2 - r2.y)
+		for i = 1,r1.w do
+			for j = 1,r1.h do
+				local _,_,_,a = i1:getRGBA(_x1 + j, _y1 + i)
+				if a > a1 then
+					_,_,_,a = i1:getRGBA(_x2 + i, _y2 - j)
+					if a > a2 then
+						return true
+					end
+				end
+			end
+		end
+	elseif rot1 and rot2 then
+		local _x1,_y1 = (o1x + r1.y), (o1y + r1.x)
+		local _x2,_y2 = (o2x + r2.y), (o2y + r2.x)
+		for i = 1,r1.w do
+			for j = 1,r1.h do
+				local _,_,_,a = i1:getRGBA(_x1 + j, _y1 + i)
+				if a > a1 then
+					_,_,_,a = i2:getRGBA(_x2 + j, _y2 + i)
+					if a > a2 then
+						return true
+					end
+				end
+			end
+		end
+	end
+
+end
     return false
 end
