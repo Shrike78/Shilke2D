@@ -20,8 +20,8 @@ By default an animation is played once. It's possible to set a
 repeatCount value to increase the number of repetition. 
 A negative repeatCount means infinite loops.
 
-An Event of type Event.REMOVE_FROM_JUGGLER is raised when the movie 
-finished playback. 
+An Event of type Event.COMPLETED is raised when the movie 
+finished playback of a single iteration. 
 
 The frame list can be inverted calling the "invertFrames" method
 --]]
@@ -159,10 +159,11 @@ function MovieClip:advanceTime(deltaTime)
                         self.repeatCount <=0 ) then
                             
                     self.currentCount = self.currentCount + 1
+					
+		    self:dispatchEvent(Event(Event.COMPLETED))
                
                     if self.currentCount == self.repeatCount then
                         self:stop()
-						self:dispatchEvent(Event(Event.REMOVE_FROM_JUGGLER))
                     else
                         self:setTexture(self.textures[self.currentFrame])
                     end
