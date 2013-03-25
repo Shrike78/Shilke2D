@@ -17,7 +17,7 @@ Load a sound.
 @return an error message if fileName is not a valid path
 --]]
 function Assets.getSound(fileName)
-	local sound = MOAIUntzSound.new ()
+	local sound = Sound()
 	if string.starts(fileName,"/") then
 		local absFileName = IO.getAbsolutePath(fileName)
 		sound:load(IO.__baseDir .. absFileName)

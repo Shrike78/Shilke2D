@@ -32,6 +32,7 @@ if __USE_SIMULATION_COORDS__ then
 else	
 	require("Shilke2D/Utils/CollisionKit")
 end
+require("Shilke2D/Utils/Sound")
 
 require("Shilke2D/Utils/Polygon")
 require("Shilke2D/Utils/PathFinding")

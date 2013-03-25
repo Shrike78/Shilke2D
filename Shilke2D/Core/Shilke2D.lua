@@ -35,7 +35,6 @@ Called only on desktop hosts.
 --]]
 function onKeyboardEvent(key, down)
 	--override function
-	print(key,down)
 end
 
 --- Check the key status of a given key code
@@ -150,7 +149,11 @@ end
 	self.info_stats._prop:setAlignment(MOAITextBox.CENTER_JUSTIFY)
 	self._showStats = false
 	
-	MOAIUntzSystem.initialize(soundSampleRate, soundFrames)
+	if MOAIUntzSystem then
+		MOAIUntzSystem.initialize(soundSampleRate, soundFrames)
+	else
+		print("warning: UNTZ system is disabled")
+	end
 end
 
 if not __JUGGLER_ON_SEPARATE_COROUTINE__ then
