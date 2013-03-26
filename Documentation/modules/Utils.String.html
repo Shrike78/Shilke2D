@@ -33,7 +33,6 @@
 <h2>Contents</h2>
 <ul>
 <li><a href="#Functions">Functions</a></li>
-<li><a href="#Tables">Tables</a></li>
 </ul>
 
 
@@ -43,7 +42,7 @@
   <li><a href="../modules/Core.Event.html">Core.Event</a></li>
   <li><a href="../modules/Core.EventDispatcher.html">Core.EventDispatcher</a></li>
   <li><a href="../modules/Core.IAnimatable.html">Core.IAnimatable</a></li>
-  <li><strong>Core.Juggler</strong></li>
+  <li><a href="../modules/Core.Juggler.html">Core.Juggler</a></li>
   <li><a href="../modules/Core.Keymap.html">Core.Keymap</a></li>
   <li><a href="../modules/Core.Shilke2D.html">Core.Shilke2D</a></li>
   <li><a href="../modules/Core.Timer.html">Core.Timer</a></li>
@@ -87,7 +86,7 @@
   <li><a href="../modules/Utils.Polygon.html">Utils.Polygon</a></li>
   <li><a href="../modules/Utils.Shape.html">Utils.Shape</a></li>
   <li><a href="../modules/Utils.Sound.html">Utils.Sound</a></li>
-  <li><a href="../modules/Utils.String.html">Utils.String</a></li>
+  <li><strong>Utils.String</strong></li>
   <li><a href="../modules/Utils.StringBuilder.html">Utils.StringBuilder</a></li>
   <li><a href="../modules/Utils.Table.html">Utils.Table</a></li>
   <li><a href="../modules/Utils.Vector.html">Utils.Vector</a></li>
@@ -100,58 +99,53 @@
 
 <div id="content">
 
-<h1>Module <code>Core.Juggler</code></h1>
+<h1>Module <code>Utils.String</code></h1>
 
-<p>A Juggler animates objects implementing IAnimatable interface.</p>
-<p>
-<p>A juggler is a simple object. It does no more than
-saving a list of objects implementing "IAnimatable" and advancing
-their time if it is told to do so (by calling its own "advanceTime"
-method). When an animation is completed, it throws it away.
-<p>You can create juggler objects yourself, just as well. That way,
-you can group your game into logical components that handle their
-animations independently. All you have to do is call the "advanceTime"
-method on your custom juggler once per frame.
-<p>Moreover the Juggler implements itself the IAnimatable interface,
-so a Juggler can be add to another Juggler. </p>
+<p>Extends string namespace</p>
+<p></p>
 
 
 <h2><a href="#Functions">Functions</a></h2>
 <table class="function_list">
 	<tr>
-	<td class="name" nowrap><a href="#Juggler:setPause">Juggler:setPause&nbsp;(paused)</a></td>
-	<td class="summary">Used to pause the current juggler execution.</td>
+	<td class="name" nowrap><a href="#string.trim">string.trim&nbsp;(s)</a></td>
+	<td class="summary">Removes blank spaces at begin or end of the string</td>
 	</tr>
 	<tr>
-	<td class="name" nowrap><a href="#Juggler:isPaused">Juggler:isPaused&nbsp;()</a></td>
-	<td class="summary">Return the current juggler pause state.</td>
+	<td class="name" nowrap><a href="#string.starts">string.starts&nbsp;(s, startString)</a></td>
+	<td class="summary">Checks if a string starts with a given substring</td>
 	</tr>
 	<tr>
-	<td class="name" nowrap><a href="#Juggler:advanceTime">Juggler:advanceTime&nbsp;(deltaTime)</a></td>
-	<td class="summary">Advances the time of all the objects added to the juggler.</td>
+	<td class="name" nowrap><a href="#string.ends">string.ends&nbsp;(s, endString)</a></td>
+	<td class="summary">Checks if a string ends with a given substring</td>
 	</tr>
 	<tr>
-	<td class="name" nowrap><a href="#Juggler:add">Juggler:add&nbsp;(obj)</a></td>
-	<td class="summary">Add an IAnimatable object to the juggler.</td>
+	<td class="name" nowrap><a href="#string.removePrefix">string.removePrefix&nbsp;(s, prefix)</a></td>
+	<td class="summary">Remove a prefix from a string</td>
 	</tr>
 	<tr>
-	<td class="name" nowrap><a href="#Juggler:remove">Juggler:remove&nbsp;(obj)</a></td>
-	<td class="summary">Remove an object from the juggler.</td>
+	<td class="name" nowrap><a href="#string.removeSuffix">string.removeSuffix&nbsp;(s, suffix)</a></td>
+	<td class="summary">Remove a suffix from a string</td>
 	</tr>
 	<tr>
-	<td class="name" nowrap><a href="#Juggler:onRemoveEvent">Juggler:onRemoveEvent&nbsp;(event)</a></td>
-	<td class="summary">Internal function.</td>
+	<td class="name" nowrap><a href="#string.split">string.split&nbsp;(s, re)</a></td>
+	<td class="summary">Splits a string into multiple string based on a specific separator</td>
 	</tr>
 	<tr>
-	<td class="name" nowrap><a href="#Juggler:clear">Juggler:clear&nbsp;()</a></td>
-	<td class="summary">Remove all the objects from the juggler.</td>
+	<td class="name" nowrap><a href="#string.splitPath">string.splitPath&nbsp;(path)</a></td>
+	<td class="summary">given an absolute file path it returns path, filename and extension</td>
 	</tr>
-</table>
-<h2><a href="#Tables">Tables</a></h2>
-<table class="function_list">
 	<tr>
-	<td class="name" nowrap><a href="#Pending">Pending</a></td>
-	<td class="summary">Used internally to handle pending operation scheduled while "playing"</td>
+	<td class="name" nowrap><a href="#string.getFileExtension">string.getFileExtension&nbsp;(path)</a></td>
+	<td class="summary">Returns the extension given a filename</td>
+	</tr>
+	<tr>
+	<td class="name" nowrap><a href="#string.getFileDir">string.getFileDir&nbsp;(path)</a></td>
+	<td class="summary">Returns the dir of a given filename</td>
+	</tr>
+	<tr>
+	<td class="name" nowrap><a href="#string.getFileName">string.getFileName&nbsp;(path, withExtension)</a></td>
+	<td class="summary">Returns the filename given an absolute path</td>
 	</tr>
 </table>
 
@@ -162,23 +156,22 @@ so a Juggler can be add to another Juggler. </p>
     <h2><a name="Functions"></a>Functions</h2>
     <dl class="function">
     <dt>
-    <a name = "Juggler:setPause"></a>
-    <strong>Juggler:setPause&nbsp;(paused)</strong>
+    <a name = "string.trim"></a>
+    <strong>string.trim&nbsp;(s)</strong>
     </dt>
     <dd>
-    Used to pause the current juggler execution.
-When a juggler is paused also the execution of all the managed IAnimatable objects is paused
+    Removes blank spaces at begin or end of the string
 
     <h3>Parameters:</h3>
     <ul>
-      <li><span class="parameter">paused</span>
-       true/false to enable/disable the pause status</li>
+      <li><span class="parameter">s</span>
+       source string</li>
     </ul>
 
     <h3>Returns:</h3>
     <ol>
 
-        nil
+        a new string
     </ol>
 
 
@@ -186,17 +179,24 @@ When a juggler is paused also the execution of all the managed IAnimatable objec
 
 </dd>
     <dt>
-    <a name = "Juggler:isPaused"></a>
-    <strong>Juggler:isPaused&nbsp;()</strong>
+    <a name = "string.starts"></a>
+    <strong>string.starts&nbsp;(s, startString)</strong>
     </dt>
     <dd>
-    Return the current juggler pause state.
+    Checks if a string starts with a given substring
 
+    <h3>Parameters:</h3>
+    <ul>
+      <li><span class="parameter">s</span>
+       the string to check</li>
+      <li><span class="parameter">startString</span>
+       the prefix to check</li>
+    </ul>
 
     <h3>Returns:</h3>
     <ol>
 
-        bool if the juggler is currently in pause
+        bool
     </ol>
 
 
@@ -204,118 +204,199 @@ When a juggler is paused also the execution of all the managed IAnimatable objec
 
 </dd>
     <dt>
-    <a name = "Juggler:advanceTime"></a>
-    <strong>Juggler:advanceTime&nbsp;(deltaTime)</strong>
+    <a name = "string.ends"></a>
+    <strong>string.ends&nbsp;(s, endString)</strong>
     </dt>
     <dd>
-    Advances the time of all the objects added to the juggler.
-After the animation phase is done, it checks for queued add/remove
-operations and executes them in the same request order.
+    Checks if a string ends with a given substring
 
     <h3>Parameters:</h3>
     <ul>
-      <li><span class="parameter">deltaTime</span>
-       millisec elapsed since last call</li>
+      <li><span class="parameter">s</span>
+       the string to check</li>
+      <li><span class="parameter">endString</span>
+       the suffix to check</li>
     </ul>
 
+    <h3>Returns:</h3>
+    <ol>
+
+        bool
+    </ol>
 
 
 
 
 </dd>
     <dt>
-    <a name = "Juggler:add"></a>
-    <strong>Juggler:add&nbsp;(obj)</strong>
+    <a name = "string.removePrefix"></a>
+    <strong>string.removePrefix&nbsp;(s, prefix)</strong>
     </dt>
     <dd>
-    Add an IAnimatable object to the juggler.
-If the juggler is playing (in advanceTime) the add is queued, if not
-the obj is added immediatly. If it's an eventDispatcher, the
-juggler register itself as a listener for the REMOVE_FROM_JUGGLER
+    Remove a prefix from a string
 
     <h3>Parameters:</h3>
     <ul>
-      <li><span class="parameter">obj</span>
-       An object that implement the IAnimatable interface</li>
+      <li><span class="parameter">s</span>
+       source string</li>
+      <li><span class="parameter">prefix</span>
+       the prefix to remove</li>
     </ul>
 
+    <h3>Returns:</h3>
+    <ol>
+
+        a new string
+    </ol>
 
 
 
 
 </dd>
     <dt>
-    <a name = "Juggler:remove"></a>
-    <strong>Juggler:remove&nbsp;(obj)</strong>
+    <a name = "string.removeSuffix"></a>
+    <strong>string.removeSuffix&nbsp;(s, suffix)</strong>
     </dt>
     <dd>
-    Remove an object from the juggler.
-If the juggler is playing (in advanceTime) the remove is queued,
-if not the obj is removed immediatly. If it's an eventDispatcher,
-the juggler deregister itself as listener for the REMOVE_FROM_JUGGLER
+    Remove a suffix from a string
 
     <h3>Parameters:</h3>
     <ul>
-      <li><span class="parameter">obj</span>
-      </li>
+      <li><span class="parameter">s</span>
+       source string</li>
+      <li><span class="parameter">suffix</span>
+       the suffix to remove</li>
     </ul>
 
+    <h3>Returns:</h3>
+    <ol>
+
+        a new string
+    </ol>
 
 
 
 
 </dd>
     <dt>
-    <a name = "Juggler:onRemoveEvent"></a>
-    <strong>Juggler:onRemoveEvent&nbsp;(event)</strong>
+    <a name = "string.split"></a>
+    <strong>string.split&nbsp;(s, re)</strong>
     </dt>
     <dd>
-    Internal function.
-Called when a listened obj dispatch an Event.REMOVE_FROM_JUGGLER event
+    Splits a string into multiple string based on a specific separator
+default is blank char
 
     <h3>Parameters:</h3>
     <ul>
-      <li><span class="parameter">event</span>
-      </li>
+      <li><span class="parameter">s</span>
+       the string to split</li>
+      <li><span class="parameter">re</span>
+       the separator char or pattern (as regular expression). </li>
     </ul>
 
+    <h3>Returns:</h3>
+    <ol>
+
+        a set of strings
+    </ol>
 
 
 
 
 </dd>
     <dt>
-    <a name = "Juggler:clear"></a>
-    <strong>Juggler:clear&nbsp;()</strong>
+    <a name = "string.splitPath"></a>
+    <strong>string.splitPath&nbsp;(path)</strong>
     </dt>
     <dd>
-    Remove all the objects from the juggler.
-If the juggler is playing (advaceTime) the removal of the objects will take place during the next frame
+    given an absolute file path it returns path, filename and extension
 
-
-
-
-
-
-</dd>
-</dl>
-    <h2><a name="Tables"></a>Tables</h2>
-    <dl class="function">
-    <dt>
-    <a name = "Pending"></a>
-    <strong>Pending</strong>
-    </dt>
-    <dd>
-    Used internally to handle pending operation scheduled while "playing"
-
-    <h3>Fields:</h3>
+    <h3>Parameters:</h3>
     <ul>
-      <li><span class="parameter">ADD</span>
-      </li>
-      <li><span class="parameter">REMOVE</span>
-      </li>
+      <li><span class="parameter">path</span>
+       absolute file path</li>
     </ul>
 
+    <h3>Returns:</h3>
+    <ol>
+        <li>
+        path</li>
+        <li>
+        filename</li>
+        <li>
+        extension</li>
+    </ol>
+
+
+
+
+</dd>
+    <dt>
+    <a name = "string.getFileExtension"></a>
+    <strong>string.getFileExtension&nbsp;(path)</strong>
+    </dt>
+    <dd>
+    Returns the extension given a filename
+
+    <h3>Parameters:</h3>
+    <ul>
+      <li><span class="parameter">path</span>
+       the absolute path of a file, or just the fileName</li>
+    </ul>
+
+    <h3>Returns:</h3>
+    <ol>
+
+        file extension
+    </ol>
+
+
+
+
+</dd>
+    <dt>
+    <a name = "string.getFileDir"></a>
+    <strong>string.getFileDir&nbsp;(path)</strong>
+    </dt>
+    <dd>
+    Returns the dir of a given filename
+
+    <h3>Parameters:</h3>
+    <ul>
+      <li><span class="parameter">path</span>
+       the absolute path of a file</li>
+    </ul>
+
+    <h3>Returns:</h3>
+    <ol>
+
+        the path to the file
+    </ol>
+
+
+
+
+</dd>
+    <dt>
+    <a name = "string.getFileName"></a>
+    <strong>string.getFileName&nbsp;(path, withExtension)</strong>
+    </dt>
+    <dd>
+    Returns the filename given an absolute path
+
+    <h3>Parameters:</h3>
+    <ul>
+      <li><span class="parameter">path</span>
+       the absolute path of a file</li>
+      <li><span class="parameter">withExtension</span>
+       boolean, if false or nil returns fileName without extension</li>
+    </ul>
+
+    <h3>Returns:</h3>
+    <ol>
+
+        fileName
+    </ol>
 
 
 

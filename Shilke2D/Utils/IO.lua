@@ -1,28 +1,41 @@
--- IO
+ --[[---
+IO namespace offers functions to easily addressed fileSystem issues.
+--]]
 
 IO = {}
 
--- Get initialized when Shilke2D is initialized and it's used to handle relative path logic
--- To be checked with iOS/Android
+---Absolute path dir. 
+--It's initialized when Shilke2D is initialized and it's used to 
+--handle relative path logic
 IO.__baseDir = MOAIFileSystem.getWorkingDirectory()
---IO.__baseDir = IO.__baseDir:sub(1,-2)
 
+---Store current workingDir, relative to base application path
 IO.__workingDir = ""
 
---setWorkingDir is meant to be used to set a working dir starting ALWAYS from root, so 
---having 'folder' starting with "/" is optional
+--[[---
+Used to set the working dir. It's meant as a path starting 
+always from root application path
+@param folder string
+--]]
 function IO.setWorkingDir(folder)
 	IO.__workingDir = ("/" .. folder):gsub("//","/")
 	local path = IO.__baseDir .. folder
 	MOAIFileSystem.setWorkingDirectory(path)
 end
 
+---Returns the absolut app dir
+--@return string
 function IO.getBaseDir()
 	return IO.__baseDir
 end
 
---if "asDevicePath" then return the path starting from device root filesystem
---else return path from application root filesystem
+--[[---
+Returns workingDir.
+if "asDevicePath" then return the path starting from device root 
+filesystem, else returns path from application root filesystem
+@param asDevicePath bool
+@return string
+--]]
 function IO.getWorkingDir(asDevicePath)
 	if asDevicePath == true then 
 		return IO.__baseDir .. IO.__workingDir
@@ -31,8 +44,14 @@ function IO.getWorkingDir(asDevicePath)
 	end
 end
 
---if "asDevicePath" then return the path starting from device root filesystem
---else return path from application root filesystem
+--[[---
+Converts a relative paht into an absolute one.
+if "asDevicePath" then return the path starting from device root 
+filesystem, else returns path from application root filesystem
+@param path string
+@param asDevicePath bool
+@return string
+--]]
 function IO.getAbsolutePath(path, asDevicePath)
 	local path = path:gsub("\\","/")
 	if not string.starts(path,"/") then
@@ -44,7 +63,10 @@ function IO.getAbsolutePath(path, asDevicePath)
 	return path:gsub("//","/")
 end
 
---get file returns raw data for each type of files
+---Returns raw data for every type of files
+--@param fileName string
+--@return file or nil if an error raises
+--@return nil or error message if an error raises
 function IO.getFile(fileName)
 	local fn = fileName
 	if string.starts(fn,"/") then
@@ -59,7 +81,7 @@ function IO.getFile(fileName)
 	return res,err
 end
 
--- allows to set a path for dofile (by default use MOAI WorkingDir
+---Allows to set a path for dofile (by default use MOAI WorkingDir
 function IO.dofile(fileName)
 	local fn = fileName
 	if string.starts(fn,"/") then

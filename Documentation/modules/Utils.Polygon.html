@@ -48,7 +48,7 @@
   <li><a href="../modules/Core.Timer.html">Core.Timer</a></li>
   <li><a href="../modules/Core.TouchSensor.html">Core.TouchSensor</a></li>
   <li><a href="../modules/Display.BaseQuad.html">Display.BaseQuad</a></li>
-  <li><strong>Display.Button</strong></li>
+  <li><a href="../modules/Display.Button.html">Display.Button</a></li>
   <li><a href="../modules/Display.DisplayObj.html">Display.DisplayObj</a></li>
   <li><a href="../modules/Display.DisplayObjContainer.html">Display.DisplayObjContainer</a></li>
   <li><a href="../modules/Display.DrawableObject.html">Display.DrawableObject</a></li>
@@ -83,7 +83,7 @@
   <li><a href="../modules/Utils.IniParser.html">Utils.IniParser</a></li>
   <li><a href="../modules/Utils.Log.html">Utils.Log</a></li>
   <li><a href="../modules/Utils.Math.html">Utils.Math</a></li>
-  <li><a href="../modules/Utils.Polygon.html">Utils.Polygon</a></li>
+  <li><strong>Utils.Polygon</strong></li>
   <li><a href="../modules/Utils.Shape.html">Utils.Shape</a></li>
   <li><a href="../modules/Utils.Sound.html">Utils.Sound</a></li>
   <li><a href="../modules/Utils.String.html">Utils.String</a></li>
@@ -99,62 +99,58 @@
 
 <div id="content">
 
-<h1>Module <code>Display.Button</code></h1>
+<h1>Module <code>Utils.Polygon</code></h1>
 
-<p>A simple button composed of an image and, optionally, text.</p>
-<p>
-<p>It's possible to set a texture for up and downstate of the button.
-If a down state is not provided the button is simply scaled a
-little when it is touched.
-<p>In addition, you can overlay a text on the button. To customize the
-text, almost the same options as those of text fields are provided.
-
-To react on touches on a button, there is special triggered-event type,
-dispatched when the touch.state is ENDED and the button was hitted</p>
+<p>Polygon class</p>
+<p></p>
 
 
 <h2><a href="#Functions">Functions</a></h2>
 <table class="function_list">
 	<tr>
-	<td class="name" nowrap><a href="#Button:init">Button:init&nbsp;(upState, downState, label)</a></td>
-	<td class="summary">Creates a button with textures for upState, downState or text.</td>
+	<td class="name" nowrap><a href="#findLineIntersection">findLineIntersection&nbsp;(start1, end1, start2, end2)</a></td>
+	<td class="summary">Find intersection between two lines</td>
 	</tr>
 	<tr>
-	<td class="name" nowrap><a href="#Button:resetContents">Button:resetContents&nbsp;()</a></td>
-	<td class="summary">Resets button state at default values</td>
+	<td class="name" nowrap><a href="#toVec2">toVec2&nbsp;(points)</a></td>
+	<td class="summary">Helper function to convert a set of [x,y,..] to an array of vec2
+If needed add an extra point at the end to 'close' the polygon</td>
 	</tr>
 	<tr>
-	<td class="name" nowrap><a href="#Button:getTextField">Button:getTextField&nbsp;()</a></td>
-	<td class="summary">Returns the textfield (if it exists)</td>
+	<td class="name" nowrap><a href="#Polygon:init">Polygon:init&nbsp;(p, ...)</a></td>
+	<td class="summary">Constructor</td>
 	</tr>
 	<tr>
-	<td class="name" nowrap><a href="#Button:getScaleWhenDown">Button:getScaleWhenDown&nbsp;()</a></td>
-	<td class="summary">The scale factor of the button on touch.</td>
+	<td class="name" nowrap><a href="#Polygon:updateRect">Polygon:updateRect&nbsp;()</a></td>
+	<td class="summary">Calculates / Updates bounding rect of the polygon</td>
 	</tr>
 	<tr>
-	<td class="name" nowrap><a href="#Button:setScaleWhenDown">Button:setScaleWhenDown&nbsp;(value)</a></td>
-	<td class="summary">The scale factor of the button on touch.</td>
+	<td class="name" nowrap><a href="#Polygon:getPoint">Polygon:getPoint&nbsp;(i)</a></td>
+	<td class="summary">Returns an indexed point</td>
 	</tr>
 	<tr>
-	<td class="name" nowrap><a href="#Button:getAlphaWhenDisabled">Button:getAlphaWhenDisabled&nbsp;()</a></td>
-	<td class="summary">The alpha value of the button when it is disabled.</td>
+	<td class="name" nowrap><a href="#Polygon:unpack">Polygon:unpack&nbsp;()</a></td>
+	<td class="summary">Returns an array of single x,y components</td>
 	</tr>
 	<tr>
-	<td class="name" nowrap><a href="#Button:setAlphaWhenDisabled">Button:setAlphaWhenDisabled&nbsp;(value)</a></td>
-	<td class="summary">The alpha value of the button when it is disabled.</td>
+	<td class="name" nowrap><a href="#Polygon:getRect">Polygon:getRect&nbsp;(resultRect)</a></td>
+	<td class="summary">Returns bounding rect of the polygon</td>
 	</tr>
 	<tr>
-	<td class="name" nowrap><a href="#Button:isEnabled">Button:isEnabled&nbsp;()</a></td>
-	<td class="summary">Indicates if the button can be triggered.</td>
+	<td class="name" nowrap><a href="#Polygon:containsPoint">Polygon:containsPoint&nbsp;(x, y)</a></td>
+	<td class="summary">Checks if the polygon contains a given point</td>
 	</tr>
 	<tr>
-	<td class="name" nowrap><a href="#Button:setEnabled">Button:setEnabled&nbsp;(value)</a></td>
-	<td class="summary">Enable/Disable button.</td>
+	<td class="name" nowrap><a href="#Polygon:intersectSegment">Polygon:intersectSegment&nbsp;(p1, p2)</a></td>
+	<td class="summary">Checks a given rect intersects the polygon</td>
 	</tr>
 	<tr>
-	<td class="name" nowrap><a href="#Button:onTouch">Button:onTouch&nbsp;(e)</a></td>
-	<td class="summary">Inner method used to handle touch event and translate it into a trigger event when
-touch is released</td>
+	<td class="name" nowrap><a href="#Polygon:intersectPolygon">Polygon:intersectPolygon&nbsp;(poly)</a></td>
+	<td class="summary">Checks intersection with another polygon</td>
+	</tr>
+	<tr>
+	<td class="name" nowrap><a href="#Polygon:merge">Polygon:merge&nbsp;(poly)</a></td>
+	<td class="summary">Merges two polygons</td>
 	</tr>
 </table>
 
@@ -165,21 +161,46 @@ touch is released</td>
     <h2><a name="Functions"></a>Functions</h2>
     <dl class="function">
     <dt>
-    <a name = "Button:init"></a>
-    <strong>Button:init&nbsp;(upState, downState, label)</strong>
+    <a name = "findLineIntersection"></a>
+    <strong>findLineIntersection&nbsp;(start1, end1, start2, end2)</strong>
     </dt>
     <dd>
-    Creates a button with textures for upState, downState or text.
+    Find intersection between two lines
 
     <h3>Parameters:</h3>
     <ul>
-      <li><span class="parameter">upState</span>
-       a texture to be used for the up state</li>
-      <li><span class="parameter">downState</span>
-       (optional) a texture to be used for the down state. If nil
-the upState texture will be used, but scaled of a factor of 0.9</li>
-      <li><span class="parameter">label</span>
-       (optional) a text to be added to the button</li>
+      <li><span class="parameter">start1</span>
+       start point (vec2) of first line</li>
+      <li><span class="parameter">end1</span>
+       end point (vec2) of first line</li>
+      <li><span class="parameter">start2</span>
+       start point (vec2) of second line</li>
+      <li><span class="parameter">end2</span>
+       end point (vec2) of second line</li>
+    </ul>
+
+    <h3>Returns:</h3>
+    <ol>
+
+        vec2 if intersection exists or nil
+    </ol>
+
+
+
+
+</dd>
+    <dt>
+    <a name = "toVec2"></a>
+    <strong>toVec2&nbsp;(points)</strong>
+    </dt>
+    <dd>
+    Helper function to convert a set of [x,y,..] to an array of vec2
+If needed add an extra point at the end to 'close' the polygon
+
+    <h3>Parameters:</h3>
+    <ul>
+      <li><span class="parameter">points</span>
+      </li>
     </ul>
 
 
@@ -188,87 +209,63 @@ the upState texture will be used, but scaled of a factor of 0.9</li>
 
 </dd>
     <dt>
-    <a name = "Button:resetContents"></a>
-    <strong>Button:resetContents&nbsp;()</strong>
+    <a name = "Polygon:init"></a>
+    <strong>Polygon:init&nbsp;(p, ...)</strong>
     </dt>
     <dd>
-    Resets button state at default values
-
-
-
-
-
-
-</dd>
-    <dt>
-    <a name = "Button:getTextField"></a>
-    <strong>Button:getTextField&nbsp;()</strong>
-    </dt>
-    <dd>
-    Returns the textfield (if it exists)
-
-
-    <h3>Returns:</h3>
-    <ol>
-
-        TextField or nil
-    </ol>
-
-
-
-
-</dd>
-    <dt>
-    <a name = "Button:getScaleWhenDown"></a>
-    <strong>Button:getScaleWhenDown&nbsp;()</strong>
-    </dt>
-    <dd>
-    The scale factor of the button on touch.  Per default,
-a button with a down state texture won't scale.
-
-
-    <h3>Returns:</h3>
-    <ol>
-
-        scale value
-    </ol>
-
-
-
-
-</dd>
-    <dt>
-    <a name = "Button:setScaleWhenDown"></a>
-    <strong>Button:setScaleWhenDown&nbsp;(value)</strong>
-    </dt>
-    <dd>
-    The scale factor of the button on touch.  Per default,
-a button with a down state texture won't scale.
+    Constructor
 
     <h3>Parameters:</h3>
     <ul>
-      <li><span class="parameter">value</span>
-       scale value</li>
+      <li><span class="parameter">p</span>
+      </li>
+      <li><span class="parameter">...</span>
+      </li>
     </ul>
 
 
 
 
+    <h3>Usage:</h3>
+    <ul>
+        <pre class="example">
+Polygon(x1,y1,x2,y2,...) - with x,y as numbers
+Polygon(p1,p2,...) - with p as vec2
+Polygon({x1,x2,...})
+Polygon({p1,p2,...})</pre>
+    </ul>
 
 </dd>
     <dt>
-    <a name = "Button:getAlphaWhenDisabled"></a>
-    <strong>Button:getAlphaWhenDisabled&nbsp;()</strong>
+    <a name = "Polygon:updateRect"></a>
+    <strong>Polygon:updateRect&nbsp;()</strong>
     </dt>
     <dd>
-    The alpha value of the button when it is disabled.
-default = 128
+    Calculates / Updates bounding rect of the polygon
 
+
+
+
+
+
+</dd>
+    <dt>
+    <a name = "Polygon:getPoint"></a>
+    <strong>Polygon:getPoint&nbsp;(i)</strong>
+    </dt>
+    <dd>
+    Returns an indexed point
+
+    <h3>Parameters:</h3>
+    <ul>
+      <li><span class="parameter">i</span>
+       index of the point to retrieve</li>
+    </ul>
 
     <h3>Returns:</h3>
     <ol>
 
-        alpha value [0,255]
+        vec2 or nil if index out of bound
     </ol>
 
 
@@ -276,31 +273,60 @@ default = 128
 
 </dd>
     <dt>
-    <a name = "Button:setAlphaWhenDisabled"></a>
-    <strong>Button:setAlphaWhenDisabled&nbsp;(value)</strong>
+    <a name = "Polygon:unpack"></a>
+    <strong>Polygon:unpack&nbsp;()</strong>
     </dt>
     <dd>
-    The alpha value of the button when it is disabled.
-default = 128
+    Returns an array of single x,y components
 
-    <h3>Parameters:</h3>
-    <ul>
-      <li><span class="parameter">value</span>
-       [0,255]</li>
-    </ul>
 
+    <h3>Returns:</h3>
+    <ol>
+
+        x1,y1,x2,y2....
+    </ol>
 
 
 
 
 </dd>
     <dt>
-    <a name = "Button:isEnabled"></a>
-    <strong>Button:isEnabled&nbsp;()</strong>
+    <a name = "Polygon:getRect"></a>
+    <strong>Polygon:getRect&nbsp;(resultRect)</strong>
     </dt>
     <dd>
-    Indicates if the button can be triggered.
+    Returns bounding rect of the polygon
 
+    <h3>Parameters:</h3>
+    <ul>
+      <li><span class="parameter">resultRect</span>
+       used to avoid the creation of a new rect. optional</li>
+    </ul>
+
+    <h3>Returns:</h3>
+    <ol>
+
+        Rect
+    </ol>
+
+
+
+
+</dd>
+    <dt>
+    <a name = "Polygon:containsPoint"></a>
+    <strong>Polygon:containsPoint&nbsp;(x, y)</strong>
+    </dt>
+    <dd>
+    Checks if the polygon contains a given point
+
+    <h3>Parameters:</h3>
+    <ul>
+      <li><span class="parameter">x</span>
+       x coordinate of the point or a vec2 point</li>
+      <li><span class="parameter">y</span>
+       y coordinate of the point or nil</li>
+    </ul>
 
     <h3>Returns:</h3>
     <ol>
@@ -313,37 +339,72 @@ default = 128
 
 </dd>
     <dt>
-    <a name = "Button:setEnabled"></a>
-    <strong>Button:setEnabled&nbsp;(value)</strong>
+    <a name = "Polygon:intersectSegment"></a>
+    <strong>Polygon:intersectSegment&nbsp;(p1, p2)</strong>
     </dt>
     <dd>
-    Enable/Disable button.
+    Checks a given rect intersects the polygon
 
     <h3>Parameters:</h3>
     <ul>
-      <li><span class="parameter">value</span>
-       boolean</li>
+      <li><span class="parameter">p1</span>
+       start point of the rect</li>
+      <li><span class="parameter">p2</span>
+       end point of the rect</li>
     </ul>
 
+    <h3>Returns:</h3>
+    <ol>
+
+        bool
+    </ol>
 
 
 
 
 </dd>
     <dt>
-    <a name = "Button:onTouch"></a>
-    <strong>Button:onTouch&nbsp;(e)</strong>
+    <a name = "Polygon:intersectPolygon"></a>
+    <strong>Polygon:intersectPolygon&nbsp;(poly)</strong>
     </dt>
     <dd>
-    Inner method used to handle touch event and translate it into a trigger event when
-touch is released
+    Checks intersection with another polygon
 
     <h3>Parameters:</h3>
     <ul>
-      <li><span class="parameter">e</span>
-       touch event</li>
+      <li><span class="parameter">poly</span>
+       the other polygon</li>
     </ul>
 
+    <h3>Returns:</h3>
+    <ol>
+
+        bool
+    </ol>
+
+
+
+
+</dd>
+    <dt>
+    <a name = "Polygon:merge"></a>
+    <strong>Polygon:merge&nbsp;(poly)</strong>
+    </dt>
+    <dd>
+    Merges two polygons
+nil if the two polygons do not intersect.
+
+    <h3>Parameters:</h3>
+    <ul>
+      <li><span class="parameter">poly</span>
+       the polygon to be merged with this</li>
+    </ul>
+
+    <h3>Returns:</h3>
+    <ol>
+
+        a new polygon obtained by the merge of the two.
+    </ol>
 
 
 

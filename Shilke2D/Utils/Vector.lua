@@ -1,4 +1,4 @@
---[[
+--[[---
 Copyright (c) 2010 Matthias Richter
 
 Permission is hereby granted, free of charge, to any person obtaining a copy
@@ -28,35 +28,47 @@ local sqrt, cos, sin = math.sqrt, math.cos, math.sin
 
 vec2 = class()
 
+---Constructor
+--@param x default 0
+--@param y default 0
 function vec2:init(x,y)
 	self.x = x or 0
 	self.y = y or 0
 end
 
+---Returns a copy of self, with x,y also cloned from self
 function vec2:clone()
 	return vec2(self.x, self.y)
 end
 
+---Returns unpacked values
+--@return x
+--@return y
 function vec2:unpack()
 	return self.x, self.y
 end
 
+---Prints components value
 function vec2:__tostring()
 	return "("..tonumber(self.x)..","..tonumber(self.y)..")"
 end
 
+---the unary - operation.
 function vec2.__unm(a)
 	return vec2(-a.x, -a.y)
 end
 
+---Sum operator between vec2
 function vec2.__add(a,b)
 	return vec2(a.x+b.x, a.y+b.y)
 end
 
+---Subtraction operator between vec2
 function vec2.__sub(a,b)
 	return vec2(a.x-b.x, a.y-b.y)
 end
 
+---Multiply a vec2 by a number or by another vec2
 function vec2.__mul(a,b)
 	if type(a) == "number" then
 		return vec2(a*b.x, a*b.y)
@@ -67,62 +79,85 @@ function vec2.__mul(a,b)
 	end
 end
 
+---Divides a vec2 by a number
 function vec2.__div(a,b)
 	return vec2(a.x / b, a.y / b)
 end
 
+---the == operation
 function vec2.__eq(a,b)
 	return a.x == b.x and a.y == b.y
 end
 
+---the < operation
 function vec2.__lt(a,b)
 	return a.x < b.x or (a.x == b.x and a.y < b.y)
 end
 
+---the <= operation
 function vec2.__le(a,b)
 	return a.x <= b.x and a.y <= b.y
 end
 
+---Multiplies vectors component per component
 function vec2.permul(a,b)
 	return vec2(a.x*b.x, a.y*b.y)
 end
 
+---Calculates len^2
 function vec2:lenSqr()
 	return self.x * self.x + self.y * self.y
 end
 
+---Calculates len
 function vec2:len()
 	return sqrt(self:lenSqr())
 end
 
+---Calculates distance between 2 points
 function vec2.dist(a, b)
 	return (b-a):len()
 end
 
+---Normalizes the vector
+--@return self
 function vec2:normalize_inplace()
 	local l = self:len()
 	self.x, self.y = self.x / l, self.y / l
 	return self
 end
 
+---Returns a normalized vector
+--@return vec2
 function vec2:normalized()
 	return self / self:len()
 end
 
+---Returns a normalized vector
+--@return vec2
 function vec2:normalize()
 	return self / self:len()
 end
 
+---Rotates the vector of phi radians
+--@param phi radians
+--@return self
 function vec2:rotate_inplace(phi)
 	local c, s = cos(phi), sin(phi)
 	self.x, self.y = c * self.x - s * self.y, s * self.x + c * self.y
 	return self
 end
 
+---Returns a rotated vector
+--@param phi radians
+--@return vec2
 function vec2:rotated(phi)
 	return self:clone():rotate_inplace(phi)
 end
 
+---Returns a rotated vector
+--@param phi radians
+--@return vec2
 function vec2:rotate(phi)
 	return self:clone():rotate_inplace(phi)
 end
@@ -131,6 +166,9 @@ function vec2:perpendicular()
 	return vec2(-self.y, self.x)
 end
 
+---Returns the projection of the vector on another vector
+--@param v vec2 on which to project the vector
+--@return vec2
 function vec2:projectOn(v)
 	return (self * v) * v / v:lenSqr()
 end
@@ -143,14 +181,20 @@ function vec2:mirrorOn(other)
 	return 2 * self:projectOn(other) - self
 end
 
+---Cross product of two vectors
+--@return vec2
 function vec2:cross(other)
 	return self.x * other.y - self.y * other.x
 end
 
+---Dot product of two vectors
+--@return vec2
 function vec2:dot(other)
 	return self.x * other.x + self.y * other.y
 end
 
+---Returns the angle between two vectors
+--@return radians
 function vec2:angleBetween(other)
 	local alpha1 = math.atan2(self.y, self.x)
 	local alpha2 = math.atan2(other.y, other.x)

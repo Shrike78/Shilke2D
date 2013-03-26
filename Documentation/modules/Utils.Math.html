@@ -33,6 +33,7 @@
 <h2>Contents</h2>
 <ul>
 <li><a href="#Functions">Functions</a></li>
+<li><a href="#Fields">Fields</a></li>
 </ul>
 
 
@@ -75,14 +76,14 @@
   <li><a href="../modules/Tween.TweenSequence.html">Tween.TweenSequence</a></li>
   <li><a href="../modules/Utils.Callbacks.html">Utils.Callbacks</a></li>
   <li><a href="../modules/Utils.ClassEx.html">Utils.ClassEx</a></li>
-  <li><strong>Utils.CollisionKit</strong></li>
+  <li><a href="../modules/Utils.CollisionKit.html">Utils.CollisionKit</a></li>
   <li><a href="../modules/Utils.Color.html">Utils.Color</a></li>
   <li><a href="../modules/Utils.Coroutines.html">Utils.Coroutines</a></li>
   <li><a href="../modules/Utils.IO.html">Utils.IO</a></li>
   <li><a href="../modules/Utils.IniFile.html">Utils.IniFile</a></li>
   <li><a href="../modules/Utils.IniParser.html">Utils.IniParser</a></li>
   <li><a href="../modules/Utils.Log.html">Utils.Log</a></li>
-  <li><a href="../modules/Utils.Math.html">Utils.Math</a></li>
+  <li><strong>Utils.Math</strong></li>
   <li><a href="../modules/Utils.Polygon.html">Utils.Polygon</a></li>
   <li><a href="../modules/Utils.Shape.html">Utils.Shape</a></li>
   <li><a href="../modules/Utils.Sound.html">Utils.Sound</a></li>
@@ -99,22 +100,44 @@
 
 <div id="content">
 
-<h1>Module <code>Utils.CollisionKit</code></h1>
+<h1>Module <code>Utils.Math</code></h1>
 
-<p>Helper for image collision detection.</p>
-<p>
-It's based on flash functions logic.</p>
+<p>Extends math namespace</p>
+<p></p>
 
 
 <h2><a href="#Functions">Functions</a></h2>
 <table class="function_list">
 	<tr>
-	<td class="name" nowrap><a href="#imageHitTest">imageHitTest&nbsp;(i1, p1, a1, i2, p2, a2)</a></td>
-	<td class="summary">Checks pixel perfect overlap of 2 raw images (MOAIImage).</td>
+	<td class="name" nowrap><a href="#math.round">math.round&nbsp;(num)</a></td>
+	<td class="summary">Rounds a number.</td>
 	</tr>
 	<tr>
-	<td class="name" nowrap><a href="#imageHitTestEx">imageHitTestEx&nbsp;(i1, p1, a1, i2, p2, a2, rect1, rect2, rot1, rot2)</a></td>
-	<td class="summary">Checks pixel perfect overlap of 2 images</td>
+	<td class="name" nowrap><a href="#math.clamp">math.clamp&nbsp;(x, min, max)</a></td>
+	<td class="summary">Clamps a number between a min and a max value</td>
+	</tr>
+	<tr>
+	<td class="name" nowrap><a href="#math.clampAbs">math.clampAbs&nbsp;(x, maxAbs)</a></td>
+	<td class="summary">Clamps a number between a value and its negative</td>
+	</tr>
+	<tr>
+	<td class="name" nowrap><a href="#math.clampLen">math.clampLen&nbsp;(vec, maxLen)</a></td>
+	<td class="summary">Clamps a vec2 to a maximum length value</td>
+	</tr>
+	<tr>
+	<td class="name" nowrap><a href="#math.sign">math.sign&nbsp;(x)</a></td>
+	<td class="summary">Returns the sign of a number.</td>
+	</tr>
+	<tr>
+	<td class="name" nowrap><a href="#math.fequals">math.fequals&nbsp;(x1, x2, dist)</a></td>
+	<td class="summary">Checks if 2 numbers are equals "enough".</td>
+	</tr>
+</table>
+<h2><a href="#Fields">Fields</a></h2>
+<table class="function_list">
+	<tr>
+	<td class="name" nowrap><a href="#eps">eps</a></td>
+	<td class="summary">epsilon = 1e-11</td>
 	</tr>
 </table>
 
@@ -125,29 +148,43 @@ It's based on flash functions logic.</p>
     <h2><a name="Functions"></a>Functions</h2>
     <dl class="function">
     <dt>
-    <a name = "imageHitTest"></a>
-    <strong>imageHitTest&nbsp;(i1, p1, a1, i2, p2, a2)</strong>
+    <a name = "math.round"></a>
+    <strong>math.round&nbsp;(num)</strong>
     </dt>
     <dd>
-    Checks pixel perfect overlap of 2 raw images (MOAIImage).
-<p>Depending on __USE_SIMULATION_COORDS__ the point 0,0 of the image is considered
-the top or the bottom left point
-
+    Rounds a number.
 
     <h3>Parameters:</h3>
     <ul>
-      <li><span class="parameter">i1</span>
-       image 1</li>
-      <li><span class="parameter">p1</span>
-       top/bottom left position (vec2) of image1</li>
-      <li><span class="parameter">a1</span>
-       alpha treshold to consider image1 pixel transparent</li>
-      <li><span class="parameter">i2</span>
-       image 2</li>
-      <li><span class="parameter">p2</span>
-       top/bottom left position (vec2) of image2</li>
-      <li><span class="parameter">a2</span>
-       alpha treshold to consider image2 pixel transparent</li>
+      <li><span class="parameter">num</span>
+       the number to round</li>
+    </ul>
+
+    <h3>Returns:</h3>
+    <ol>
+
+        number rounded to nearest int value
+    </ol>
+
+
+
+
+</dd>
+    <dt>
+    <a name = "math.clamp"></a>
+    <strong>math.clamp&nbsp;(x, min, max)</strong>
+    </dt>
+    <dd>
+    Clamps a number between a min and a max value
+
+    <h3>Parameters:</h3>
+    <ul>
+      <li><span class="parameter">x</span>
+      </li>
+      <li><span class="parameter">min</span>
+      </li>
+      <li><span class="parameter">max</span>
+      </li>
     </ul>
 
 
@@ -156,37 +193,103 @@ the top or the bottom left point
 
 </dd>
     <dt>
-    <a name = "imageHitTestEx"></a>
-    <strong>imageHitTestEx&nbsp;(i1, p1, a1, i2, p2, a2, rect1, rect2, rot1, rot2)</strong>
+    <a name = "math.clampAbs"></a>
+    <strong>math.clampAbs&nbsp;(x, maxAbs)</strong>
     </dt>
     <dd>
-    Checks pixel perfect overlap of 2 images Depending on __USE_SIMULATION_COORDS__ the point 0,0 of the image is considered
-the top or the bottom left point
-
+    Clamps a number between a value and its negative
 
     <h3>Parameters:</h3>
     <ul>
-      <li><span class="parameter">i1</span>
-       image 1</li>
-      <li><span class="parameter">p1</span>
-       top/bottom left position (vec2) of image1</li>
-      <li><span class="parameter">a1</span>
-       alpha treshold to consider image1 pixel transparent</li>
-      <li><span class="parameter">i2</span>
-       image 2</li>
-      <li><span class="parameter">p2</span>
-       top/bottom left position (vec2) of image2</li>
-      <li><span class="parameter">a2</span>
-       alpha treshold to consider image2 pixel transparent</li>
-      <li><span class="parameter">rect1</span>
-       (optional) can define a sub region over image1 (position and size)</li>
-      <li><span class="parameter">rect2</span>
-       (optional) can define a sub region over image2 (position and size)</li>
-      <li><span class="parameter">rot1</span>
-       (optional) if true rect1 must be considered rotated 90* anticlock wise</li>
-      <li><span class="parameter">rot2</span>
-       (optional) if true rect2 must be considered rotated 90* anticlock wise</li>
+      <li><span class="parameter">x</span>
+      </li>
+      <li><span class="parameter">maxAbs</span>
+      </li>
     </ul>
+
+
+
+
+
+</dd>
+    <dt>
+    <a name = "math.clampLen"></a>
+    <strong>math.clampLen&nbsp;(vec, maxLen)</strong>
+    </dt>
+    <dd>
+    Clamps a vec2 to a maximum length value
+
+    <h3>Parameters:</h3>
+    <ul>
+      <li><span class="parameter">vec</span>
+      </li>
+      <li><span class="parameter">maxLen</span>
+      </li>
+    </ul>
+
+
+
+
+
+</dd>
+    <dt>
+    <a name = "math.sign"></a>
+    <strong>math.sign&nbsp;(x)</strong>
+    </dt>
+    <dd>
+    Returns the sign of a number.  0 if the number is 0
+
+    <h3>Parameters:</h3>
+    <ul>
+      <li><span class="parameter">x</span>
+      </li>
+    </ul>
+
+
+
+
+
+</dd>
+    <dt>
+    <a name = "math.fequals"></a>
+    <strong>math.fequals&nbsp;(x1, x2, dist)</strong>
+    </dt>
+    <dd>
+    Checks if 2 numbers are equals "enough".
+Because for floating point numbers the equals operator raises problems,
+it's possible to use this function the check if the difference bewteen 2
+number is as small as desired.
+
+    <h3>Parameters:</h3>
+    <ul>
+      <li><span class="parameter">x1</span>
+       first number</li>
+      <li><span class="parameter">x2</span>
+       second number</li>
+      <li><span class="parameter">dist</span>
+       maximum distance allowed to consider the 2 number equals. default value is eps</li>
+    </ul>
+
+    <h3>Returns:</h3>
+    <ol>
+
+        bool
+    </ol>
+
+
+
+
+</dd>
+</dl>
+    <h2><a name="Fields"></a>Fields</h2>
+    <dl class="function">
+    <dt>
+    <a name = "eps"></a>
+    <strong>eps</strong>
+    </dt>
+    <dd>
+    epsilon = 1e-11
+
 
 
 

@@ -75,7 +75,7 @@
   <li><a href="../modules/Tween.TweenSequence.html">Tween.TweenSequence</a></li>
   <li><a href="../modules/Utils.Callbacks.html">Utils.Callbacks</a></li>
   <li><a href="../modules/Utils.ClassEx.html">Utils.ClassEx</a></li>
-  <li><strong>Utils.CollisionKit</strong></li>
+  <li><a href="../modules/Utils.CollisionKit.html">Utils.CollisionKit</a></li>
   <li><a href="../modules/Utils.Color.html">Utils.Color</a></li>
   <li><a href="../modules/Utils.Coroutines.html">Utils.Coroutines</a></li>
   <li><a href="../modules/Utils.IO.html">Utils.IO</a></li>
@@ -91,7 +91,7 @@
   <li><a href="../modules/Utils.Table.html">Utils.Table</a></li>
   <li><a href="../modules/Utils.Vector.html">Utils.Vector</a></li>
   <li><a href="../modules/Utils.XmlNode.html">Utils.XmlNode</a></li>
-  <li><a href="../modules/Utils.XmlParser.html">Utils.XmlParser</a></li>
+  <li><strong>Utils.XmlParser</strong></li>
   <li><a href="../modules/include.html">include</a></li>
 </ul>
 
@@ -99,22 +99,37 @@
 
 <div id="content">
 
-<h1>Module <code>Utils.CollisionKit</code></h1>
+<h1>Module <code>Utils.XmlParser</code></h1>
 
-<p>Helper for image collision detection.</p>
-<p>
-It's based on flash functions logic.</p>
+<p>LUA only XmlParser, original code from Alexander Makeev</p>
+<p></p>
 
 
 <h2><a href="#Functions">Functions</a></h2>
 <table class="function_list">
 	<tr>
-	<td class="name" nowrap><a href="#imageHitTest">imageHitTest&nbsp;(i1, p1, a1, i2, p2, a2)</a></td>
-	<td class="summary">Checks pixel perfect overlap of 2 raw images (MOAIImage).</td>
+	<td class="name" nowrap><a href="#ToXmlString">ToXmlString&nbsp;(value)</a></td>
+	<td class="summary">Converts a string value to an xml string</td>
 	</tr>
 	<tr>
-	<td class="name" nowrap><a href="#imageHitTestEx">imageHitTestEx&nbsp;(i1, p1, a1, i2, p2, a2, rect1, rect2, rot1, rot2)</a></td>
-	<td class="summary">Checks pixel perfect overlap of 2 images</td>
+	<td class="name" nowrap><a href="#FromXmlString">FromXmlString&nbsp;(value)</a></td>
+	<td class="summary">Converts an xml string to a string value</td>
+	</tr>
+	<tr>
+	<td class="name" nowrap><a href="#ParseArgs">ParseArgs&nbsp;(s)</a></td>
+	<td class="summary">Parses a string retrieving a list of arguments (couples of key=val)</td>
+	</tr>
+	<tr>
+	<td class="name" nowrap><a href="#ParseXmlText">ParseXmlText&nbsp;(xmlText)</a></td>
+	<td class="summary">Parses a xml text and returns a lua table</td>
+	</tr>
+	<tr>
+	<td class="name" nowrap><a href="#ParseXmlFile">ParseXmlFile&nbsp;(xmlFileName)</a></td>
+	<td class="summary">loads a xmlfile and parses it</td>
+	</tr>
+	<tr>
+	<td class="name" nowrap><a href="#dump">dump&nbsp;(xml, log)</a></td>
+	<td class="summary">prints the content of a table obtained with XmlParser.parse</td>
 	</tr>
 </table>
 
@@ -125,29 +140,16 @@ It's based on flash functions logic.</p>
     <h2><a name="Functions"></a>Functions</h2>
     <dl class="function">
     <dt>
-    <a name = "imageHitTest"></a>
-    <strong>imageHitTest&nbsp;(i1, p1, a1, i2, p2, a2)</strong>
+    <a name = "ToXmlString"></a>
+    <strong>ToXmlString&nbsp;(value)</strong>
     </dt>
     <dd>
-    Checks pixel perfect overlap of 2 raw images (MOAIImage).
-<p>Depending on __USE_SIMULATION_COORDS__ the point 0,0 of the image is considered
-the top or the bottom left point
-
+    Converts a string value to an xml string
 
     <h3>Parameters:</h3>
     <ul>
-      <li><span class="parameter">i1</span>
-       image 1</li>
-      <li><span class="parameter">p1</span>
-       top/bottom left position (vec2) of image1</li>
-      <li><span class="parameter">a1</span>
-       alpha treshold to consider image1 pixel transparent</li>
-      <li><span class="parameter">i2</span>
-       image 2</li>
-      <li><span class="parameter">p2</span>
-       top/bottom left position (vec2) of image2</li>
-      <li><span class="parameter">a2</span>
-       alpha treshold to consider image2 pixel transparent</li>
+      <li><span class="parameter">value</span>
+      </li>
     </ul>
 
 
@@ -156,36 +158,97 @@ the top or the bottom left point
 
 </dd>
     <dt>
-    <a name = "imageHitTestEx"></a>
-    <strong>imageHitTestEx&nbsp;(i1, p1, a1, i2, p2, a2, rect1, rect2, rot1, rot2)</strong>
+    <a name = "FromXmlString"></a>
+    <strong>FromXmlString&nbsp;(value)</strong>
     </dt>
     <dd>
-    Checks pixel perfect overlap of 2 images Depending on __USE_SIMULATION_COORDS__ the point 0,0 of the image is considered
-the top or the bottom left point
-
+    Converts an xml string to a string value
 
     <h3>Parameters:</h3>
     <ul>
-      <li><span class="parameter">i1</span>
-       image 1</li>
-      <li><span class="parameter">p1</span>
-       top/bottom left position (vec2) of image1</li>
-      <li><span class="parameter">a1</span>
-       alpha treshold to consider image1 pixel transparent</li>
-      <li><span class="parameter">i2</span>
-       image 2</li>
-      <li><span class="parameter">p2</span>
-       top/bottom left position (vec2) of image2</li>
-      <li><span class="parameter">a2</span>
-       alpha treshold to consider image2 pixel transparent</li>
-      <li><span class="parameter">rect1</span>
-       (optional) can define a sub region over image1 (position and size)</li>
-      <li><span class="parameter">rect2</span>
-       (optional) can define a sub region over image2 (position and size)</li>
-      <li><span class="parameter">rot1</span>
-       (optional) if true rect1 must be considered rotated 90* anticlock wise</li>
-      <li><span class="parameter">rot2</span>
-       (optional) if true rect2 must be considered rotated 90* anticlock wise</li>
+      <li><span class="parameter">value</span>
+      </li>
+    </ul>
+
+
+
+
+
+</dd>
+    <dt>
+    <a name = "ParseArgs"></a>
+    <strong>ParseArgs&nbsp;(s)</strong>
+    </dt>
+    <dd>
+    Parses a string retrieving a list of arguments (couples of key=val)
+
+    <h3>Parameters:</h3>
+    <ul>
+      <li><span class="parameter">s</span>
+      </li>
+    </ul>
+
+
+
+
+
+</dd>
+    <dt>
+    <a name = "ParseXmlText"></a>
+    <strong>ParseXmlText&nbsp;(xmlText)</strong>
+    </dt>
+    <dd>
+    Parses a xml text and returns a lua table
+
+    <h3>Parameters:</h3>
+    <ul>
+      <li><span class="parameter">xmlText</span>
+      </li>
+    </ul>
+
+
+
+
+
+</dd>
+    <dt>
+    <a name = "ParseXmlFile"></a>
+    <strong>ParseXmlFile&nbsp;(xmlFileName)</strong>
+    </dt>
+    <dd>
+    loads a xmlfile and parses it
+
+    <h3>Parameters:</h3>
+    <ul>
+      <li><span class="parameter">xmlFileName</span>
+      </li>
+    </ul>
+
+    <h3>Returns:</h3>
+    <ol>
+        <li>
+        table or nil if an error raises</li>
+        <li>
+        nil or error message if an error raises</li>
+    </ol>
+
+
+
+
+</dd>
+    <dt>
+    <a name = "dump"></a>
+    <strong>dump&nbsp;(xml, log)</strong>
+    </dt>
+    <dd>
+    prints the content of a table obtained with XmlParser.parse
+
+    <h3>Parameters:</h3>
+    <ul>
+      <li><span class="parameter">xml</span>
+       the xml table</li>
+      <li><span class="parameter">log</span>
+       a log object</li>
     </ul>
 
 

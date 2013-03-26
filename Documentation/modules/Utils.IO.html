@@ -33,6 +33,7 @@
 <h2>Contents</h2>
 <ul>
 <li><a href="#Functions">Functions</a></li>
+<li><a href="#Fields">Fields</a></li>
 </ul>
 
 
@@ -75,10 +76,10 @@
   <li><a href="../modules/Tween.TweenSequence.html">Tween.TweenSequence</a></li>
   <li><a href="../modules/Utils.Callbacks.html">Utils.Callbacks</a></li>
   <li><a href="../modules/Utils.ClassEx.html">Utils.ClassEx</a></li>
-  <li><strong>Utils.CollisionKit</strong></li>
+  <li><a href="../modules/Utils.CollisionKit.html">Utils.CollisionKit</a></li>
   <li><a href="../modules/Utils.Color.html">Utils.Color</a></li>
   <li><a href="../modules/Utils.Coroutines.html">Utils.Coroutines</a></li>
-  <li><a href="../modules/Utils.IO.html">Utils.IO</a></li>
+  <li><strong>Utils.IO</strong></li>
   <li><a href="../modules/Utils.IniFile.html">Utils.IniFile</a></li>
   <li><a href="../modules/Utils.IniParser.html">Utils.IniParser</a></li>
   <li><a href="../modules/Utils.Log.html">Utils.Log</a></li>
@@ -99,22 +100,48 @@
 
 <div id="content">
 
-<h1>Module <code>Utils.CollisionKit</code></h1>
+<h1>Module <code>Utils.IO</code></h1>
 
-<p>Helper for image collision detection.</p>
-<p>
-It's based on flash functions logic.</p>
+<p>IO namespace offers functions to easily addressed fileSystem issues.</p>
+<p></p>
 
 
 <h2><a href="#Functions">Functions</a></h2>
 <table class="function_list">
 	<tr>
-	<td class="name" nowrap><a href="#imageHitTest">imageHitTest&nbsp;(i1, p1, a1, i2, p2, a2)</a></td>
-	<td class="summary">Checks pixel perfect overlap of 2 raw images (MOAIImage).</td>
+	<td class="name" nowrap><a href="#setWorkingDir">setWorkingDir&nbsp;(folder)</a></td>
+	<td class="summary">Used to set the working dir.</td>
 	</tr>
 	<tr>
-	<td class="name" nowrap><a href="#imageHitTestEx">imageHitTestEx&nbsp;(i1, p1, a1, i2, p2, a2, rect1, rect2, rot1, rot2)</a></td>
-	<td class="summary">Checks pixel perfect overlap of 2 images</td>
+	<td class="name" nowrap><a href="#getBaseDir">getBaseDir&nbsp;()</a></td>
+	<td class="summary">Returns the absolut app dir</td>
+	</tr>
+	<tr>
+	<td class="name" nowrap><a href="#getWorkingDir">getWorkingDir&nbsp;(asDevicePath)</a></td>
+	<td class="summary">Returns workingDir.</td>
+	</tr>
+	<tr>
+	<td class="name" nowrap><a href="#getAbsolutePath">getAbsolutePath&nbsp;(path, asDevicePath)</a></td>
+	<td class="summary">Converts a relative paht into an absolute one.</td>
+	</tr>
+	<tr>
+	<td class="name" nowrap><a href="#getFile">getFile&nbsp;(fileName)</a></td>
+	<td class="summary">Returns raw data for every type of files</td>
+	</tr>
+	<tr>
+	<td class="name" nowrap><a href="#dofile">dofile&nbsp;(fileName)</a></td>
+	<td class="summary">Allows to set a path for dofile (by default use MOAI WorkingDir</td>
+	</tr>
+</table>
+<h2><a href="#Fields">Fields</a></h2>
+<table class="function_list">
+	<tr>
+	<td class="name" nowrap><a href="#__baseDir">__baseDir</a></td>
+	<td class="summary">Absolute path dir.</td>
+	</tr>
+	<tr>
+	<td class="name" nowrap><a href="#__workingDir">__workingDir</a></td>
+	<td class="summary">Store current workingDir, relative to base application path</td>
 	</tr>
 </table>
 
@@ -125,29 +152,17 @@ It's based on flash functions logic.</p>
     <h2><a name="Functions"></a>Functions</h2>
     <dl class="function">
     <dt>
-    <a name = "imageHitTest"></a>
-    <strong>imageHitTest&nbsp;(i1, p1, a1, i2, p2, a2)</strong>
+    <a name = "setWorkingDir"></a>
+    <strong>setWorkingDir&nbsp;(folder)</strong>
     </dt>
     <dd>
-    Checks pixel perfect overlap of 2 raw images (MOAIImage).
-<p>Depending on __USE_SIMULATION_COORDS__ the point 0,0 of the image is considered
-the top or the bottom left point
-
+    Used to set the working dir.  It's meant as a path starting
+always from root application path
 
     <h3>Parameters:</h3>
     <ul>
-      <li><span class="parameter">i1</span>
-       image 1</li>
-      <li><span class="parameter">p1</span>
-       top/bottom left position (vec2) of image1</li>
-      <li><span class="parameter">a1</span>
-       alpha treshold to consider image1 pixel transparent</li>
-      <li><span class="parameter">i2</span>
-       image 2</li>
-      <li><span class="parameter">p2</span>
-       top/bottom left position (vec2) of image2</li>
-      <li><span class="parameter">a2</span>
-       alpha treshold to consider image2 pixel transparent</li>
+      <li><span class="parameter">folder</span>
+       string</li>
     </ul>
 
 
@@ -156,37 +171,143 @@ the top or the bottom left point
 
 </dd>
     <dt>
-    <a name = "imageHitTestEx"></a>
-    <strong>imageHitTestEx&nbsp;(i1, p1, a1, i2, p2, a2, rect1, rect2, rot1, rot2)</strong>
+    <a name = "getBaseDir"></a>
+    <strong>getBaseDir&nbsp;()</strong>
     </dt>
     <dd>
-    Checks pixel perfect overlap of 2 images Depending on __USE_SIMULATION_COORDS__ the point 0,0 of the image is considered
-the top or the bottom left point
+    Returns the absolut app dir
 
+
+    <h3>Returns:</h3>
+    <ol>
+
+        string
+    </ol>
+
+
+
+
+</dd>
+    <dt>
+    <a name = "getWorkingDir"></a>
+    <strong>getWorkingDir&nbsp;(asDevicePath)</strong>
+    </dt>
+    <dd>
+    Returns workingDir.
+if "asDevicePath" then return the path starting from device root
+filesystem, else returns path from application root filesystem
 
     <h3>Parameters:</h3>
     <ul>
-      <li><span class="parameter">i1</span>
-       image 1</li>
-      <li><span class="parameter">p1</span>
-       top/bottom left position (vec2) of image1</li>
-      <li><span class="parameter">a1</span>
-       alpha treshold to consider image1 pixel transparent</li>
-      <li><span class="parameter">i2</span>
-       image 2</li>
-      <li><span class="parameter">p2</span>
-       top/bottom left position (vec2) of image2</li>
-      <li><span class="parameter">a2</span>
-       alpha treshold to consider image2 pixel transparent</li>
-      <li><span class="parameter">rect1</span>
-       (optional) can define a sub region over image1 (position and size)</li>
-      <li><span class="parameter">rect2</span>
-       (optional) can define a sub region over image2 (position and size)</li>
-      <li><span class="parameter">rot1</span>
-       (optional) if true rect1 must be considered rotated 90* anticlock wise</li>
-      <li><span class="parameter">rot2</span>
-       (optional) if true rect2 must be considered rotated 90* anticlock wise</li>
+      <li><span class="parameter">asDevicePath</span>
+       bool</li>
     </ul>
+
+    <h3>Returns:</h3>
+    <ol>
+
+        string
+    </ol>
+
+
+
+
+</dd>
+    <dt>
+    <a name = "getAbsolutePath"></a>
+    <strong>getAbsolutePath&nbsp;(path, asDevicePath)</strong>
+    </dt>
+    <dd>
+    Converts a relative paht into an absolute one.
+if "asDevicePath" then return the path starting from device root
+filesystem, else returns path from application root filesystem
+
+    <h3>Parameters:</h3>
+    <ul>
+      <li><span class="parameter">path</span>
+       string</li>
+      <li><span class="parameter">asDevicePath</span>
+       bool</li>
+    </ul>
+
+    <h3>Returns:</h3>
+    <ol>
+
+        string
+    </ol>
+
+
+
+
+</dd>
+    <dt>
+    <a name = "getFile"></a>
+    <strong>getFile&nbsp;(fileName)</strong>
+    </dt>
+    <dd>
+    Returns raw data for every type of files
+
+    <h3>Parameters:</h3>
+    <ul>
+      <li><span class="parameter">fileName</span>
+       string</li>
+    </ul>
+
+    <h3>Returns:</h3>
+    <ol>
+        <li>
+        file or nil if an error raises</li>
+        <li>
+        nil or error message if an error raises</li>
+    </ol>
+
+
+
+
+</dd>
+    <dt>
+    <a name = "dofile"></a>
+    <strong>dofile&nbsp;(fileName)</strong>
+    </dt>
+    <dd>
+    Allows to set a path for dofile (by default use MOAI WorkingDir
+
+    <h3>Parameters:</h3>
+    <ul>
+      <li><span class="parameter">fileName</span>
+      </li>
+    </ul>
+
+
+
+
+
+</dd>
+</dl>
+    <h2><a name="Fields"></a>Fields</h2>
+    <dl class="function">
+    <dt>
+    <a name = "__baseDir"></a>
+    <strong>__baseDir</strong>
+    </dt>
+    <dd>
+    Absolute path dir.
+It's initialized when Shilke2D is initialized and it's used to
+handle relative path logic
+
+
+
+
+
+
+</dd>
+    <dt>
+    <a name = "__workingDir"></a>
+    <strong>__workingDir</strong>
+    </dt>
+    <dd>
+    Store current workingDir, relative to base application path
+
 
 
 

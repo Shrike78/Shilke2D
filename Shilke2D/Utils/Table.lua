@@ -1,11 +1,15 @@
--- table utilities functions extension
-        
+---Extends table namespace
+ 
+---clear a table, setting all the values to nil 
 function table.clear(t)
     for k,_ in pairs(t) do
         t[k] = nil
     end
 end  
 
+---make a copy of the values of a table and assign the same metatable
+--@return table table to be copied
+--@return a new table
 function table.copy(t)
     local u ={}
     for k,v in pairs(t) do
@@ -14,6 +18,11 @@ function table.copy(t)
     return setmetatable(u, getmetatable(t))
 end
 
+
+---Make a deep copy of the values of a table and assign the same metatable.
+--Deep copy means that each value of type table is deepcopied itself
+--@return table table to be copied
+--@return a new table
 function table.deepcopy(t)
     if type(t) ~= 'table' then 
         return t 
@@ -31,12 +40,21 @@ function table.deepcopy(t)
     return res
 end 
 
+---Sets to nil a key and returns previous value
+--@param table the table to modify
+--@param key the key to reset
+--@return previous kay value
 function table.removeKey(table, key)
     local element = table[key]
     table[key] = nil
     return element
 end
 
+---Returns position of o in table t
+--@param t the table where to search
+--@param o the object to be searched
+--@return index of the object into the table. 
+--0 if the table doesn't contain the object.
 function table.find(t,o)
     local c = 1
     for _,v in pairs(t) do
@@ -48,6 +66,10 @@ function table.find(t,o)
     return 0
 end
 
+---Removes an object from a table
+--@param t the table to modify
+--@param o the object to be removed
+--@return the removed object. nil if o doesn't belong to t
 function table.removeObj(t, o)
     local i = table.find(t,o)
     if i then 
@@ -56,7 +78,10 @@ function table.removeObj(t, o)
     return nil
 end
 
-
+---Returns a new table that contains the same elements in inverse order.
+--Threats the table as normal indexed array
+--@param t the array to invert
+--@return a new table
 function table.invert(t)
     local new = {}
     for i=0, #t do
@@ -65,6 +90,11 @@ function table.invert(t)
     return new
 end
 
+---Returns a new table that is a copy of a section af a given table.
+--@param t the source table
+--@param i1 start index of the copy section
+--@param i2 end index of the copy section
+--@return a new table
 function table.slice(t,i1,i2)
     local res = {}
     local n = #t
@@ -87,9 +117,13 @@ function table.slice(t,i1,i2)
     return res
 end
 
-function table.dump(t)
+---prints the content of a table using outFunc
+--@param t the table to dump
+--@param outFunc the function to be used for dumping. default is "print"
+function table.dump(t,outFunc)
+	local outFunc = outFunc or print
 	for k,v in pairs(t) do
-		print(k,v)
+		outFunc(k,v)
 		if type(v) == "table" then
 			table.dump(v)
 		end

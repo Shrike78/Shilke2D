@@ -45,7 +45,7 @@
   <li><a href="../modules/Core.Juggler.html">Core.Juggler</a></li>
   <li><a href="../modules/Core.Keymap.html">Core.Keymap</a></li>
   <li><a href="../modules/Core.Shilke2D.html">Core.Shilke2D</a></li>
-  <li><strong>Core.Timer</strong></li>
+  <li><a href="../modules/Core.Timer.html">Core.Timer</a></li>
   <li><a href="../modules/Core.TouchSensor.html">Core.TouchSensor</a></li>
   <li><a href="../modules/Display.BaseQuad.html">Display.BaseQuad</a></li>
   <li><a href="../modules/Display.Button.html">Display.Button</a></li>
@@ -88,7 +88,7 @@
   <li><a href="../modules/Utils.Sound.html">Utils.Sound</a></li>
   <li><a href="../modules/Utils.String.html">Utils.String</a></li>
   <li><a href="../modules/Utils.StringBuilder.html">Utils.StringBuilder</a></li>
-  <li><a href="../modules/Utils.Table.html">Utils.Table</a></li>
+  <li><strong>Utils.Table</strong></li>
   <li><a href="../modules/Utils.Vector.html">Utils.Vector</a></li>
   <li><a href="../modules/Utils.XmlNode.html">Utils.XmlNode</a></li>
   <li><a href="../modules/Utils.XmlParser.html">Utils.XmlParser</a></li>
@@ -99,36 +99,49 @@
 
 <div id="content">
 
-<h1>Module <code>Core.Timer</code></h1>
+<h1>Module <code>Utils.Table</code></h1>
 
-<p>Timer class is the equivalent of as3 Timer.</p>
-<p>
-Each timer can be scheduled to run multiple times, even infinite.
-It's possible to register as listener for timer events.
-A Timer can be started, stopped and paused</p>
+<p>Extends table namespace</p>
+<p></p>
 
 
 <h2><a href="#Functions">Functions</a></h2>
 <table class="function_list">
 	<tr>
-	<td class="name" nowrap><a href="#Timer:init">Timer:init&nbsp;(delay, repeatCount)</a></td>
-	<td class="summary">Timer initialization.</td>
+	<td class="name" nowrap><a href="#table.clear">table.clear&nbsp;(t)</a></td>
+	<td class="summary">clear a table, setting all the values to nil</td>
 	</tr>
 	<tr>
-	<td class="name" nowrap><a href="#Timer:start">Timer:start&nbsp;()</a></td>
-	<td class="summary">Starts the timer, if it is not already running.</td>
+	<td class="name" nowrap><a href="#table.copy">table.copy&nbsp;(t)</a></td>
+	<td class="summary">make a copy of the values of a table and assign the same metatable</td>
 	</tr>
 	<tr>
-	<td class="name" nowrap><a href="#Timer:stop">Timer:stop&nbsp;()</a></td>
-	<td class="summary">Stops the timer, if it is running.</td>
+	<td class="name" nowrap><a href="#table.deepcopy">table.deepcopy&nbsp;(t)</a></td>
+	<td class="summary">Make a deep copy of the values of a table and assign the same metatable.</td>
 	</tr>
 	<tr>
-	<td class="name" nowrap><a href="#Timer:reset">Timer:reset&nbsp;()</a></td>
-	<td class="summary">Stops the timer, if it is running.</td>
+	<td class="name" nowrap><a href="#table.removeKey">table.removeKey&nbsp;(table, key)</a></td>
+	<td class="summary">Sets to nil a key and returns previous value</td>
 	</tr>
 	<tr>
-	<td class="name" nowrap><a href="#Timer:advanceTime">Timer:advanceTime&nbsp;(deltaTime)</a></td>
-	<td class="summary">IAnimatable update method</td>
+	<td class="name" nowrap><a href="#table.find">table.find&nbsp;(t, o)</a></td>
+	<td class="summary">Returns position of o in table t</td>
+	</tr>
+	<tr>
+	<td class="name" nowrap><a href="#table.removeObj">table.removeObj&nbsp;(t, o)</a></td>
+	<td class="summary">Removes an object from a table</td>
+	</tr>
+	<tr>
+	<td class="name" nowrap><a href="#table.invert">table.invert&nbsp;(t)</a></td>
+	<td class="summary">Returns a new table that contains the same elements in inverse order.</td>
+	</tr>
+	<tr>
+	<td class="name" nowrap><a href="#table.slice">table.slice&nbsp;(t, i1, i2)</a></td>
+	<td class="summary">Returns a new table that is a copy of a section af a given table.</td>
+	</tr>
+	<tr>
+	<td class="name" nowrap><a href="#table.dump">table.dump&nbsp;(t, outFunc)</a></td>
+	<td class="summary">prints the content of a table using outFunc</td>
 	</tr>
 </table>
 
@@ -139,18 +152,16 @@ A Timer can be started, stopped and paused</p>
     <h2><a name="Functions"></a>Functions</h2>
     <dl class="function">
     <dt>
-    <a name = "Timer:init"></a>
-    <strong>Timer:init&nbsp;(delay, repeatCount)</strong>
+    <a name = "table.clear"></a>
+    <strong>table.clear&nbsp;(t)</strong>
     </dt>
     <dd>
-    Timer initialization.
+    clear a table, setting all the values to nil
 
     <h3>Parameters:</h3>
     <ul>
-      <li><span class="parameter">delay</span>
-       the duration of each countdown</li>
-      <li><span class="parameter">repeatCount</span>
-       the number of iteration. Defaul is 1. 0 or negative values means Infinite</li>
+      <li><span class="parameter">t</span>
+      </li>
     </ul>
 
 
@@ -159,57 +170,196 @@ A Timer can be started, stopped and paused</p>
 
 </dd>
     <dt>
-    <a name = "Timer:start"></a>
-    <strong>Timer:start&nbsp;()</strong>
+    <a name = "table.copy"></a>
+    <strong>table.copy&nbsp;(t)</strong>
     </dt>
     <dd>
-    Starts the timer, if it is not already running.
-
-
-
-
-
-
-</dd>
-    <dt>
-    <a name = "Timer:stop"></a>
-    <strong>Timer:stop&nbsp;()</strong>
-    </dt>
-    <dd>
-    Stops the timer, if it is running.
-
-
-
-
-
-
-</dd>
-    <dt>
-    <a name = "Timer:reset"></a>
-    <strong>Timer:reset&nbsp;()</strong>
-    </dt>
-    <dd>
-    Stops the timer, if it is running.
-Sets the currentCount property and the elapsedTime property back to 0,
-like the reset button of a stopwatch,  to
-
-
-
-
-
-
-</dd>
-    <dt>
-    <a name = "Timer:advanceTime"></a>
-    <strong>Timer:advanceTime&nbsp;(deltaTime)</strong>
-    </dt>
-    <dd>
-    IAnimatable update method
+    make a copy of the values of a table and assign the same metatable
 
     <h3>Parameters:</h3>
     <ul>
-      <li><span class="parameter">deltaTime</span>
+      <li><span class="parameter">t</span>
       </li>
+    </ul>
+
+    <h3>Returns:</h3>
+    <ol>
+        <li>
+        table table to be copied</li>
+        <li>
+        a new table</li>
+    </ol>
+
+
+
+
+</dd>
+    <dt>
+    <a name = "table.deepcopy"></a>
+    <strong>table.deepcopy&nbsp;(t)</strong>
+    </dt>
+    <dd>
+    Make a deep copy of the values of a table and assign the same metatable.
+Deep copy means that each value of type table is deepcopied itself
+
+    <h3>Parameters:</h3>
+    <ul>
+      <li><span class="parameter">t</span>
+      </li>
+    </ul>
+
+    <h3>Returns:</h3>
+    <ol>
+        <li>
+        table table to be copied</li>
+        <li>
+        a new table</li>
+    </ol>
+
+
+
+
+</dd>
+    <dt>
+    <a name = "table.removeKey"></a>
+    <strong>table.removeKey&nbsp;(table, key)</strong>
+    </dt>
+    <dd>
+    Sets to nil a key and returns previous value
+
+    <h3>Parameters:</h3>
+    <ul>
+      <li><span class="parameter">table</span>
+       the table to modify</li>
+      <li><span class="parameter">key</span>
+       the key to reset</li>
+    </ul>
+
+    <h3>Returns:</h3>
+    <ol>
+
+        previous kay value
+    </ol>
+
+
+
+
+</dd>
+    <dt>
+    <a name = "table.find"></a>
+    <strong>table.find&nbsp;(t, o)</strong>
+    </dt>
+    <dd>
+    Returns position of o in table t
+0 if the table doesn't contain the object.
+
+    <h3>Parameters:</h3>
+    <ul>
+      <li><span class="parameter">t</span>
+       the table where to search</li>
+      <li><span class="parameter">o</span>
+       the object to be searched</li>
+    </ul>
+
+    <h3>Returns:</h3>
+    <ol>
+
+        index of the object into the table.
+    </ol>
+
+
+
+
+</dd>
+    <dt>
+    <a name = "table.removeObj"></a>
+    <strong>table.removeObj&nbsp;(t, o)</strong>
+    </dt>
+    <dd>
+    Removes an object from a table
+
+    <h3>Parameters:</h3>
+    <ul>
+      <li><span class="parameter">t</span>
+       the table to modify</li>
+      <li><span class="parameter">o</span>
+       the object to be removed</li>
+    </ul>
+
+    <h3>Returns:</h3>
+    <ol>
+
+        the removed object. nil if o doesn't belong to t
+    </ol>
+
+
+
+
+</dd>
+    <dt>
+    <a name = "table.invert"></a>
+    <strong>table.invert&nbsp;(t)</strong>
+    </dt>
+    <dd>
+    Returns a new table that contains the same elements in inverse order.
+Threats the table as normal indexed array
+
+    <h3>Parameters:</h3>
+    <ul>
+      <li><span class="parameter">t</span>
+       the array to invert</li>
+    </ul>
+
+    <h3>Returns:</h3>
+    <ol>
+
+        a new table
+    </ol>
+
+
+
+
+</dd>
+    <dt>
+    <a name = "table.slice"></a>
+    <strong>table.slice&nbsp;(t, i1, i2)</strong>
+    </dt>
+    <dd>
+    Returns a new table that is a copy of a section af a given table.
+
+    <h3>Parameters:</h3>
+    <ul>
+      <li><span class="parameter">t</span>
+       the source table</li>
+      <li><span class="parameter">i1</span>
+       start index of the copy section</li>
+      <li><span class="parameter">i2</span>
+       end index of the copy section</li>
+    </ul>
+
+    <h3>Returns:</h3>
+    <ol>
+
+        a new table
+    </ol>
+
+
+
+
+</dd>
+    <dt>
+    <a name = "table.dump"></a>
+    <strong>table.dump&nbsp;(t, outFunc)</strong>
+    </dt>
+    <dd>
+    prints the content of a table using outFunc
+
+    <h3>Parameters:</h3>
+    <ul>
+      <li><span class="parameter">t</span>
+       the table to dump</li>
+      <li><span class="parameter">outFunc</span>
+       the function to be used for dumping. default is "print"</li>
     </ul>
 
 

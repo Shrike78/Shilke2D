@@ -1,7 +1,8 @@
--- LUA only XmlParser, original code from Alexander Makeev
+---LUA only XmlParser, original code from Alexander Makeev
 
 XmlParser = {}
 
+---Converts a string value to an xml string
 function XmlParser.ToXmlString(value)
     value = string.gsub (value, "&", "&amp;");        -- '&' -> "&amp;"
     value = string.gsub (value, "<", "&lt;");        -- '<' -> "&lt;"
@@ -18,6 +19,7 @@ function XmlParser.ToXmlString(value)
     return value
 end
 
+---Converts an xml string to a string value
 function XmlParser.FromXmlString(value)
     value = string.gsub(value, "&#x([%x]+)%;",
         function(h) 
@@ -41,6 +43,7 @@ function XmlParser.FromXmlString(value)
     return value
 end
    
+---Parses a string retrieving a list of arguments (couples of key=val)
 function XmlParser.ParseArgs(s)
     local arg = {}
     --handle space between arguments name, value and "="
@@ -50,6 +53,7 @@ function XmlParser.ParseArgs(s)
     return arg
 end
 
+---Parses a xml text and returns a lua table
 function XmlParser.ParseXmlText(xmlText)
     local stack = {}
     local top = {name=nil,value=nil,attributes={},childNodes={}}
@@ -106,6 +110,9 @@ function XmlParser.ParseXmlText(xmlText)
     return stack[1].childNodes[1]
 end
 
+---loads a xmlfile and parses it
+--@return table or nil if an error raises
+--@return nil or error message if an error raises
 function XmlParser.ParseXmlFile(xmlFileName)
     local xmlText, err = IO.getFile(xmlFileName)
     if (not err) then
@@ -115,7 +122,9 @@ function XmlParser.ParseXmlFile(xmlFileName)
     end
 end
 
---print plain text value
+---prints the content of a table obtained with XmlParser.parse
+--@param xml the xml table
+--@param log a log object
 function XmlParser.dump(xml,log)
     --local xml
     if xml.name then 

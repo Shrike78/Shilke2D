@@ -75,7 +75,7 @@
   <li><a href="../modules/Tween.TweenSequence.html">Tween.TweenSequence</a></li>
   <li><a href="../modules/Utils.Callbacks.html">Utils.Callbacks</a></li>
   <li><a href="../modules/Utils.ClassEx.html">Utils.ClassEx</a></li>
-  <li><strong>Utils.CollisionKit</strong></li>
+  <li><a href="../modules/Utils.CollisionKit.html">Utils.CollisionKit</a></li>
   <li><a href="../modules/Utils.Color.html">Utils.Color</a></li>
   <li><a href="../modules/Utils.Coroutines.html">Utils.Coroutines</a></li>
   <li><a href="../modules/Utils.IO.html">Utils.IO</a></li>
@@ -87,7 +87,7 @@
   <li><a href="../modules/Utils.Shape.html">Utils.Shape</a></li>
   <li><a href="../modules/Utils.Sound.html">Utils.Sound</a></li>
   <li><a href="../modules/Utils.String.html">Utils.String</a></li>
-  <li><a href="../modules/Utils.StringBuilder.html">Utils.StringBuilder</a></li>
+  <li><strong>Utils.StringBuilder</strong></li>
   <li><a href="../modules/Utils.Table.html">Utils.Table</a></li>
   <li><a href="../modules/Utils.Vector.html">Utils.Vector</a></li>
   <li><a href="../modules/Utils.XmlNode.html">Utils.XmlNode</a></li>
@@ -99,22 +99,38 @@
 
 <div id="content">
 
-<h1>Module <code>Utils.CollisionKit</code></h1>
+<h1>Module <code>Utils.StringBuilder</code></h1>
 
-<p>Helper for image collision detection.</p>
-<p>
-It's based on flash functions logic.</p>
+<p>StringBuilder class to enable faster string composition</p>
+<p></p>
 
 
 <h2><a href="#Functions">Functions</a></h2>
 <table class="function_list">
 	<tr>
-	<td class="name" nowrap><a href="#imageHitTest">imageHitTest&nbsp;(i1, p1, a1, i2, p2, a2)</a></td>
-	<td class="summary">Checks pixel perfect overlap of 2 raw images (MOAIImage).</td>
+	<td class="name" nowrap><a href="#StringBuilder:reset">StringBuilder:reset&nbsp;()</a></td>
+	<td class="summary">Resets the builder data</td>
 	</tr>
 	<tr>
-	<td class="name" nowrap><a href="#imageHitTestEx">imageHitTestEx&nbsp;(i1, p1, a1, i2, p2, a2, rect1, rect2, rot1, rot2)</a></td>
-	<td class="summary">Checks pixel perfect overlap of 2 images</td>
+	<td class="name" nowrap><a href="#StringBuilder:write">StringBuilder:write&nbsp;(...)</a></td>
+	<td class="summary">Appends a set of stringified items</td>
+	</tr>
+	<tr>
+	<td class="name" nowrap><a href="#StringBuilder:writeln">StringBuilder:writeln&nbsp;(...)</a></td>
+	<td class="summary">Calls write(...) and append a 'newline' at the end</td>
+	</tr>
+	<tr>
+	<td class="name" nowrap><a href="#StringBuilder:lenght">StringBuilder:lenght&nbsp;()</a></td>
+	<td class="summary">Returns the length of the final string.</td>
+	</tr>
+	<tr>
+	<td class="name" nowrap><a href="#StringBuilder:toString">StringBuilder:toString&nbsp;(bFlush)</a></td>
+	<td class="summary">Returns the resulting string and, if bFlush is true,
+resets the builder</td>
+	</tr>
+	<tr>
+	<td class="name" nowrap><a href="#__tostring">__tostring&nbsp;(o)</a></td>
+	<td class="summary">returns the current string value without flushing the builder</td>
 	</tr>
 </table>
 
@@ -125,29 +141,30 @@ It's based on flash functions logic.</p>
     <h2><a name="Functions"></a>Functions</h2>
     <dl class="function">
     <dt>
-    <a name = "imageHitTest"></a>
-    <strong>imageHitTest&nbsp;(i1, p1, a1, i2, p2, a2)</strong>
+    <a name = "StringBuilder:reset"></a>
+    <strong>StringBuilder:reset&nbsp;()</strong>
     </dt>
     <dd>
-    Checks pixel perfect overlap of 2 raw images (MOAIImage).
-<p>Depending on __USE_SIMULATION_COORDS__ the point 0,0 of the image is considered
-the top or the bottom left point
+    Resets the builder data
 
+
+
+
+
+
+</dd>
+    <dt>
+    <a name = "StringBuilder:write"></a>
+    <strong>StringBuilder:write&nbsp;(...)</strong>
+    </dt>
+    <dd>
+    Appends a set of stringified items
+appended to the inner string list
 
     <h3>Parameters:</h3>
     <ul>
-      <li><span class="parameter">i1</span>
-       image 1</li>
-      <li><span class="parameter">p1</span>
-       top/bottom left position (vec2) of image1</li>
-      <li><span class="parameter">a1</span>
-       alpha treshold to consider image1 pixel transparent</li>
-      <li><span class="parameter">i2</span>
-       image 2</li>
-      <li><span class="parameter">p2</span>
-       top/bottom left position (vec2) of image2</li>
-      <li><span class="parameter">a2</span>
-       alpha treshold to consider image2 pixel transparent</li>
+      <li><span class="parameter">...</span>
+       each param is converted calling tostring() and is </li>
     </ul>
 
 
@@ -156,36 +173,78 @@ the top or the bottom left point
 
 </dd>
     <dt>
-    <a name = "imageHitTestEx"></a>
-    <strong>imageHitTestEx&nbsp;(i1, p1, a1, i2, p2, a2, rect1, rect2, rot1, rot2)</strong>
+    <a name = "StringBuilder:writeln"></a>
+    <strong>StringBuilder:writeln&nbsp;(...)</strong>
     </dt>
     <dd>
-    Checks pixel perfect overlap of 2 images Depending on __USE_SIMULATION_COORDS__ the point 0,0 of the image is considered
-the top or the bottom left point
-
+    Calls write(...) and append a 'newline' at the end
 
     <h3>Parameters:</h3>
     <ul>
-      <li><span class="parameter">i1</span>
-       image 1</li>
-      <li><span class="parameter">p1</span>
-       top/bottom left position (vec2) of image1</li>
-      <li><span class="parameter">a1</span>
-       alpha treshold to consider image1 pixel transparent</li>
-      <li><span class="parameter">i2</span>
-       image 2</li>
-      <li><span class="parameter">p2</span>
-       top/bottom left position (vec2) of image2</li>
-      <li><span class="parameter">a2</span>
-       alpha treshold to consider image2 pixel transparent</li>
-      <li><span class="parameter">rect1</span>
-       (optional) can define a sub region over image1 (position and size)</li>
-      <li><span class="parameter">rect2</span>
-       (optional) can define a sub region over image2 (position and size)</li>
-      <li><span class="parameter">rot1</span>
-       (optional) if true rect1 must be considered rotated 90* anticlock wise</li>
-      <li><span class="parameter">rot2</span>
-       (optional) if true rect2 must be considered rotated 90* anticlock wise</li>
+      <li><span class="parameter">...</span>
+      </li>
+    </ul>
+
+
+
+
+
+</dd>
+    <dt>
+    <a name = "StringBuilder:lenght"></a>
+    <strong>StringBuilder:lenght&nbsp;()</strong>
+    </dt>
+    <dd>
+    Returns the length of the final string.
+The value is updated each time a new
+string is added to the builder
+
+
+    <h3>Returns:</h3>
+    <ol>
+
+        number
+    </ol>
+
+
+
+
+</dd>
+    <dt>
+    <a name = "StringBuilder:toString"></a>
+    <strong>StringBuilder:toString&nbsp;(bFlush)</strong>
+    </dt>
+    <dd>
+    Returns the resulting string and, if bFlush is true,
+resets the builder
+
+    <h3>Parameters:</h3>
+    <ul>
+      <li><span class="parameter">bFlush</span>
+       bool, if true clear the builder</li>
+    </ul>
+
+    <h3>Returns:</h3>
+    <ol>
+
+        string
+    </ol>
+
+
+
+
+</dd>
+    <dt>
+    <a name = "__tostring"></a>
+    <strong>__tostring&nbsp;(o)</strong>
+    </dt>
+    <dd>
+    returns the current string value without flushing the builder
+
+    <h3>Parameters:</h3>
+    <ul>
+      <li><span class="parameter">o</span>
+      </li>
     </ul>
 
 

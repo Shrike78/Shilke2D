@@ -1,6 +1,12 @@
--- Polygon
+---Polygon class
 
-local function findLineIntersection(start1, end1, start2, end2)
+---Find intersection between two lines
+--@param start1 start point (vec2) of first line
+--@param end1 end point (vec2) of first line
+--@param start2 start point (vec2) of second line
+--@param end2 end point (vec2) of second line
+--@return vec2 if intersection exists or nil
+function findLineIntersection(start1, end1, start2, end2)
 	local x1,y1,x2,y2,x3,y3,x4,y4 = start1.x, start1.y, end1.x, end1.y, start2.x, start2.y, end2.x, end2.y
 	local d = (x1-x2)*(y3-y4) - (y1-y2)*(x3-x4)
 	if (d == 0) then return nil end
@@ -15,6 +21,8 @@ end
 
 Polygon = class()
 
+---Helper function to convert a set of [x,y,..] to an array of vec2
+--If needed add an extra point at the end to 'close' the polygon
 local function toVec2(points)
 	if #points == 0 then return nil end
 	
@@ -33,7 +41,14 @@ local function toVec2(points)
 	return res
 end
 
-
+--[[---
+Constructor
+@usage
+Polygon(x1,y1,x2,y2,...) - with x,y as numbers
+Polygon(p1,p2,...) - with p as vec2
+Polygon({x1,x2,...})
+Polygon({p1,p2,...})
+--]]
 function Polygon:init(p,...)
 	local points
 	if class_type(p) == vec2 or type(p) == 'number' then
@@ -46,12 +61,13 @@ function Polygon:init(p,...)
 	self._invalidRect = true
 end
 
+---Calculates / Updates bounding rect of the polygon
 function Polygon:updateRect()
 	local xmin = math.huge
     local xmax = -math.huge
     local ymin = math.huge
     local ymax = -math.huge
-	
+
     for i = 1, #self.points do
 		local point = self.points[i]
         local x,y  = point.x,point.y
@@ -82,10 +98,15 @@ function Polygon:removePoint(idx)
 end
 --]]
 
+---Returns an indexed point
+--@param i index of the point to retrieve
+--@return vec2 or nil if index out of bound
 function Polygon:getPoint(i)
 	return self.points[i]
 end
 
+---Returns an array of single x,y components
+--@return x1,y1,x2,y2....
 function Polygon:unpack()
 	local res = {}
 	for i=1,#self.points do
@@ -95,6 +116,9 @@ function Polygon:unpack()
 	return unpack(res)
 end
 
+---Returns bounding rect of the polygon
+--@param resultRect used to avoid the creation of a new rect. optional
+--@return Rect
 function Polygon:getRect(resultRect)
 	if self._invalidRect then
 		self:updateRect()
@@ -104,8 +128,14 @@ function Polygon:getRect(resultRect)
     return r
 end
 
-
+---Checks if the polygon contains a given point
+--@param x x coordinate of the point or a vec2 point
+--@param y y coordinate of the point or nil
+--@return bool
 function Polygon:containsPoint(x,y)
+	
+	local y = y and y or x.y
+	local x = y and x or x.x
 	
 	local polySides = #self.points - 1
 	local j = polySides
@@ -127,6 +157,10 @@ function Polygon:containsPoint(x,y)
 	return res
 end
 
+---Checks a given rect intersects the polygon
+--@param p1 start point of the rect
+--@param p2 end point of the rect
+--@return bool
 function Polygon:intersectSegment(p1,p2)
 	for i = 1, #self.points-1 do
 		if findLineIntersection(p1,p2,self.points[i],self.points[i+1]) then
@@ -136,6 +170,9 @@ function Polygon:intersectSegment(p1,p2)
 	return false
 end
 
+---Checks intersection with another polygon
+--@param poly the other polygon
+--@return bool
 function Polygon:intersectPolygon(poly)
 	if not self:getRect():intersects(poly:getRect()) then
 		return false
@@ -161,6 +198,10 @@ function Polygon:intersectPolygon(poly)
 	return false
 end
 
+---Merges two polygons
+--@param poly the polygon to be merged with this
+--@return a new polygon obtained by the merge of the two. 
+--nil if the two polygons do not intersect.
 function Polygon:merge(poly)
 	if not self:getRect():intersects(poly:getRect()) then
 		return nil

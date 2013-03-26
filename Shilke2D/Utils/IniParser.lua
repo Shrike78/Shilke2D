@@ -1,7 +1,16 @@
--- IniParser
+ --[[---
+IniParser allows to parse a file ini and convert it into a lua table.
+
+Original parser version worked with string.match but there were problems 
+with iOS version where mathc failed to return correct results.
+--]]
 
 IniParser = {}
 
+---Load a file ini and parse it
+--@param iniFileName the path of the file ini to load
+--@return table with the parsed file info or nil if the path wasn't valid
+--@return nil or error if the path wasn't valid
 function IniParser.parseIniFile(iniFileName)
     local iniText, err = IO.getFile(iniFileName)
     if (not err) then
@@ -11,8 +20,9 @@ function IniParser.parseIniFile(iniFileName)
     end
 end
 
---original version worked with string.match but there were problems with iOS version where mathc
---failed to return correct results.
+---Parse a text representing a ini file
+--@param text the text representing the file ini
+--@return table with the parsed file info
 function IniParser.parseIniText(text)
 	local t = {}
 	local section
