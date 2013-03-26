@@ -12,4 +12,4 @@ Shilke2D has been tested with MOAI SDK version 1.40p0
 Shilke2D has been developed using [ZeroBrane Studio](http://studio.zerobrane.com/), a wonderfull Lua IDE. It relies also on Mobdebug, 
 the debugger included in ZeroBrane Studio, to enable callbacks debug.
 
-
+Documentation has been produced using [LDoc](https://github.com/stevedonovan/LDoc) by Steve Donovan.
