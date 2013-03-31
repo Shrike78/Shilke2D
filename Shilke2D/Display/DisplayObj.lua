@@ -126,9 +126,6 @@ function DisplayObj:_setParent(parent)
     if parent then
         self:_setMultiplyAlpha(parent:_getMultipliedAlpha())
         self._prop:setParent(parent._prop)
---        self._prop:setNodeLink(parent._prop)
-		--if not called it can happens that objects are not correctly updated since first
-		--displayList change
 		self._prop:forceUpdate()
     else
         self._prop:setParent(nil)

@@ -85,8 +85,12 @@ function Texture:init(srcData)
 		self.srcData = srcData
 		self.textureData = MOAITexture.new()
 		self.textureData:load(self.srcData)
+	--getRenderTable is a specific "MOAIFrameBufferTexture" (userdata) method
+    elseif srcData.getRenderTable then
+		self.srcData = srcData
+		self.textureData = srcData
 	else
-		error("Texture accept image path, MOAIImage or MOAIImageTexture")
+		error("Texture accept image path, MOAIImage, MOAIImageTexture or MOAIFrameBufferTexture")
     end
     
 	self.width, self.height = self.textureData:getSize()

@@ -224,6 +224,47 @@ Iterates over all the children and calculates a rectangle that enclose them all.
 	<td class="name" nowrap><a href="#DisplayObjContainer:hitTest">DisplayObjContainer:hitTest&nbsp;(x, y, targetSpace, forTouch)</a></td>
 	<td class="summary">Given a x,y point in targetSpace coordinates it check if it falls inside local bounds.</td>
 	</tr>
+	<tr>
+	<td class="name" nowrap><a href="#DisplayObjContainer:createFrameBufferImage">DisplayObjContainer:createFrameBufferImage&nbsp;(bUpdate, width, height)</a></td>
+	<td class="summary">The method led to create an image that will be rendered in place of the whole
+displaylist owned by the container.</td>
+	</tr>
+	<tr>
+	<td class="name" nowrap><a href="#DisplayObjContainer:destroyFrameBufferImage">DisplayObjContainer:destroyFrameBufferImage&nbsp;()</a></td>
+	<td class="summary">Removes the frameBufferImage previously created with a createFrameBufferImage call and restores
+normal draw of the container.</td>
+	</tr>
+	<tr>
+	<td class="name" nowrap><a href="#DisplayObjContainer:getFrameBufferImage">DisplayObjContainer:getFrameBufferImage&nbsp;()</a></td>
+	<td class="summary">Returns the frameBufferImage previously created with a createFrameBufferImage call</td>
+	</tr>
+	<tr>
+	<td class="name" nowrap><a href="#DisplayObjContainer:flatten">DisplayObjContainer:flatten&nbsp;(w, h)</a></td>
+	<td class="summary">alias for createFrameBufferImage call with bUpdate = false
+Takes the name from original Starling sprite:flatten logic</td>
+	</tr>
+	<tr>
+	<td class="name" nowrap><a href="#DisplayObjContainer:unflatten">DisplayObjContainer:unflatten&nbsp;()</a></td>
+	<td class="summary">alias for destroyFrameBufferImage call
+Takes the name from original Starling sprite:unflatten logic</td>
+	</tr>
+	<tr>
+	<td class="name" nowrap><a href="#DisplayObjContainer:isFlattened">DisplayObjContainer:isFlattened&nbsp;()</a></td>
+	<td class="summary">Check if a frameBufferData is present with isFlattened = true</td>
+	</tr>
+	<tr>
+	<td class="name" nowrap><a href="#DisplayObjContainer:setClipArea">DisplayObjContainer:setClipArea&nbsp;(w, h)</a></td>
+	<td class="summary">alias for createFrameBufferImage call with dynamic update set to true</td>
+	</tr>
+	<tr>
+	<td class="name" nowrap><a href="#DisplayObjContainer:destroyClipArea">DisplayObjContainer:destroyClipArea&nbsp;()</a></td>
+	<td class="summary">alias for destroyFrameBufferImage call
+Takes the name from original Starling sprite:unflatten logic</td>
+	</tr>
+	<tr>
+	<td class="name" nowrap><a href="#DisplayObjContainer:hasClipArea">DisplayObjContainer:hasClipArea&nbsp;()</a></td>
+	<td class="summary">Check if a frameBufferData is present with isFlattened = false (so dynamic)</td>
+	</tr>
 </table>
 
 <br/>
@@ -768,6 +809,193 @@ displayObjContainer.
     <ol>
 
         self if the hitTest is positive else nil
+    </ol>
+
+
+
+
+</dd>
+    <dt>
+    <a name = "DisplayObjContainer:createFrameBufferImage"></a>
+    <strong>DisplayObjContainer:createFrameBufferImage&nbsp;(bUpdate, width, height)</strong>
+    </dt>
+    <dd>
+    The method led to create an image that will be rendered in place of the whole
+displaylist owned by the container.
+<p>That can be used for different purposes:
+<p>1) to optimize the rendering of a displayList composed of only static objects.
+If bUpdate is false or nil in fact, all the children attached to the container are
+rendered once to an image then used as unique displayObj. That can lead
+to a performance increase when the container is made of several static objects.
+The draw back is that the rendering is never updated since a new call to createFrameBufferImage
+or since a call to destroyFrameBufferImage. That means that even if a child is removed,
+set invisible or transofrmed the rendering will shows the state of the container at the moment of the
+image creation. It's possible to specify the size of the area that will be draw (things outside
+will be clipped out). If no width/height are provided then container width / height are used
+(with a maximum of 2048x2048)
+<p>Very important: the draw of the image will happen next frame, so every change done during the same
+frame of the call will be applied even if done after the call.
+<p>The logic is similar to Starling flatten / unflatten logic and for that a couple of method with
+this name are provided as alias.
+<p>2) To create a clip area of given width / height.
+If bUpdate is true, an image is created but the rendering is updated each frame.
+That lead to a decrease in performance because the normal rendering has to be done and moreover
+a new texture has to be rendered. The good news is that now we're able to clip a container
+like when using scissor but without the limitation of the scissor of being axis aligned.
+<p>
+An important thing about having a container transformed into an image is that it allows to apply shaders
+transformation to the resulting image, and so to a whole display scene.
+<p>NB: the frameBufferImage is always built on a rect that has point (0,0) coincindent with the point (0,0)
+of the container.
+
+
+    <h3>Parameters:</h3>
+    <ul>
+      <li><span class="parameter">bUpdate</span>
+       defines if the frameBufferImage will be dynamically updated each frame or created once
+and no more update (flatten)</li>
+      <li><span class="parameter">width</span>
+       width of the frameBufferImage. Default value is the width of the container. Max = 2048</li>
+      <li><span class="parameter">height</span>
+       height of the frameBufferImage. Default value is the height of the container. Max = 2048</li>
+    </ul>
+
+
+
+
+
+</dd>
+    <dt>
+    <a name = "DisplayObjContainer:destroyFrameBufferImage"></a>
+    <strong>DisplayObjContainer:destroyFrameBufferImage&nbsp;()</strong>
+    </dt>
+    <dd>
+    Removes the frameBufferImage previously created with a createFrameBufferImage call and restores
+normal draw of the container.
+
+
+
+
+
+
+</dd>
+    <dt>
+    <a name = "DisplayObjContainer:getFrameBufferImage"></a>
+    <strong>DisplayObjContainer:getFrameBufferImage&nbsp;()</strong>
+    </dt>
+    <dd>
+    Returns the frameBufferImage previously created with a createFrameBufferImage call
+
+
+    <h3>Returns:</h3>
+    <ol>
+
+        framBufferImage or nil
+    </ol>
+
+
+
+
+</dd>
+    <dt>
+    <a name = "DisplayObjContainer:flatten"></a>
+    <strong>DisplayObjContainer:flatten&nbsp;(w, h)</strong>
+    </dt>
+    <dd>
+    alias for createFrameBufferImage call with bUpdate = false
+Takes the name from original Starling sprite:flatten logic
+
+    <h3>Parameters:</h3>
+    <ul>
+      <li><span class="parameter">w</span>
+       width of the flattened area (that always begin in 0,0)</li>
+      <li><span class="parameter">h</span>
+       height of the flattened area (that always begin in 0,0)</li>
+    </ul>
+
+
+
+
+
+</dd>
+    <dt>
+    <a name = "DisplayObjContainer:unflatten"></a>
+    <strong>DisplayObjContainer:unflatten&nbsp;()</strong>
+    </dt>
+    <dd>
+    alias for destroyFrameBufferImage call
+Takes the name from original Starling sprite:unflatten logic
+
+
+
+
+
+
+</dd>
+    <dt>
+    <a name = "DisplayObjContainer:isFlattened"></a>
+    <strong>DisplayObjContainer:isFlattened&nbsp;()</strong>
+    </dt>
+    <dd>
+    Check if a frameBufferData is present with isFlattened = true
+
+
+    <h3>Returns:</h3>
+    <ol>
+
+        bool
+    </ol>
+
+
+
+
+</dd>
+    <dt>
+    <a name = "DisplayObjContainer:setClipArea"></a>
+    <strong>DisplayObjContainer:setClipArea&nbsp;(w, h)</strong>
+    </dt>
+    <dd>
+    alias for createFrameBufferImage call with dynamic update set to true
+
+    <h3>Parameters:</h3>
+    <ul>
+      <li><span class="parameter">w</span>
+       width of the clip area (that always begin in 0,0)</li>
+      <li><span class="parameter">h</span>
+       height of the clip area (that always begin in 0,0)</li>
+    </ul>
+
+
+
+
+
+</dd>
+    <dt>
+    <a name = "DisplayObjContainer:destroyClipArea"></a>
+    <strong>DisplayObjContainer:destroyClipArea&nbsp;()</strong>
+    </dt>
+    <dd>
+    alias for destroyFrameBufferImage call
+Takes the name from original Starling sprite:unflatten logic
+
+
+
+
+
+
+</dd>
+    <dt>
+    <a name = "DisplayObjContainer:hasClipArea"></a>
+    <strong>DisplayObjContainer:hasClipArea&nbsp;()</strong>
+    </dt>
+    <dd>
+    Check if a frameBufferData is present with isFlattened = false (so dynamic)
+
+
+    <h3>Returns:</h3>
+    <ol>
+
+        bool
     </ol>
 
 

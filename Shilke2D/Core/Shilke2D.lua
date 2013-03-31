@@ -6,8 +6,13 @@ It initializes also main juggler, log system and Stage
 --]]
 Shilke2D = class()
 
+
 ---Alias for old lib name. Can be used in place of Shilke2D
 Starling = Shilke2D
+
+---internal use only. Used to convert DisplayObjContainer to textures
+Shilke2D.__frameBufferTables = {}
+
 
 ---Called at the beginning of the application.
 -- Can be considered as the entry point of the application, where to initialize everything

@@ -82,8 +82,17 @@ Children displayObj list is built as well as objRenderTalbe list.
 --]]
 function DisplayObjContainer:init()
     DisplayObj.init(self)
+	--list of all the displayObjs children of this container
     self._displayObjs = {}
+	--list of all the props that will be rendered
     self._objRenderTable = {}
+	--it's possible to create a frameBuffer image that will be rendered instead of the 
+	--objRenderTable.
+	self._frameBufferData = nil
+	--The renderTable that will be displayed. _renderTable[2] can be:
+	--1)self._objRenderTable: visible container
+	--2)a frameBufferImg: visible container drawn using a frameBuffer image
+	--3)nil: invisible container
     self._renderTable = {self._prop, self._objRenderTable}
     self._hittable = false
 end
@@ -149,17 +158,7 @@ parent container.
 @param obj the obj to be added as child
 --]]
 function DisplayObjContainer:addChild(obj)
-	local parent = obj:getParent()
-    if parent then
-        parent:removeChild(obj)
-    end
-    table.insert(self._displayObjs,obj)
-    if obj:is_a(DisplayObjContainer) then
-        table.insert(self._objRenderTable, obj._renderTable)
-    else
-        table.insert(self._objRenderTable, obj._prop)
-    end
-    obj:_setParent(self)
+	self:addChildAt(obj,#self._displayObjs+1)
 end
 
 --[[---
@@ -171,16 +170,7 @@ if the object is not a child do nothing
 --]]
 function DisplayObjContainer:removeChild(obj,dispose)
     local pos = table.find(self._displayObjs, obj)
-    if pos then
-        table.remove(self._displayObjs, pos)
-        table.remove(self._objRenderTable, pos)
-        obj:_setParent(nil)
-		if dispose == true then
-			obj:dispose()
-		end
-		return obj
-    end
-	return nil
+	return self:removeChildAt(pos,dispose)
 end
 
 ---Return the number of children
@@ -203,6 +193,12 @@ function DisplayObjContainer:addChildAt(obj,index)
         table.insert(self._objRenderTable, index, obj._prop)
     end
     obj:_setParent(self)
+	
+	--specific logic to handle frameBufferImg instead of normal rendering
+	if self._frameBufferData then
+		obj._prop:setParent(nil)
+		obj._prop:forceUpdate()
+	end
 end
 
 ---Remove a child at a given position
@@ -344,7 +340,11 @@ function DisplayObjContainer:setVisible(visible)
 		DisplayObj.setVisible(self,visible)
 		
 		if visible and not self._renderTable[2] then
-			self._renderTable[2] = self._objRenderTable
+			if self._frameBufferData then
+				self._renderTable[2] = self._frameBufferData.frameBufferImg._prop
+			else
+				self._renderTable[2] = self._objRenderTable
+			end
 		elseif not visible and self._renderTable[2] then
 			self._renderTable[2] = nil
 		end
@@ -419,4 +419,216 @@ function DisplayObjContainer:hitTest(x,y,targetSpace,forTouch)
 		end
     end
     return nil
+end
+
+
+local __helperRect = Rect()
+
+--[[---
+The method led to create an image that will be rendered in place of the whole 
+displaylist owned by the container.
+
+That can be used for different purposes:
+
+1) to optimize the rendering of a displayList composed of only static objects.
+If bUpdate is false or nil in fact, all the children attached to the container are 
+rendered once to an image then used as unique displayObj. That can lead 
+to a performance increase when the container is made of several static objects. 
+The draw back is that the rendering is never updated since a new call to createFrameBufferImage 
+or since a call to destroyFrameBufferImage. That means that even if a child is removed, 
+set invisible or transofrmed the rendering will shows the state of the container at the moment of the 
+image creation. It's possible to specify the size of the area that will be draw (things outside
+will be clipped out). If no width/height are provided then container width / height are used 
+(with a maximum of 2048x2048)
+
+Very important: the draw of the image will happen next frame, so every change done during the same
+frame of the call will be applied even if done after the call.
+
+The logic is similar to Starling flatten / unflatten logic and for that a couple of method with
+this name are provided as alias.
+
+2) To create a clip area of given width / height.
+If bUpdate is true, an image is created but the rendering is updated each frame. 
+That lead to a decrease in performance because the normal rendering has to be done and moreover 
+a new texture has to be rendered. The good news is that now we're able to clip a container 
+like when using scissor but without the limitation of the scissor of being axis aligned.
+
+
+An important thing about having a container transformed into an image is that it allows to apply shaders 
+transformation to the resulting image, and so to a whole display scene.
+
+NB: the frameBufferImage is always built on a rect that has point (0,0) coincindent with the point (0,0) 
+of the container.
+
+@param bUpdate defines if the frameBufferImage will be dynamically updated each frame or created once
+and no more update (flatten)
+@param width width of the frameBufferImage. Default value is the width of the container. Max = 2048
+@param height height of the frameBufferImage. Default value is the height of the container. Max = 2048
+--]]
+function DisplayObjContainer:createFrameBufferImage(bUpdate,width,height)
+	--clear previous frameBufferImg if it exists
+	if self._frameBufferData then
+		self:destroyFrameBufferImage()
+	end
+	
+	local r = (width and height) and nil or self:getRect(self._parent,__helperRect)
+	
+	local width = width or r.w + r.x 
+	local height = height or r.h + r.y
+	
+	local MAX_TEXTURE_WIDTH = 2048
+	local MAX_TEXTURE_HEIGHT = MAX_TEXTURE_WIDTH
+	
+	width = math.min(width,MAX_TEXTURE_WIDTH)
+	height = math.min(height,MAX_TEXTURE_HEIGHT)
+	
+	--1) create a new viewport with current displayObjContainer width / height
+	local viewport = MOAIViewport.new()
+	if __USE_SIMULATION_COORDS__ then
+		viewport:setScale(width, -height)
+		viewport:setSize(width, height)
+		viewport:setOffset(-1, 1)
+	else
+		viewport:setScale(width, height)
+		viewport:setSize(width, height)
+		viewport:setOffset(-1, -1)
+	end
+	
+	--2) create a new layer for viewport and 'subscene' management
+	local layer = MOAILayer.new()
+	layer:setViewport(viewport)
+	
+	--3)remove the parent of the children objs props
+	for _,o in ipairs(self._displayObjs) do
+		o._prop:setParent(nil)
+		o._prop:forceUpdate()
+	end
+	
+	--4) create the framebuffer with its specific rendertable
+	local frameBuffer = MOAIFrameBufferTexture.new ()
+	
+	if not bUpdate then
+	--4a)Flatten the displayObj to a single img that logic is very similar to a 
+	--Teture.fromDisplayObj() logic... and it's similar to starling 'flatten'
+	--After the first frame the frameBuffer is removed from rendermgr buffer table
+	--so no more updated. Moreover the display render list of the container is not updated
+	--and that means that from now on an optimzed img will be rendered instead of a whole 
+	--displaylist
+		local sd = MOAIScriptDeck.new()
+		local sdp = MOAIProp.new()
+		sdp:setDeck(sd)
+		sd:setDrawCallback(function()
+				table.removeObj(Shilke2D.__frameBufferTables,frameBuffer)
+				MOAIRenderMgr.setBufferTable (Shilke2D.__frameBufferTables)
+			end
+		)
+		frameBuffer:setRenderTable ({layer,self._objRenderTable,sdp})
+	else
+	--4b)If the call is instead meant for a 'scissor' extended logic or for an image for shaders
+	--then the frameBuffer will be updated each frame
+		frameBuffer:setRenderTable ({layer,self._objRenderTable})
+	end
+	frameBuffer:init( width, height )
+	--the clear color is set to transparent color
+	frameBuffer:setClearColor ( 0, 0, 0, 0 )
+	
+	--5)update global __frameBufferTables and enable rendering of this frameBuffer
+	table.insert(Shilke2D.__frameBufferTables,frameBuffer)
+	MOAIRenderMgr.setBufferTable (Shilke2D.__frameBufferTables)
+	
+	--6)Create an image with correct coorindate system to handle onscreen rendering
+	local pivotMode = __USE_SIMULATION_COORDS__ == true and PivotMode.BOTTOM_LEFT	or PivotMode.TOP_LEFT 
+	local frameBufferImg = Image(Texture(frameBuffer),pivotMode)
+	
+	--6)bind this new image (just as prop) to the current layer
+	frameBufferImg._prop:setParent(self._prop)
+	frameBufferImg._prop:forceUpdate()
+		
+	--7)replace the img to the renderTable
+	if self._renderTable[2] then
+		self._renderTable[2] = frameBufferImg._prop
+	end
+	
+	self._frameBufferData = {
+		viewport = viewport,
+		layer = layer,
+		frameBuffer = frameBuffer,
+		frameBufferImg = frameBufferImg,
+		isFlattened = not bUpdate
+	}
+end
+
+--[[---
+Removes the frameBufferImage previously created with a createFrameBufferImage call and restores
+normal draw of the container.
+--]]
+function DisplayObjContainer:destroyFrameBufferImage()
+	if self._frameBufferData then
+		--first reset renderTable status if visible
+		if self._renderTable[2] then
+			self._renderTable[2] = self._objRenderTable
+		end
+		
+		for _,o in ipairs(self._displayObjs) do
+			o._prop:setParent(self._prop)
+			o._prop:forceUpdate()
+		end
+
+		local frameBufferTxt = self._frameBufferData.frameBufferImg.texture
+		local fb = table.removeObj(Shilke2D.__frameBufferTables,frameBufferTxt.srcData)
+		MOAIRenderMgr.setBufferTable (Shilke2D.__frameBufferTables)
+		
+		frameBufferTxt:dispose()
+		self._frameBufferData.frameBufferImg:dispose()
+		self._frameBufferData.frameBufferImg = nil
+		self._frameBufferData.layer = nil
+		self._frameBufferData.viewport = nil
+		self._frameBufferData = nil
+	end
+end
+
+---Returns the frameBufferImage previously created with a createFrameBufferImage call
+--@return framBufferImage or nil
+function DisplayObjContainer:getFrameBufferImage()
+	return self._frameBufferData and self._frameBufferData.frameBufferImg or nil
+end
+
+---alias for createFrameBufferImage call with bUpdate = false
+--Takes the name from original Starling sprite:flatten logic
+--@param w width of the flattened area (that always begin in 0,0)
+--@param h height of the flattened area (that always begin in 0,0)
+function DisplayObjContainer:flatten(w,h)
+	self:createFrameBufferImage(false,w,h)
+end
+
+---alias for destroyFrameBufferImage call
+--Takes the name from original Starling sprite:unflatten logic
+function DisplayObjContainer:unflatten()
+	self:destroyFrameBufferImage()
+end
+
+---Check if a frameBufferData is present with isFlattened = true
+--@return bool
+function DisplayObjContainer:isFlattened()
+	return self._frameBufferData and self._frameBufferData.isFlattened or false
+end
+
+
+---alias for createFrameBufferImage call with dynamic update set to true
+--@param w width of the clip area (that always begin in 0,0)
+--@param h height of the clip area (that always begin in 0,0)
+function DisplayObjContainer:setClipArea(w,h)
+	self:createFrameBufferImage(true,w,h)
+end
+
+---alias for destroyFrameBufferImage call
+--Takes the name from original Starling sprite:unflatten logic
+function DisplayObjContainer:destroyClipArea()
+	self:destroyFrameBufferImage()
+end
+
+---Check if a frameBufferData is present with isFlattened = false (so dynamic)
+--@return bool
+function DisplayObjContainer:hasClipArea()
+	return self._frameBufferData and not self._frameBufferData.isFlattened or false
 end
