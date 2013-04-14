@@ -141,12 +141,16 @@ function DisplayObj:_setParent(parent)
     if parent then
         self._prop:setParent(parent._prop)
 		self._prop:forceUpdate()
-        self:_setMultiplyColor(parent:_getMultipliedColor())
+        	if self._useMultiplyColor then
+			self:_setMultiplyColor(parent:_getMultipliedColor())
+		end
     else
         self._prop:setParent(nil)
 		self._prop:forceUpdate()
-        self:_setMultiplyColor(self._WHITE_COLOR)
-    end
+        	if self._useMultiplyColor then
+			self:_setMultiplyColor(self._WHITE_COLOR)
+		end
+	end
 end
 
 ---Return the parent DisplayObjContainer
@@ -250,7 +254,7 @@ Called by parent container, setMultiplyColor set the multiply color value of the
 @param c an int obtained by Color.rgba2int([0,255],[0,255],[0,255],[0,255])
 --]]
 function DisplayObj:_setMultiplyColor(c)
-    self._multiplyColor = c
+	self._multiplyColor = c
 end
 
 --[[---
