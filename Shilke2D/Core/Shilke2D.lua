@@ -139,7 +139,8 @@ end
 	
 	--Stats management
 	self.stats = DisplayObjContainer()
-	
+	self.stats:setHittable(true)
+		
 	self.info_stats = TextField(200,20, "")
 	local bg_stats = Quad(200,20)
 	bg_stats:setColor(Color(0,0,0))
@@ -192,7 +193,26 @@ function Shilke2D:start()
         if self.ownedTouches[touch.id] then
             target = self.ownedTouches[touch.id]
         else
-            target = self.stage:hitTest(touch.x,touch.y,nil,true)
+			--manually set position because the stats object is not attached to 'stage' so 
+			-- hitTest logic cannot work properly
+			if self.stats and self._statsForceGarbage then
+				local x,y = touch.x - self.w/2, touch.y
+				if __USE_SIMULATION_COORDS__ then	
+					y = y - (self.h - 20)
+				else
+					y = y - 20
+				end	
+
+				if self.stats:hitTest(x,y,nil,true) then
+					--if stats is hit collectgarbare and return
+					collectgarbage()
+					return
+				else
+					target = self.stage:hitTest(touch.x,touch.y,nil,true)					
+				end
+			else
+				target = self.stage:hitTest(touch.x,touch.y,nil,true)
+			end
         end
         local prevTarget = self.touchIds[touch.id]
         
@@ -234,13 +254,11 @@ function Shilke2D:start()
 		local mainJuggler = MOAICoroutine.new()
 		mainJuggler:run(
 			function()
-				local elapsedTime = 0
-				local prevElapsedTime = 0
+				local elapsedTime, prevElapsedTime, currElapsedTime = 0, 0, 0
 				coroutine.yield()
 				while (true) do
 					coroutine.yield()
-
-					local currElapsedTime = MOAISim.getElapsedTime()
+					currElapsedTime = MOAISim.getElapsedTime()
 					elapsedTime = currElapsedTime - prevElapsedTime
 					prevElapsedTime = currElapsedTime
 					self.juggler:advanceTime(elapsedTime)
@@ -253,15 +271,12 @@ function Shilke2D:start()
 	local thread = MOAICoroutine.new()
 	thread:run(
 	function()
-		--local prevElapsedTime = MOAISim.getDeviceTime()
-		local elapsedTime = 0
-		local prevElapsedTime = 0
+		local elapsedTime, prevElapsedTime, currElapsedTime = 0, 0, 0
 		--force to skip a first 0 time frame
 		coroutine.yield()
 		while (true) do
 			coroutine.yield()
-
-			local currElapsedTime = MOAISim.getElapsedTime()
+			currElapsedTime = MOAISim.getElapsedTime()
 			elapsedTime = currElapsedTime - prevElapsedTime
 			prevElapsedTime = currElapsedTime
 			--used to have the juggler update into the same coroutine
@@ -292,8 +307,11 @@ function Shilke2D:getJuggler()
 end
 
 ---Debug function that allows to show on screen average fps and memory consumption
-function Shilke2D:showStats(show)
-	self._showStats = show
+--@param show bool, show or hide the stats on screen. default is true
+--@param forceGarbageOnTouch bool. If stats are shown, if true force garbage collector on touch. default is false
+function Shilke2D:showStats(show,forceGarbageOnTouch)
+	self._showStats = show ~= nil and show or true
+	self._statsForceGarbage = forceGarbageOnTouch
 	if show and #self._renderTable == 2 then
 		self._renderTable[3] = self.stats._renderTable
 	elseif not show and #self._renderTable == 3 then
