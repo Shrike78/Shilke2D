@@ -90,6 +90,9 @@ end
 ---If a derived object needs to clean up resources it must inherits this method, always remembering to 
 --call also parent dispose method
 function DisplayObj:dispose()
+	if self._parent then
+		self._parent:removeChild(self)
+	end
 	EventDispatcher.dispose(self)
 	self._transformMatrix = nil
 	self._prop = nil
