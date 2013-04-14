@@ -15,10 +15,9 @@ be either leaf nodes or other containers.
 
 A display object has properties that define its position in relation 
 to its parent (x, y), as well as its rotation and scaling factors 
-(scaleX, scaleY). Use the alpha and  visible properties to make an 
-object translucent or invisible. Alpha value are affected by parent 
-alpha values, with a multiply factor in the [0..1] range
-         
+(scaleX, scaleY). Use the alpha and visible properties to make an 
+object translucent or invisible.
+
 - Transforming coordinates
 
 Within the display tree, each object has its own local coordinate 
@@ -36,6 +35,7 @@ DisplayObject:
 function DisplayObj:getRect(targetSpace,resultRect)
 --]]
 
+--basic math function calls
 local DEG = math.deg
 local RAD = math.rad
 local ABS = math.abs
@@ -47,14 +47,30 @@ local max = math.max
 local MAX_VALUE = math.huge
 local MIN_VALUE = -math.huge
 
+--helper for getBound / rect calls
 local __helperRect = Rect()
 
+--used as default multiplyColor value
+
 DisplayObj = class(EventDispatcher)
+
+DisplayObj._WHITE_COLOR = Color.rgba2int(255,255,255,255)
+
+--[[---
+By default DisplayObjs do not make use of multiplyColor because the
+resulting color on screen is automatically affected by hierarchy colors.
+Special cases are when an object is rendered using a shader that doesn't
+take care of hierarchy, and so it's required to manually modify colors 
+according to multiply value.
+--]]
+DisplayObj._defaultUseMultiplyColor = false
 
 ---Initialization.
 function DisplayObj:init()
     EventDispatcher.init(self)
     
+	self._useMultiplyColor = self._defaultUseMultiplyColor
+	
     self._prop = self:_createProp()
 	--exact clone of transformation prop, used to calculate transformMatrix depending
 	--on a specific targetSpace
@@ -62,13 +78,13 @@ function DisplayObj:init()
     
     self._touchable = true
     
-    self._multiplyAlpha = 1
-    self._alpha = 255
+    self._multiplyColor = self._WHITE_COLOR
     
     self._name = nil
     self._parent = nil
     
 	self._visible = true
+
 end
 
 ---If a derived object needs to clean up resources it must inherits this method, always remembering to 
@@ -97,7 +113,6 @@ function DisplayObj:dbgInfo(recursive)
     sb:writeln("position = ",self._prop:getLoc())
     sb:writeln("scale = ",self._prop:getScl())
     sb:writeln("rotation = ",self._prop:getRot())
-    sb:writeln("alpha = ",self._alpha)
     sb:writeln("visible = ",(self._visible))
     sb:writeln("touchable = ",self._touchable)
             
@@ -116,7 +131,7 @@ function DisplayObj:getName()
     return self._name
 end
 
----Internal methoed.
+---Internal method.
 --Called by a DisplayObjContainer when the DisplayObj is added as child
 function DisplayObj:_setParent(parent)
     --assert(not parent or parent:is_a(DisplayObjContainer))
@@ -124,12 +139,13 @@ function DisplayObj:_setParent(parent)
     self._parent = parent
     
     if parent then
-        self:_setMultiplyAlpha(parent:_getMultipliedAlpha())
         self._prop:setParent(parent._prop)
 		self._prop:forceUpdate()
+        self:_setMultiplyColor(parent:_getMultipliedColor())
     else
         self._prop:setParent(nil)
-        self._multiplyAlpha = 1
+		self._prop:forceUpdate()
+        self:_setMultiplyColor(self._WHITE_COLOR)
     end
 end
 
@@ -209,24 +225,47 @@ function DisplayObj:isTouchable()
 end
 
 --[[---
-Inner method.
-Called by parent container, setMultiplyAlpha set the alpha value of the parent container (already
-modified by his current multiplyalpha value)
-@param a alpha value [0,255]
+Used to override default 'useMultiplyColor' class value for a specific instance
+Used for example for images when a pixel shader is set for special effects.
+@param bUse boolean
 --]]
-function DisplayObj:_setMultiplyAlpha(a)
-    self._multiplyAlpha = a / 255
-    self._prop:setAttr(MOAIColor.ATTR_A_COL, (self._alpha / 255) * self._multiplyAlpha)
+function DisplayObj:useMultiplyColor(bUse)
+	self._useMultiplyColor = bUse
+	if bUse and self._parent then
+		self:_setMultiplyColor(self._parent:_getMultiplyColor())
+	else
+		self:_setMultiplyColor(self._WHITE_COLOR)
+	end
+end
+
+---Returns if the object is using multiplyColor feature
+--@return bool
+function DisplayObj:isMultiplyingColor()
+	return self._useMultiplyColor
+end
+--[[---
+Inner method.
+Called by parent container, setMultiplyColor set the multiply color value of the parent container 
+(already modified by his current multiplyColor value)
+@param c an int obtained by Color.rgba2int([0,255],[0,255],[0,255],[0,255])
+--]]
+function DisplayObj:_setMultiplyColor(c)
+    self._multiplyColor = c
 end
 
 --[[---
-Return the alpha that the object has when displayed. 
-This value is obtained multiplying the obj alpha by the parent multiplyAlpha value
-@return alpha value [0,255]
+Inner method.
+Returns the color of the object when displayed. 
+This value is obtained multiplying the obj color by the parent multiplyColor value
+@return int obtained by Color.rgba2int([0,255],[0,255],[0,255],[0,255])
 --]] 
-function DisplayObj:_getMultipliedAlpha()
-    return self._multiplyAlpha * self._alpha
---  return self._prop:getAttr(MOAIColor.ATTR_A_COL)  
+function DisplayObj:_getMultipliedColor()
+	local r,g,b,a = Color.int2rgba(self._multiplyColor)
+	r = r * self._prop:getAttr(MOAIColor.ATTR_R_COL)  
+	g = g * self._prop:getAttr(MOAIColor.ATTR_G_COL)  
+	b = b * self._prop:getAttr(MOAIColor.ATTR_B_COL)  
+	a = a * self._prop:getAttr(MOAIColor.ATTR_A_COL)  
+    return Color.rgba2int(r,g,b,a)
 end
 
 
@@ -235,14 +274,13 @@ end
 ---Set alpha value of the object
 --@param a alpha value [0,255]
 function DisplayObj:setAlpha(a)
-    self._alpha = math.clamp(a,0,255)
-    self._prop:setAttr(MOAIColor.ATTR_A_COL, (self._alpha / 255) * self._multiplyAlpha)
+    self._prop:setAttr(MOAIColor.ATTR_A_COL, a / 255)
 end
 
 --Return alpha value of the object
 --@return alpha [0,255]
 function DisplayObj:getAlpha()
-   return self._alpha
+   return self._prop:getAttr(MOAIColor.ATTR_A_COL)  
 end
 
 --[[---
@@ -261,16 +299,10 @@ function DisplayObj:setColor(r,g,b,a)
 		local r = r/255
 		local g = g/255
 		local b = b/255
-		if a then
-			self._alpha = a
-		end
-		self._prop:setColor(r,g,b,(self._alpha / 255) * self._multiplyAlpha)
+		local a = a and a/255 or self._prop:getAttr(MOAIColor.ATTR_A_COL) 
+		self._prop:setColor(r,g,b,a)
 	else
-		local _r = r.r/255
-		local _g = r.g/255
-		local _b = r.b/255
-		self._alpha = r.a
-		self._prop:setColor(_r,_g,_b,(self._alpha / 255) * self._multiplyAlpha)
+		self._prop:setColor(r:unpack_normalized())
 	end
 end
 
@@ -280,7 +312,8 @@ function DisplayObj:getColor()
 	local r = self._prop:getAttr(MOAIColor.ATTR_R_COL)  
 	local g = self._prop:getAttr(MOAIColor.ATTR_G_COL)  
 	local b = self._prop:getAttr(MOAIColor.ATTR_B_COL)  
-	return Color(r*255,g*255,b*255, self._alpha)
+	local a = self._prop:getAttr(MOAIColor.ATTR_A_COL)  
+	return Color(r*255,g*255,b*255,a*255)
 end
 
 
@@ -400,8 +433,8 @@ end
 
 ---Get rotation value
 --@return r [-math.pi, math.pi]
-function DisplayObj:getRotation()
-    return RAD(self._prop:getAttr(MOAITransform.ATTR_Z_ROT))
+function DisplayObj:getRotation()   
+	return RAD(self._prop:getAttr(MOAITransform.ATTR_Z_ROT))
 end
 
 ---Set scale
@@ -457,17 +490,22 @@ end
 Inner method, called to force update of transformation matrix used 
 to calculate relative position into the displayList
 @param targetSpace could be self, nil or an ancestor displayObj.
---]]	
+--]]
 function DisplayObj:updateTransformationMatrix(targetSpace)
-
-	if targetSpace == self then
-		self._transformMatrix:setParent(nil)
-		self._transformMatrix:setPiv(0,0,0)
-		self._transformMatrix:setLoc(0,0,0)
-		self._transformMatrix:setScl(1,1)
-		self._transformMatrix:setAttr(MOAITransform.ATTR_Z_ROT,0)
-		self._transformMatrix:forceUpdate()
-		return
+	
+	if (targetSpace == self or (not self._parent and not targetSpace) ) then
+		if self._bTransformMatrixIsIdentity then 
+			return
+		else
+			self._transformMatrix:setParent(nil)
+			self._transformMatrix:setPiv(0,0,0)
+			self._transformMatrix:setLoc(0,0,0)
+			self._transformMatrix:setScl(1,1)
+			self._transformMatrix:setAttr(MOAITransform.ATTR_Z_ROT,0)
+			self._transformMatrix:forceUpdate()
+			self._bTransformMatrixIsIdentity = true
+			return
+		end
 	end
 	
 	if self._parent then
@@ -479,15 +517,12 @@ function DisplayObj:updateTransformationMatrix(targetSpace)
 		self._transformMatrix:setAttr(MOAITransform.ATTR_Z_ROT,
 			self._prop:getAttr(MOAITransform.ATTR_Z_ROT))
 		self._transformMatrix:forceUpdate()
+		self._bTransformMatrixIsIdentity = false
 		return
 	end
 	
-	if not targetSpace then
-		return
-	else
-		error("the targetSpace is not an ancestor of the current obj")
-	end
-end	
+	error("the targetSpace " .. targetSpace .. " is not an ancestor of the current obj")
+end
 
 --[[---
 Transforms a point from the local coordinate system to 
@@ -516,7 +551,7 @@ If nil is considered to be the the top most container
 
 @param x coordinate in global system
 @param y coordinate in global system
-@param targetSpace source space of the trasnformation 
+@param targetSpace source space of the trasnformation
 If nil refers to the top most container
 --]]
 function DisplayObj:globalToLocal(x,y,targetSpace)
@@ -682,7 +717,7 @@ function DisplayObj:hitTest(x,y,targetSpace,forTouch)
             _x,_y = self:globalToLocal(x,y,targetSpace)
         end
 		
-        local r = self:getBounds(self,__helperRect)
+        local r = self:getRect(__helperRect)
         if r:containsPoint(_x,_y) then
             return self
         end

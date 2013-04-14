@@ -58,7 +58,7 @@ function Image:hitTest(x,y,targetSpace,forTouch)
 			_x,_y = self:globalToLocal(x,y,targetSpace)
 		end
 		
-		local r = self:getBounds(self,__helperRect)
+		local r = self:getRect(__helperRect)
 		if r:containsPoint(_x,_y) then
 			if self.ppHitTest then
 				local a

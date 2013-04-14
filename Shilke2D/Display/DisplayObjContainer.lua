@@ -18,6 +18,15 @@ possibly occluding a child that was added before.
 
 DisplayObjContainer = class(DisplayObj)
 
+--[[---
+DisplayObjContainers must notify all interested children into color changes so to be able 
+to correctly react to the events. Used mainly by children objects drawn using pixel shader 
+(like quads)
+Disabling multiplyColor calling useMultiplyColor() makes possible to optimize DisplayObjContainer 
+color / alpha management, but only if sure that no children are using multiplyColor feature
+--]]
+DisplayObjContainer._defaultUseMultiplyColor = true
+
 --[[---iterator for DisplayObjContainer children. 
 It's possible to retrieve only children of a given 'typeFilter' type
 @param displayObjContainer the container of which children must be iterated
@@ -26,12 +35,13 @@ It's possible to retrieve only children of a given 'typeFilter' type
 --]]
 function children(displayObjContainer,typeFilter)
 	local i = 0
-	local n = displayObjContainer:getNumChildren()
+	local n = #displayObjContainer._displayObjs
 	if typeFilter then
 		return function ()
+			local child
 			while i <= n-1 do
 				i = i + 1
-				local child = displayObjContainer:getChildAt(i)
+				child = displayObjContainer._displayObjs[i]
 				if child:is_a(typeFilter) then 
 					return child
 				end
@@ -41,7 +51,7 @@ function children(displayObjContainer,typeFilter)
 		return function ()
 			i = i + 1
 			if i <= n then 
-				return displayObjContainer:getChildAt(i) 
+				return displayObjContainer._displayObjs[i]
 			end
 		end
 	end
@@ -55,12 +65,13 @@ It's possible to retrieve only children of a given 'typeFilter' type
 @return next (reverse) iterator
 --]]
 function reverse_children(displayObjContainer,typeFilter)
-	local i = displayObjContainer:getNumChildren() + 1
+	local i = #displayObjContainer._displayObjs + 1
 	if typeFilter then
 		return function ()
+			local child
 			while i > 1 do
 				i = i - 1
-				local child = displayObjContainer:getChildAt(i) 
+				child = displayObjContainer._displayObjs[i]
 				if child:is_a(typeFilter) then 
 					return child
 				end
@@ -70,7 +81,7 @@ function reverse_children(displayObjContainer,typeFilter)
 		return function ()
 			i = i - 1
 			if i > 0 then 
-				return displayObjContainer:getChildAt(i) 
+				return displayObjContainer._displayObjs[i] 
 			end
 		end
 	end
@@ -289,30 +300,44 @@ function DisplayObjContainer:swapChildrenAt(index1,index2)
 	end
 end
 
+
 ---Set container alpha value
 --@param a [0,255]
 function DisplayObjContainer:setAlpha(a)
-    self._alpha = math.clamp(a,0,255)
-    self:_updateChildrenAlpha()
+--	DisplayObj.setAlpha(a)
+	self._prop:setAttr(MOAIColor.ATTR_A_COL, a / 255)
+	if self._useMultiplyColor then
+		self:_updateChildrenColor()
+	end
+end
+
+function DisplayObjContainer:setColor(r,g,b,a)
+	DisplayObj.setColor(self,r,g,b,a)
+	if self._useMultiplyColor then
+		self:_updateChildrenColor()
+	end
 end
 
 --[[---
 Inner method. Called by parent container, setMultiplyAlpha set the alpha value of the parent container (already
 modified by his current multiplyalpha value)
-@param a alpha value [0,255]
+@param c an int obtained by Color.rgba2int([0,255],[0,255],[0,255],[0,255])
 --]]
-function DisplayObjContainer:_setMultiplyAlpha(a)
-    --DisplayObj.setMultiplyAlpha(self,a)
-    self._multiplyAlpha = a / 255
-    self:_updateChildrenAlpha()
+function DisplayObjContainer:_setMultiplyColor(c)
+    --DisplayObj._setMultiplyColor(self,c)
+    self._multiplyColor = c
+    self:_updateChildrenColor()
 end
 
----Inner method. Propagate alpha value to all children, setting "multiplied alpha" value
-function DisplayObjContainer:_updateChildrenAlpha()
-    local a = self._alpha * self._multiplyAlpha
-    
+---Inner method. Propagate color value to all children, setting "multiplied color" value
+--used by object that need it for correct displaying using pixel shaders
+function DisplayObjContainer:_updateChildrenColor()
+	local c = self._useMultiplyColor and self:_getMultipliedColor() or self._WHITE_COLOR
+	
     for _,o in pairs(self._displayObjs) do
-        o:_setMultiplyAlpha(a)
+		if o._useMultiplyColor then
+			o:_setMultiplyColor(c)
+		end
     end
 end
 

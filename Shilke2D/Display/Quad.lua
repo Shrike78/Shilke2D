@@ -15,6 +15,10 @@ and the vertices follow counter clockwise order.
 
 Quad = class(BaseQuad)
 
+---Quad are drawn using a pixel shader so it's necessary to have
+--it enabled to inherits ancestors color values
+Quad._defaultUseMultiplyColor = true
+
 --[[---
 Constructor.
 @param width quad width
@@ -77,12 +81,18 @@ function Quad:_updateVertexBuffer()
 	
 	self._vbo:reset()
 	
+	local r,g,b,a = Color.int2rgba(self._multiplyColor)
+	r = r/255
+	g = g/255
+	b = b/255
+	a = a/255
+	
 	for i=1, #vcoords do
 		-- write vertex position
 		self._vbo:writeFloat ( vcoords[i][1], vcoords[i][2] )              
 		-- write RGBA value
-		self._vbo:writeColor32 ( self._colors[i][1], self._colors[i][2], 
-			self._colors[i][3], self._colors[i][4] * self._multiplyAlpha)  
+		self._vbo:writeColor32 ( self._colors[i][1] * r, self._colors[i][2] * g, 
+			self._colors[i][3] * b, self._colors[i][4] * a)  
 	end
     
 	self._vbo:bless ()	
@@ -97,17 +107,22 @@ function Quad:setSize(width,height)
 end
 
 ---Override base method. It calls _updateVertexBuffer
---@param a alpha value [0,255]
-function Quad:_setMultiplyAlpha(a)
-    self._multiplyAlpha = a / 255
+--@param c an int obtained by Color.rgba2int([0,255],[0,255],[0,255],[0,255])
+function Quad:_setMultiplyColor(c)
+    self._multiplyColor = c
     self:_updateVertexBuffer()
 end
 
 ---Returns the multiplied alpha value as applied to the first vertex. 
 --If alpha values is different per vertices the return value has no real meaning
---@return alpha value [0,255]
-function Quad:_getMultipliedAlpha()
-   return self._multiplyAlpha * (self._colors[1][4] * 255)
+--@return int obtained by Color.rgba2int([0,255],[0,255],[0,255],[0,255])
+function Quad:_getMultipliedColor()
+	local r,g,b,a = Color.int2rgba(self._multiplyColor)
+	r = r * self._colors[1][1]  
+	g = g * self._colors[1][2]  
+	b = b * self._colors[1][3]  
+	a = a * self._colors[1][4]
+    return Color.rgba2int(r,g,b,a)
 end
 
 

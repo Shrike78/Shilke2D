@@ -37,7 +37,8 @@ function Color:unpack_normalized()
 			math.clamp(self.a,0,255)/255
 end
 
----sum two color
+---sum r,g,b cjhannels of two colors
+--alpha of the first color is taken
 function Color.__add(c1,c2)
 	return Color(
 			c1.r + c2.r,
@@ -47,7 +48,8 @@ function Color.__add(c1,c2)
 		)
 end
 
----subtract two color
+---subtract r,g,b channels of two colors
+--alpha of the first color is taken
 function Color.__sub(c1,c2)
 	return Color(
 			c1.r - c2.r,
@@ -57,7 +59,8 @@ function Color.__sub(c1,c2)
 		)
 end
 
----multiply a color by a number
+---multiply r,g,b channels of a color by a number
+--alpha is let unchanged
 function Color.__mul(c1,c2)
 	if type(c1) == "number" then
 		return Color(
@@ -78,7 +81,8 @@ function Color.__mul(c1,c2)
 	end
 end
 
----divide a color by a number
+---divide r,g,b components of a color by a number
+--alpha is let unchanged
 function Color.__div(c,d)
 	return Color(
 		c.r/d, 
@@ -130,5 +134,37 @@ function Color.hsv2rgb(h, s, v)
         r = v; g = m; b = n
     end
     return floor(r*255), floor(g*255), floor(b*255)
+end
+
+
+---Pack an r,g,b,a set of values to a single int value
+--@param r [0,255]
+--@param g [0,255]
+--@param b [0,255]
+--@param a [0,255]
+--@return int
+function Color.rgba2int(r,g,b,a)
+	local r = math.floor(r)
+	local g = math.floor(g)
+	local b = math.floor(b)
+	local a = math.floor(a)
+	return ((a * 256 + r) * 256 + g) * 256 + b
+end
+
+---Unpack an int value to a set of r,g,b,a values
+--@param c value to be unpack
+--@return r [0,255]
+--@return g [0,255]
+--@return b [0,255]
+--@return a [0,255]
+function Color.int2rgba(c)
+	local b = c % 256
+	c = c / 256
+	local g = c % 256
+	c = c / 256
+	local r = c % 256
+	c = c / 256
+	local a = c % 256
+	return math.floor(r),math.floor(g),math.floor(b),math.floor(a)
 end
 
