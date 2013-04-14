@@ -169,7 +169,23 @@ parent container.
 @param obj the obj to be added as child
 --]]
 function DisplayObjContainer:addChild(obj)
-	self:addChildAt(obj,#self._displayObjs+1)
+    local parent = obj._parent
+    if parent then
+        parent:removeChild(obj)
+    end
+    self._displayObjs[#self._displayObjs+1] = obj
+    if obj:is_a(DisplayObjContainer) then
+		self._objRenderTable[#self._objRenderTable+1] = obj._renderTable
+    else
+		self._objRenderTable[#self._objRenderTable+1] = obj._prop
+    end
+    obj:_setParent(self)
+	
+	--specific logic to handle frameBufferImg instead of normal rendering
+	if self._frameBufferData then
+		obj._prop:setParent(nil)
+		obj._prop:forceUpdate()
+	end
 end
 
 --[[---
@@ -181,7 +197,16 @@ if the object is not a child do nothing
 --]]
 function DisplayObjContainer:removeChild(obj,dispose)
     local pos = table.find(self._displayObjs, obj)
-	return self:removeChildAt(pos,dispose)
+    if pos then
+        table.remove(self._displayObjs, pos)
+        table.remove(self._objRenderTable, pos)
+        obj:_setParent(nil)
+		if dispose == true then
+			obj:dispose()
+		end
+		return obj
+    end
+	return nil
 end
 
 ---Return the number of children
