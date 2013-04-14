@@ -33,6 +33,7 @@
 <h2>Contents</h2>
 <ul>
 <li><a href="#Functions">Functions</a></li>
+<li><a href="#Fields">Fields</a></li>
 </ul>
 
 
@@ -83,6 +84,7 @@
   <li><a href="../modules/Utils.IniParser.html">Utils.IniParser</a></li>
   <li><a href="../modules/Utils.Log.html">Utils.Log</a></li>
   <li><a href="../modules/Utils.Math.html">Utils.Math</a></li>
+  <li><a href="../modules/Utils.PerformanceTimer.html">Utils.PerformanceTimer</a></li>
   <li><a href="../modules/Utils.Polygon.html">Utils.Polygon</a></li>
   <li><a href="../modules/Utils.Shape.html">Utils.Shape</a></li>
   <li><a href="../modules/Utils.Sound.html">Utils.Sound</a></li>
@@ -195,11 +197,11 @@ If both the indices are valid, swap the relative objects</td>
 	<td class="summary">Set container alpha value</td>
 	</tr>
 	<tr>
-	<td class="name" nowrap><a href="#DisplayObjContainer:_setMultiplyAlpha">DisplayObjContainer:_setMultiplyAlpha&nbsp;(a)</a></td>
+	<td class="name" nowrap><a href="#DisplayObjContainer:_setMultiplyColor">DisplayObjContainer:_setMultiplyColor&nbsp;(c)</a></td>
 	<td class="summary">Inner method.</td>
 	</tr>
 	<tr>
-	<td class="name" nowrap><a href="#DisplayObjContainer:_updateChildrenAlpha">DisplayObjContainer:_updateChildrenAlpha&nbsp;()</a></td>
+	<td class="name" nowrap><a href="#DisplayObjContainer:_updateChildrenColor">DisplayObjContainer:_updateChildrenColor&nbsp;()</a></td>
 	<td class="summary">Inner method.</td>
 	</tr>
 	<tr>
@@ -266,6 +268,14 @@ Takes the name from original Starling sprite:unflatten logic</td>
 	<td class="summary">Check if a frameBufferData is present with isFlattened = false (so dynamic)</td>
 	</tr>
 </table>
+<h2><a href="#Fields">Fields</a></h2>
+<table class="function_list">
+	<tr>
+	<td class="name" nowrap><a href="#_defaultUseMultiplyColor">_defaultUseMultiplyColor</a></td>
+	<td class="summary">DisplayObjContainers must notify all interested children into color changes so to be able
+to correctly react to the events.</td>
+	</tr>
+</table>
 
 <br/>
 <br/>
@@ -283,10 +293,10 @@ It's possible to retrieve only children of a given 'typeFilter' type
 
     <h3>Parameters:</h3>
     <ul>
-      <li><span class="parameter">displayObjContainer</span>
-       the container of which children must be iterated</li>
-      <li><span class="parameter">typeFilter</span>
-       filter on the type of the children</li>
+        <li><span class="parameter">displayObjContainer</span>
+         the container of which children must be iterated</li>
+        <li><span class="parameter">typeFilter</span>
+         filter on the type of the children</li>
     </ul>
 
     <h3>Returns:</h3>
@@ -309,10 +319,10 @@ It's possible to retrieve only children of a given 'typeFilter' type
 
     <h3>Parameters:</h3>
     <ul>
-      <li><span class="parameter">displayObjContainer</span>
-       the container of which children must be iterated</li>
-      <li><span class="parameter">typeFilter</span>
-       filter on the type of the children</li>
+        <li><span class="parameter">displayObjContainer</span>
+         the container of which children must be iterated</li>
+        <li><span class="parameter">typeFilter</span>
+         filter on the type of the children</li>
     </ul>
 
     <h3>Returns:</h3>
@@ -362,8 +372,8 @@ All the children are themself disposed
 
     <h3>Parameters:</h3>
     <ul>
-      <li><span class="parameter">recursive</span>
-       boolean, if true dbgInfo will be called also for all the children</li>
+        <li><span class="parameter">recursive</span>
+         boolean, if true dbgInfo will be called also for all the children</li>
     </ul>
 
     <h3>Returns:</h3>
@@ -398,8 +408,8 @@ All the children are themself disposed
 
     <h3>Parameters:</h3>
     <ul>
-      <li><span class="parameter">drawContainer</span>
-       boolean, if true also container bounds will be drawn</li>
+        <li><span class="parameter">drawContainer</span>
+         boolean, if true also container bounds will be drawn</li>
     </ul>
 
 
@@ -416,8 +426,8 @@ All the children are themself disposed
 
     <h3>Parameters:</h3>
     <ul>
-      <li><span class="parameter">name</span>
-       of the child to be searched</li>
+        <li><span class="parameter">name</span>
+         of the child to be searched</li>
     </ul>
 
     <h3>Returns:</h3>
@@ -442,8 +452,8 @@ parent container.
 
     <h3>Parameters:</h3>
     <ul>
-      <li><span class="parameter">obj</span>
-       the obj to be added as child</li>
+        <li><span class="parameter">obj</span>
+         the obj to be added as child</li>
     </ul>
 
 
@@ -461,10 +471,10 @@ if the object is not a child do nothing
 
     <h3>Parameters:</h3>
     <ul>
-      <li><span class="parameter">obj</span>
-       the obj to be removed</li>
-      <li><span class="parameter">dispose</span>
-       if to dispose after removal</li>
+        <li><span class="parameter">obj</span>
+         the obj to be removed</li>
+        <li><span class="parameter">dispose</span>
+         if to dispose after removal</li>
     </ul>
 
     <h3>Returns:</h3>
@@ -504,10 +514,10 @@ if the object is not a child do nothing
 
     <h3>Parameters:</h3>
     <ul>
-      <li><span class="parameter">obj</span>
-       the obj o be added</li>
-      <li><span class="parameter">index</span>
-       the desired position</li>
+        <li><span class="parameter">obj</span>
+         the obj o be added</li>
+        <li><span class="parameter">index</span>
+         the desired position</li>
     </ul>
 
 
@@ -524,10 +534,10 @@ if the object is not a child do nothing
 
     <h3>Parameters:</h3>
     <ul>
-      <li><span class="parameter">index</span>
-       the position of the obj to be removed</li>
-      <li><span class="parameter">dispose</span>
-       boolean, if to dispose the obj after removal</li>
+        <li><span class="parameter">index</span>
+         the position of the obj to be removed</li>
+        <li><span class="parameter">dispose</span>
+         boolean, if to dispose the obj after removal</li>
     </ul>
 
     <h3>Returns:</h3>
@@ -549,12 +559,12 @@ if the object is not a child do nothing
 
     <h3>Parameters:</h3>
     <ul>
-      <li><span class="parameter">beginIndex</span>
-       index of the first object to be removed</li>
-      <li><span class="parameter">endIndex</span>
-       index of the last object to be removed</li>
-      <li><span class="parameter">dispose</span>
-       if to dispose the objects after removal</li>
+        <li><span class="parameter">beginIndex</span>
+         index of the first object to be removed</li>
+        <li><span class="parameter">endIndex</span>
+         index of the last object to be removed</li>
+        <li><span class="parameter">dispose</span>
+         if to dispose the objects after removal</li>
     </ul>
 
 
@@ -571,8 +581,8 @@ if the object is not a child do nothing
 
     <h3>Parameters:</h3>
     <ul>
-      <li><span class="parameter">obj</span>
-       the obj to be searched</li>
+        <li><span class="parameter">obj</span>
+         the obj to be searched</li>
     </ul>
 
     <h3>Returns:</h3>
@@ -594,8 +604,8 @@ if the object is not a child do nothing
 
     <h3>Parameters:</h3>
     <ul>
-      <li><span class="parameter">index</span>
-       the index of the obj to be returned</li>
+        <li><span class="parameter">index</span>
+         the index of the obj to be returned</li>
     </ul>
 
     <h3>Returns:</h3>
@@ -618,10 +628,10 @@ If both the object are children, swap the positions
 
     <h3>Parameters:</h3>
     <ul>
-      <li><span class="parameter">obj1</span>
-       first object to be moved</li>
-      <li><span class="parameter">obj2</span>
-       second object to be moved</li>
+        <li><span class="parameter">obj1</span>
+         first object to be moved</li>
+        <li><span class="parameter">obj2</span>
+         second object to be moved</li>
     </ul>
 
 
@@ -639,10 +649,10 @@ If both the indices are valid, swap the relative objects
 
     <h3>Parameters:</h3>
     <ul>
-      <li><span class="parameter">index1</span>
-       index of the first object to be moved</li>
-      <li><span class="parameter">index2</span>
-       index of the second object to be moved</li>
+        <li><span class="parameter">index1</span>
+         index of the first object to be moved</li>
+        <li><span class="parameter">index2</span>
+         index of the second object to be moved</li>
     </ul>
 
 
@@ -659,8 +669,8 @@ If both the indices are valid, swap the relative objects
 
     <h3>Parameters:</h3>
     <ul>
-      <li><span class="parameter">a</span>
-       [0,255]</li>
+        <li><span class="parameter">a</span>
+         [0,255]</li>
     </ul>
 
 
@@ -669,8 +679,8 @@ If both the indices are valid, swap the relative objects
 
 </dd>
     <dt>
-    <a name = "DisplayObjContainer:_setMultiplyAlpha"></a>
-    <strong>DisplayObjContainer:_setMultiplyAlpha&nbsp;(a)</strong>
+    <a name = "DisplayObjContainer:_setMultiplyColor"></a>
+    <strong>DisplayObjContainer:_setMultiplyColor&nbsp;(c)</strong>
     </dt>
     <dd>
     Inner method.  Called by parent container, setMultiplyAlpha set the alpha value of the parent container (already
@@ -678,8 +688,8 @@ modified by his current multiplyalpha value)
 
     <h3>Parameters:</h3>
     <ul>
-      <li><span class="parameter">a</span>
-       alpha value [0,255]</li>
+        <li><span class="parameter">c</span>
+         an int obtained by Color.rgba2int([0,255],[0,255],[0,255],[0,255])</li>
     </ul>
 
 
@@ -688,11 +698,12 @@ modified by his current multiplyalpha value)
 
 </dd>
     <dt>
-    <a name = "DisplayObjContainer:_updateChildrenAlpha"></a>
-    <strong>DisplayObjContainer:_updateChildrenAlpha&nbsp;()</strong>
+    <a name = "DisplayObjContainer:_updateChildrenColor"></a>
+    <strong>DisplayObjContainer:_updateChildrenColor&nbsp;()</strong>
     </dt>
     <dd>
-    Inner method.  Propagate alpha value to all children, setting "multiplied alpha" value
+    Inner method.  Propagate color value to all children, setting "multiplied color" value
+used by object that need it for correct displaying using pixel shaders
 
 
 
@@ -712,8 +723,8 @@ an hitTest, without going deep in the displayList
 
     <h3>Parameters:</h3>
     <ul>
-      <li><span class="parameter">hittable</span>
-      </li>
+        <li><span class="parameter">hittable</span>
+        </li>
     </ul>
 
 
@@ -748,8 +759,8 @@ an hitTest, without going deep in the displayList
 
     <h3>Parameters:</h3>
     <ul>
-      <li><span class="parameter">visible</span>
-       boolean</li>
+        <li><span class="parameter">visible</span>
+         boolean</li>
     </ul>
 
 
@@ -767,8 +778,8 @@ Iterates over all the children and calculates a rectangle that enclose them all.
 
     <h3>Parameters:</h3>
     <ul>
-      <li><span class="parameter">resultRect</span>
-       it's possibile to pass a Rect helper to store results</li>
+        <li><span class="parameter">resultRect</span>
+         it's possibile to pass a Rect helper to store results</li>
     </ul>
 
     <h3>Returns:</h3>
@@ -795,14 +806,14 @@ displayObjContainer.
 
     <h3>Parameters:</h3>
     <ul>
-      <li><span class="parameter">x</span>
-       coordinate in targetSpace system</li>
-      <li><span class="parameter">y</span>
-       coordinate in targetSpace system</li>
-      <li><span class="parameter">targetSpace</span>
-       the referred coorindate system. if nil the top most container / stage</li>
-      <li><span class="parameter">forTouch</span>
-       boolean. If true the check is done only for visible and touchable object</li>
+        <li><span class="parameter">x</span>
+         coordinate in targetSpace system</li>
+        <li><span class="parameter">y</span>
+         coordinate in targetSpace system</li>
+        <li><span class="parameter">targetSpace</span>
+         the referred coorindate system. if nil the top most container / stage</li>
+        <li><span class="parameter">forTouch</span>
+         boolean. If true the check is done only for visible and touchable object</li>
     </ul>
 
     <h3>Returns:</h3>
@@ -851,13 +862,13 @@ of the container.
 
     <h3>Parameters:</h3>
     <ul>
-      <li><span class="parameter">bUpdate</span>
-       defines if the frameBufferImage will be dynamically updated each frame or created once
+        <li><span class="parameter">bUpdate</span>
+         defines if the frameBufferImage will be dynamically updated each frame or created once
 and no more update (flatten)</li>
-      <li><span class="parameter">width</span>
-       width of the frameBufferImage. Default value is the width of the container. Max = 2048</li>
-      <li><span class="parameter">height</span>
-       height of the frameBufferImage. Default value is the height of the container. Max = 2048</li>
+        <li><span class="parameter">width</span>
+         width of the frameBufferImage. Default value is the width of the container. Max = 2048</li>
+        <li><span class="parameter">height</span>
+         height of the frameBufferImage. Default value is the height of the container. Max = 2048</li>
     </ul>
 
 
@@ -907,10 +918,10 @@ Takes the name from original Starling sprite:flatten logic
 
     <h3>Parameters:</h3>
     <ul>
-      <li><span class="parameter">w</span>
-       width of the flattened area (that always begin in 0,0)</li>
-      <li><span class="parameter">h</span>
-       height of the flattened area (that always begin in 0,0)</li>
+        <li><span class="parameter">w</span>
+         width of the flattened area (that always begin in 0,0)</li>
+        <li><span class="parameter">h</span>
+         height of the flattened area (that always begin in 0,0)</li>
     </ul>
 
 
@@ -959,10 +970,10 @@ Takes the name from original Starling sprite:unflatten logic
 
     <h3>Parameters:</h3>
     <ul>
-      <li><span class="parameter">w</span>
-       width of the clip area (that always begin in 0,0)</li>
-      <li><span class="parameter">h</span>
-       height of the clip area (that always begin in 0,0)</li>
+        <li><span class="parameter">w</span>
+         width of the clip area (that always begin in 0,0)</li>
+        <li><span class="parameter">h</span>
+         height of the clip area (that always begin in 0,0)</li>
     </ul>
 
 
@@ -1003,12 +1014,32 @@ Takes the name from original Starling sprite:unflatten logic
 
 </dd>
 </dl>
+    <h2><a name="Fields"></a>Fields</h2>
+    <dl class="function">
+    <dt>
+    <a name = "_defaultUseMultiplyColor"></a>
+    <strong>_defaultUseMultiplyColor</strong>
+    </dt>
+    <dd>
+    DisplayObjContainers must notify all interested children into color changes so to be able
+to correctly react to the events.  Used mainly by children objects drawn using pixel shader
+(like quads)
+Disabling multiplyColor calling useMultiplyColor() makes possible to optimize DisplayObjContainer
+color / alpha management, but only if sure that no children are using multiplyColor feature
+
+
+
+
+
+
+</dd>
+</dl>
 
 
 </div> <!-- id="content" -->
 </div> <!-- id="main" -->
 <div id="about">
-<i>generated by <a href="http://github.com/stevedonovan/LDoc">LDoc 1.3</a></i>
+<i>generated by <a href="http://github.com/stevedonovan/LDoc">LDoc 1.3.11</a></i>
 </div> <!-- id="about" -->
 </div> <!-- id="container" -->
 </body>

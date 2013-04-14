@@ -83,10 +83,10 @@
   <li><a href="../modules/Utils.IniParser.html">Utils.IniParser</a></li>
   <li><a href="../modules/Utils.Log.html">Utils.Log</a></li>
   <li><a href="../modules/Utils.Math.html">Utils.Math</a></li>
-  <li><a href="../modules/Utils.PerformanceTimer.html">Utils.PerformanceTimer</a></li>
+  <li><strong>Utils.PerformanceTimer</strong></li>
   <li><a href="../modules/Utils.Polygon.html">Utils.Polygon</a></li>
   <li><a href="../modules/Utils.Shape.html">Utils.Shape</a></li>
-  <li><strong>Utils.Sound</strong></li>
+  <li><a href="../modules/Utils.Sound.html">Utils.Sound</a></li>
   <li><a href="../modules/Utils.String.html">Utils.String</a></li>
   <li><a href="../modules/Utils.StringBuilder.html">Utils.StringBuilder</a></li>
   <li><a href="../modules/Utils.Table.html">Utils.Table</a></li>
@@ -100,19 +100,24 @@
 
 <div id="content">
 
-<h1>Module <code>Utils.Sound</code></h1>
+<h1>Module <code>Utils.PerformanceTimer</code></h1>
 
-<p>If MOAIUntzSystem is enabled Sound() call returns a MOAIUntzSound.new().</p>
+<p>PerformanceTimer is an helper class that implements an high res timer
+that returns time in millisec since initialization and that can be used also as stopwatch.</p>
 <p>
-If MOAIUntzSystem is disabled instead a stub interface is created to make
-the game run consistently</p>
+It's based on socket.gettime() call</p>
 
 
 <h2><a href="#Functions">Functions</a></h2>
 <table class="function_list">
 	<tr>
-	<td class="name" nowrap><a href="#Sound">Sound&nbsp;()</a></td>
-	<td class="summary">Returns a new sound object</td>
+	<td class="name" nowrap><a href="#PerformanceTimer:getTime">PerformanceTimer:getTime&nbsp;()</a></td>
+	<td class="summary">Returns time elapsed since initialization of the object</td>
+	</tr>
+	<tr>
+	<td class="name" nowrap><a href="#PerformanceTimer:getDeltaTime">PerformanceTimer:getDeltaTime&nbsp;()</a></td>
+	<td class="summary">Returns time elapsed since last getDeltaTime() call or since
+initialization (first time call)</td>
 	</tr>
 </table>
 
@@ -123,17 +128,36 @@ the game run consistently</p>
     <h2><a name="Functions"></a>Functions</h2>
     <dl class="function">
     <dt>
-    <a name = "Sound"></a>
-    <strong>Sound&nbsp;()</strong>
+    <a name = "PerformanceTimer:getTime"></a>
+    <strong>PerformanceTimer:getTime&nbsp;()</strong>
     </dt>
     <dd>
-    Returns a new sound object
+    Returns time elapsed since initialization of the object
 
 
     <h3>Returns:</h3>
     <ol>
 
-        MOAIUntzSound if MOAIUntzSystem is enabled, else a Sound stub class.
+        millisec
+    </ol>
+
+
+
+
+</dd>
+    <dt>
+    <a name = "PerformanceTimer:getDeltaTime"></a>
+    <strong>PerformanceTimer:getDeltaTime&nbsp;()</strong>
+    </dt>
+    <dd>
+    Returns time elapsed since last getDeltaTime() call or since
+initialization (first time call)
+
+
+    <h3>Returns:</h3>
+    <ol>
+
+        millisec
     </ol>
 
 

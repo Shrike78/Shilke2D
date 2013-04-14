@@ -85,6 +85,7 @@
   <li><a href="../modules/Utils.IniParser.html">Utils.IniParser</a></li>
   <li><a href="../modules/Utils.Log.html">Utils.Log</a></li>
   <li><a href="../modules/Utils.Math.html">Utils.Math</a></li>
+  <li><a href="../modules/Utils.PerformanceTimer.html">Utils.PerformanceTimer</a></li>
   <li><a href="../modules/Utils.Polygon.html">Utils.Polygon</a></li>
   <li><a href="../modules/Utils.Shape.html">Utils.Shape</a></li>
   <li><a href="../modules/Utils.Sound.html">Utils.Sound</a></li>
@@ -159,7 +160,7 @@ It initializes also main juggler, log system and Stage</p>
  or can be updated manually</td>
 	</tr>
 	<tr>
-	<td class="name" nowrap><a href="#Shilke2D:showStats">Shilke2D:showStats&nbsp;(show)</a></td>
+	<td class="name" nowrap><a href="#Shilke2D:showStats">Shilke2D:showStats&nbsp;(show, forceGarbageOnTouch)</a></td>
 	<td class="summary">Debug function that allows to show on screen average fps and memory consumption</td>
 	</tr>
 	<tr>
@@ -226,8 +227,8 @@ touch (id) event.</td>
 
     <h3>Parameters:</h3>
     <ul>
-      <li><span class="parameter">elapsedTime</span>
-       the time elapsed since last call of the function</li>
+        <li><span class="parameter">elapsedTime</span>
+         the time elapsed since last call of the function</li>
     </ul>
 
 
@@ -258,10 +259,10 @@ Called only on desktop hosts.
 
     <h3>Parameters:</h3>
     <ul>
-      <li><span class="parameter">key</span>
-       the key that has been pressed or released</li>
-      <li><span class="parameter">down</span>
-       key status</li>
+        <li><span class="parameter">key</span>
+         the key that has been pressed or released</li>
+        <li><span class="parameter">down</span>
+         key status</li>
     </ul>
 
 
@@ -278,8 +279,8 @@ Called only on desktop hosts.
 
     <h3>Parameters:</h3>
     <ul>
-      <li><span class="parameter">key</span>
-      </li>
+        <li><span class="parameter">key</span>
+        </li>
     </ul>
 
 
@@ -331,20 +332,20 @@ Stage, Juggler and log system are initialized here too.
 
     <h3>Parameters:</h3>
     <ul>
-      <li><span class="parameter">w</span>
-       logical width of the viewport</li>
-      <li><span class="parameter">h</span>
-       logical height of the viewport</li>
-      <li><span class="parameter">fps</span>
-       desired frame rate</li>
-      <li><span class="parameter">scaleX</span>
-       on screen viewport scale on x axe</li>
-      <li><span class="parameter">scaleY</span>
-       on screen viewport scale on y axe</li>
-      <li><span class="parameter">soundSampleRate</span>
-       audio system sample rate</li>
-      <li><span class="parameter">soundFrames</span>
-       audio system number of frames</li>
+        <li><span class="parameter">w</span>
+         logical width of the viewport</li>
+        <li><span class="parameter">h</span>
+         logical height of the viewport</li>
+        <li><span class="parameter">fps</span>
+         desired frame rate</li>
+        <li><span class="parameter">scaleX</span>
+         on screen viewport scale on x axe</li>
+        <li><span class="parameter">scaleY</span>
+         on screen viewport scale on y axe</li>
+        <li><span class="parameter">soundSampleRate</span>
+         audio system sample rate</li>
+        <li><span class="parameter">soundFrames</span>
+         audio system number of frames</li>
     </ul>
 
 
@@ -399,15 +400,17 @@ Juggler and update coroutines are finally created and executed, and the applicat
 </dd>
     <dt>
     <a name = "Shilke2D:showStats"></a>
-    <strong>Shilke2D:showStats&nbsp;(show)</strong>
+    <strong>Shilke2D:showStats&nbsp;(show, forceGarbageOnTouch)</strong>
     </dt>
     <dd>
     Debug function that allows to show on screen average fps and memory consumption
 
     <h3>Parameters:</h3>
     <ul>
-      <li><span class="parameter">show</span>
-      </li>
+        <li><span class="parameter">show</span>
+         bool, show or hide the stats on screen. default is true</li>
+        <li><span class="parameter">forceGarbageOnTouch</span>
+         bool. If stats are shown, if true force garbage collector on touch. default is false</li>
     </ul>
 
 
@@ -428,10 +431,10 @@ method.
 
     <h3>Parameters:</h3>
     <ul>
-      <li><span class="parameter">touch</span>
-      </li>
-      <li><span class="parameter">obj</span>
-      </li>
+        <li><span class="parameter">touch</span>
+        </li>
+        <li><span class="parameter">obj</span>
+        </li>
     </ul>
 
 
@@ -450,10 +453,10 @@ If the object was not registered as listener an error raises.
 
     <h3>Parameters:</h3>
     <ul>
-      <li><span class="parameter">touch</span>
-      </li>
-      <li><span class="parameter">obj</span>
-      </li>
+        <li><span class="parameter">touch</span>
+        </li>
+        <li><span class="parameter">obj</span>
+        </li>
     </ul>
 
 
@@ -470,8 +473,8 @@ If the object was not registered as listener an error raises.
 
     <h3>Parameters:</h3>
     <ul>
-      <li><span class="parameter">touch</span>
-       the touch for which we want to get the owner</li>
+        <li><span class="parameter">touch</span>
+         the touch for which we want to get the owner</li>
     </ul>
 
     <h3>Returns:</h3>
@@ -538,7 +541,7 @@ If the object was not registered as listener an error raises.
 </div> <!-- id="content" -->
 </div> <!-- id="main" -->
 <div id="about">
-<i>generated by <a href="http://github.com/stevedonovan/LDoc">LDoc 1.3</a></i>
+<i>generated by <a href="http://github.com/stevedonovan/LDoc">LDoc 1.3.11</a></i>
 </div> <!-- id="about" -->
 </div> <!-- id="container" -->
 </body>
