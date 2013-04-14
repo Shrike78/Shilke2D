@@ -40,48 +40,40 @@ depending on the new shape of the object.
 function BaseQuad:_doNothing()
 end
 
-local __height_correction__
-
-if __USE_SIMULATION_COORDS__ then
-	__height_correction__ = -1
-else
-	__height_correction__ = 1
-end
-
 function BaseQuad:_pivotModeBL()
-   DisplayObj.setPivot(self, -self._width/2, __height_correction__ * self._height/2)
+   DisplayObj.setPivot(self, 0, __USE_SIMULATION_COORDS__ and 0 or self._height)
 end
 
 function BaseQuad:_pivotModeBC()
-   DisplayObj.setPivot(self, 0, __height_correction__ * self._height/2)
+   DisplayObj.setPivot(self, self._width/2, __USE_SIMULATION_COORDS__ and 0 or self._height)
 end
 
 function BaseQuad:_pivotModeBR()
-   DisplayObj.setPivot(self, self._width/2, __height_correction__ * self._height/2)
+   DisplayObj.setPivot(self, self._width, __USE_SIMULATION_COORDS__ and 0 or self._height)
 end
 
 function BaseQuad:_pivotModeCL()
-	DisplayObj.setPivot(self, -self._width/2, 0)
+	DisplayObj.setPivot(self, 0, self._height/2)
 end
 
 function BaseQuad:_pivotModeC()
-	DisplayObj.setPivot(self,0,0)
+	DisplayObj.setPivot(self,self._width/2, self._height/2)
 end
 
 function BaseQuad:_pivotModeCR()
-	DisplayObj.setPivot(self, self._width/2,0)
+	DisplayObj.setPivot(self, self._width, self._height/2)
 end
 
 function BaseQuad:_pivotModeTL()
-	DisplayObj.setPivot(self, -self._width/2, -__height_correction__ * self._height/2)
+	DisplayObj.setPivot(self, 0, __USE_SIMULATION_COORDS__ and self._height or 0)
 end
 
 function BaseQuad:_pivotModeTC()
-	DisplayObj.setPivot(self, 0, -__height_correction__ * self._height/2)
+	DisplayObj.setPivot(self, self._width/2, __USE_SIMULATION_COORDS__ and self._height or 0)
 end
 
 function BaseQuad:_pivotModeTR()
-	DisplayObj.setPivot(self, self._width/2, -__height_correction__ * self._height/2)
+	DisplayObj.setPivot(self, self._width, __USE_SIMULATION_COORDS__ and self._height or 0)
 end
 
 --ordered by PivotMode enum values
@@ -144,47 +136,28 @@ size of the object would be changed
 --]]
 function BaseQuad:setPivot(x,y)
     self:setPivotMode(PivotMode.CUSTOM)
-	self._prop:setPiv(x-self._width/2 ,y - self._height/2, 0)
-end
-
----Return pivot coordinate
---return x
---return y
-function BaseQuad:getPivot()
-    local x,y = self._prop:getPiv()
-    return x + self._width/2, y + self._height/2
+	self._prop:setPiv(x,y,0)
 end
 
 ---Set Pivot x position
 function BaseQuad:setPivotX(x)
     self:setPivotMode(PivotMode.CUSTOM)
-	self._prop:setAttr(MOAITransform.ATTR_X_PIV, x - self._width/2)    
-end
-
----Get Pivot x position
---@return x
-function BaseQuad:getPivotX()
-   return self._prop:getAttr(MOAITransform.ATTR_X_PIV) + self._width/2
+	self._prop:setAttr(MOAITransform.ATTR_X_PIV, x)    
 end
 
 ---Set Pivot y position
 function BaseQuad:setPivotY(y)
     self:setPivotMode(PivotMode.CUSTOM)
-	self._prop:setAttr(MOAITransform.ATTR_Y_PIV, y - self._height/2)
+	self._prop:setAttr(MOAITransform.ATTR_Y_PIV, y)
 end
 
----Get Pivot y position
---@return y
-function BaseQuad:getPivotY()
-   return self._prop:getAttr(MOAITransform.ATTR_Y_PIV) + self._height/2
-end
 
 ---Returns the rect defined by obj widht and height, centered in 0,0
 --@param resultRect helper rect that can be set avoiding creation of a new rect
 function BaseQuad:getRect(resultRect)
     local r = resultRect or Rect()
-	r.x = -self._width/2
-	r.y = -self._height/2
+	r.x = 0
+	r.y = 0
 	r.w = self._width
 	r.h = self._height
 	return r

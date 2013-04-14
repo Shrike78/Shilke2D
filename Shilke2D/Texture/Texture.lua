@@ -174,7 +174,7 @@ else
 							)
 end
 		end
-        self._quad:setRect(-self.width/2, -self.height/2, self.width/2, self.height/2)
+        self._quad:setRect(0, 0, self.width, self.height)
     end
     return self._quad
 end

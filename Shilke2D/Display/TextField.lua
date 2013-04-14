@@ -47,7 +47,7 @@ function TextField:init(width, height, text, font, fontSize, pivotMode)
 if __USE_SIMULATION_COORDS__  then
     self._prop:setYFlip ( true )
 end
-	self._prop:setRect(-self._width/2,-self._height/2,self._width/2,self._height/2)
+	self._prop:setRect(0,0,self._width,self._height)
 
 	local font = font or TextField.__systemFont
 	local fontSize = fontSize or 16
@@ -112,7 +112,7 @@ end
 --@param height
 function TextField:setSize(width,height)
 	BaseQuad.setSize(self,width,height)
-    self._prop:setRect(-width/2, -height/2, width/2, height/2)
+    self._prop:setRect(0, 0, width, height)
 end
 
 ---Sets font

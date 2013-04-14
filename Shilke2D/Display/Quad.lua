@@ -74,10 +74,10 @@ end
 --to update mesh vertices infos.
 function Quad:_updateVertexBuffer()
 	
-	local vcoords = {{ -self._width/2, -self._height/2 },
-					{ self._width/2, -self._height/2 },
-					{ self._width/2, self._height/2 },
-					{ -self._width/2, self._height/2 }}
+	local vcoords = {{ 0, 0 },
+					{ self._width, 0 },
+					{ self._width, self._height },
+					{ 0, self._height }}
 	
 	self._vbo:reset()
 	
