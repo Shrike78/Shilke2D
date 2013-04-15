@@ -8,6 +8,13 @@ as a middle class that has no meeaning to be instantiated by itself.
 BaseQuad allows different pivotMode. Default PivotMode is PivotMode.CENTER               
 --]]
 
+--basic math function calls
+local RAD = math.rad
+local ABS = math.abs
+local COS = math.cos
+local SIN = math.sin
+local INV_255 = 1/255
+
 
 ---PivotMode function
 PivotMode = {
@@ -45,7 +52,7 @@ function BaseQuad:_pivotModeBL()
 end
 
 function BaseQuad:_pivotModeBC()
-   DisplayObj.setPivot(self, self._width/2, __USE_SIMULATION_COORDS__ and 0 or self._height)
+   DisplayObj.setPivot(self, self._width*0.5, __USE_SIMULATION_COORDS__ and 0 or self._height)
 end
 
 function BaseQuad:_pivotModeBR()
@@ -53,15 +60,15 @@ function BaseQuad:_pivotModeBR()
 end
 
 function BaseQuad:_pivotModeCL()
-	DisplayObj.setPivot(self, 0, self._height/2)
+	DisplayObj.setPivot(self, 0, self._height*0.5)
 end
 
 function BaseQuad:_pivotModeC()
-	DisplayObj.setPivot(self,self._width/2, self._height/2)
+	DisplayObj.setPivot(self,self._width*0.5, self._height*0.5)
 end
 
 function BaseQuad:_pivotModeCR()
-	DisplayObj.setPivot(self, self._width, self._height/2)
+	DisplayObj.setPivot(self, self._width, self._height*0.5)
 end
 
 function BaseQuad:_pivotModeTL()
@@ -69,7 +76,7 @@ function BaseQuad:_pivotModeTL()
 end
 
 function BaseQuad:_pivotModeTC()
-	DisplayObj.setPivot(self, self._width/2, __USE_SIMULATION_COORDS__ and self._height or 0)
+	DisplayObj.setPivot(self, self._width*0.5, __USE_SIMULATION_COORDS__ and self._height or 0)
 end
 
 function BaseQuad:_pivotModeTR()
@@ -163,16 +170,14 @@ function BaseQuad:getRect(resultRect)
 	return r
 end
 
-local RAD = math.rad
-
 
 ---Get object width related on parent trasnformation (so with scaling applied)
 function BaseQuad:getWidth()
     local w,h = self._width,self._height
     if self._parent then
       local r = RAD(self._prop:getAttr(MOAITransform.ATTR_Z_ROT))
-      local sx,sy = self._prop:getScl() 
-      w = math.abs( sx * w * math.cos(r)) + math.abs(sy * h * math.sin(r))
+      local sx,sy = self._prop:getScl()
+      w = ABS( sx * w * COS(r)) + ABS(sy * h * SIN(r))
     end
     return w
 end
@@ -183,7 +188,7 @@ function BaseQuad:getHeight()
     if self._parent then
       local r = RAD(self._prop:getAttr(MOAITransform.ATTR_Z_ROT))
       local sx,sy = self._prop:getScl() 
-      h = math.abs( sx * w * math.sin(r)) + math.abs(sy * h * math.cos(r))
+      h = ABS( sx * w * SIN(r)) + ABS(sy * h * COS(r))
     end
     return h
 end

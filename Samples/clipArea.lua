@@ -31,7 +31,7 @@ function setup()
 	local juggler = shilke.juggler 
 	
 	--show as overlay fps and memory allocation
-	shilke:showStats(true)
+	shilke:showStats(true,true)
 		
 	--Set a "moai.png" image as background at full screen
 	local moaiImg = Image(Assets.getTexture("moai.png"))

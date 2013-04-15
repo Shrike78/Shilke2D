@@ -1,4 +1,7 @@
 --[[---
+
+vec2 class.
+
 Copyright (c) 2010 Matthias Richter
 
 Permission is hereby granted, free of charge, to any person obtaining a copy

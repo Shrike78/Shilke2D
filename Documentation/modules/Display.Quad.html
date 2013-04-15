@@ -112,8 +112,7 @@ another color to vertices 3 and 4.
 <p>if __USE_SIMULATION_COORDS__ is nil or false then vertex 1 is the top left one,
 and the vertices follow clockwise order.
 <p>if __USE_SIMULATION_COORDS__ is true then vertex 1 is the bottom left one,
-and the vertices follow counter clockwise order.
-</p>
+and the vertices follow counter clockwise order.</p>
 
 
 <h2><a href="#Functions">Functions</a></h2>
@@ -135,7 +134,7 @@ and the vertices follow counter clockwise order.
 	<td class="summary">Set the size of the quad</td>
 	</tr>
 	<tr>
-	<td class="name" nowrap><a href="#Quad:_setMultiplyColor">Quad:_setMultiplyColor&nbsp;(c)</a></td>
+	<td class="name" nowrap><a href="#Quad:_setMultiplyColor">Quad:_setMultiplyColor&nbsp;(r, g, b, a)</a></td>
 	<td class="summary">Override base method.</td>
 	</tr>
 	<tr>
@@ -270,15 +269,21 @@ to update mesh vertices infos.
 </dd>
     <dt>
     <a name = "Quad:_setMultiplyColor"></a>
-    <strong>Quad:_setMultiplyColor&nbsp;(c)</strong>
+    <strong>Quad:_setMultiplyColor&nbsp;(r, g, b, a)</strong>
     </dt>
     <dd>
     Override base method.  It calls _updateVertexBuffer
 
     <h3>Parameters:</h3>
     <ul>
-        <li><span class="parameter">c</span>
-         an int obtained by Color.rgba2int([0,255],[0,255],[0,255],[0,255])</li>
+        <li><span class="parameter">r</span>
+         [0,1]</li>
+        <li><span class="parameter">g</span>
+         [0,1]</li>
+        <li><span class="parameter">b</span>
+         [0,1]</li>
+        <li><span class="parameter">a</span>
+         [0,1]</li>
     </ul>
 
 

@@ -31,10 +31,12 @@ end
 --@return b/255
 --@return a/255
 function Color:unpack_normalized()
-	return math.clamp(self.r,0,255)/255,
-			math.clamp(self.g,0,255)/255,
-			math.clamp(self.b,0,255)/255,
-			math.clamp(self.a,0,255)/255
+	local clamp = math.clamp
+	local INV_255 = 1/255
+	return 	clamp(self.r,0,255)*INV_255,
+			clamp(self.g,0,255)*INV_255,
+			clamp(self.b,0,255)*INV_255,
+			clamp(self.a,0,255)*INV_255
 end
 
 ---sum r,g,b cjhannels of two colors
@@ -136,7 +138,6 @@ function Color.hsv2rgb(h, s, v)
     return floor(r*255), floor(g*255), floor(b*255)
 end
 
-
 ---Pack an r,g,b,a set of values to a single int value
 --@param r [0,255]
 --@param g [0,255]
@@ -144,10 +145,11 @@ end
 --@param a [0,255]
 --@return int
 function Color.rgba2int(r,g,b,a)
-	local r = math.floor(r)
-	local g = math.floor(g)
-	local b = math.floor(b)
-	local a = math.floor(a)
+	local floor = math.floor
+	local r = floor(r)
+	local g = floor(g)
+	local b = floor(b)
+	local a = floor(a)
 	return ((a * 256 + r) * 256 + g) * 256 + b
 end
 
@@ -158,13 +160,16 @@ end
 --@return b [0,255]
 --@return a [0,255]
 function Color.int2rgba(c)
+	local floor = math.floor
+	local INV_256 = 1/256
+
 	local b = c % 256
-	c = c / 256
+	c = c * INV_256
 	local g = c % 256
-	c = c / 256
+	c = c * INV_256
 	local r = c % 256
-	c = c / 256
+	c = c * INV_256
 	local a = c % 256
-	return math.floor(r),math.floor(g),math.floor(b),math.floor(a)
+	return floor(r), floor(g), floor(b), floor(a)
 end
 

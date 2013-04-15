@@ -204,7 +204,7 @@ Used for example for images when a pixel shader is set for special effects.</td>
 	<td class="summary">Returns if the object is using multiplyColor feature</td>
 	</tr>
 	<tr>
-	<td class="name" nowrap><a href="#DisplayObj:_setMultiplyColor">DisplayObj:_setMultiplyColor&nbsp;(c)</a></td>
+	<td class="name" nowrap><a href="#DisplayObj:_setMultiplyColor">DisplayObj:_setMultiplyColor&nbsp;(r, g, b, a)</a></td>
 	<td class="summary">Inner method.</td>
 	</tr>
 	<tr>
@@ -699,7 +699,7 @@ Used for example for images when a pixel shader is set for special effects.
 </dd>
     <dt>
     <a name = "DisplayObj:_setMultiplyColor"></a>
-    <strong>DisplayObj:_setMultiplyColor&nbsp;(c)</strong>
+    <strong>DisplayObj:_setMultiplyColor&nbsp;(r, g, b, a)</strong>
     </dt>
     <dd>
     Inner method.
@@ -708,8 +708,14 @@ Called by parent container, setMultiplyColor set the multiply color value of the
 
     <h3>Parameters:</h3>
     <ul>
-        <li><span class="parameter">c</span>
-         an int obtained by Color.rgba2int([0,255],[0,255],[0,255],[0,255])</li>
+        <li><span class="parameter">r</span>
+         [0,1]</li>
+        <li><span class="parameter">g</span>
+         [0,1]</li>
+        <li><span class="parameter">b</span>
+         [0,1]</li>
+        <li><span class="parameter">a</span>
+         [0,1]</li>
     </ul>
 
 
@@ -729,8 +735,14 @@ This value is obtained multiplying the obj color by the parent multiplyColor val
 
     <h3>Returns:</h3>
     <ol>
-
-        int obtained by Color.rgba2int([0,255],[0,255],[0,255],[0,255])
+        <li>
+        r [0,1]</li>
+        <li>
+        g [0,1]</li>
+        <li>
+        b [0,1]</li>
+        <li>
+        a [0,1]</li>
     </ol>
 
 

@@ -16,6 +16,14 @@ When you add a child, it will be added at the frontmost position,
 possibly occluding a child that was added before.
 --]]
 
+--basic math function calls
+local min = math.min
+local max = math.max
+local MAX_VALUE = math.huge
+local MIN_VALUE = -math.huge
+local INV_255 = 1/255
+
+
 DisplayObjContainer = class(DisplayObj)
 
 --[[---
@@ -162,6 +170,24 @@ function DisplayObjContainer:getChildByName(name)
 end
 
 --[[---
+Inner method.
+Used to remove a children by the container without setting the new father.
+It's used either from removeChild than from addChild for object already added 
+to another container
+@param obj the obj to remove
+@return obj if removed or nil
+--]]
+function DisplayObjContainer:_innerRemoveChild(obj)
+    local pos = table.find(self._displayObjs, obj)
+    if pos then
+        table.remove(self._displayObjs, pos)
+        table.remove(self._objRenderTable, pos)
+		return obj
+    end
+	return nil
+end
+
+--[[---
 Add a displayObj to the children list.
 The child is add at the end of the children list so it's the top most of the drawn children.
 If the obj already has a parent, first is removed from the parent and then added to the new 
@@ -171,7 +197,7 @@ parent container.
 function DisplayObjContainer:addChild(obj)
     local parent = obj._parent
     if parent then
-        parent:removeChild(obj)
+        parent:_innerRemoveChild(obj)
     end
     self._displayObjs[#self._displayObjs+1] = obj
     if obj:is_a(DisplayObjContainer) then
@@ -196,19 +222,17 @@ if the object is not a child do nothing
 @return the obj if removed, nil if the obj is not a child
 --]]
 function DisplayObjContainer:removeChild(obj,dispose)
-    local pos = table.find(self._displayObjs, obj)
-    if pos then
-        table.remove(self._displayObjs, pos)
-        table.remove(self._objRenderTable, pos)
-        obj:_setParent(nil)
+	local res = self:_innerRemoveChild(obj)
+	if res then
+        res:_setParent(nil)
 		if dispose == true then
-			obj:dispose()
+			res:dispose()
 		end
-		return obj
-    end
-	return nil
+	end
+	return res
 end
 
+	
 ---Return the number of children
 --@return size of displayObj list
 function DisplayObjContainer:getNumChildren()
@@ -220,7 +244,7 @@ end
 --@param index the desired position
 function DisplayObjContainer:addChildAt(obj,index)
     if(obj.parent) then
-        obj.parent:removeChild(obj)
+        obj.parent:_innerRemoveChild(obj)
     end
     table.insert(self._displayObjs,index,obj)
     if obj:is_a(DisplayObjContainer) then
@@ -293,7 +317,7 @@ function DisplayObjContainer:swapChildren(obj1,obj2)
     local index1 = table.find(self._displayObjs,obj1)
     local index2 = table.find(self._displayObjs,obj2)
     
-    assert(index1>0 and index2>0)
+    --assert(index1>0 and index2>0)
 	if (index1>0 and index2>0) then
 		self._displayObjs[index1] = obj2
 		self._displayObjs[index2] = obj1
@@ -313,7 +337,7 @@ function DisplayObjContainer:swapChildrenAt(index1,index2)
     local obj1 = self._displayObjs[index1]
     local obj2 = self._displayObjs[index2]
     
-    assert(obj1 and obj2)
+    --assert(obj1 and obj2)
     if obj1 and obj2 then
 		self._displayObjs[index1] = obj2
 		self._displayObjs[index2] = obj1
@@ -330,7 +354,7 @@ end
 --@param a [0,255]
 function DisplayObjContainer:setAlpha(a)
 --	DisplayObj.setAlpha(a)
-	self._prop:setAttr(MOAIColor.ATTR_A_COL, a / 255)
+	self._prop:setAttr(MOAIColor.ATTR_A_COL, a * INV_255)
 	if self._useMultiplyColor then
 		self:_updateChildrenColor()
 	end
@@ -346,22 +370,33 @@ end
 --[[---
 Inner method. Called by parent container, setMultiplyAlpha set the alpha value of the parent container (already
 modified by his current multiplyalpha value)
-@param c an int obtained by Color.rgba2int([0,255],[0,255],[0,255],[0,255])
+@param r [0,1]
+@param g [0,1]
+@param b [0,1]
+@param a [0,1]
 --]]
-function DisplayObjContainer:_setMultiplyColor(c)
+function DisplayObjContainer:_setMultiplyColor(r,g,b,a)
     --DisplayObj._setMultiplyColor(self,c)
-    self._multiplyColor = c
+	local mc = self._multiplyColor
+	mc[1] = r
+	mc[2] = g
+	mc[3] = b
+	mc[4] = a
     self:_updateChildrenColor()
 end
 
 ---Inner method. Propagate color value to all children, setting "multiplied color" value
 --used by object that need it for correct displaying using pixel shaders
 function DisplayObjContainer:_updateChildrenColor()
-	local c = self._useMultiplyColor and self:_getMultipliedColor() or self._WHITE_COLOR
+	local r,g,b,a = 1,1,1,1
+	
+	if self._useMultiplyColor then
+		r,g,b,a = self:_getMultipliedColor() 
+	end
 	
     for _,o in pairs(self._displayObjs) do
 		if o._useMultiplyColor then
-			o:_setMultiplyColor(c)
+			o:_setMultiplyColor(r,g,b,a)
 		end
     end
 end
@@ -400,11 +435,6 @@ function DisplayObjContainer:setVisible(visible)
 		end
 	end
 end
-
-local min = math.min
-local max = math.max
-local MAX_VALUE = math.huge
-local MIN_VALUE = -math.huge
 
 ---Return a rect obtained by children rect
 --Iterates over all the children and calculates a rectangle that enclose them all.
@@ -600,9 +630,7 @@ function DisplayObjContainer:createFrameBufferImage(bUpdate,width,height)
 	end
 	
 	self._frameBufferData = {
-		viewport = viewport,
 		layer = layer,
-		frameBuffer = frameBuffer,
 		frameBufferImg = frameBufferImg,
 		isFlattened = not bUpdate
 	}
@@ -620,19 +648,24 @@ function DisplayObjContainer:destroyFrameBufferImage()
 		end
 		
 		for _,o in ipairs(self._displayObjs) do
+			o._prop:setParent(nil)
 			o._prop:setParent(self._prop)
 			o._prop:forceUpdate()
 		end
-
-		local frameBufferTxt = self._frameBufferData.frameBufferImg.texture
-		local fb = table.removeObj(Shilke2D.__frameBufferTables,frameBufferTxt.srcData)
+		
+		local layer 			= self._frameBufferData.layer
+		local frameBufferImg 	= self._frameBufferData.frameBufferImg
+		local frameBufferTxt 	= frameBufferImg.texture
+		local frameBuffer 		= frameBufferTxt.srcData
+	
+		local fb = table.removeObj(Shilke2D.__frameBufferTables, frameBuffer)
 		MOAIRenderMgr.setBufferTable (Shilke2D.__frameBufferTables)
 		
+		frameBuffer:setRenderTable(nil)
+		frameBufferImg:dispose()
 		frameBufferTxt:dispose()
-		self._frameBufferData.frameBufferImg:dispose()
-		self._frameBufferData.frameBufferImg = nil
-		self._frameBufferData.layer = nil
-		self._frameBufferData.viewport = nil
+		layer:clear()
+		
 		self._frameBufferData = nil
 	end
 end

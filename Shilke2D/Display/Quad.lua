@@ -10,8 +10,10 @@ and the vertices follow clockwise order.
 
 if __USE_SIMULATION_COORDS__ is true then vertex 1 is the bottom left one, 
 and the vertices follow counter clockwise order.
-
 --]]
+
+--basic math function calls
+local INV_255 = 1/255
 
 Quad = class(BaseQuad)
 
@@ -81,21 +83,22 @@ function Quad:_updateVertexBuffer()
 	
 	self._vbo:reset()
 	
-	local r,g,b,a = Color.int2rgba(self._multiplyColor)
-	r = r/255
-	g = g/255
-	b = b/255
-	a = a/255
+	local mc = self._multiplyColor
 	
 	for i=1, #vcoords do
 		-- write vertex position
 		self._vbo:writeFloat ( vcoords[i][1], vcoords[i][2] )              
 		-- write RGBA value
-		self._vbo:writeColor32 ( self._colors[i][1] * r, self._colors[i][2] * g, 
-			self._colors[i][3] * b, self._colors[i][4] * a)  
+		self._vbo:writeColor32 ( 	
+									self._colors[i][1] * mc[1], 
+									self._colors[i][2] * mc[2], 
+									self._colors[i][3] * mc[3], 
+									self._colors[i][4] * mc[4]
+								)  
 	end
     
 	self._vbo:bless ()	
+
 end
 
 ---Set the size of the quad
@@ -106,10 +109,19 @@ function Quad:setSize(width,height)
 	self:_updateVertexBuffer()
 end
 
----Override base method. It calls _updateVertexBuffer
---@param c an int obtained by Color.rgba2int([0,255],[0,255],[0,255],[0,255])
-function Quad:_setMultiplyColor(c)
-    self._multiplyColor = c
+--[[---
+Override base method. It calls _updateVertexBuffer
+@param r [0,1]
+@param g [0,1]
+@param b [0,1]
+@param a [0,1]
+--]]
+function Quad:_setMultiplyColor(r,g,b,a)
+    local mc = self._multiplyColor
+	mc[1] = r
+	mc[2] = g
+	mc[3] = b
+	mc[4] = a
     self:_updateVertexBuffer()
 end
 
@@ -117,12 +129,12 @@ end
 --If alpha values is different per vertices the return value has no real meaning
 --@return int obtained by Color.rgba2int([0,255],[0,255],[0,255],[0,255])
 function Quad:_getMultipliedColor()
-	local r,g,b,a = Color.int2rgba(self._multiplyColor)
-	r = r * self._colors[1][1]  
-	g = g * self._colors[1][2]  
-	b = b * self._colors[1][3]  
-	a = a * self._colors[1][4]
-    return Color.rgba2int(r,g,b,a)
+    local mc = self._multiplyColor
+	local r = mc[1] * self._colors[1][1]  
+	local g = mc[2] * self._colors[1][2]  
+	local b = mc[3] * self._colors[1][3]  
+	local a = mc[4] * self._colors[1][4]
+    return r,g,b,a
 end
 
 
@@ -130,7 +142,7 @@ end
 --@param a alpha value [0,255]
 function Quad:setAlpha(a)
     for i = 1,4 do
-        self._colors[i][4] = a/255
+        self._colors[i][4] = a * INV_255
     end
     self:_updateVertexBuffer()
 end
@@ -147,7 +159,7 @@ end
 --@param v index of the vertex [1,4]
 --@param a alpha value [0,255]
 function Quad:setVertexAlpha(v,a) 
-    self._colors[v][4] = a/255
+    self._colors[v][4] = a * INV_255
 	self:_updateVertexBuffer()
 end
 
@@ -172,10 +184,10 @@ The following calls are valid:
 function Quad:setColor(r,g,b,a)
 	local _r,_g,_b,_a
 	if type(r) == 'number' then
-		_r = r/255
-		_g = g/255
-		_b = b/255
-		_a = a and a / 255 or self._colors[1][4]
+		_r = r * INV_255
+		_g = g * INV_255
+		_b = b * INV_255
+		_a = a and a * INV_255 or self._colors[1][4]
 	else
 		_r, _g, _b, _a = r:unpack_normalized()
 	end
@@ -212,10 +224,10 @@ function Quad:setVertexColor(v,r,g,b,a)
 	local col = self._colors[v]
 	
 	if type(r) == 'number' then
-		col[1] = r/255
-		col[2] = g/255
-		col[3] = b/255
-		col[4] = a and a/255 or col[4]
+		col[1] = r * INV_255
+		col[2] = g * INV_255
+		col[3] = b * INV_255
+		col[4] = a and a * INV_255 or col[4]
 	else
 		col[1], col[2], col[3], col[4] = r:unpack_normalized()
 	end

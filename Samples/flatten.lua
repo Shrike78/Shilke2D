@@ -32,7 +32,7 @@ function setup()
 	local juggler = shilke.juggler 
 	
 	--show as overlay fps and memory allocation
-	shilke:showStats(true)
+	shilke:showStats(true,true)
 		
 	--load the PlanetCute texture atlas
 	local atlas = TexturePacker.loadSparrowFormat("PlanetCute.xml")

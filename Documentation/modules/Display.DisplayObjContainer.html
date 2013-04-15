@@ -152,6 +152,10 @@ possibly occluding a child that was added before.</p>
 	<td class="summary">Returns the first child with a given name, if it exists, or nil</td>
 	</tr>
 	<tr>
+	<td class="name" nowrap><a href="#DisplayObjContainer:_innerRemoveChild">DisplayObjContainer:_innerRemoveChild&nbsp;(obj)</a></td>
+	<td class="summary">Inner method.</td>
+	</tr>
+	<tr>
 	<td class="name" nowrap><a href="#DisplayObjContainer:addChild">DisplayObjContainer:addChild&nbsp;(obj)</a></td>
 	<td class="summary">Add a displayObj to the children list.</td>
 	</tr>
@@ -197,7 +201,7 @@ If both the indices are valid, swap the relative objects</td>
 	<td class="summary">Set container alpha value</td>
 	</tr>
 	<tr>
-	<td class="name" nowrap><a href="#DisplayObjContainer:_setMultiplyColor">DisplayObjContainer:_setMultiplyColor&nbsp;(c)</a></td>
+	<td class="name" nowrap><a href="#DisplayObjContainer:_setMultiplyColor">DisplayObjContainer:_setMultiplyColor&nbsp;(r, g, b, a)</a></td>
 	<td class="summary">Inner method.</td>
 	</tr>
 	<tr>
@@ -434,6 +438,32 @@ All the children are themself disposed
     <ol>
 
         displayObj or nil
+    </ol>
+
+
+
+
+</dd>
+    <dt>
+    <a name = "DisplayObjContainer:_innerRemoveChild"></a>
+    <strong>DisplayObjContainer:_innerRemoveChild&nbsp;(obj)</strong>
+    </dt>
+    <dd>
+    Inner method.
+Used to remove a children by the container without setting the new father.
+It's used either from removeChild than from addChild for object already added
+to another container
+
+    <h3>Parameters:</h3>
+    <ul>
+        <li><span class="parameter">obj</span>
+         the obj to remove</li>
+    </ul>
+
+    <h3>Returns:</h3>
+    <ol>
+
+        obj if removed or nil
     </ol>
 
 
@@ -680,7 +710,7 @@ If both the indices are valid, swap the relative objects
 </dd>
     <dt>
     <a name = "DisplayObjContainer:_setMultiplyColor"></a>
-    <strong>DisplayObjContainer:_setMultiplyColor&nbsp;(c)</strong>
+    <strong>DisplayObjContainer:_setMultiplyColor&nbsp;(r, g, b, a)</strong>
     </dt>
     <dd>
     Inner method.  Called by parent container, setMultiplyAlpha set the alpha value of the parent container (already
@@ -688,8 +718,14 @@ modified by his current multiplyalpha value)
 
     <h3>Parameters:</h3>
     <ul>
-        <li><span class="parameter">c</span>
-         an int obtained by Color.rgba2int([0,255],[0,255],[0,255],[0,255])</li>
+        <li><span class="parameter">r</span>
+         [0,1]</li>
+        <li><span class="parameter">g</span>
+         [0,1]</li>
+        <li><span class="parameter">b</span>
+         [0,1]</li>
+        <li><span class="parameter">a</span>
+         [0,1]</li>
     </ul>
 
 

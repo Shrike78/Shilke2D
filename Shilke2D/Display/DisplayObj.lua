@@ -41,11 +41,13 @@ local RAD = math.rad
 local ABS = math.abs
 local PI = math.pi
 local PI2 = math.pi * 2
+local INV_255 = 1/255
 
 local min = math.min
 local max = math.max
 local MAX_VALUE = math.huge
 local MIN_VALUE = -math.huge
+
 
 --helper for getBound / rect calls
 local __helperRect = Rect()
@@ -53,8 +55,6 @@ local __helperRect = Rect()
 --used as default multiplyColor value
 
 DisplayObj = class(EventDispatcher)
-
-DisplayObj._WHITE_COLOR = Color.rgba2int(255,255,255,255)
 
 --[[---
 By default DisplayObjs do not make use of multiplyColor because the
@@ -76,14 +76,13 @@ function DisplayObj:init()
 	--on a specific targetSpace
     self._transformMatrix = MOAITransform.new() 
     
-    self._touchable = true
-    
-    self._multiplyColor = self._WHITE_COLOR
-    
     self._name = nil
     self._parent = nil
     
 	self._visible = true
+    self._touchable = true
+	
+    self._multiplyColor = {1,1,1,1}
 
 end
 
@@ -140,20 +139,21 @@ function DisplayObj:_setParent(parent)
     --assert(not parent or parent:is_a(DisplayObjContainer))
     
     self._parent = parent
-    
     if parent then
+		--if not set before it can raise problems
+		self._prop:setParent(nil)
         self._prop:setParent(parent._prop)
-		self._prop:forceUpdate()
-        	if self._useMultiplyColor then
+       	if self._useMultiplyColor then
 			self:_setMultiplyColor(parent:_getMultipliedColor())
 		end
     else
-        self._prop:setParent(nil)
-		self._prop:forceUpdate()
-        	if self._useMultiplyColor then
-			self:_setMultiplyColor(self._WHITE_COLOR)
+		self._prop:setParent(nil)
+       	if self._useMultiplyColor then
+			self:_setMultiplyColor(1,1,1,1)
 		end
 	end
+	--force update of transform matrix
+	self._prop:forceUpdate()
 end
 
 ---Return the parent DisplayObjContainer
@@ -241,7 +241,7 @@ function DisplayObj:useMultiplyColor(bUse)
 	if bUse and self._parent then
 		self:_setMultiplyColor(self._parent:_getMultiplyColor())
 	else
-		self:_setMultiplyColor(self._WHITE_COLOR)
+		self:_setMultiplyColor(1,1,1,1)
 	end
 end
 
@@ -250,29 +250,41 @@ end
 function DisplayObj:isMultiplyingColor()
 	return self._useMultiplyColor
 end
+
 --[[---
 Inner method.
 Called by parent container, setMultiplyColor set the multiply color value of the parent container 
 (already modified by his current multiplyColor value)
-@param c an int obtained by Color.rgba2int([0,255],[0,255],[0,255],[0,255])
+@param r [0,1]
+@param g [0,1]
+@param b [0,1]
+@param a [0,1]
 --]]
-function DisplayObj:_setMultiplyColor(c)
-	self._multiplyColor = c
+function DisplayObj:_setMultiplyColor(r,g,b,a)
+	local mc = self._multiplyColor
+	mc[1] = r
+	mc[2] = g
+	mc[3] = b
+	mc[4] = a
 end
 
 --[[---
 Inner method.
 Returns the color of the object when displayed. 
 This value is obtained multiplying the obj color by the parent multiplyColor value
-@return int obtained by Color.rgba2int([0,255],[0,255],[0,255],[0,255])
+@return r [0,1]
+@return g [0,1]
+@return b [0,1]
+@return a [0,1]
 --]] 
 function DisplayObj:_getMultipliedColor()
-	local r,g,b,a = Color.int2rgba(self._multiplyColor)
-	r = r * self._prop:getAttr(MOAIColor.ATTR_R_COL)  
-	g = g * self._prop:getAttr(MOAIColor.ATTR_G_COL)  
-	b = b * self._prop:getAttr(MOAIColor.ATTR_B_COL)  
-	a = a * self._prop:getAttr(MOAIColor.ATTR_A_COL)  
-    return Color.rgba2int(r,g,b,a)
+	local mc = self._multiplyColor
+	local prop = self._prop
+	local r = mc[1] * prop:getAttr(MOAIColor.ATTR_R_COL)  
+	local g = mc[2] * prop:getAttr(MOAIColor.ATTR_G_COL)  
+	local b = mc[3] * prop:getAttr(MOAIColor.ATTR_B_COL)  
+	local a = mc[4] * prop:getAttr(MOAIColor.ATTR_A_COL)  
+    return r,g,b,a
 end
 
 
@@ -281,14 +293,15 @@ end
 ---Set alpha value of the object
 --@param a alpha value [0,255]
 function DisplayObj:setAlpha(a)
-    self._prop:setAttr(MOAIColor.ATTR_A_COL, a / 255)
+    self._prop:setAttr(MOAIColor.ATTR_A_COL, a * INV_255)
 end
 
 --Return alpha value of the object
 --@return alpha [0,255]
 function DisplayObj:getAlpha()
-   return self._prop:getAttr(MOAIColor.ATTR_A_COL)  
+   return self._prop:getAttr(MOAIColor.ATTR_A_COL) * 255
 end
+
 
 --[[---
 Set obj color.
@@ -302,25 +315,29 @@ The following calls are valid:
 @param a alpha value [0,255] or nil
 --]]
 function DisplayObj:setColor(r,g,b,a)
+	local prop = self._prop
 	if type(r) == 'number' then
-		local r = r/255
-		local g = g/255
-		local b = b/255
-		local a = a and a/255 or self._prop:getAttr(MOAIColor.ATTR_A_COL) 
-		self._prop:setColor(r,g,b,a)
+		prop:setColor(
+						r*INV_255,
+						g*INV_255,
+						b*INV_255,
+						a and a * INV_255 or prop:getAttr(MOAIColor.ATTR_A_COL)
+					)
 	else
-		self._prop:setColor(r:unpack_normalized())
+		prop:setColor(r:unpack_normalized())
 	end
 end
 
 ---Return the current Color of the object
 --@return Color(r,g,b,a)
 function DisplayObj:getColor()
-	local r = self._prop:getAttr(MOAIColor.ATTR_R_COL)  
-	local g = self._prop:getAttr(MOAIColor.ATTR_G_COL)  
-	local b = self._prop:getAttr(MOAIColor.ATTR_B_COL)  
-	local a = self._prop:getAttr(MOAIColor.ATTR_A_COL)  
-	return Color(r*255,g*255,b*255,a*255)
+	local prop = self._prop
+	return Color(	
+					prop:getAttr(MOAIColor.ATTR_R_COL)*255,
+					prop:getAttr(MOAIColor.ATTR_G_COL)*255,
+					prop:getAttr(MOAIColor.ATTR_B_COL)*255,
+					prop:getAttr(MOAIColor.ATTR_A_COL)*255
+				)
 end
 
 
