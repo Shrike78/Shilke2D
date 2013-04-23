@@ -28,7 +28,6 @@ function XmlNode.fromLuaXml(xml,parent)
     if xml.childNodes then
         for _,child in pairs(xml.childNodes) do
             childNode = XmlNode.fromLuaXml(child,node)
-            node:addChild(childNode)
         end 
     end
     return node
