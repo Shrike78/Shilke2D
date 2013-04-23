@@ -17,21 +17,18 @@ local INV_255 = 1/255
 
 
 ---PivotMode function
-PivotMode = {
-
-	CUSTOM = 1,
-	
-	BOTTOM_LEFT = 2,
-	BOTTOM_CENTER = 3,
-	BOTTOM_RIGHT = 4,
-	
-	CENTER_LEFT = 5,
-	CENTER = 6,
-	CENTER_RIGHT = 7,
-	
-	TOP_LEFT = 8,
-	TOP_CENTER = 9,
-	TOP_RIGHT = 10
+PivotMode = 
+{
+	CUSTOM 			= 1,
+	BOTTOM_LEFT 	= 2,
+	BOTTOM_CENTER 	= 3,
+	BOTTOM_RIGHT 	= 4,
+	CENTER_LEFT 	= 5,
+	CENTER 			= 6,
+	CENTER_RIGHT 	= 7,
+	TOP_LEFT 		= 8,
+	TOP_CENTER 		= 9,
+	TOP_RIGHT 		= 10
 }
 
 

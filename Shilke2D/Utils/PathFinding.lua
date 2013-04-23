@@ -1,3 +1,25 @@
+--[[
+Shortest Path Through A Concave Polygon With Holes
+ 
+- Works with a bounding polygon that is either a convex polygon or a concave polygon.
+
+- Other polygons can be placed within the bounding polygon to create “holes” — 
+	interior polygons of exclusion.
+
+- Self-intersection complex polygons are not considered by the algorithm.
+ 
+References:
+- http://developer.coronalabs.com/node/25249 (the article from where the lua code is taken and adapted)
+- http://alienryderflex.com/shortest_path/ (The C code source for this Lua code)
+- http://code.google.com/p/icecream-sandwich/source/browse/trunk/+icecream-sandwich/src/se/mushroomwars/mapeditor/model/PathFinder.java?spec=svn52&r=52
+- http://en.wikipedia.org/wiki/Dijkstra%27s_algorithm
+- http://www.mathopenref.com/polygonconcave.html
+- http://renaud.waldura.com/doc/java/dijkstra/
+- http://www.ecse.rpi.edu/Homepages/wrf/Research/Short_Notes/pnpoly.html
+- http://en.wikipedia.org/wiki/Breadth-first_search
+--]]
+
+
 -- PathFinding
 local sqrt	= math.sqrt
 local abs	= math.abs
@@ -26,7 +48,6 @@ local function getLipsCache(testSX,testSY,testEX,testEY, lipsCache)
 	lipsCache[#lipsCache+1] = cacheObj
 	return cacheObj
 end
-
 
 
 
