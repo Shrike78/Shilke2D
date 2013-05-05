@@ -73,6 +73,7 @@
   <li><a href="../modules/Tween.TweenLoop.html">Tween.TweenLoop</a></li>
   <li><a href="../modules/Tween.TweenParallel.html">Tween.TweenParallel</a></li>
   <li><a href="../modules/Tween.TweenSequence.html">Tween.TweenSequence</a></li>
+  <li><a href="../modules/Utils.BitOp.html">Utils.BitOp</a></li>
   <li><a href="../modules/Utils.Callbacks.html">Utils.Callbacks</a></li>
   <li><a href="../modules/Utils.ClassEx.html">Utils.ClassEx</a></li>
   <li><a href="../modules/Utils.CollisionKit.html">Utils.CollisionKit</a></li>
@@ -121,8 +122,8 @@ It's also possible to add / remove children and attributes from a node.</p>
 	<td class="summary">Creates a XmlNode starting from the product of XmlParser.parse.</td>
 	</tr>
 	<tr>
-	<td class="name" nowrap><a href="#fromString">fromString&nbsp;(xml)</a></td>
-	<td class="summary">Built an XmlNode starting from a string.</td>
+	<td class="name" nowrap><a href="#fromString">fromString&nbsp;(xml, parent)</a></td>
+	<td class="summary">Builds an XmlNode starting from a string.</td>
 	</tr>
 	<tr>
 	<td class="name" nowrap><a href="#XmlNode:addChild">XmlNode:addChild&nbsp;(child)</a></td>
@@ -138,7 +139,8 @@ It's also possible to add / remove children and attributes from a node.</p>
 	</tr>
 	<tr>
 	<td class="name" nowrap><a href="#XmlNode:addAttribute">XmlNode:addAttribute&nbsp;(name, value)</a></td>
-	<td class="summary">Adds a new attribute</td>
+	<td class="summary">Adds a new attribute
+if the attribute was already defined it replaces the attribute value</td>
 	</tr>
 	<tr>
 	<td class="name" nowrap><a href="#XmlNode:removeAttribute">XmlNode:removeAttribute&nbsp;(name)</a></td>
@@ -146,11 +148,11 @@ It's also possible to add / remove children and attributes from a node.</p>
 	</tr>
 	<tr>
 	<td class="name" nowrap><a href="#XmlNode:getAttributeN">XmlNode:getAttributeN&nbsp;(name, default)</a></td>
-	<td class="summary">Returns an attribute already converted as number.</td>
+	<td class="summary">Returns an attribute value converted as number.</td>
 	</tr>
 	<tr>
 	<td class="name" nowrap><a href="#XmlNode:getAttributeBool">XmlNode:getAttributeBool&nbsp;(name, default)</a></td>
-	<td class="summary">Returns a attribute already converted as boolean.</td>
+	<td class="summary">Returns an attribute value converted as boolean.</td>
 	</tr>
 	<tr>
 	<td class="name" nowrap><a href="#XmlNode:getAttributeName">XmlNode:getAttributeName&nbsp;(idx)</a></td>
@@ -162,15 +164,19 @@ It's also possible to add / remove children and attributes from a node.</p>
 	</tr>
 	<tr>
 	<td class="name" nowrap><a href="#XmlNode:getChildren">XmlNode:getChildren&nbsp;(name)</a></td>
-	<td class="summary">Returns a children based on name</td>
+	<td class="summary">Returns a children list of child with a given name</td>
 	</tr>
 	<tr>
 	<td class="name" nowrap><a href="#XmlNode:getParent">XmlNode:getParent&nbsp;()</a></td>
-	<td class="summary">Returns parent node</td>
+	<td class="summary">Returns the parent node</td>
 	</tr>
 	<tr>
 	<td class="name" nowrap><a href="#XmlNode:dump">XmlNode:dump&nbsp;(stringbuilder)</a></td>
-	<td class="summary">Dumps xmlnode content over a stringbuilder</td>
+	<td class="summary">Dumps xmlnode content over a StringBuilder</td>
+	</tr>
+	<tr>
+	<td class="name" nowrap><a href="#XmlNode:strDump">XmlNode:strDump&nbsp;()</a></td>
+	<td class="summary">Prints the content of an XmlNode</td>
 	</tr>
 </table>
 
@@ -189,14 +195,14 @@ It's also possible to add / remove children and attributes from a node.</p>
 
     <h3>Parameters:</h3>
     <ul>
-        <li><span class="parameter">name</span>
-        </li>
-        <li><span class="parameter">attributes</span>
-        </li>
-        <li><span class="parameter">value</span>
-        </li>
-        <li><span class="parameter">children</span>
-        </li>
+      <li><span class="parameter">name</span>
+      </li>
+      <li><span class="parameter">attributes</span>
+      </li>
+      <li><span class="parameter">value</span>
+      </li>
+      <li><span class="parameter">children</span>
+      </li>
     </ul>
 
 
@@ -214,12 +220,17 @@ Attaches the new xmlNode to "parent"
 
     <h3>Parameters:</h3>
     <ul>
-        <li><span class="parameter">xml</span>
-         a xml lua table obtained by XmlParser.parse</li>
-        <li><span class="parameter">parent</span>
-        </li>
+      <li><span class="parameter">xml</span>
+       a xml lua table obtained by XmlParser.parse</li>
+      <li><span class="parameter">parent</span>
+       optional, if provided the new node is attached to the parent node</li>
     </ul>
 
+    <h3>Returns:</h3>
+    <ol>
+
+        XmlNode
+    </ol>
 
 
 
@@ -227,18 +238,25 @@ Attaches the new xmlNode to "parent"
 </dd>
     <dt>
     <a name = "fromString"></a>
-    <strong>fromString&nbsp;(xml)</strong>
+    <strong>fromString&nbsp;(xml, parent)</strong>
     </dt>
     <dd>
-    Built an XmlNode starting from a string.
+    Builds an XmlNode starting from a string.
 Uses XmlParser.ParseXmlText to easily load the string
 
     <h3>Parameters:</h3>
     <ul>
-        <li><span class="parameter">xml</span>
-        </li>
+      <li><span class="parameter">xml</span>
+       the xml string to use for creating the node structure</li>
+      <li><span class="parameter">parent</span>
+       optional, if provided the new node is attached to the parent node</li>
     </ul>
 
+    <h3>Returns:</h3>
+    <ol>
+
+        XmlNode
+    </ol>
 
 
 
@@ -253,8 +271,8 @@ Uses XmlParser.ParseXmlText to easily load the string
 
     <h3>Parameters:</h3>
     <ul>
-        <li><span class="parameter">child</span>
-        </li>
+      <li><span class="parameter">child</span>
+       the XmlNode to attach as a child</li>
     </ul>
 
 
@@ -271,10 +289,15 @@ Uses XmlParser.ParseXmlText to easily load the string
 
     <h3>Parameters:</h3>
     <ul>
-        <li><span class="parameter">child</span>
-        </li>
+      <li><span class="parameter">child</span>
+       the XmlNode to remove from children list</li>
     </ul>
 
+    <h3>Returns:</h3>
+    <ol>
+
+        XmlNode if the node was really a child it returns it, else returns nil
+    </ol>
 
 
 
@@ -289,16 +312,16 @@ Uses XmlParser.ParseXmlText to easily load the string
 
     <h3>Parameters:</h3>
     <ul>
-        <li><span class="parameter">name</span>
-         attribute key</li>
-        <li><span class="parameter">default</span>
-         the value to return if the attribute name doesn't exist</li>
+      <li><span class="parameter">name</span>
+       attribute key</li>
+      <li><span class="parameter">default</span>
+       [optional] if the attribute doesn't exist returns it. default value is nil</li>
     </ul>
 
     <h3>Returns:</h3>
     <ol>
 
-        string
+        string the value of the attribute as a string or nil
     </ol>
 
 
@@ -311,13 +334,14 @@ Uses XmlParser.ParseXmlText to easily load the string
     </dt>
     <dd>
     Adds a new attribute
+if the attribute was already defined it replaces the attribute value
 
     <h3>Parameters:</h3>
     <ul>
-        <li><span class="parameter">name</span>
-         attribute name</li>
-        <li><span class="parameter">value</span>
-         attribute value</li>
+      <li><span class="parameter">name</span>
+       attribute name</li>
+      <li><span class="parameter">value</span>
+       attribute value</li>
     </ul>
 
 
@@ -334,14 +358,14 @@ Uses XmlParser.ParseXmlText to easily load the string
 
     <h3>Parameters:</h3>
     <ul>
-        <li><span class="parameter">name</span>
-         the name of the attribute to remove</li>
+      <li><span class="parameter">name</span>
+       the name of the attribute to remove</li>
     </ul>
 
     <h3>Returns:</h3>
     <ol>
 
-        value of the removed attribute
+        value of the removed attribute or nil if the attribute is not a valid one
     </ol>
 
 
@@ -353,18 +377,21 @@ Uses XmlParser.ParseXmlText to easily load the string
     <strong>XmlNode:getAttributeN&nbsp;(name, default)</strong>
     </dt>
     <dd>
-    Returns an attribute already converted as number.
-If attribute doesn't exist it return default value
-(if provided, or nil if not)
+    Returns an attribute value converted as number.
 
     <h3>Parameters:</h3>
     <ul>
-        <li><span class="parameter">name</span>
-        </li>
-        <li><span class="parameter">default</span>
-        </li>
+      <li><span class="parameter">name</span>
+       attribute key</li>
+      <li><span class="parameter">default</span>
+       [optional] if the attribute doesn't exist returns it. default value is nil</li>
     </ul>
 
+    <h3>Returns:</h3>
+    <ol>
+
+        int the value of the attribute as a int or nil
+    </ol>
 
 
 
@@ -375,18 +402,21 @@ If attribute doesn't exist it return default value
     <strong>XmlNode:getAttributeBool&nbsp;(name, default)</strong>
     </dt>
     <dd>
-    Returns a attribute already converted as boolean.
-If attribute doesn't exist it return default value
-(if provided, or nil if not)
+    Returns an attribute value converted as boolean.
 
     <h3>Parameters:</h3>
     <ul>
-        <li><span class="parameter">name</span>
-        </li>
-        <li><span class="parameter">default</span>
-        </li>
+      <li><span class="parameter">name</span>
+       attribute key</li>
+      <li><span class="parameter">default</span>
+       [optional] if the attribute doesn't exist returns it. default value is nil</li>
     </ul>
 
+    <h3>Returns:</h3>
+    <ol>
+
+        bool the value of the attribute as a bool or nil
+    </ol>
 
 
 
@@ -401,10 +431,15 @@ If attribute doesn't exist it return default value
 
     <h3>Parameters:</h3>
     <ul>
-        <li><span class="parameter">idx</span>
-        </li>
+      <li><span class="parameter">idx</span>
+       the index of the attribute</li>
     </ul>
 
+    <h3>Returns:</h3>
+    <ol>
+
+        string the name of the attribute if idx is a valid index, or nil
+    </ol>
 
 
 
@@ -418,6 +453,11 @@ If attribute doesn't exist it return default value
     Returns the number of attributes
 
 
+    <h3>Returns:</h3>
+    <ol>
+
+        int number of attributes
+    </ol>
 
 
 
@@ -428,14 +468,20 @@ If attribute doesn't exist it return default value
     <strong>XmlNode:getChildren&nbsp;(name)</strong>
     </dt>
     <dd>
-    Returns a children based on name
+    Returns a children list of child with a given name
+If not provided the method returns all the children of the node
 
     <h3>Parameters:</h3>
     <ul>
-        <li><span class="parameter">name</span>
-        </li>
+      <li><span class="parameter">name</span>
+       [optional] the name of the children element we want to retrieve. </li>
     </ul>
 
+    <h3>Returns:</h3>
+    <ol>
+
+        XmlNode[] an ordered array of all the children with the given name
+    </ol>
 
 
 
@@ -446,9 +492,14 @@ If attribute doesn't exist it return default value
     <strong>XmlNode:getParent&nbsp;()</strong>
     </dt>
     <dd>
-    Returns parent node
+    Returns the parent node
 
 
+    <h3>Returns:</h3>
+    <ol>
+
+        XmlNode the parent node
+    </ol>
 
 
 
@@ -459,14 +510,32 @@ If attribute doesn't exist it return default value
     <strong>XmlNode:dump&nbsp;(stringbuilder)</strong>
     </dt>
     <dd>
-    Dumps xmlnode content over a stringbuilder
+    Dumps xmlnode content over a StringBuilder
 
     <h3>Parameters:</h3>
     <ul>
-        <li><span class="parameter">stringbuilder</span>
-        </li>
+      <li><span class="parameter">stringbuilder</span>
+       the StringBuilder o use to dump the content of the node</li>
     </ul>
 
+
+
+
+
+</dd>
+    <dt>
+    <a name = "XmlNode:strDump"></a>
+    <strong>XmlNode:strDump&nbsp;()</strong>
+    </dt>
+    <dd>
+    Prints the content of an XmlNode
+
+
+    <h3>Returns:</h3>
+    <ol>
+
+        string
+    </ol>
 
 
 
@@ -478,7 +547,7 @@ If attribute doesn't exist it return default value
 </div> <!-- id="content" -->
 </div> <!-- id="main" -->
 <div id="about">
-<i>generated by <a href="http://github.com/stevedonovan/LDoc">LDoc 1.3.11</a></i>
+<i>generated by <a href="http://github.com/stevedonovan/LDoc">LDoc 1.3</a></i>
 </div> <!-- id="about" -->
 </div> <!-- id="container" -->
 </body>

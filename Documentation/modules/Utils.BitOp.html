@@ -73,7 +73,7 @@
   <li><a href="../modules/Tween.TweenLoop.html">Tween.TweenLoop</a></li>
   <li><a href="../modules/Tween.TweenParallel.html">Tween.TweenParallel</a></li>
   <li><a href="../modules/Tween.TweenSequence.html">Tween.TweenSequence</a></li>
-  <li><a href="../modules/Utils.BitOp.html">Utils.BitOp</a></li>
+  <li><strong>Utils.BitOp</strong></li>
   <li><a href="../modules/Utils.Callbacks.html">Utils.Callbacks</a></li>
   <li><a href="../modules/Utils.ClassEx.html">Utils.ClassEx</a></li>
   <li><a href="../modules/Utils.CollisionKit.html">Utils.CollisionKit</a></li>
@@ -85,7 +85,7 @@
   <li><a href="../modules/Utils.Log.html">Utils.Log</a></li>
   <li><a href="../modules/Utils.Math.html">Utils.Math</a></li>
   <li><a href="../modules/Utils.PerformanceTimer.html">Utils.PerformanceTimer</a></li>
-  <li><strong>Utils.Polygon</strong></li>
+  <li><a href="../modules/Utils.Polygon.html">Utils.Polygon</a></li>
   <li><a href="../modules/Utils.Shape.html">Utils.Shape</a></li>
   <li><a href="../modules/Utils.Sound.html">Utils.Sound</a></li>
   <li><a href="../modules/Utils.String.html">Utils.String</a></li>
@@ -101,58 +101,53 @@
 
 <div id="content">
 
-<h1>Module <code>Utils.Polygon</code></h1>
+<h1>Module <code>Utils.BitOp</code></h1>
 
-<p>Polygon class</p>
+<p>Utility functions to work with bitfields</p>
 <p></p>
 
 
 <h2><a href="#Functions">Functions</a></h2>
 <table class="function_list">
 	<tr>
-	<td class="name" nowrap><a href="#findLineIntersection">findLineIntersection&nbsp;(start1, end1, start2, end2)</a></td>
-	<td class="summary">Find intersection between two lines</td>
+	<td class="name" nowrap><a href="#bnot">bnot&nbsp;(a)</a></td>
+	<td class="summary">logical not operator</td>
 	</tr>
 	<tr>
-	<td class="name" nowrap><a href="#toVec2">toVec2&nbsp;(points)</a></td>
-	<td class="summary">Helper function to convert a set of [x,y,..] to an array of vec2
-If needed add an extra point at the end to 'close' the polygon</td>
+	<td class="name" nowrap><a href="#bxor">bxor&nbsp;(a, b)</a></td>
+	<td class="summary">logical xor operator</td>
 	</tr>
 	<tr>
-	<td class="name" nowrap><a href="#Polygon:init">Polygon:init&nbsp;(p, ...)</a></td>
-	<td class="summary">Constructor</td>
+	<td class="name" nowrap><a href="#band">band&nbsp;(a, b)</a></td>
+	<td class="summary">logical and operator</td>
 	</tr>
 	<tr>
-	<td class="name" nowrap><a href="#Polygon:updateRect">Polygon:updateRect&nbsp;()</a></td>
-	<td class="summary">Calculates / Updates bounding rect of the polygon</td>
+	<td class="name" nowrap><a href="#bor">bor&nbsp;(a, b)</a></td>
+	<td class="summary">logical or operator</td>
 	</tr>
 	<tr>
-	<td class="name" nowrap><a href="#Polygon:getPoint">Polygon:getPoint&nbsp;(i)</a></td>
-	<td class="summary">Returns an indexed point</td>
+	<td class="name" nowrap><a href="#rshift">rshift&nbsp;(a, disp)</a></td>
+	<td class="summary">right shift</td>
 	</tr>
 	<tr>
-	<td class="name" nowrap><a href="#Polygon:unpack">Polygon:unpack&nbsp;()</a></td>
-	<td class="summary">Returns an array of single x,y components</td>
+	<td class="name" nowrap><a href="#lshift">lshift&nbsp;(a, disp)</a></td>
+	<td class="summary">left shift</td>
 	</tr>
 	<tr>
-	<td class="name" nowrap><a href="#Polygon:getRect">Polygon:getRect&nbsp;(resultRect)</a></td>
-	<td class="summary">Returns bounding rect of the polygon</td>
+	<td class="name" nowrap><a href="#testflag">testflag&nbsp;(a, flag)</a></td>
+	<td class="summary">Tests if a specific flag is true in a bitfield</td>
 	</tr>
 	<tr>
-	<td class="name" nowrap><a href="#Polygon:containsPoint">Polygon:containsPoint&nbsp;(x, y)</a></td>
-	<td class="summary">Checks if the polygon contains a given point</td>
+	<td class="name" nowrap><a href="#setflag">setflag&nbsp;(a, flag)</a></td>
+	<td class="summary">Sets a specific flag in a bitfield</td>
 	</tr>
 	<tr>
-	<td class="name" nowrap><a href="#Polygon:intersectSegment">Polygon:intersectSegment&nbsp;(p1, p2)</a></td>
-	<td class="summary">Checks a given rect intersects the polygon</td>
+	<td class="name" nowrap><a href="#clrflag">clrflag&nbsp;(a, flag)</a></td>
+	<td class="summary">Clears a specific flag in a bitfield</td>
 	</tr>
 	<tr>
-	<td class="name" nowrap><a href="#Polygon:intersectPolygon">Polygon:intersectPolygon&nbsp;(poly)</a></td>
-	<td class="summary">Checks intersection with another polygon</td>
-	</tr>
-	<tr>
-	<td class="name" nowrap><a href="#Polygon:merge">Polygon:merge&nbsp;(poly)</a></td>
-	<td class="summary">Merges two polygons</td>
+	<td class="name" nowrap><a href="#toString">toString&nbsp;(a)</a></td>
+	<td class="summary">Converts a bitfield to a string</td>
 	</tr>
 </table>
 
@@ -163,45 +158,15 @@ If needed add an extra point at the end to 'close' the polygon</td>
     <h2><a name="Functions"></a>Functions</h2>
     <dl class="function">
     <dt>
-    <a name = "findLineIntersection"></a>
-    <strong>findLineIntersection&nbsp;(start1, end1, start2, end2)</strong>
+    <a name = "bnot"></a>
+    <strong>bnot&nbsp;(a)</strong>
     </dt>
     <dd>
-    Find intersection between two lines
+    logical not operator
 
     <h3>Parameters:</h3>
     <ul>
-      <li><span class="parameter">start1</span>
-       start point (vec2) of first line</li>
-      <li><span class="parameter">end1</span>
-       end point (vec2) of first line</li>
-      <li><span class="parameter">start2</span>
-       start point (vec2) of second line</li>
-      <li><span class="parameter">end2</span>
-       end point (vec2) of second line</li>
-    </ul>
-
-    <h3>Returns:</h3>
-    <ol>
-
-        vec2 if intersection exists or nil
-    </ol>
-
-
-
-
-</dd>
-    <dt>
-    <a name = "toVec2"></a>
-    <strong>toVec2&nbsp;(points)</strong>
-    </dt>
-    <dd>
-    Helper function to convert a set of [x,y,..] to an array of vec2
-If needed add an extra point at the end to 'close' the polygon
-
-    <h3>Parameters:</h3>
-    <ul>
-      <li><span class="parameter">points</span>
+      <li><span class="parameter">a</span>
       </li>
     </ul>
 
@@ -211,63 +176,124 @@ If needed add an extra point at the end to 'close' the polygon
 
 </dd>
     <dt>
-    <a name = "Polygon:init"></a>
-    <strong>Polygon:init&nbsp;(p, ...)</strong>
+    <a name = "bxor"></a>
+    <strong>bxor&nbsp;(a, b)</strong>
     </dt>
     <dd>
-    Constructor
+    logical xor operator
 
     <h3>Parameters:</h3>
     <ul>
-      <li><span class="parameter">p</span>
+      <li><span class="parameter">a</span>
       </li>
-      <li><span class="parameter">...</span>
+      <li><span class="parameter">b</span>
       </li>
     </ul>
 
 
 
 
-    <h3>Usage:</h3>
-    <ul>
-        <pre class="example">
-Polygon(x1,y1,x2,y2,...) - with x,y as numbers
-Polygon(p1,p2,...) - with p as vec2
-Polygon({x1,x2,...})
-Polygon({p1,p2,...})</pre>
-    </ul>
 
 </dd>
     <dt>
-    <a name = "Polygon:updateRect"></a>
-    <strong>Polygon:updateRect&nbsp;()</strong>
+    <a name = "band"></a>
+    <strong>band&nbsp;(a, b)</strong>
     </dt>
     <dd>
-    Calculates / Updates bounding rect of the polygon
-
-
-
-
-
-
-</dd>
-    <dt>
-    <a name = "Polygon:getPoint"></a>
-    <strong>Polygon:getPoint&nbsp;(i)</strong>
-    </dt>
-    <dd>
-    Returns an indexed point
+    logical and operator
 
     <h3>Parameters:</h3>
     <ul>
-      <li><span class="parameter">i</span>
-       index of the point to retrieve</li>
+      <li><span class="parameter">a</span>
+      </li>
+      <li><span class="parameter">b</span>
+      </li>
+    </ul>
+
+
+
+
+
+</dd>
+    <dt>
+    <a name = "bor"></a>
+    <strong>bor&nbsp;(a, b)</strong>
+    </dt>
+    <dd>
+    logical or operator
+
+    <h3>Parameters:</h3>
+    <ul>
+      <li><span class="parameter">a</span>
+      </li>
+      <li><span class="parameter">b</span>
+      </li>
+    </ul>
+
+
+
+
+
+</dd>
+    <dt>
+    <a name = "rshift"></a>
+    <strong>rshift&nbsp;(a, disp)</strong>
+    </dt>
+    <dd>
+    right shift
+
+    <h3>Parameters:</h3>
+    <ul>
+      <li><span class="parameter">a</span>
+       the bitfield to be r shifted</li>
+      <li><span class="parameter">disp</span>
+       the number of shift to perform</li>
+    </ul>
+
+
+
+
+
+</dd>
+    <dt>
+    <a name = "lshift"></a>
+    <strong>lshift&nbsp;(a, disp)</strong>
+    </dt>
+    <dd>
+    left shift
+
+    <h3>Parameters:</h3>
+    <ul>
+      <li><span class="parameter">a</span>
+       the bitfield to be l shifted</li>
+      <li><span class="parameter">disp</span>
+       the number of shift to perform</li>
+    </ul>
+
+
+
+
+
+</dd>
+    <dt>
+    <a name = "testflag"></a>
+    <strong>testflag&nbsp;(a, flag)</strong>
+    </dt>
+    <dd>
+    Tests if a specific flag is true in a bitfield
+
+    <h3>Parameters:</h3>
+    <ul>
+      <li><span class="parameter">a</span>
+       the bitfield</li>
+      <li><span class="parameter">flag</span>
+       the flag to test</li>
     </ul>
 
     <h3>Returns:</h3>
     <ol>
 
-        vec2 or nil if index out of bound
+        bool if the flag is set
     </ol>
 
 
@@ -275,17 +301,24 @@ Polygon({p1,p2,...})</pre>
 
 </dd>
     <dt>
-    <a name = "Polygon:unpack"></a>
-    <strong>Polygon:unpack&nbsp;()</strong>
+    <a name = "setflag"></a>
+    <strong>setflag&nbsp;(a, flag)</strong>
     </dt>
     <dd>
-    Returns an array of single x,y components
+    Sets a specific flag in a bitfield
 
+    <h3>Parameters:</h3>
+    <ul>
+      <li><span class="parameter">a</span>
+       the bitfield</li>
+      <li><span class="parameter">flag</span>
+       the flag to set</li>
+    </ul>
 
     <h3>Returns:</h3>
     <ol>
 
-        x1,y1,x2,y2....
+        bitfield the modified bitfield
     </ol>
 
 
@@ -293,22 +326,24 @@ Polygon({p1,p2,...})</pre>
 
 </dd>
     <dt>
-    <a name = "Polygon:getRect"></a>
-    <strong>Polygon:getRect&nbsp;(resultRect)</strong>
+    <a name = "clrflag"></a>
+    <strong>clrflag&nbsp;(a, flag)</strong>
     </dt>
     <dd>
-    Returns bounding rect of the polygon
+    Clears a specific flag in a bitfield
 
     <h3>Parameters:</h3>
     <ul>
-      <li><span class="parameter">resultRect</span>
-       used to avoid the creation of a new rect. optional</li>
+      <li><span class="parameter">a</span>
+       the bitfield</li>
+      <li><span class="parameter">flag</span>
+       the flag to clear</li>
     </ul>
 
     <h3>Returns:</h3>
     <ol>
 
-        Rect
+        bitfield the modified bitfield
     </ol>
 
 
@@ -316,96 +351,22 @@ Polygon({p1,p2,...})</pre>
 
 </dd>
     <dt>
-    <a name = "Polygon:containsPoint"></a>
-    <strong>Polygon:containsPoint&nbsp;(x, y)</strong>
+    <a name = "toString"></a>
+    <strong>toString&nbsp;(a)</strong>
     </dt>
     <dd>
-    Checks if the polygon contains a given point
+    Converts a bitfield to a string
 
     <h3>Parameters:</h3>
     <ul>
-      <li><span class="parameter">x</span>
-       x coordinate of the point or a vec2 point</li>
-      <li><span class="parameter">y</span>
-       y coordinate of the point or nil</li>
+      <li><span class="parameter">a</span>
+       the bitfield to convert as string</li>
     </ul>
 
     <h3>Returns:</h3>
     <ol>
 
-        bool
-    </ol>
-
-
-
-
-</dd>
-    <dt>
-    <a name = "Polygon:intersectSegment"></a>
-    <strong>Polygon:intersectSegment&nbsp;(p1, p2)</strong>
-    </dt>
-    <dd>
-    Checks a given rect intersects the polygon
-
-    <h3>Parameters:</h3>
-    <ul>
-      <li><span class="parameter">p1</span>
-       start point of the rect</li>
-      <li><span class="parameter">p2</span>
-       end point of the rect</li>
-    </ul>
-
-    <h3>Returns:</h3>
-    <ol>
-
-        bool
-    </ol>
-
-
-
-
-</dd>
-    <dt>
-    <a name = "Polygon:intersectPolygon"></a>
-    <strong>Polygon:intersectPolygon&nbsp;(poly)</strong>
-    </dt>
-    <dd>
-    Checks intersection with another polygon
-
-    <h3>Parameters:</h3>
-    <ul>
-      <li><span class="parameter">poly</span>
-       the other polygon</li>
-    </ul>
-
-    <h3>Returns:</h3>
-    <ol>
-
-        bool
-    </ol>
-
-
-
-
-</dd>
-    <dt>
-    <a name = "Polygon:merge"></a>
-    <strong>Polygon:merge&nbsp;(poly)</strong>
-    </dt>
-    <dd>
-    Merges two polygons
-nil if the two polygons do not intersect.
-
-    <h3>Parameters:</h3>
-    <ul>
-      <li><span class="parameter">poly</span>
-       the polygon to be merged with this</li>
-    </ul>
-
-    <h3>Returns:</h3>
-    <ol>
-
-        a new polygon obtained by the merge of the two.
+        string the bitfield as a string
     </ol>
 
 
