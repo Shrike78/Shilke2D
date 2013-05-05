@@ -69,6 +69,7 @@ function setup()
 	moaiImg2:setPosition(0,0)
 	
 	animJuggler:add(DisplayObjTweener.seekTargetPosition(moaiImg2,moaiImg,5))
+	animJuggler:add(DisplayObjTweener.seekAlpha(moaiImg2,0,5))
 			
 	juggler:add(
 		Tween.loop(

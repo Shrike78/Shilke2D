@@ -68,10 +68,11 @@ DisplayObj._defaultUseMultiplyColor = false
 ---Initialization.
 function DisplayObj:init()
     EventDispatcher.init(self)
-    
-	self._useMultiplyColor = self._defaultUseMultiplyColor
-	
+    	
     self._prop = self:_createProp()
+	--use alpha value as opacity
+	self._prop:setBlendMode(MOAIProp2D.GL_SRC_ALPHA, MOAIProp2D.GL_ONE_MINUS_SRC_ALPHA)
+	
 	--exact clone of transformation prop, used to calculate transformMatrix depending
 	--on a specific targetSpace
     self._transformMatrix = MOAITransform.new() 
@@ -81,6 +82,7 @@ function DisplayObj:init()
     
 	self._visible = true
     self._touchable = true
+	self._useMultiplyColor = self._defaultUseMultiplyColor
 	
     self._multiplyColor = {1,1,1,1}
 
