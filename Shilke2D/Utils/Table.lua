@@ -1,8 +1,13 @@
 ---Extends table namespace
  
----clear a table, setting all the values to nil 
-function table.clear(t)
+---clears a table, setting all the values to nil
+--@param t the table to clear
+--@param recursive [optional] if true clear all subtables deeply. Default value is false
+function table.clear(t,recursive)
     for k,_ in pairs(t) do
+		if recursive and type(t[k]) == 'table' then
+			table.clear(t[k],true)
+		end
         t[k] = nil
     end
 end  
