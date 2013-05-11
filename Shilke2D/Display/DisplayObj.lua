@@ -70,13 +70,12 @@ function DisplayObj:init()
     EventDispatcher.init(self)
     	
     self._prop = self:_createProp()
-	--use alpha value as opacity
-	self._prop:setBlendMode(MOAIProp2D.GL_SRC_ALPHA, MOAIProp2D.GL_ONE_MINUS_SRC_ALPHA)
+	self._renderTable = self._prop
 	
 	--exact clone of transformation prop, used to calculate transformMatrix depending
 	--on a specific targetSpace
-    self._transformMatrix = MOAITransform.new() 
-    
+    self._transformMatrix = MOAITransform.new()
+	
     self._name = nil
     self._parent = nil
     
@@ -84,6 +83,7 @@ function DisplayObj:init()
     self._touchable = true
 	self._useMultiplyColor = self._defaultUseMultiplyColor
 	
+    self._color = {1,1,1,1}
     self._multiplyColor = {1,1,1,1}
 
 end
@@ -135,6 +135,12 @@ function DisplayObj:getName()
     return self._name
 end
 
+---Sets a blendMode using one of the predefined Shilke2D BlendModes
+--@param blendmode enum defined in BlendMode namespace
+function DisplayObj:setBlendMode(blendmode)
+	self._prop:setBlendMode(getBlendFactors(blendmode))
+end
+
 ---Internal method.
 --Called by a DisplayObjContainer when the DisplayObj is added as child
 function DisplayObj:_setParent(parent)
@@ -143,13 +149,14 @@ function DisplayObj:_setParent(parent)
     self._parent = parent
     if parent then
 		--if not set before it can raise problems
-		self._prop:setParent(nil)
-        self._prop:setParent(parent._prop)
+		self._prop:setAttrLink(MOAITransform.INHERIT_TRANSFORM, parent._prop, MOAITransform.TRANSFORM_TRAIT)
+		self._prop:setAttrLink(MOAIColor.INHERIT_COLOR, parent._prop, MOAIColor.COLOR_TRAIT)
        	if self._useMultiplyColor then
 			self:_setMultiplyColor(parent:_getMultipliedColor())
 		end
     else
-		self._prop:setParent(nil)
+		self._prop:clearAttrLink(MOAITransform.INHERIT_TRANSFORM)
+		self._prop:clearAttrLink(MOAIColor.INHERIT_COLOR)
        	if self._useMultiplyColor then
 			self:_setMultiplyColor(1,1,1,1)
 		end
@@ -295,13 +302,16 @@ end
 ---Set alpha value of the object
 --@param a alpha value [0,255]
 function DisplayObj:setAlpha(a)
-    self._prop:setAttr(MOAIColor.ATTR_A_COL, a * INV_255)
+	local c = self._color
+	c[4] = a * INV_255
+	a = c[4]
+	self._prop:setColor(c[1]*a,c[2]*a,c[3]*a,a)
 end
 
 --Return alpha value of the object
 --@return alpha [0,255]
 function DisplayObj:getAlpha()
-   return self._prop:getAttr(MOAIColor.ATTR_A_COL) * 255
+   return self._color[4] * 255
 end
 
 
@@ -317,28 +327,28 @@ The following calls are valid:
 @param a alpha value [0,255] or nil
 --]]
 function DisplayObj:setColor(r,g,b,a)
-	local prop = self._prop
+	local c = self._color
 	if type(r) == 'number' then
-		prop:setColor(
-						r*INV_255,
-						g*INV_255,
-						b*INV_255,
-						a and a * INV_255 or prop:getAttr(MOAIColor.ATTR_A_COL)
-					)
+		c[1] = r * INV_255
+		c[2] = g * INV_255
+		c[3] = b * INV_255
+		c[4] = a and (a * INV_255) or c[4]
 	else
-		prop:setColor(r:unpack_normalized())
+		c[1], c[2], c[3], c[4] = r:unpack_normalized()
 	end
+	local a = c[4]
+	self._prop:setColor(c[1]*a,c[2]*a,c[3]*a,a)
 end
 
 ---Return the current Color of the object
 --@return Color(r,g,b,a)
 function DisplayObj:getColor()
-	local prop = self._prop
+	local c = self._color
 	return Color(	
-					prop:getAttr(MOAIColor.ATTR_R_COL)*255,
-					prop:getAttr(MOAIColor.ATTR_G_COL)*255,
-					prop:getAttr(MOAIColor.ATTR_B_COL)*255,
-					prop:getAttr(MOAIColor.ATTR_A_COL)*255
+					c[1]*255,
+					c[2]*255,
+					c[3]*255,
+					c[4]*255
 				)
 end
 
@@ -523,7 +533,7 @@ function DisplayObj:updateTransformationMatrix(targetSpace)
 		if self._bTransformMatrixIsIdentity then 
 			return
 		else
-			self._transformMatrix:setParent(nil)
+			self._transformMatrix:clearAttrLink(MOAITransform.INHERIT_TRANSFORM)
 			self._transformMatrix:setPiv(0,0,0)
 			self._transformMatrix:setLoc(0,0,0)
 			self._transformMatrix:setScl(1,1)
@@ -536,7 +546,8 @@ function DisplayObj:updateTransformationMatrix(targetSpace)
 	
 	if self._parent then
 		self._parent:updateTransformationMatrix(targetSpace)
-		self._transformMatrix:setParent(self._parent._transformMatrix)
+		self._transformMatrix:setAttrLink(MOAITransform.INHERIT_TRANSFORM,
+			self._parent._transformMatrix, MOAITransform.TRANSFORM_TRAIT)
 		self._transformMatrix:setPiv(self._prop:getPiv())
 		self._transformMatrix:setLoc(self._prop:getLoc())
 		self._transformMatrix:setScl(self._prop:getScl())

@@ -122,6 +122,9 @@ All the children are themself disposed
 --]]
 function DisplayObjContainer:dispose()
 	self:removeChildren(nil,nil,true)
+	if self._frameBufferData then
+		self:destroyFrameBufferImage()
+	end
 	DisplayObj.dispose(self)
 end
 
@@ -200,16 +203,20 @@ function DisplayObjContainer:addChild(obj)
         parent:_innerRemoveChild(obj)
     end
     self._displayObjs[#self._displayObjs+1] = obj
+--[[	
     if obj:is_a(DisplayObjContainer) then
 		self._objRenderTable[#self._objRenderTable+1] = obj._renderTable
     else
 		self._objRenderTable[#self._objRenderTable+1] = obj._prop
     end
+--]]	
+	self._objRenderTable[#self._objRenderTable+1] = obj._renderTable
     obj:_setParent(self)
 	
 	--specific logic to handle frameBufferImg instead of normal rendering
 	if self._frameBufferData then
-		obj._prop:setParent(nil)
+		obj._prop:cleatAttrLink(MOAITransform.INHERIT_TRANSFORM)
+		obj._prop:cleatAttrLink(MOAIColor.INHERIT_COLOR)
 		obj._prop:forceUpdate()
 	end
 end
@@ -247,16 +254,20 @@ function DisplayObjContainer:addChildAt(obj,index)
         obj.parent:_innerRemoveChild(obj)
     end
     table.insert(self._displayObjs,index,obj)
+	--[[
     if obj:is_a(DisplayObjContainer) then
         table.insert(self._objRenderTable, index, obj._renderTable)
     else
         table.insert(self._objRenderTable, index, obj._prop)
     end
+	--]]
+	table.insert(self._objRenderTable, index, obj._renderTable)
     obj:_setParent(self)
 	
 	--specific logic to handle frameBufferImg instead of normal rendering
 	if self._frameBufferData then
-		obj._prop:setParent(nil)
+		obj._prop:cleatAttrLink(MOAITransform.INHERIT_TRANSFORM)
+		obj._prop:cleatAttrLink(MOAIColor.INHERIT_COLOR)
 		obj._prop:forceUpdate()
 	end
 end
@@ -353,8 +364,7 @@ end
 ---Set container alpha value
 --@param a [0,255]
 function DisplayObjContainer:setAlpha(a)
---	DisplayObj.setAlpha(a)
-	self._prop:setAttr(MOAIColor.ATTR_A_COL, a * INV_255)
+	DisplayObj.setAlpha(self,a)
 	if self._useMultiplyColor then
 		self:_updateChildrenColor()
 	end
@@ -580,7 +590,10 @@ function DisplayObjContainer:createFrameBufferImage(bUpdate,width,height)
 	
 	--3)remove the parent of the children objs props
 	for _,o in ipairs(self._displayObjs) do
-		o._prop:setParent(nil)
+		if not bUpdate then
+			o._prop:clearAttrLink(MOAIColor.INHERIT_COLOR)
+		end
+		o._prop:clearAttrLink(MOAITransform.INHERIT_TRANSFORM)
 		o._prop:forceUpdate()
 	end
 	
@@ -620,11 +633,14 @@ function DisplayObjContainer:createFrameBufferImage(bUpdate,width,height)
 	local pivotMode = __USE_SIMULATION_COORDS__ == true and PivotMode.BOTTOM_LEFT	or PivotMode.TOP_LEFT 
 	local frameBufferImg = Image(Texture(frameBuffer),pivotMode)
 	
-	--6)bind this new image (just as prop) to the current layer
-	frameBufferImg._prop:setParent(self._prop)
+	--7)bind this new image (just as prop) to the current layer
+	if not bUpdate then
+		frameBufferImg._prop:setAttrLink(MOAIColor.INHERIT_COLOR, self._prop, MOAIColor.COLOR_TRAIT)	
+	end
+	frameBufferImg._prop:setAttrLink(MOAITransform.INHERIT_TRANSFORM, self._prop, MOAITransform.TRANSFORM_TRAIT)	
 	frameBufferImg._prop:forceUpdate()
-		
-	--7)replace the img to the renderTable
+	
+	--8)replace the img to the renderTable
 	if self._renderTable[2] then
 		self._renderTable[2] = frameBufferImg._prop
 	end
@@ -646,10 +662,14 @@ function DisplayObjContainer:destroyFrameBufferImage()
 		if self._renderTable[2] then
 			self._renderTable[2] = self._objRenderTable
 		end
+	
+		local bFlattened = self._frameBufferData.isFlattened
 		
 		for _,o in ipairs(self._displayObjs) do
-			o._prop:setParent(nil)
-			o._prop:setParent(self._prop)
+			if bFlattened then
+				o._prop:setAttrLink(MOAIColor.INHERIT_COLOR, self._prop, MOAIColor.COLOR_TRAIT)
+			end
+			o._prop:setAttrLink(MOAITransform.INHERIT_TRANSFORM, self._prop, MOAITransform.TRANSFORM_TRAIT)
 			o._prop:forceUpdate()
 		end
 		

@@ -65,6 +65,11 @@ function TextField:_createProp()
 	return MOAITextBox.new()
 end
 
+---A MOAI bug prevents textfield to work correctly with blendmodes,
+--so this override method just do nothing
+function TextField:setBlendMode(blendmode)
+end
+
 ---Sets horizontal and vertical alignment
 --@param hAlign  
 --@param vAlign 

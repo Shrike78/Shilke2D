@@ -49,6 +49,7 @@ require("Shilke2D/Core/Timer")
 require("Shilke2D/Core/Keymap")
 
 --Shilke2D/Display
+require("Shilke2D/Display/BlendMode")
 require("Shilke2D/Display/DisplayObj")
 require("Shilke2D/Display/DisplayObjContainer")
 require("Shilke2D/Display/Stage")

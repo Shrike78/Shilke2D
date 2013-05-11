@@ -30,7 +30,9 @@ Constructor.
 function Quad:init(width,height,pivotMode)
 	BaseQuad.init(self,width,height,pivotMode)
 	
-	self._colors = {{1,1,1,1},
+	--use the base color as first of the 4 colors of the quad
+	self._colors = {--{1,1,1,1},
+					self._color,
 					{1,1,1,1},
 					{1,1,1,1},
 					{1,1,1,1}}
@@ -84,17 +86,18 @@ function Quad:_updateVertexBuffer()
 	self._vbo:reset()
 	
 	local mc = self._multiplyColor
-	
+	local a
 	for i=1, #vcoords do
 		-- write vertex position
 		self._vbo:writeFloat ( vcoords[i][1], vcoords[i][2] )              
 		-- write RGBA value
-		self._vbo:writeColor32 ( 	
-									self._colors[i][1] * mc[1], 
-									self._colors[i][2] * mc[2], 
-									self._colors[i][3] * mc[3], 
-									self._colors[i][4] * mc[4]
-								)  
+		a = self._colors[i][4]
+		self._vbo:writeColor32(
+					self._colors[i][1] * mc[1] * a, 
+					self._colors[i][2] * mc[2] * a, 
+					self._colors[i][3] * mc[3] * a, 
+					a * mc[4] * a
+				)
 	end
     
 	self._vbo:bless ()	
