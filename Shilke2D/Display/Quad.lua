@@ -19,7 +19,7 @@ Quad = class(BaseQuad)
 
 ---Quad are drawn using a pixel shader so it's necessary to have
 --it enabled to inherits ancestors color values
-Quad._defaultUseMultiplyColor = true
+Quad.__defaultUseMultiplyColor = true
 
 --[[---
 Constructor.
@@ -86,18 +86,30 @@ function Quad:_updateVertexBuffer()
 	self._vbo:reset()
 	
 	local mc = self._multiplyColor
-	local a
+	local c,a
 	for i=1, #vcoords do
 		-- write vertex position
 		self._vbo:writeFloat ( vcoords[i][1], vcoords[i][2] )              
 		-- write RGBA value
-		a = self._colors[i][4]
-		self._vbo:writeColor32(
-					self._colors[i][1] * mc[1] * a, 
-					self._colors[i][2] * mc[2] * a, 
-					self._colors[i][3] * mc[3] * a, 
-					a * mc[4] * a
-				)
+		c = self._colors[i]
+		if self._alphaAsOpacity then
+			a = c[4]
+			--opacity should be modified only by quad alpha, while transparency by displayList alpha
+			--chain
+			self._vbo:writeColor32(
+						c[1] * mc[1] * a, 
+						c[2] * mc[2] * a, 
+						c[3] * mc[3] * a, 
+						a * mc[4] * a
+					)
+		else
+			self._vbo:writeColor32(
+						c[1] * mc[1], 
+						c[2] * mc[2], 
+						c[3] * mc[3], 
+						c[4] * mc[4]
+					)
+		end
 	end
     
 	self._vbo:bless ()	
@@ -140,6 +152,11 @@ function Quad:_getMultipliedColor()
     return r,g,b,a
 end
 
+---overrides displayobj method redirecting on _updateVertexBuffer
+--that already does the same thing for quads
+function Quad:_updateColor()
+	self:_updateVertexBuffer()
+end
 
 ---Override base method. It calls _updateVertexBuffer
 --@param a alpha value [0,255]

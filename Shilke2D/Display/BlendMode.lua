@@ -5,7 +5,7 @@ A blend mode is always defined by two blendFactor values.
 A blend factor represents a particular four-value vector that is multiplied with the source 
 or destination color in the blending formula. 
 
-The blending formula is:
+The default GL_FUNC_ADD blending equation formula is:
 
 result = source * sourceFactor + destination * destinationFactor
 
@@ -14,18 +14,26 @@ The destination color is the color that currently exists in the color buffer, as
 previous clear and draw operations.
 --]]
 
-local BlendFactors = 
+---BlendMode namespace contains enums for OpenGL blend factors and blend equations and
+--also specific Shilke2D enums for typical blend modes
+BlendMode = 
 {
-	--blend factors using premultiplied alpha
-	none 		= 	{MOAIProp.GL_ONE, 		MOAIProp.GL_ZERO},
-	normal 		= 	{MOAIProp.GL_ONE, 		MOAIProp.GL_ONE_MINUS_SRC_ALPHA},
-	add 		= 	{MOAIProp.GL_ONE, 		MOAIProp.GL_ONE},
-	multiply 	= 	{MOAIProp.GL_DST_COLOR, MOAIProp.GL_ONE_MINUS_SRC_ALPHA},
-	screen 		= 	{MOAIProp.GL_ONE, 		MOAIProp.GL_ONE_MINUS_SRC_COLOR},
-	erase 		= 	{MOAIProp.GL_ZERO, 		MOAIProp.GL_ONE_MINUS_SRC_ALPHA}
-}
+	GL_FUNC_ADD 				= MOAIProp.GL_FUNC_ADD,
+	GL_FUNC_SUBTRACT 			= MOAIProp.GL_FUNC_SUBTRACT,
+	GL_FUNC_REVERSE_SUBTRACT 	= MOAIProp.GL_FUNC_REVERSE_SUBTRACT,
 
-BlendMode = {}
+	GL_ONE 						= MOAIProp.GL_ONE,
+	GL_ZERO 					= MOAIProp.GL_ZERO,
+	GL_DST_ALPHA 				= MOAIProp.GL_DST_ALPHA,
+	GL_DST_COLOR 				= MOAIProp.GL_DST_COLOR,
+	GL_SRC_COLOR 				= MOAIProp.GL_SRC_COLOR,
+	GL_ONE_MINUS_DST_ALPHA		= MOAIProp.GL_ONE_MINUS_DST_ALPHA,
+	GL_ONE_MINUS_DST_COLOR		= MOAIProp.GL_ONE_MINUS_DST_COLOR,
+	GL_ONE_MINUS_SRC_ALPHA 		= MOAIProp.GL_ONE_MINUS_SRC_ALPHA,
+	GL_ONE_MINUS_SRC_COLOR 		= MOAIProp.GL_ONE_MINUS_SRC_COLOR,
+	GL_SRC_ALPHA 				= MOAIProp.GL_SRC_ALPHA,
+	GL_SRC_ALPHA_SATURATE 		= MOAIProp.GL_SRC_ALPHA_SATURATE,	
+}	
 
 ---Deactivates blending disabling any transparency.
 BlendMode.NONE = "none"
@@ -43,15 +51,44 @@ BlendMode.MULTIPLY = "multiply"
 -- the background color, resulting in a bleaching effect.
 BlendMode.SCREEN = "screen"
 
----Erases the background when drawn on a RenderTexture.
+---Erases the background when drawn.
 BlendMode.ERASE = "erase"
 
----Returns blendfactors given blendmode enum
---@param blendmode the enum blendmode needed.
---@return srcBlendFactor
---@return dstBlendFactor
-function getBlendFactors(blendmode)
-	local res = BlendFactors[blendmode]
+local BlendFactors = 
+{
+	--no premultiplied alpha
+	[0] = 
+	{
+		none 		= 	{BlendMode.GL_ONE, 			BlendMode.GL_ZERO},
+		normal 		= 	{BlendMode.GL_SRC_ALPHA, 	BlendMode.GL_ONE_MINUS_SRC_ALPHA},
+		add 		= 	{BlendMode.GL_SRC_ALPHA, 	BlendMode.GL_DST_ALPHA},
+		multiply 	= 	{BlendMode.GL_DST_COLOR, 	BlendMode.GL_ONE_MINUS_SRC_ALPHA},
+		screen 		= 	{BlendMode.GL_SRC_APHA,		BlendMode.GL_ONE},
+		erase 		= 	{BlendMode.GL_ZERO, 		BlendMode.GL_ONE_MINUS_SRC_ALPHA}
+	},
+	--premultiplied alpha
+	[1] = 
+	{
+		none 		= 	{BlendMode.GL_ONE, 			BlendMode.GL_ZERO},
+		normal 		= 	{BlendMode.GL_ONE, 			BlendMode.GL_ONE_MINUS_SRC_ALPHA},
+		add 		= 	{BlendMode.GL_ONE, 			BlendMode.GL_ONE},
+		multiply 	= 	{BlendMode.GL_DST_COLOR, 	BlendMode.GL_ONE_MINUS_SRC_ALPHA},
+		screen 		= 	{BlendMode.GL_ONE, 			BlendMode.GL_ONE_MINUS_SRC_COLOR},
+		erase 		= 	{BlendMode.GL_ZERO, 		BlendMode.GL_ONE_MINUS_SRC_ALPHA}
+	}
+}
+
+
+--[[---
+Returns blendfactors given blendmode enum
+@param blendmode the enum blendmode needed.
+@param pma [optional] Used to select if with premultipied alpha or not. Default is true.
+@return srcBlendFactor
+@return dstBlendFactor
+--]]
+function getBlendFactors(blendmode,pma)
+	local pma = (pma == false) and 0 or 1
+	local res = BlendFactors[pma][blendmode]
 	assert(res, tostring(blendmode) .. " is an invalid blendMode")
 	return unpack(res)
 end

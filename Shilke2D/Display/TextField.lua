@@ -6,6 +6,9 @@ Current implementation allows to use only standard true type fonts.
 --]]
 TextField = class(BaseQuad)
 
+---Textfields (at least when used with ttf) have pma value set to false to be correctly displayed.
+TextField.__pma = false
+
 ---Used to align vertically or horizontally the text
 TextField.CENTER_JUSTIFY = MOAITextBox.CENTER_JUSTIFY
 
@@ -47,6 +50,7 @@ function TextField:init(width, height, text, font, fontSize, pivotMode)
 if __USE_SIMULATION_COORDS__  then
     self._prop:setYFlip ( true )
 end
+
 	self._prop:setRect(0,0,self._width,self._height)
 
 	local font = font or TextField.__systemFont
@@ -63,11 +67,6 @@ end
 --@return MOAITextBox
 function TextField:_createProp()
 	return MOAITextBox.new()
-end
-
----A MOAI bug prevents textfield to work correctly with blendmodes,
---so this override method just do nothing
-function TextField:setBlendMode(blendmode)
 end
 
 ---Sets horizontal and vertical alignment
@@ -90,7 +89,7 @@ end
 --@param hAlign
 function TextField:setHAlignement(hAlign)
 	self.hAlign = hAlign
-	self._prop:setAlignment( self.hAlign, self.vAlign)
+	self._prop:setAlignment(self.hAlign, self.vAlign)
 end
 
 ---Returns horizontal alignment

@@ -24,6 +24,10 @@ Within the display tree, each object has its own local coordinate
 system. If you rotate a container, you rotate that coordinate system
 and thus all the children of the container.
 
+- Color, Opacity and BlendModes
+
+[TODO]
+
 - Subclassing
 
 Since DisplayObject is an abstract class, you cannot instantiate it
@@ -33,6 +37,7 @@ You will need to implement the following method when you subclass
 DisplayObject:
 
 function DisplayObj:getRect(targetSpace,resultRect)
+	
 --]]
 
 --basic math function calls
@@ -52,8 +57,6 @@ local MIN_VALUE = -math.huge
 --helper for getBound / rect calls
 local __helperRect = Rect()
 
---used as default multiplyColor value
-
 DisplayObj = class(EventDispatcher)
 
 --[[---
@@ -63,7 +66,14 @@ Special cases are when an object is rendered using a shader that doesn't
 take care of hierarchy, and so it's required to manually modify colors 
 according to multiply value.
 --]]
-DisplayObj._defaultUseMultiplyColor = false
+DisplayObj.__defaultUseMultiplyColor = false
+
+--[[---
+Used to define the default behaviour of the displayObj type related on BlendMode default values.
+Most of the objects must have __pma set to true, some types require instead false (like textfields when used
+with ttf)
+--]]
+DisplayObj.__pma = true
 
 ---Initialization.
 function DisplayObj:init()
@@ -74,14 +84,16 @@ function DisplayObj:init()
 	
 	--exact clone of transformation prop, used to calculate transformMatrix depending
 	--on a specific targetSpace
-    self._transformMatrix = MOAITransform.new()
+	self._transformMatrix = MOAITransform.new()
 	
     self._name = nil
     self._parent = nil
     
 	self._visible = true
     self._touchable = true
-	self._useMultiplyColor = self._defaultUseMultiplyColor
+	self._alphaAsOpacity = true
+
+	self._useMultiplyColor = self.__defaultUseMultiplyColor
 	
     self._color = {1,1,1,1}
     self._multiplyColor = {1,1,1,1}
@@ -133,12 +145,6 @@ end
 --return name (string) or nil if a name has not been set
 function DisplayObj:getName()
     return self._name
-end
-
----Sets a blendMode using one of the predefined Shilke2D BlendModes
---@param blendmode enum defined in BlendMode namespace
-function DisplayObj:setBlendMode(blendmode)
-	self._prop:setBlendMode(getBlendFactors(blendmode))
 end
 
 ---Internal method.
@@ -296,16 +302,62 @@ function DisplayObj:_getMultipliedColor()
     return r,g,b,a
 end
 
+--[[---
+Set the blend equation. 
+This determines how the srcFactor and dstFactor values set with setBlendMode are interpreted.
+@param blendEquation [optional] one of the three blend equation defined by BlendMode enum. 
+default value is BlendMode.GL_FUNC_ADD
+--]]
+function DisplayObj:setBlendEquation(blendEquation)
+	self._prop:setBlendEquation(blendEquation)
+end 
 
--- public Setter and Getter
+--[[---
+Sets a blendMode using one of the predefined Shilke2D BlendModes or using two blend factors.
+If called without parameter it default on BlendMode.NORMAL (that depends on the __pma value of 
+the specific displayObj type).
+If called without parameter or with a BlendMode enum it also resets the blend equation to 
+BlendEquation.GL_FUNC_ADD
+@param srcFactor a blend mode factor or a BlendMode enum
+@param dstFactor a blend mode factor or nil (if BlendMode enum is provided as first param)
+--]]
+function DisplayObj:setBlendMode(srcFactor,dstFactor)
+	if not srcFactor then
+		srcFactor = BlendMode.NORMAL
+	end
+	if type(srcFactor) == 'string' then
+		srcFactor,dstFactor = getBlendFactors(srcFactor,self.__pma)
+		--if called with one of the default values it also reset on the default blend equation
+		self._prop:setBlendEquation(BlendMode.GL_FUNC_ADD)
+	end
+	self._prop:setBlendMode(srcFactor,dstFactor)
+end
+
+
+---Defines if alpha value has to be used as opacity value for rgb or not
+--@param bUse default is true
+function DisplayObj:useAlphaAsOpacity(bUse)
+	self._alphaAsOpacity = not (bUse == false)
+	self:_updateColor()
+end
+
+function DisplayObj:_updateColor()
+	local c = self._color
+	if self._alphaAsOpacity then
+		local a = c[4]
+		self._prop:setColor(c[1]*a,c[2]*a,c[3]*a,a)
+	else
+		self._prop:setColor(c[1],c[2],c[3],c[4])
+	end
+end
+
 
 ---Set alpha value of the object
 --@param a alpha value [0,255]
 function DisplayObj:setAlpha(a)
 	local c = self._color
 	c[4] = a * INV_255
-	a = c[4]
-	self._prop:setColor(c[1]*a,c[2]*a,c[3]*a,a)
+	self:_updateColor()
 end
 
 --Return alpha value of the object
@@ -336,8 +388,7 @@ function DisplayObj:setColor(r,g,b,a)
 	else
 		c[1], c[2], c[3], c[4] = r:unpack_normalized()
 	end
-	local a = c[4]
-	self._prop:setColor(c[1]*a,c[2]*a,c[3]*a,a)
+	self:_updateColor()
 end
 
 ---Return the current Color of the object
