@@ -44,11 +44,12 @@ f:implements(iE) = true
 
 local reserved =
 {
-    __index            = true,
-    _base              = true,
-    init               = true,
-    is_a               = true,
-    implements         = true
+    __index		= true,
+    _base		= true,
+    init		= true,
+    is_a		= true,
+    implements	= true,
+	super		= true			
 }
 
 --[[---
@@ -133,7 +134,7 @@ function class(...)
         return obj
     end
 
-	---allows to check if a class inherits from another
+	---Allows to check if a class inherits from another
     c.is_a = function(self, klass)
         local m = getmetatable(self)
         while m do 
@@ -143,7 +144,7 @@ function class(...)
         return false
     end
     
-	---allows to check if a class implements a specific interface
+	---Allows to check if a class implements a specific interface
     c.implements = function(self, interface)
             -- Check we have all the target's callables
         for k, v in pairs(interface) do
@@ -155,6 +156,28 @@ function class(...)
         return true
     end
 
+	--[[---
+	Allows to use super class.
+	If used without parameter then just return the super class of the current class 
+	(nil if called on a base class)-
+	If used providing a function name and (if needed) some parameter, it calls the relative function
+	on the parent class (if defined) and return the function result.
+	That can be usefull to override a method in a sub class without carying about the correct inheritance 
+	chain, like happens in C# or other languages
+	@param self the caller object reference
+	@param funcName [optional] the name of the function of the super class to call
+	@param ... a set of parameters to be provided to super:funcName() method
+	@return super class if funcName is nil or the result of super:funcName(...) call
+	--]]
+	c.super = function(self,funcName,...)
+		local m = getmetatable(self)
+		if funcName then
+			return m._base[funcName](self,...)
+		else
+			return m._base
+		end
+	end
+	
     setmetatable(c, mt)
     return c
 end
