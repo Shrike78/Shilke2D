@@ -49,6 +49,7 @@
   <li><a href="../modules/Core.Timer.html">Core.Timer</a></li>
   <li><a href="../modules/Core.TouchSensor.html">Core.TouchSensor</a></li>
   <li><a href="../modules/Display.BaseQuad.html">Display.BaseQuad</a></li>
+  <li><a href="../modules/Display.BlendMode.html">Display.BlendMode</a></li>
   <li><a href="../modules/Display.Button.html">Display.Button</a></li>
   <li><a href="../modules/Display.DisplayObj.html">Display.DisplayObj</a></li>
   <li><a href="../modules/Display.DisplayObjContainer.html">Display.DisplayObjContainer</a></li>
@@ -143,6 +144,11 @@ and the vertices follow counter clockwise order.</p>
 	<td class="summary">Returns the multiplied alpha value as applied to the first vertex.</td>
 	</tr>
 	<tr>
+	<td class="name" nowrap><a href="#Quad:_updateColor">Quad:_updateColor&nbsp;()</a></td>
+	<td class="summary">overrides displayobj method redirecting on _updateVertexBuffer
+that already does the same thing for quads</td>
+	</tr>
+	<tr>
 	<td class="name" nowrap><a href="#Quad:setAlpha">Quad:setAlpha&nbsp;(a)</a></td>
 	<td class="summary">Override base method.</td>
 	</tr>
@@ -186,7 +192,7 @@ The following calls are valid:
 <h2><a href="#Fields">Fields</a></h2>
 <table class="function_list">
 	<tr>
-	<td class="name" nowrap><a href="#_defaultUseMultiplyColor">_defaultUseMultiplyColor</a></td>
+	<td class="name" nowrap><a href="#__defaultUseMultiplyColor">__defaultUseMultiplyColor</a></td>
 	<td class="summary">Quad are drawn using a pixel shader so it's necessary to have
 it enabled to inherits ancestors color values</td>
 	</tr>
@@ -306,6 +312,20 @@ If alpha values is different per vertices the return value has no real meaning
 
         int obtained by Color.rgba2int([0,255],[0,255],[0,255],[0,255])
     </ol>
+
+
+
+
+</dd>
+    <dt>
+    <a name = "Quad:_updateColor"></a>
+    <strong>Quad:_updateColor&nbsp;()</strong>
+    </dt>
+    <dd>
+    overrides displayobj method redirecting on _updateVertexBuffer
+that already does the same thing for quads
+
+
 
 
 
@@ -519,8 +539,8 @@ The following calls are valid:
     <h2><a name="Fields"></a>Fields</h2>
     <dl class="function">
     <dt>
-    <a name = "_defaultUseMultiplyColor"></a>
-    <strong>_defaultUseMultiplyColor</strong>
+    <a name = "__defaultUseMultiplyColor"></a>
+    <strong>__defaultUseMultiplyColor</strong>
     </dt>
     <dd>
     Quad are drawn using a pixel shader so it's necessary to have

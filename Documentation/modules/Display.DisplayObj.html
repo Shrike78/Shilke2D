@@ -49,6 +49,7 @@
   <li><a href="../modules/Core.Timer.html">Core.Timer</a></li>
   <li><a href="../modules/Core.TouchSensor.html">Core.TouchSensor</a></li>
   <li><a href="../modules/Display.BaseQuad.html">Display.BaseQuad</a></li>
+  <li><a href="../modules/Display.BlendMode.html">Display.BlendMode</a></li>
   <li><a href="../modules/Display.Button.html">Display.Button</a></li>
   <li><strong>Display.DisplayObj</strong></li>
   <li><a href="../modules/Display.DisplayObjContainer.html">Display.DisplayObjContainer</a></li>
@@ -123,12 +124,15 @@ object translucent or invisible.
 <p>Within the display tree, each object has its own local coordinate
 system. If you rotate a container, you rotate that coordinate system
 and thus all the children of the container.
+<p>- Color, Opacity and BlendModes
+<p>[TODO]
 <p>- Subclassing
 <p>Since DisplayObject is an abstract class, you cannot instantiate it
 directly, but have to use one of its subclasses instead.
 <p>You will need to implement the following method when you subclass
 DisplayObject:
-<p>function DisplayObj:getRect(targetSpace,resultRect)</p>
+<p>function DisplayObj:getRect(targetSpace,resultRect)
+	</p>
 
 
 <h2><a href="#Functions">Functions</a></h2>
@@ -211,6 +215,18 @@ Used for example for images when a pixel shader is set for special effects.</td>
 	<tr>
 	<td class="name" nowrap><a href="#DisplayObj:_getMultipliedColor">DisplayObj:_getMultipliedColor&nbsp;()</a></td>
 	<td class="summary">Inner method.</td>
+	</tr>
+	<tr>
+	<td class="name" nowrap><a href="#DisplayObj:setBlendEquation">DisplayObj:setBlendEquation&nbsp;(blendEquation)</a></td>
+	<td class="summary">Set the blend equation.</td>
+	</tr>
+	<tr>
+	<td class="name" nowrap><a href="#DisplayObj:setBlendMode">DisplayObj:setBlendMode&nbsp;(srcFactor, dstFactor)</a></td>
+	<td class="summary">Sets a blendMode using one of the predefined Shilke2D BlendModes or using two blend factors.</td>
+	</tr>
+	<tr>
+	<td class="name" nowrap><a href="#DisplayObj:useAlphaAsOpacity">DisplayObj:useAlphaAsOpacity&nbsp;(bUse)</a></td>
+	<td class="summary">Defines if alpha value has to be used as opacity value for rgb or not</td>
 	</tr>
 	<tr>
 	<td class="name" nowrap><a href="#DisplayObj:setAlpha">DisplayObj:setAlpha&nbsp;(a)</a></td>
@@ -391,9 +407,13 @@ another coordinate system</td>
 <h2><a href="#Fields">Fields</a></h2>
 <table class="function_list">
 	<tr>
-	<td class="name" nowrap><a href="#_defaultUseMultiplyColor">_defaultUseMultiplyColor</a></td>
+	<td class="name" nowrap><a href="#__defaultUseMultiplyColor">__defaultUseMultiplyColor</a></td>
 	<td class="summary">By default DisplayObjs do not make use of multiplyColor because the
 resulting color on screen is automatically affected by hierarchy colors.</td>
+	</tr>
+	<tr>
+	<td class="name" nowrap><a href="#__pma">__pma</a></td>
+	<td class="summary">Used to define the default behaviour of the displayObj type related on BlendMode default values.</td>
 	</tr>
 </table>
 
@@ -745,6 +765,68 @@ This value is obtained multiplying the obj color by the parent multiplyColor val
         <li>
         a [0,1]</li>
     </ol>
+
+
+
+
+</dd>
+    <dt>
+    <a name = "DisplayObj:setBlendEquation"></a>
+    <strong>DisplayObj:setBlendEquation&nbsp;(blendEquation)</strong>
+    </dt>
+    <dd>
+    Set the blend equation.
+This determines how the srcFactor and dstFactor values set with setBlendMode are interpreted.
+default value is BlendMode.GL_FUNC_ADD
+
+    <h3>Parameters:</h3>
+    <ul>
+      <li><span class="parameter">blendEquation</span>
+       [optional] one of the three blend equation defined by BlendMode enum. </li>
+    </ul>
+
+
+
+
+
+</dd>
+    <dt>
+    <a name = "DisplayObj:setBlendMode"></a>
+    <strong>DisplayObj:setBlendMode&nbsp;(srcFactor, dstFactor)</strong>
+    </dt>
+    <dd>
+    Sets a blendMode using one of the predefined Shilke2D BlendModes or using two blend factors.
+If called without parameter it default on BlendMode.NORMAL (that depends on the __pma value of
+the specific displayObj type).
+If called without parameter or with a BlendMode enum it also resets the blend equation to
+BlendEquation.GL_FUNC_ADD
+
+    <h3>Parameters:</h3>
+    <ul>
+      <li><span class="parameter">srcFactor</span>
+       a blend mode factor or a BlendMode enum</li>
+      <li><span class="parameter">dstFactor</span>
+       a blend mode factor or nil (if BlendMode enum is provided as first param)</li>
+    </ul>
+
+
+
+
+
+</dd>
+    <dt>
+    <a name = "DisplayObj:useAlphaAsOpacity"></a>
+    <strong>DisplayObj:useAlphaAsOpacity&nbsp;(bUse)</strong>
+    </dt>
+    <dd>
+    Defines if alpha value has to be used as opacity value for rgb or not
+
+    <h3>Parameters:</h3>
+    <ul>
+      <li><span class="parameter">bUse</span>
+       default is true</li>
+    </ul>
+
 
 
 
@@ -1594,8 +1676,8 @@ The array can be directely used for rendering
     <h2><a name="Fields"></a>Fields</h2>
     <dl class="function">
     <dt>
-    <a name = "_defaultUseMultiplyColor"></a>
-    <strong>_defaultUseMultiplyColor</strong>
+    <a name = "__defaultUseMultiplyColor"></a>
+    <strong>__defaultUseMultiplyColor</strong>
     </dt>
     <dd>
     By default DisplayObjs do not make use of multiplyColor because the
@@ -1603,6 +1685,21 @@ resulting color on screen is automatically affected by hierarchy colors.
 Special cases are when an object is rendered using a shader that doesn't
 take care of hierarchy, and so it's required to manually modify colors
 according to multiply value.
+
+
+
+
+
+
+</dd>
+    <dt>
+    <a name = "__pma"></a>
+    <strong>__pma</strong>
+    </dt>
+    <dd>
+    Used to define the default behaviour of the displayObj type related on BlendMode default values.
+Most of the objects must have __pma set to true, some types require instead false (like textfields when used
+with ttf)
 
 
 

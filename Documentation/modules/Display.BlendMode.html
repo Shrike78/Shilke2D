@@ -33,6 +33,8 @@
 <h2>Contents</h2>
 <ul>
 <li><a href="#Functions">Functions</a></li>
+<li><a href="#Tables">Tables</a></li>
+<li><a href="#Fields">Fields</a></li>
 </ul>
 
 
@@ -48,7 +50,7 @@
   <li><a href="../modules/Core.Timer.html">Core.Timer</a></li>
   <li><a href="../modules/Core.TouchSensor.html">Core.TouchSensor</a></li>
   <li><a href="../modules/Display.BaseQuad.html">Display.BaseQuad</a></li>
-  <li><a href="../modules/Display.BlendMode.html">Display.BlendMode</a></li>
+  <li><strong>Display.BlendMode</strong></li>
   <li><a href="../modules/Display.Button.html">Display.Button</a></li>
   <li><a href="../modules/Display.DisplayObj.html">Display.DisplayObj</a></li>
   <li><a href="../modules/Display.DisplayObjContainer.html">Display.DisplayObjContainer</a></li>
@@ -77,7 +79,7 @@
   <li><a href="../modules/Utils.BitOp.html">Utils.BitOp</a></li>
   <li><a href="../modules/Utils.Callbacks.html">Utils.Callbacks</a></li>
   <li><a href="../modules/Utils.ClassEx.html">Utils.ClassEx</a></li>
-  <li><strong>Utils.CollisionKit</strong></li>
+  <li><a href="../modules/Utils.CollisionKit.html">Utils.CollisionKit</a></li>
   <li><a href="../modules/Utils.Color.html">Utils.Color</a></li>
   <li><a href="../modules/Utils.Coroutines.html">Utils.Coroutines</a></li>
   <li><a href="../modules/Utils.IO.html">Utils.IO</a></li>
@@ -102,22 +104,61 @@
 
 <div id="content">
 
-<h1>Module <code>Utils.CollisionKit</code></h1>
+<h1>Module <code>Display.BlendMode</code></h1>
 
-<p>Helper for image collision detection.</p>
+<p>BlendMode provides constant values for visual blend mode effects.</p>
 <p>
-It's based on flash functions logic.</p>
+<p>A blend mode is always defined by two blendFactor values.
+A blend factor represents a particular four-value vector that is multiplied with the source
+or destination color in the blending formula.
+<p>The default GL_FUNC_ADD blending equation formula is:
+<p>result = source * sourceFactor + destination * destinationFactor
+<p>In the formula, the source color is the output color of the pixel shader program.
+The destination color is the color that currently exists in the color buffer, as set by
+previous clear and draw operations.</p>
 
 
 <h2><a href="#Functions">Functions</a></h2>
 <table class="function_list">
 	<tr>
-	<td class="name" nowrap><a href="#imageHitTest">imageHitTest&nbsp;(i1, p1, a1, i2, p2, a2)</a></td>
-	<td class="summary">Checks pixel perfect overlap of 2 raw images (MOAIImage).</td>
+	<td class="name" nowrap><a href="#getBlendFactors">getBlendFactors&nbsp;(blendmode, pma)</a></td>
+	<td class="summary">Returns blendfactors given blendmode enum</td>
+	</tr>
+</table>
+<h2><a href="#Tables">Tables</a></h2>
+<table class="function_list">
+	<tr>
+	<td class="name" nowrap><a href="#BlendMode">BlendMode</a></td>
+	<td class="summary">BlendMode namespace contains enums for OpenGL blend factors and blend equations and
+also specific Shilke2D enums for typical blend modes</td>
+	</tr>
+</table>
+<h2><a href="#Fields">Fields</a></h2>
+<table class="function_list">
+	<tr>
+	<td class="name" nowrap><a href="#NONE">NONE</a></td>
+	<td class="summary">Deactivates blending disabling any transparency.</td>
 	</tr>
 	<tr>
-	<td class="name" nowrap><a href="#imageHitTestEx">imageHitTestEx&nbsp;(i1, p1, a1, i2, p2, a2, rect1, rect2, rot1, rot2)</a></td>
-	<td class="summary">Checks pixel perfect overlap of 2 images</td>
+	<td class="name" nowrap><a href="#NORMAL">NORMAL</a></td>
+	<td class="summary">The display object appears in front of the background.</td>
+	</tr>
+	<tr>
+	<td class="name" nowrap><a href="#ADD">ADD</a></td>
+	<td class="summary">Adds the values of the colors of the display object to the colors of its background.</td>
+	</tr>
+	<tr>
+	<td class="name" nowrap><a href="#MULTIPLY">MULTIPLY</a></td>
+	<td class="summary">Multiplies the values of the display object colors with the the background color.</td>
+	</tr>
+	<tr>
+	<td class="name" nowrap><a href="#SCREEN">SCREEN</a></td>
+	<td class="summary">Multiplies the complement (inverse) of the display object color with the complement of
+ the background color, resulting in a bleaching effect.</td>
+	</tr>
+	<tr>
+	<td class="name" nowrap><a href="#ERASE">ERASE</a></td>
+	<td class="summary">Erases the background when drawn.</td>
 	</tr>
 </table>
 
@@ -128,29 +169,73 @@ It's based on flash functions logic.</p>
     <h2><a name="Functions"></a>Functions</h2>
     <dl class="function">
     <dt>
-    <a name = "imageHitTest"></a>
-    <strong>imageHitTest&nbsp;(i1, p1, a1, i2, p2, a2)</strong>
+    <a name = "getBlendFactors"></a>
+    <strong>getBlendFactors&nbsp;(blendmode, pma)</strong>
     </dt>
     <dd>
-    Checks pixel perfect overlap of 2 raw images (MOAIImage).
-<p>Depending on __USE_SIMULATION_COORDS__ the point 0,0 of the image is considered
-the top or the bottom left point
-
+    Returns blendfactors given blendmode enum
 
     <h3>Parameters:</h3>
     <ul>
-      <li><span class="parameter">i1</span>
-       image 1</li>
-      <li><span class="parameter">p1</span>
-       top/bottom left position (vec2) of image1</li>
-      <li><span class="parameter">a1</span>
-       alpha treshold to consider image1 pixel transparent</li>
-      <li><span class="parameter">i2</span>
-       image 2</li>
-      <li><span class="parameter">p2</span>
-       top/bottom left position (vec2) of image2</li>
-      <li><span class="parameter">a2</span>
-       alpha treshold to consider image2 pixel transparent</li>
+      <li><span class="parameter">blendmode</span>
+       the enum blendmode needed.</li>
+      <li><span class="parameter">pma</span>
+       [optional] Used to select if with premultipied alpha or not. Default is true.</li>
+    </ul>
+
+    <h3>Returns:</h3>
+    <ol>
+        <li>
+        srcBlendFactor</li>
+        <li>
+        dstBlendFactor</li>
+    </ol>
+
+
+
+
+</dd>
+</dl>
+    <h2><a name="Tables"></a>Tables</h2>
+    <dl class="function">
+    <dt>
+    <a name = "BlendMode"></a>
+    <strong>BlendMode</strong>
+    </dt>
+    <dd>
+    BlendMode namespace contains enums for OpenGL blend factors and blend equations and
+also specific Shilke2D enums for typical blend modes
+
+    <h3>Fields:</h3>
+    <ul>
+      <li><span class="parameter">GL_FUNC_ADD</span>
+      </li>
+      <li><span class="parameter">GL_FUNC_SUBTRACT</span>
+      </li>
+      <li><span class="parameter">GL_FUNC_REVERSE_SUBTRACT</span>
+      </li>
+      <li><span class="parameter">GL_ONE</span>
+      </li>
+      <li><span class="parameter">GL_ZERO</span>
+      </li>
+      <li><span class="parameter">GL_DST_ALPHA</span>
+      </li>
+      <li><span class="parameter">GL_DST_COLOR</span>
+      </li>
+      <li><span class="parameter">GL_SRC_COLOR</span>
+      </li>
+      <li><span class="parameter">GL_ONE_MINUS_DST_ALPHA</span>
+      </li>
+      <li><span class="parameter">GL_ONE_MINUS_DST_COLOR</span>
+      </li>
+      <li><span class="parameter">GL_ONE_MINUS_SRC_ALPHA</span>
+      </li>
+      <li><span class="parameter">GL_ONE_MINUS_SRC_COLOR</span>
+      </li>
+      <li><span class="parameter">GL_SRC_ALPHA</span>
+      </li>
+      <li><span class="parameter">GL_SRC_ALPHA_SATURATE</span>
+      </li>
     </ul>
 
 
@@ -158,38 +243,82 @@ the top or the bottom left point
 
 
 </dd>
+</dl>
+    <h2><a name="Fields"></a>Fields</h2>
+    <dl class="function">
     <dt>
-    <a name = "imageHitTestEx"></a>
-    <strong>imageHitTestEx&nbsp;(i1, p1, a1, i2, p2, a2, rect1, rect2, rot1, rot2)</strong>
+    <a name = "NONE"></a>
+    <strong>NONE</strong>
     </dt>
     <dd>
-    Checks pixel perfect overlap of 2 images Depending on __USE_SIMULATION_COORDS__ the point 0,0 of the image is considered
-the top or the bottom left point
+    Deactivates blending disabling any transparency.
 
 
-    <h3>Parameters:</h3>
-    <ul>
-      <li><span class="parameter">i1</span>
-       image 1</li>
-      <li><span class="parameter">p1</span>
-       top/bottom left position (vec2) of image1</li>
-      <li><span class="parameter">a1</span>
-       alpha treshold to consider image1 pixel transparent</li>
-      <li><span class="parameter">i2</span>
-       image 2</li>
-      <li><span class="parameter">p2</span>
-       top/bottom left position (vec2) of image2</li>
-      <li><span class="parameter">a2</span>
-       alpha treshold to consider image2 pixel transparent</li>
-      <li><span class="parameter">rect1</span>
-       (optional) can define a sub region over image1 (position and size)</li>
-      <li><span class="parameter">rect2</span>
-       (optional) can define a sub region over image2 (position and size)</li>
-      <li><span class="parameter">rot1</span>
-       (optional) if true rect1 must be considered rotated 90* anticlock wise</li>
-      <li><span class="parameter">rot2</span>
-       (optional) if true rect2 must be considered rotated 90* anticlock wise</li>
-    </ul>
+
+
+
+
+</dd>
+    <dt>
+    <a name = "NORMAL"></a>
+    <strong>NORMAL</strong>
+    </dt>
+    <dd>
+    The display object appears in front of the background.
+
+
+
+
+
+
+</dd>
+    <dt>
+    <a name = "ADD"></a>
+    <strong>ADD</strong>
+    </dt>
+    <dd>
+    Adds the values of the colors of the display object to the colors of its background.
+
+
+
+
+
+
+</dd>
+    <dt>
+    <a name = "MULTIPLY"></a>
+    <strong>MULTIPLY</strong>
+    </dt>
+    <dd>
+    Multiplies the values of the display object colors with the the background color.
+
+
+
+
+
+
+</dd>
+    <dt>
+    <a name = "SCREEN"></a>
+    <strong>SCREEN</strong>
+    </dt>
+    <dd>
+    Multiplies the complement (inverse) of the display object color with the complement of
+ the background color, resulting in a bleaching effect.
+
+
+
+
+
+
+</dd>
+    <dt>
+    <a name = "ERASE"></a>
+    <strong>ERASE</strong>
+    </dt>
+    <dd>
+    Erases the background when drawn.
+
 
 
 
