@@ -26,7 +26,15 @@ and thus all the children of the container.
 
 - Color, Opacity and BlendModes
 
-[TODO]
+By default display objects use alpha channel not only for transparency but also for opacity,
+multiplying rgb components. It's possible to change this behaviour calling
+
+DisplayObj:useAlphaAsOpacity(bUse)
+
+It's also possible to change the blend mode of a display object using 
+
+DisplayObj:setBlendEquation() 
+DisplayObj:setBlendMode() 
 
 - Subclassing
 
