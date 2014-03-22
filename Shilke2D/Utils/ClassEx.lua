@@ -52,26 +52,103 @@ local reserved =
 	super		= true			
 }
 
+
 --[[---
-Offers a way to check if an obj is of a specific class
+Extends the basic lua type keyword, providing a way to check if an obj is also of a given class type.
 @param o the object to be testet
-@return the 'type' of the object if is a class type
+@return string/metatable the 'type' of the object, a string for basic lua types or the 
+class prototype (aka metatable) for class object instances
 @usage
 A = class()
 B = class(A)
 
+a = A()
 b = B()
 
-class_type(b) == A -> false
-class_type(b) == B -> true
+class_type(a) -> A
+class_type(b) -> B
+class_type("test") -> 'string'
+class_type({1,2,3}) -> 'table'
 --]]
 function class_type(o)
 	local t = type(o)
-	--classes are tables
-	if t ~= 'table' then return nil end
-	--classes must have a is_a function defined
-	if not o.is_a then return nil end
-	return getmetatable(o)
+	if t == 'table' then
+		if o.is_a then
+			return getmetatable(o)
+		end
+	end
+	return t
+end
+
+--[[---
+Used to check if a given object is of a given type.
+It can be used on generic types and on class object instances
+@param o the object to be checked
+@param t the type to be checked
+@return bool true if the object is of the given type, false if not. 
+NB: Even if a class object isntance is always also a table in lua, this function
+return false if trying to check a class object instance over a 'table' type.
+
+@usage
+A = class()
+B = class(A)
+
+a = A()
+b = B()
+
+is_a(a,A) -> true
+is_a(a,B) -> false
+
+is_a(b,A) -> true
+is_a(b,B) -> true
+
+is_a(a,'table') -> false
+
+is_a('test','string') -> true
+is_a({1,2,3},'table') -> true
+
+--]]
+function is_a(o,t)
+	local _t = type(o)
+	if _t == 'table' then
+		if o.is_a then
+			return o:is_a(t)
+		end
+	end
+	return _t == t
+end
+
+
+--[[---
+Used to check if a given object implements a given interface.
+It can be used on generic types and on class object instances
+@param o the object to be checked
+@param t the interface type to be checked
+@return bool true if the object implements the given interface, false if not. 
+NB: we assume that a basic lua object always implements only the interface of its base type
+
+@usage
+iA = class()
+iB = class()
+C = class(nil,iA,iB)
+
+c = C()
+
+implements(c,iA) = true
+implements(c,iB) = true
+implements(c,C) = true
+implements("test",C) = false
+implements("test",'string') = true
+
+--]]
+function implements(o,t)
+	local _t = type(o)
+	if _t == 'table' then
+		if o.is_a then
+			return o:implements(t)
+		end
+	end
+	return _t == t
 end
 
 --[[---

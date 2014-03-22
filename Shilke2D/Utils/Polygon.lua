@@ -51,9 +51,10 @@ Polygon({p1,p2,...})
 --]]
 function Polygon:init(p,...)
 	local points
-	if class_type(p) == vec2 or type(p) == 'number' then
+	t = class_type(p)
+	if t == vec2 or t == 'number' then
 		points = {p,...}
-	elseif type(p) == 'table' then
+	elseif t == 'table' then
 		points = p
 	end
 	self.points = toVec2(points)
