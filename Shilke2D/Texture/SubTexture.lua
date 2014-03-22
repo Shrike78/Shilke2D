@@ -46,7 +46,7 @@ end
 
 ---The rect is obtained as product of the region values and the parent texture width and height
 --@return Rect
-function SubTexture:_getRect()
+function SubTexture:getRect()
 	local w,h = self.parent.width, self.parent.height
 	local r = Rect(math.round(self.region.x * w),
 					math.round(self.region.y * h),
@@ -75,7 +75,7 @@ function SubTexture:image()
 							math.round(self.region.y * self.parent.height),
 							0, 0, self.width, self.height)
 		else
-			local r = self:_getRect()
+			local r = self:getRect()
 			for i = 1, self.height do
 				for j = 1, self.width do
 					local x = r.x + r.w - i

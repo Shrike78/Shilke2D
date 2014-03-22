@@ -182,7 +182,7 @@ end
 
 ---Returns the rect enclosing the image
 --@return Rect
-function Texture:_getRect()
+function Texture:getRect()
 	local r = Rect(0,0, self.width, self.height)
 	return r
 end
@@ -202,8 +202,8 @@ __USE_SIMULATION_COORDS__ value
 function Texture:hitTest(p1,a1,texture2,p2,a2)
     return imageHitTestEx(self.srcData,p1,a1,
         texture2.srcData,p2,a2,
-		self:_getRect(),
-		texture2:_getRect(),
+		self:getRect(),
+		texture2:getRect(),
 		self.rotated,
 		texture2.rotated)
 end
