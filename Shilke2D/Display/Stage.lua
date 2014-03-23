@@ -29,7 +29,7 @@ function Stage:init(viewport)
 
     self._debugProp = MOAIProp.new ()
     self._debugProp:setDeck ( self._debugDeck )
-    
+    self._bkgColor = Color(0,0,0,1)
     self._rt = {self._renderTable}
 end
 
@@ -57,7 +57,7 @@ end
 
 --[[---
 Inner method.
-With moai 1.4 clearColor funciton has been moved to frameBuffer and removed from GfxDevice.
+With moai 1.4 clearColor function has been moved to frameBuffer and removed from GfxDevice.
 The call checks which method is available and make the proper moai call.
 @param r red component [0..1]
 @param g green component [0..1]
@@ -81,10 +81,27 @@ Set background color.
 function Stage:setBackground(r,g,b)
 	if class_type(r) == Color then
 		__setClearColor(r:unpack_normalized())
+		self._bkgColor.r = r.r
+		self._bkgColor.g = r.g
+		self._bkgColor.b = r.b
 	else
 		__setClearColor(r/255,g/255,b/255,1)
+		self._bkgColor.r = r
+		self._bkgColor.g = g
+		self._bkgColor.b = b
 	end
 end
+
+--[[---
+Set background color.
+@param r red component [0..255] or Color
+@param g green component [0..255] or nil
+@param b blue component [0..255] or nil
+--]]
+function Stage:getBackground()
+	return self._bkgColor
+end
+
 
 ---Raise error if called because stage cannot be added as child to other containers
 function Stage:_setParent(parent)
