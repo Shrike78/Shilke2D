@@ -598,7 +598,7 @@ function DisplayObjContainer:createFrameBufferImage(bUpdate,width,height)
 	end
 	
 	--4) create the framebuffer with its specific rendertable
-	local frameBuffer = MOAIFrameBufferTexture.new ()
+	local frameBuffer = MOAIFrameBufferTexture.new()
 	
 	if not bUpdate then
 	--4a)Flatten the displayObj to a single img that logic is very similar to a 
@@ -612,22 +612,22 @@ function DisplayObjContainer:createFrameBufferImage(bUpdate,width,height)
 		sdp:setDeck(sd)
 		sd:setDrawCallback(function()
 				table.removeObj(Shilke2D.__frameBufferTables,frameBuffer)
-				MOAIRenderMgr.setBufferTable (Shilke2D.__frameBufferTables)
+				MOAIRenderMgr.setBufferTable(Shilke2D.__frameBufferTables)
 			end
 		)
-		frameBuffer:setRenderTable ({layer,self._objRenderTable,sdp})
+		frameBuffer:setRenderTable({layer,self._objRenderTable,sdp})
 	else
 	--4b)If the call is instead meant for a 'scissor' extended logic or for an image for shaders
 	--then the frameBuffer will be updated each frame
-		frameBuffer:setRenderTable ({layer,self._objRenderTable})
+		frameBuffer:setRenderTable({layer,self._objRenderTable})
 	end
 	frameBuffer:init( width, height )
 	--the clear color is set to transparent color
-	frameBuffer:setClearColor ( 0, 0, 0, 0 )
+	frameBuffer:setClearColor( 0, 0, 0, 0 )
 	
 	--5)update global __frameBufferTables and enable rendering of this frameBuffer
 	table.insert(Shilke2D.__frameBufferTables,frameBuffer)
-	MOAIRenderMgr.setBufferTable (Shilke2D.__frameBufferTables)
+	MOAIRenderMgr.setBufferTable(Shilke2D.__frameBufferTables)
 	
 	--6)Create an image with correct coorindate system to handle onscreen rendering
 	local pivotMode = __USE_SIMULATION_COORDS__ == true and PivotMode.BOTTOM_LEFT	or PivotMode.TOP_LEFT 
@@ -676,7 +676,7 @@ function DisplayObjContainer:destroyFrameBufferImage()
 		local layer 			= self._frameBufferData.layer
 		local frameBufferImg 	= self._frameBufferData.frameBufferImg
 		local frameBufferTxt 	= frameBufferImg.texture
-		local frameBuffer 		= frameBufferTxt.srcData
+		local frameBuffer 		= frameBufferTxt.textureData
 	
 		local fb = table.removeObj(Shilke2D.__frameBufferTables, frameBuffer)
 		MOAIRenderMgr.setBufferTable (Shilke2D.__frameBufferTables)

@@ -86,8 +86,10 @@ function Texture:init(srcData)
 		self.textureData = MOAITexture.new()
 		self.textureData:load(self.srcData)
 	--getRenderTable is a specific "MOAIFrameBufferTexture" (userdata) method
+	--MOAIFrameBufferTexture has lot of limitations (not getRGB, ecc.), can be just
+	--used as drawable object.
     elseif srcData.getRenderTable then
-		self.srcData = srcData
+		self.srcData = nil
 		self.textureData = srcData
 	else
 		error("Texture accept image path, MOAIImage, MOAIImageTexture or MOAIFrameBufferTexture")
@@ -124,6 +126,10 @@ returns values in the range [0,1]
 @return r,g,b,a [0,1]
 --]]
 function Texture:getRGBA(x,y)
+	if not self.srcData then
+		print("warning: Texture:getRGBA called with nil srcData") 
+		return 0,0,0,0
+	end
 	return self.srcData:getRGBA(x,y)
 end
 
@@ -200,6 +206,10 @@ __USE_SIMULATION_COORDS__ value
 @param a2 alpha treshold to consider texture2 pixel transparent
 --]]
 function Texture:hitTest(p1,a1,texture2,p2,a2)
+	if not self.srcData or not texture2.srcData then
+		print("warning: Texture:hisTest called on a nil srcData texture") 
+		return false
+	end
     return imageHitTestEx(self.srcData,p1,a1,
         texture2.srcData,p2,a2,
 		self:getRect(),
