@@ -103,10 +103,16 @@ BaseQuad.__pivotModeFunctions = {
 --@param pivotMode by default PivotMode.CENTER
 function BaseQuad:init(width,height,pivotMode)
 	DisplayObj.init(self)
-	self._width = width
-	self._height = height
+	self._width = width or 0
+	self._height = height or 0
 	local pivotMode = pivotMode or PivotMode.CENTER
 	self:setPivotMode(pivotMode)
+end
+
+function BaseQuad:copy(src)
+	DisplayObj.copy(self,src)
+	self:setSize(src:getSize())
+	self:setPivotMode(src:getPivotMode())
 end
 
 ---Set the size of the object.
@@ -117,6 +123,14 @@ function BaseQuad:setSize(width,height)
 	self._width = width
 	self._height = height
     BaseQuad.__pivotModeFunctions[self._pivotMode](self)
+end
+
+
+---Get the size of the object in local coords
+--@return width widht of the quad
+--@return height height of the quad
+function BaseQuad:getSize()
+	return self._width, self._height
 end
 
 ---Set the pivotMode object.

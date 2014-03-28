@@ -69,6 +69,15 @@ function TextField:_createProp()
 	return MOAITextBox.new()
 end
 
+function TextField:clone()
+	error("clone not available for TextField class")
+end
+
+function TextField:copy(src)
+	error("copy not available for TextField class")
+end
+
+
 ---Sets horizontal and vertical alignment
 --@param hAlign  
 --@param vAlign 

@@ -29,6 +29,11 @@ function Image:dispose()
 	self.texture = nil
 end
 
+function Image:copy(src)
+	BaseQuad.copy(self, src)
+	self:setTexture(src:getTexture())
+end
+
 ---For images is possible to force the hitTest to be pixel precise on texture pixels
 --@param enabled boolean enable/disable pixelPrecise hitTest
 --@param alphaLevel if prixelPrecise hitTest is enabled this value define the alpha treshold to consider
@@ -82,23 +87,6 @@ end
 
 -- public methods
 
---[[---
-Return a new Image that shares the same texture
-@param bClonePivot boolean if true set the same pivotMode / pivot point, 
-else set defaul pivotMode CENTER
-@return Image
---]]
-function Image:clone(bClonePivot)
-    if not bClonePivot then
-        return Image(self.texture)
-    else
-        local obj = Image(self.texture,self._pivotMode)
-        if self._pivotMode == PivotMode.CUSTOM then
-            obj:setPivot(self:getPivot())
-        end
-        return obj
-    end
-end
 
 --[[---
 Set a new texture.

@@ -151,6 +151,30 @@ function implements(o,t)
 	return _t == t
 end
 
+
+--[[---
+	Returns the super class of a given class.
+	Useful to create polimorfic calls without caring of the actual superclass
+	that could change in future
+	
+	ex:
+	
+	A = class()
+	B = class(A)
+	C = class(B)
+	o = C()
+	
+	super(C) -> B
+	super(B) -> A
+	super(A) -> nil
+	
+	@param c class
+	@return super super class of c (nil if c is a first class)
+--]]
+function super(c)
+	return c._base
+end
+
 --[[---
 Creates a new class type, allowing single inheritance and multiple interface implementation
 @param ... p1 is a base class for inheritance (can be null), following are interface to implement 
@@ -233,28 +257,6 @@ function class(...)
         return true
     end
 
-	--[[---
-	Allows to use super class.
-	If used without parameter then just return the super class of the current class 
-	(nil if called on a base class)-
-	If used providing a function name and (if needed) some parameter, it calls the relative function
-	on the parent class (if defined) and return the function result.
-	That can be usefull to override a method in a sub class without carying about the correct inheritance 
-	chain, like happens in C# or other languages
-	@param self the caller object reference
-	@param funcName [optional] the name of the function of the super class to call
-	@param ... a set of parameters to be provided to super:funcName() method
-	@return super class if funcName is nil or the result of super:funcName(...) call
-	--]]
-	c.super = function(self,funcName,...)
-		local m = getmetatable(self)
-		if funcName then
-			return m._base[funcName](self,...)
-		else
-			return m._base
-		end
-	end
-	
     setmetatable(c, mt)
     return c
 end

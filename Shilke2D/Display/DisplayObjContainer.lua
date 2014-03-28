@@ -128,6 +128,16 @@ function DisplayObjContainer:dispose()
 	DisplayObj.dispose(self)
 end
 
+
+function DisplayObjContainer:copy(src)
+	DisplayObj.copy(self, src)
+	self:removeChildren()
+	for _,obj in pairs(src._displayObjs) do
+		self:addChild(obj:clone())
+	end
+end
+
+
 ---Debug Infos
 --@param recursive boolean, if true dbgInfo will be called also for all the children
 --@return string

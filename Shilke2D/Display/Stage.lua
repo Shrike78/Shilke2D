@@ -38,6 +38,16 @@ function Stage:_createProp()
     return MOAILayer.new()
 end
 
+function Stage:clone()
+	error("it's not possible to clone a stage")
+	return nil
+end
+
+function Stage:copy(src)
+	error("it's not possible to copy a stage")
+	return false
+end
+
 ---Debug function. Used to show bounding box while rendering.
 --@param showOrientedBounds boolean. if nil is set to true
 --@param showAABounds boolean. if nil is set to false

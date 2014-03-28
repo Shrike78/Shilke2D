@@ -7,6 +7,17 @@ returns a value divided by 255, so normalized in MOAI [0,1] color space
 --]]
 Color = class()
 
+local floor = math.floor
+
+---create a Color given r,g,b,a as float 0..1 values
+--@param r [0..1]
+--@param g [0..1]
+--@param b [0..1]
+--@param a [0..1]
+function Color.fromNormalizedValues(r,g,b,a)
+	return Color(r*255, g*255, b*255, a*255)
+end
+
 ---Constructor.
 --if a param is not provided defaul value is 255
 function Color:init(r,g,b,a)
@@ -110,7 +121,6 @@ end
 
 ---color space conversion
 function Color.hsv2rgb(h, s, v)
-	local floor = math.floor
 
     -- h, s, v is allowed having values between [0 ... 1].
 
@@ -145,7 +155,6 @@ end
 --@param a [0,255]
 --@return int
 function Color.rgba2int(r,g,b,a)
-	local floor = math.floor
 	local r = floor(r)
 	local g = floor(g)
 	local b = floor(b)
@@ -160,7 +169,6 @@ end
 --@return b [0,255]
 --@return a [0,255]
 function Color.int2rgba(c)
-	local floor = math.floor
 	local INV_256 = 1/256
 
 	local b = c % 256

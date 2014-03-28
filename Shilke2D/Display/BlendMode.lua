@@ -60,11 +60,11 @@ local BlendFactors =
 	[0] = 
 	{
 		none 		= 	{BlendMode.GL_ONE, 			BlendMode.GL_ZERO},
-		normal 		= 	{BlendMode.GL_SRC_ALPHA, 	BlendMode.GL_ONE_MINUS_SRC_ALPHA},
-		add 		= 	{BlendMode.GL_SRC_ALPHA, 	BlendMode.GL_DST_ALPHA},
-		multiply 	= 	{BlendMode.GL_DST_COLOR, 	BlendMode.GL_ONE_MINUS_SRC_ALPHA},
-		screen 		= 	{BlendMode.GL_SRC_APHA,		BlendMode.GL_ONE},
-		erase 		= 	{BlendMode.GL_ZERO, 		BlendMode.GL_ONE_MINUS_SRC_ALPHA}
+		normal 		= 	{BlendMode.GL_SRC_ALPHA, 		BlendMode.GL_ONE_MINUS_SRC_ALPHA},
+		add 		= 	{BlendMode.GL_SRC_ALPHA, 		BlendMode.GL_DST_ALPHA},
+		multiply 	= 	{BlendMode.GL_DST_COLOR, 		BlendMode.GL_ONE_MINUS_SRC_ALPHA},
+		screen 		= 	{BlendMode.GL_SRC_APHA,			BlendMode.GL_ONE},
+		erase 		= 	{BlendMode.GL_ZERO, 			BlendMode.GL_ONE_MINUS_SRC_ALPHA}
 	},
 	--premultiplied alpha
 	[1] = 
@@ -72,9 +72,9 @@ local BlendFactors =
 		none 		= 	{BlendMode.GL_ONE, 			BlendMode.GL_ZERO},
 		normal 		= 	{BlendMode.GL_ONE, 			BlendMode.GL_ONE_MINUS_SRC_ALPHA},
 		add 		= 	{BlendMode.GL_ONE, 			BlendMode.GL_ONE},
-		multiply 	= 	{BlendMode.GL_DST_COLOR, 	BlendMode.GL_ONE_MINUS_SRC_ALPHA},
+		multiply 	= 	{BlendMode.GL_DST_COLOR, 		BlendMode.GL_ONE_MINUS_SRC_ALPHA},
 		screen 		= 	{BlendMode.GL_ONE, 			BlendMode.GL_ONE_MINUS_SRC_COLOR},
-		erase 		= 	{BlendMode.GL_ZERO, 		BlendMode.GL_ONE_MINUS_SRC_ALPHA}
+		erase 		= 	{BlendMode.GL_ZERO, 			BlendMode.GL_ONE_MINUS_SRC_ALPHA}
 	}
 }
 

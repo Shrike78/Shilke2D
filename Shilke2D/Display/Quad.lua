@@ -43,6 +43,11 @@ function Quad:init(width,height,pivotMode)
 	self._prop:setDeck(self._mesh)
 end
 
+function Quad:copy(src)
+	BaseQuad.copy(self, src)
+	self:setColors(src:getColor())
+end
+
 ---Inner method. It creates the quad mesh that will be displayed
 function Quad:_createMesh()
 		
@@ -224,8 +229,7 @@ end
 --If color value is per vertices the return value has no real meaning
 --@return Color
 function Quad:getColor()
-  local r,g,b,a = self._colors[1][1],self._colors[1][2],self._colors[1][3],self._colors[1][4]
-  return Color(r*255,g*255,b*255,a*255)
+  return Color.fromNormalizedValues(unpack(self._colors[1]))
 end
 
 --[[---
@@ -259,8 +263,7 @@ end
 --@param v index of the vertex [1,4]
 --@return Color
 function Quad:getVertexColor(v)
-  local r,g,b,a = self._colors[v][1],self._colors[v][2],self._colors[v][3],self._colors[v][4]
-  return Color(r*255,g*255,b*255,a*255)
+  return Color.fromNormalizedValues(unpack(self._colors[v]))
 end
 
 ---Sets all the colors of the 4 vertices
@@ -279,4 +282,17 @@ function Quad:setColors(c1,c2,c3,c4)
 	self:_updateVertexBuffer()
 end
 
+---Gets all the colors of the 4 vertices
+--@return c1 Color of vertex1
+--@return c2 Color of vertex2
+--@return c3 Color of vertex3
+--@return c4 Color of vertex4
+function Quad:getColors()
+	local colors = {}
+	for v = 1,4 do
+		local c = self._colors[v]
+		colors[#colors+1] = Color.fromNormalizedValues(unpack(c))
+	end
+	return unpack(colors)
+end
 

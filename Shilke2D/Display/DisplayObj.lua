@@ -29,7 +29,7 @@ and thus all the children of the container.
 By default display objects use alpha channel not only for transparency but also for opacity,
 multiplying rgb components. It's possible to change this behaviour calling
 
-DisplayObj:useAlphaAsOpacity(bUse)
+DisplayObj:setAlphaAsOpacity(bUse)
 
 It's also possible to change the blend mode of a display object using 
 
@@ -103,6 +103,11 @@ function DisplayObj:init()
 
 	self._useMultiplyColor = self.__defaultUseMultiplyColor
 	
+	--default blend values
+	self._blendEquation = BlendMode.GL_FUNC_ADD
+	self._blendSrcFactor = BlendMode.NORMAL
+	self._blendDstFactor = nil
+	
     self._color = {1,1,1,1}
     self._multiplyColor = {1,1,1,1}
 
@@ -117,6 +122,43 @@ function DisplayObj:dispose()
 	EventDispatcher.dispose(self)
 	self._transformMatrix = nil
 	self._prop = nil
+end
+
+--[[---
+Clones the displayObj creating a new one with the same configuration. It requires that all displayObj
+implements a default empty constructor. If a displayObj has no empty constructor the function must
+be overridden.
+@return displayObj a new displayObj, exact clone of the called one
+--]]
+function DisplayObj:clone()
+	local c = class_type(self)()
+	c:copy(self)
+	return c
+end
+
+--[[---
+Copy all the paramater from src displayObj
+The function succeed if src is of the same type of the caller or inherits from the caller class. In that case
+only common properties will be copied. The method is used to recursively copy between inheritance chain.
+Copy is used by clone.
+@param src the src displayObj to be copied
+--]]
+function DisplayObj:copy(src)
+	if not src:is_a(class_type(self)) then
+		error("it's not possible to copy from a displayObj that doesn't inherit from the self classtype")
+	end
+	self:setName(src:getName())
+	self:setVisible(src:isVisible())
+	self:setTouchable(src:isTouchable())
+	self:useMultiplyColor(src:isMultiplyingColor())
+	self:setBlendEquation(src:getBlendEquation())
+	self:setBlendMode(src:getBlendMode())
+	self:setAlphaAsOpacity(src:isAlphaAsOpacity())
+	self:setColor(src:getColor())
+	self:setPivot(src:getPivot())
+	self:setPosition(src:getPosition())
+	self:setRotation(src:getRotation())
+	self:setScale(src:getScale())
 end
 
 ---create a MOAI prop that the current DisplayObj is going to wrap.
@@ -317,8 +359,20 @@ This determines how the srcFactor and dstFactor values set with setBlendMode are
 default value is BlendMode.GL_FUNC_ADD
 --]]
 function DisplayObj:setBlendEquation(blendEquation)
+	self._blendEquation = blendEquation
 	self._prop:setBlendEquation(blendEquation)
 end 
+
+
+--[[---
+Get the current blend equation. 
+This determines how the srcFactor and dstFactor values set with setBlendMode are interpreted.
+@return blendEquation one of the three blend equation defined by BlendMode enum. 
+--]]
+function DisplayObj:getBlendEquation()
+	return self._blendEquation
+end
+
 
 --[[---
 Sets a blendMode using one of the predefined Shilke2D BlendModes or using two blend factors.
@@ -338,15 +392,32 @@ function DisplayObj:setBlendMode(srcFactor,dstFactor)
 		--if called with one of the default values it also reset on the default blend equation
 		self._prop:setBlendEquation(BlendMode.GL_FUNC_ADD)
 	end
+	self._blendSrcFactor = srcFactor
+	self._blendDstFactor = dstFactor
 	self._prop:setBlendMode(srcFactor,dstFactor)
 end
 
+--[[---
+Gets the current blendMode. that can be expressed using one of the predefined Shilke2D BlendModes 
+or using two blend factors. 
+@return srcFactor a blend mode factor or a BlendMode enum
+@return dstFactor a blend mode factor or nil (if srcFactor is a BlendMode enum)
+--]]
+function DisplayObj:getBlendMode()
+	return self._blendSrcFactor, self._blendDstFactor
+end
 
 ---Defines if alpha value has to be used as opacity value for rgb or not
 --@param bUse default is true
-function DisplayObj:useAlphaAsOpacity(bUse)
+function DisplayObj:setAlphaAsOpacity(bUse)
 	self._alphaAsOpacity = not (bUse == false)
 	self:_updateColor()
+end
+
+---Returns if alpha value is used as opacity value for rgb or not
+--@return bool
+function DisplayObj:isAlphaAsOpacity()
+	return self._alphaAsOpacity
 end
 
 function DisplayObj:_updateColor()
@@ -402,13 +473,7 @@ end
 ---Return the current Color of the object
 --@return Color(r,g,b,a)
 function DisplayObj:getColor()
-	local c = self._color
-	return Color(	
-					c[1]*255,
-					c[2]*255,
-					c[3]*255,
-					c[4]*255
-				)
+	return Color.fromNormalizedValues(unpack(self._color))
 end
 
 
@@ -717,12 +782,12 @@ function DisplayObj:getRect(resultRect)
     error("method must be overridden")
 end
 
----Get object width related on parent trasnformation (so with scaling applied)
+---Get object width related on parent transformation (so with scaling applied)
 function DisplayObj:getWidth()
 	return self:getBounds(self._parent,__helperRect).w
 end
 
----Get object height related on parent trasnformation (so with scaling applied)
+---Get object height related on parent transformation (so with scaling applied)
 function DisplayObj:getHeight()
 	return self:getBounds(self._parent,__helperRect).h
 end

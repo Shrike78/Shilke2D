@@ -50,6 +50,14 @@ function Button:init(upState, downState, label)
     self:addEventListener(Event.TOUCH, Button.onTouch, self)        
 end
 
+function Button:clone()
+	error("clone not available for Button class")
+end
+
+function Button:copy(src)
+	error("copy not available for Button class")
+end
+
 ---Resets button state at default values
 function Button:resetContents()
     self.isDown = false
@@ -62,6 +70,19 @@ end
 --@return TextField or nil
 function Button:getTextField()
     return self.textField
+end
+
+
+function Button:getUpState()
+	return self.upState
+end
+
+function Button:getDownState()
+	return self.downState
+end
+
+function Button:getLabel()
+	return self.textField and self.textField:getText() or ""
 end
 
 

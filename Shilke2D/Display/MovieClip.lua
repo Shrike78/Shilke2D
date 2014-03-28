@@ -32,9 +32,20 @@ MovieClip = class(Image, IAnimatable)
 --@param textures a list of textures that rapresents the frames of the animation
 --@param fps the animation fps value. If nil, default is 12
 --@param pivotMode default value is CENTER
-function MovieClip:init(textures,fps,pivotMode)
-    --assert(textures)
-    Image.init(self,textures[1],pivotMode)
+function MovieClip:init(textures, fps, pivotMode)
+	local txt = nil
+	if textures and #textures > 0 then
+		txt = textures[1]
+	end
+	Image.init(self,txt,pivotMode)
+	self:setup(textures, fps, pivotMode)
+end
+
+function MovieClip:setup(textures, fps)
+	textures = textures or {}
+	if #textures>0 then
+		self:setTexture(textures[1])
+	end
     self.fps = fps or 12
     self.animTime = 1 / self.fps
     self.textures = textures
@@ -44,6 +55,11 @@ function MovieClip:init(textures,fps,pivotMode)
     self.playing = false
     self.elapsedTime = 0
     self.repeatCount = 1
+end
+
+function MovieClip:copy(src)
+	Image.copy(self, src)
+	self:setup(src:getTextures(), src:getFps())
 end
 
 function MovieClip:dispose()
@@ -56,22 +72,20 @@ function MovieClip:dispose()
     self.repeatCount = 1
 end
 
---[[---
-Returns a new MovieClip that shares the same texture list (frames) and fps
-@param bClonePivot boolean if true set the same pivotMode / pivot point, 
-else set defaul pivotMode CENTER
-@return MovieClip
---]]
-function MovieClip:clone(bClonePivot)
-    if not bClonePivot then
-        return MovieClip(self.textures,self.fps)
-    else
-        local obj = MovieClip(self.textures,self.fps,self._pivotMode)
-        if self._pivotMode == PivotMode.CUSTOM then
-            obj:setPivot(self:getPivot())
-        end
-        return obj
-    end
+function MovieClip:setFps(fps)
+	self.setup(self.textures, fps)
+end
+
+function MovieClip:getFps()
+	return self.fps
+end
+
+function MovieClip:setTextures(textures)
+	self.setup(textures, self.fps)
+end
+
+function MovieClip:getTextures()
+	return self.textures
 end
 
 ---Returns the number of frames handled by the animation
