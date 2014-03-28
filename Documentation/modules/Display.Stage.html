@@ -136,6 +136,10 @@ the displayList</td>
 	<td class="summary">Set background color.</td>
 	</tr>
 	<tr>
+	<td class="name" nowrap><a href="#Stage:getBackground">Stage:getBackground&nbsp;(r, g, b)</a></td>
+	<td class="summary">Set background color.</td>
+	</tr>
+	<tr>
 	<td class="name" nowrap><a href="#Stage:_setParent">Stage:_setParent&nbsp;(parent)</a></td>
 	<td class="summary">Raise error if called because stage cannot be added as child to other containers</td>
 	</tr>
@@ -218,8 +222,8 @@ the displayList
 
     <h3>Parameters:</h3>
     <ul>
-      <li><span class="parameter">viewport</span>
-       the viewport of the scene</li>
+        <li><span class="parameter">viewport</span>
+         the viewport of the scene</li>
     </ul>
 
 
@@ -249,10 +253,10 @@ the displayList
 
     <h3>Parameters:</h3>
     <ul>
-      <li><span class="parameter">showOrientedBounds</span>
-       boolean. if nil is set to true</li>
-      <li><span class="parameter">showAABounds</span>
-       boolean. if nil is set to false</li>
+        <li><span class="parameter">showOrientedBounds</span>
+         boolean. if nil is set to true</li>
+        <li><span class="parameter">showAABounds</span>
+         boolean. if nil is set to false</li>
     </ul>
 
 
@@ -266,19 +270,19 @@ the displayList
     </dt>
     <dd>
     Inner method.
-With moai 1.4 clearColor funciton has been moved to frameBuffer and removed from GfxDevice.
+With moai 1.4 clearColor function has been moved to frameBuffer and removed from GfxDevice.
 The call checks which method is available and make the proper moai call.
 
     <h3>Parameters:</h3>
     <ul>
-      <li><span class="parameter">r</span>
-       red component [0..1]</li>
-      <li><span class="parameter">g</span>
-       green component [0..1]</li>
-      <li><span class="parameter">b</span>
-       blue component [0..1]</li>
-      <li><span class="parameter">a</span>
-       alpha component [0..1]</li>
+        <li><span class="parameter">r</span>
+         red component [0..1]</li>
+        <li><span class="parameter">g</span>
+         green component [0..1]</li>
+        <li><span class="parameter">b</span>
+         blue component [0..1]</li>
+        <li><span class="parameter">a</span>
+         alpha component [0..1]</li>
     </ul>
 
 
@@ -295,12 +299,34 @@ The call checks which method is available and make the proper moai call.
 
     <h3>Parameters:</h3>
     <ul>
-      <li><span class="parameter">r</span>
-       red component [0..255] or Color</li>
-      <li><span class="parameter">g</span>
-       green component [0..255] or nil</li>
-      <li><span class="parameter">b</span>
-       blue component [0..255] or nil</li>
+        <li><span class="parameter">r</span>
+         red component [0..255] or Color</li>
+        <li><span class="parameter">g</span>
+         green component [0..255] or nil</li>
+        <li><span class="parameter">b</span>
+         blue component [0..255] or nil</li>
+    </ul>
+
+
+
+
+
+</dd>
+    <dt>
+    <a name = "Stage:getBackground"></a>
+    <strong>Stage:getBackground&nbsp;(r, g, b)</strong>
+    </dt>
+    <dd>
+    Set background color.
+
+    <h3>Parameters:</h3>
+    <ul>
+        <li><span class="parameter">r</span>
+         red component [0..255] or Color</li>
+        <li><span class="parameter">g</span>
+         green component [0..255] or nil</li>
+        <li><span class="parameter">b</span>
+         blue component [0..255] or nil</li>
     </ul>
 
 
@@ -317,8 +343,8 @@ The call checks which method is available and make the proper moai call.
 
     <h3>Parameters:</h3>
     <ul>
-      <li><span class="parameter">parent</span>
-      </li>
+        <li><span class="parameter">parent</span>
+        </li>
     </ul>
 
 
@@ -335,10 +361,10 @@ The call checks which method is available and make the proper moai call.
 
     <h3>Parameters:</h3>
     <ul>
-      <li><span class="parameter">x</span>
-      </li>
-      <li><span class="parameter">y</span>
-      </li>
+        <li><span class="parameter">x</span>
+        </li>
+        <li><span class="parameter">y</span>
+        </li>
     </ul>
 
 
@@ -355,8 +381,8 @@ The call checks which method is available and make the proper moai call.
 
     <h3>Parameters:</h3>
     <ul>
-      <li><span class="parameter">x</span>
-      </li>
+        <li><span class="parameter">x</span>
+        </li>
     </ul>
 
 
@@ -373,8 +399,8 @@ The call checks which method is available and make the proper moai call.
 
     <h3>Parameters:</h3>
     <ul>
-      <li><span class="parameter">y</span>
-      </li>
+        <li><span class="parameter">y</span>
+        </li>
     </ul>
 
 
@@ -391,10 +417,10 @@ The call checks which method is available and make the proper moai call.
 
     <h3>Parameters:</h3>
     <ul>
-      <li><span class="parameter">x</span>
-      </li>
-      <li><span class="parameter">y</span>
-      </li>
+        <li><span class="parameter">x</span>
+        </li>
+        <li><span class="parameter">y</span>
+        </li>
     </ul>
 
 
@@ -411,8 +437,8 @@ The call checks which method is available and make the proper moai call.
 
     <h3>Parameters:</h3>
     <ul>
-      <li><span class="parameter">v</span>
-      </li>
+        <li><span class="parameter">v</span>
+        </li>
     </ul>
 
 
@@ -429,8 +455,8 @@ The call checks which method is available and make the proper moai call.
 
     <h3>Parameters:</h3>
     <ul>
-      <li><span class="parameter">x</span>
-      </li>
+        <li><span class="parameter">x</span>
+        </li>
     </ul>
 
 
@@ -447,8 +473,8 @@ The call checks which method is available and make the proper moai call.
 
     <h3>Parameters:</h3>
     <ul>
-      <li><span class="parameter">y</span>
-      </li>
+        <li><span class="parameter">y</span>
+        </li>
     </ul>
 
 
@@ -465,10 +491,10 @@ The call checks which method is available and make the proper moai call.
 
     <h3>Parameters:</h3>
     <ul>
-      <li><span class="parameter">x</span>
-      </li>
-      <li><span class="parameter">y</span>
-      </li>
+        <li><span class="parameter">x</span>
+        </li>
+        <li><span class="parameter">y</span>
+        </li>
     </ul>
 
 
@@ -485,8 +511,8 @@ The call checks which method is available and make the proper moai call.
 
     <h3>Parameters:</h3>
     <ul>
-      <li><span class="parameter">r</span>
-      </li>
+        <li><span class="parameter">r</span>
+        </li>
     </ul>
 
 
@@ -503,10 +529,10 @@ The call checks which method is available and make the proper moai call.
 
     <h3>Parameters:</h3>
     <ul>
-      <li><span class="parameter">x</span>
-      </li>
-      <li><span class="parameter">y</span>
-      </li>
+        <li><span class="parameter">x</span>
+        </li>
+        <li><span class="parameter">y</span>
+        </li>
     </ul>
 
 
@@ -523,8 +549,8 @@ The call checks which method is available and make the proper moai call.
 
     <h3>Parameters:</h3>
     <ul>
-      <li><span class="parameter">v</span>
-      </li>
+        <li><span class="parameter">v</span>
+        </li>
     </ul>
 
 
@@ -541,8 +567,8 @@ The call checks which method is available and make the proper moai call.
 
     <h3>Parameters:</h3>
     <ul>
-      <li><span class="parameter">s</span>
-      </li>
+        <li><span class="parameter">s</span>
+        </li>
     </ul>
 
 
@@ -559,8 +585,8 @@ The call checks which method is available and make the proper moai call.
 
     <h3>Parameters:</h3>
     <ul>
-      <li><span class="parameter">s</span>
-      </li>
+        <li><span class="parameter">s</span>
+        </li>
     </ul>
 
 
@@ -577,12 +603,12 @@ The call checks which method is available and make the proper moai call.
 
     <h3>Parameters:</h3>
     <ul>
-      <li><span class="parameter">x</span>
-      </li>
-      <li><span class="parameter">y</span>
-      </li>
-      <li><span class="parameter">targetSpace</span>
-      </li>
+        <li><span class="parameter">x</span>
+        </li>
+        <li><span class="parameter">y</span>
+        </li>
+        <li><span class="parameter">targetSpace</span>
+        </li>
     </ul>
 
 
@@ -599,12 +625,12 @@ The call checks which method is available and make the proper moai call.
 
     <h3>Parameters:</h3>
     <ul>
-      <li><span class="parameter">dx</span>
-      </li>
-      <li><span class="parameter">dy</span>
-      </li>
-      <li><span class="parameter">targetSpace</span>
-      </li>
+        <li><span class="parameter">dx</span>
+        </li>
+        <li><span class="parameter">dy</span>
+        </li>
+        <li><span class="parameter">targetSpace</span>
+        </li>
     </ul>
 
 
@@ -618,7 +644,7 @@ The call checks which method is available and make the proper moai call.
 </div> <!-- id="content" -->
 </div> <!-- id="main" -->
 <div id="about">
-<i>generated by <a href="http://github.com/stevedonovan/LDoc">LDoc 1.3</a></i>
+<i>generated by <a href="http://github.com/stevedonovan/LDoc">LDoc 1.3.11</a></i>
 </div> <!-- id="about" -->
 </div> <!-- id="container" -->
 </body>

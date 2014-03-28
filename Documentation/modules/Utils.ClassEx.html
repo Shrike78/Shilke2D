@@ -153,7 +153,19 @@ f:implements(iE) = true</pre>
 <table class="function_list">
 	<tr>
 	<td class="name" nowrap><a href="#class_type">class_type&nbsp;(o)</a></td>
-	<td class="summary">Offers a way to check if an obj is of a specific class</td>
+	<td class="summary">Extends the basic lua type keyword, providing a way to check if an obj is also of a given class type.</td>
+	</tr>
+	<tr>
+	<td class="name" nowrap><a href="#is_a">is_a&nbsp;(o, t)</a></td>
+	<td class="summary">Used to check if a given object is of a given type.</td>
+	</tr>
+	<tr>
+	<td class="name" nowrap><a href="#implements">implements&nbsp;(o, t)</a></td>
+	<td class="summary">Used to check if a given object implements a given interface.</td>
+	</tr>
+	<tr>
+	<td class="name" nowrap><a href="#super">super&nbsp;(c)</a></td>
+	<td class="summary">Returns the super class of a given class.</td>
 	</tr>
 	<tr>
 	<td class="name" nowrap><a href="#class">class&nbsp;(...)</a></td>
@@ -166,10 +178,6 @@ f:implements(iE) = true</pre>
 	<tr>
 	<td class="name" nowrap><a href="#c.implements">c.implements&nbsp;(self, interface)</a></td>
 	<td class="summary">Allows to check if a class implements a specific interface</td>
-	</tr>
-	<tr>
-	<td class="name" nowrap><a href="#c.super">c.super&nbsp;(self, funcName, ...)</a></td>
-	<td class="summary">Allows to use super class.</td>
 	</tr>
 </table>
 
@@ -184,18 +192,19 @@ f:implements(iE) = true</pre>
     <strong>class_type&nbsp;(o)</strong>
     </dt>
     <dd>
-    Offers a way to check if an obj is of a specific class
+    Extends the basic lua type keyword, providing a way to check if an obj is also of a given class type.
+class prototype (aka metatable) for class object instances
 
     <h3>Parameters:</h3>
     <ul>
-      <li><span class="parameter">o</span>
-       the object to be testet</li>
+        <li><span class="parameter">o</span>
+         the object to be testet</li>
     </ul>
 
     <h3>Returns:</h3>
     <ol>
 
-        the 'type' of the object if is a class type
+        string/metatable the 'type' of the object, a string for basic lua types or the
     </ol>
 
 
@@ -206,11 +215,143 @@ f:implements(iE) = true</pre>
 A = class()
 B = class(A)
 
+a = A()
 b = B()
 
-class_type(b) == A -&gt; <span class="keyword">false</span>
-class_type(b) == B -&gt; <span class="keyword">true</span></pre>
+class_type(a) -&gt; A
+class_type(b) -&gt; B
+class_type(<span class="string">"test"</span>) -&gt; <span class="string">'string'</span>
+class_type({<span class="number">1</span>,<span class="number">2</span>,<span class="number">3</span>}) -&gt; <span class="string">'table'</span></pre>
     </ul>
+
+</dd>
+    <dt>
+    <a name = "is_a"></a>
+    <strong>is_a&nbsp;(o, t)</strong>
+    </dt>
+    <dd>
+    Used to check if a given object is of a given type.
+It can be used on generic types and on class object instances
+NB: Even if a class object isntance is always also a table in lua, this function
+return false if trying to check a class object instance over a 'table' type.
+
+
+    <h3>Parameters:</h3>
+    <ul>
+        <li><span class="parameter">o</span>
+         the object to be checked</li>
+        <li><span class="parameter">t</span>
+         the type to be checked</li>
+    </ul>
+
+    <h3>Returns:</h3>
+    <ol>
+
+         bool true if the object is of the given type, false if not.
+    </ol>
+
+
+
+    <h3>Usage:</h3>
+    <ul>
+        <pre class="example">
+A = class()
+B = class(A)
+
+a = A()
+b = B()
+
+is_a(a,A) -&gt; <span class="keyword">true</span>
+is_a(a,B) -&gt; <span class="keyword">false</span>
+
+is_a(b,A) -&gt; <span class="keyword">true</span>
+is_a(b,B) -&gt; <span class="keyword">true</span>
+
+is_a(a,<span class="string">'table'</span>) -&gt; <span class="keyword">false</span>
+
+is_a(<span class="string">'test'</span>,<span class="string">'string'</span>) -&gt; <span class="keyword">true</span>
+is_a({<span class="number">1</span>,<span class="number">2</span>,<span class="number">3</span>},<span class="string">'table'</span>) -&gt; <span class="keyword">true</span></pre>
+    </ul>
+
+</dd>
+    <dt>
+    <a name = "implements"></a>
+    <strong>implements&nbsp;(o, t)</strong>
+    </dt>
+    <dd>
+    Used to check if a given object implements a given interface.
+It can be used on generic types and on class object instances
+NB: we assume that a basic lua object always implements only the interface of its base type
+
+
+    <h3>Parameters:</h3>
+    <ul>
+        <li><span class="parameter">o</span>
+         the object to be checked</li>
+        <li><span class="parameter">t</span>
+         the interface type to be checked</li>
+    </ul>
+
+    <h3>Returns:</h3>
+    <ol>
+
+         bool true if the object implements the given interface, false if not.
+    </ol>
+
+
+
+    <h3>Usage:</h3>
+    <ul>
+        <pre class="example">
+iA = class()
+iB = class()
+C = class(<span class="keyword">nil</span>,iA,iB)
+
+c = C()
+
+implements(c,iA) = <span class="keyword">true</span>
+implements(c,iB) = <span class="keyword">true</span>
+implements(c,C) = <span class="keyword">true</span>
+implements(<span class="string">"test"</span>,C) = <span class="keyword">false</span>
+implements(<span class="string">"test"</span>,<span class="string">'string'</span>) = <span class="keyword">true</span></pre>
+    </ul>
+
+</dd>
+    <dt>
+    <a name = "super"></a>
+    <strong>super&nbsp;(c)</strong>
+    </dt>
+    <dd>
+    Returns the super class of a given class.
+	Useful to create polimorfic calls without caring of the actual superclass
+	that could change in future
+
+	ex:
+
+	A = class()
+	B = class(A)
+	C = class(B)
+	o = C()
+
+	super(C) -> B
+	super(B) -> A
+	super(A) -> nil
+
+
+    <h3>Parameters:</h3>
+    <ul>
+        <li><span class="parameter">c</span>
+         class</li>
+    </ul>
+
+    <h3>Returns:</h3>
+    <ol>
+
+        super super class of c (nil if c is a first class)
+    </ol>
+
+
+
 
 </dd>
     <dt>
@@ -222,8 +363,8 @@ class_type(b) == B -&gt; <span class="keyword">true</span></pre>
 
     <h3>Parameters:</h3>
     <ul>
-      <li><span class="parameter">...</span>
-       p1 is a base class for inheritance (can be null), following are interface to implement</li>
+        <li><span class="parameter">...</span>
+         p1 is a base class for inheritance (can be null), following are interface to implement</li>
     </ul>
 
 
@@ -240,10 +381,10 @@ class_type(b) == B -&gt; <span class="keyword">true</span></pre>
 
     <h3>Parameters:</h3>
     <ul>
-      <li><span class="parameter">self</span>
-      </li>
-      <li><span class="parameter">klass</span>
-      </li>
+        <li><span class="parameter">self</span>
+        </li>
+        <li><span class="parameter">klass</span>
+        </li>
     </ul>
 
 
@@ -260,45 +401,12 @@ class_type(b) == B -&gt; <span class="keyword">true</span></pre>
 
     <h3>Parameters:</h3>
     <ul>
-      <li><span class="parameter">self</span>
-      </li>
-      <li><span class="parameter">interface</span>
-      Check we have all the target's callables</li>
+        <li><span class="parameter">self</span>
+        </li>
+        <li><span class="parameter">interface</span>
+        Check we have all the target's callables</li>
     </ul>
 
-
-
-
-
-</dd>
-    <dt>
-    <a name = "c.super"></a>
-    <strong>c.super&nbsp;(self, funcName, ...)</strong>
-    </dt>
-    <dd>
-    Allows to use super class.
-	If used without parameter then just return the super class of the current class
-	(nil if called on a base class)-
-	If used providing a function name and (if needed) some parameter, it calls the relative function
-	on the parent class (if defined) and return the function result.
-	That can be usefull to override a method in a sub class without carying about the correct inheritance
-	chain, like happens in C# or other languages
-
-    <h3>Parameters:</h3>
-    <ul>
-      <li><span class="parameter">self</span>
-       the caller object reference</li>
-      <li><span class="parameter">funcName</span>
-       [optional] the name of the function of the super class to call</li>
-      <li><span class="parameter">...</span>
-       a set of parameters to be provided to super:funcName() method</li>
-    </ul>
-
-    <h3>Returns:</h3>
-    <ol>
-
-        super class if funcName is nil or the result of super:funcName(...) call
-    </ol>
 
 
 
@@ -310,7 +418,7 @@ class_type(b) == B -&gt; <span class="keyword">true</span></pre>
 </div> <!-- id="content" -->
 </div> <!-- id="main" -->
 <div id="about">
-<i>generated by <a href="http://github.com/stevedonovan/LDoc">LDoc 1.3</a></i>
+<i>generated by <a href="http://github.com/stevedonovan/LDoc">LDoc 1.3.11</a></i>
 </div> <!-- id="about" -->
 </div> <!-- id="container" -->
 </body>

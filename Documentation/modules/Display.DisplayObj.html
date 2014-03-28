@@ -125,7 +125,12 @@ object translucent or invisible.
 system. If you rotate a container, you rotate that coordinate system
 and thus all the children of the container.
 <p>- Color, Opacity and BlendModes
-<p>[TODO]
+<p>By default display objects use alpha channel not only for transparency but also for opacity,
+multiplying rgb components. It's possible to change this behaviour calling
+<p>DisplayObj:setAlphaAsOpacity(bUse)
+<p>It's also possible to change the blend mode of a display object using
+<p>DisplayObj:setBlendEquation()
+DisplayObj:setBlendMode()
 <p>- Subclassing
 <p>Since DisplayObject is an abstract class, you cannot instantiate it
 directly, but have to use one of its subclasses instead.
@@ -145,6 +150,15 @@ DisplayObject:
 	<td class="name" nowrap><a href="#DisplayObj:dispose">DisplayObj:dispose&nbsp;()</a></td>
 	<td class="summary">If a derived object needs to clean up resources it must inherits this method, always remembering to
 call also parent dispose method</td>
+	</tr>
+	<tr>
+	<td class="name" nowrap><a href="#DisplayObj:clone">DisplayObj:clone&nbsp;()</a></td>
+	<td class="summary">Clones the displayObj creating a new one with the same configuration.</td>
+	</tr>
+	<tr>
+	<td class="name" nowrap><a href="#DisplayObj:copy">DisplayObj:copy&nbsp;(src)</a></td>
+	<td class="summary">Copy all the paramater from src displayObj
+The function succeed if src is of the same type of the caller or inherits from the caller class.</td>
 	</tr>
 	<tr>
 	<td class="name" nowrap><a href="#DisplayObj:_createProp">DisplayObj:_createProp&nbsp;()</a></td>
@@ -221,12 +235,24 @@ Used for example for images when a pixel shader is set for special effects.</td>
 	<td class="summary">Set the blend equation.</td>
 	</tr>
 	<tr>
+	<td class="name" nowrap><a href="#DisplayObj:getBlendEquation">DisplayObj:getBlendEquation&nbsp;()</a></td>
+	<td class="summary">Get the current blend equation.</td>
+	</tr>
+	<tr>
 	<td class="name" nowrap><a href="#DisplayObj:setBlendMode">DisplayObj:setBlendMode&nbsp;(srcFactor, dstFactor)</a></td>
 	<td class="summary">Sets a blendMode using one of the predefined Shilke2D BlendModes or using two blend factors.</td>
 	</tr>
 	<tr>
-	<td class="name" nowrap><a href="#DisplayObj:useAlphaAsOpacity">DisplayObj:useAlphaAsOpacity&nbsp;(bUse)</a></td>
+	<td class="name" nowrap><a href="#DisplayObj:getBlendMode">DisplayObj:getBlendMode&nbsp;()</a></td>
+	<td class="summary">Gets the current blendMode.</td>
+	</tr>
+	<tr>
+	<td class="name" nowrap><a href="#DisplayObj:setAlphaAsOpacity">DisplayObj:setAlphaAsOpacity&nbsp;(bUse)</a></td>
 	<td class="summary">Defines if alpha value has to be used as opacity value for rgb or not</td>
+	</tr>
+	<tr>
+	<td class="name" nowrap><a href="#DisplayObj:isAlphaAsOpacity">DisplayObj:isAlphaAsOpacity&nbsp;()</a></td>
+	<td class="summary">Returns if alpha value is used as opacity value for rgb or not</td>
 	</tr>
 	<tr>
 	<td class="name" nowrap><a href="#DisplayObj:setAlpha">DisplayObj:setAlpha&nbsp;(a)</a></td>
@@ -375,11 +401,11 @@ container coordinates (usually the stage).</td>
 	</tr>
 	<tr>
 	<td class="name" nowrap><a href="#DisplayObj:getWidth">DisplayObj:getWidth&nbsp;()</a></td>
-	<td class="summary">Get object width related on parent trasnformation (so with scaling applied)</td>
+	<td class="summary">Get object width related on parent transformation (so with scaling applied)</td>
 	</tr>
 	<tr>
 	<td class="name" nowrap><a href="#DisplayObj:getHeight">DisplayObj:getHeight&nbsp;()</a></td>
-	<td class="summary">Get object height related on parent trasnformation (so with scaling applied)</td>
+	<td class="summary">Get object height related on parent transformation (so with scaling applied)</td>
 	</tr>
 	<tr>
 	<td class="name" nowrap><a href="#DisplayObj:getBounds">DisplayObj:getBounds&nbsp;(targetSpace, resultRect)</a></td>
@@ -451,6 +477,47 @@ call also parent dispose method
 
 </dd>
     <dt>
+    <a name = "DisplayObj:clone"></a>
+    <strong>DisplayObj:clone&nbsp;()</strong>
+    </dt>
+    <dd>
+    Clones the displayObj creating a new one with the same configuration.  It requires that all displayObj
+implements a default empty constructor. If a displayObj has no empty constructor the function must
+be overridden.
+
+
+    <h3>Returns:</h3>
+    <ol>
+
+        displayObj a new displayObj, exact clone of the called one
+    </ol>
+
+
+
+
+</dd>
+    <dt>
+    <a name = "DisplayObj:copy"></a>
+    <strong>DisplayObj:copy&nbsp;(src)</strong>
+    </dt>
+    <dd>
+    Copy all the paramater from src displayObj
+The function succeed if src is of the same type of the caller or inherits from the caller class.  In that case
+only common properties will be copied. The method is used to recursively copy between inheritance chain.
+Copy is used by clone.
+
+    <h3>Parameters:</h3>
+    <ul>
+        <li><span class="parameter">src</span>
+         the src displayObj to be copied</li>
+    </ul>
+
+
+
+
+
+</dd>
+    <dt>
     <a name = "DisplayObj:_createProp"></a>
     <strong>DisplayObj:_createProp&nbsp;()</strong>
     </dt>
@@ -475,8 +542,8 @@ Can be used to create a description of the single displayObj or of a whole displ
 
     <h3>Parameters:</h3>
     <ul>
-      <li><span class="parameter">recursive</span>
-       has meaning only if the displayObj is a DisplayObjContainer.</li>
+        <li><span class="parameter">recursive</span>
+         has meaning only if the displayObj is a DisplayObjContainer.</li>
     </ul>
 
     <h3>Returns:</h3>
@@ -498,8 +565,8 @@ Can be used to create a description of the single displayObj or of a whole displ
 
     <h3>Parameters:</h3>
     <ul>
-      <li><span class="parameter">name</span>
-       the name of the object. Can be nil</li>
+        <li><span class="parameter">name</span>
+         the name of the object. Can be nil</li>
     </ul>
 
 
@@ -531,9 +598,9 @@ Called by a DisplayObjContainer when the DisplayObj is added as child
 
     <h3>Parameters:</h3>
     <ul>
-      <li><span class="parameter">parent</span>
-        <span class="types"><span class="type">assert(not parent or parent</span></span>
-      is_a(DisplayObjContainer))</li>
+        <li><span class="parameter">parent</span>
+            <span class="types"><span class="type">assert(not parent or parent</span></span>
+        is_a(DisplayObjContainer))</li>
     </ul>
 
 
@@ -614,8 +681,8 @@ For all the displayed object the root is Stage
 
     <h3>Parameters:</h3>
     <ul>
-      <li><span class="parameter">visible</span>
-       boolean value to set visible or hidden the displayObj</li>
+        <li><span class="parameter">visible</span>
+         boolean value to set visible or hidden the displayObj</li>
     </ul>
 
 
@@ -654,8 +721,8 @@ tested too
 
     <h3>Parameters:</h3>
     <ul>
-      <li><span class="parameter">touchable</span>
-       boolean value to enable / disable touchable status</li>
+        <li><span class="parameter">touchable</span>
+         boolean value to enable / disable touchable status</li>
     </ul>
 
 
@@ -691,8 +758,8 @@ Used for example for images when a pixel shader is set for special effects.
 
     <h3>Parameters:</h3>
     <ul>
-      <li><span class="parameter">bUse</span>
-       boolean</li>
+        <li><span class="parameter">bUse</span>
+         boolean</li>
     </ul>
 
 
@@ -729,14 +796,14 @@ Called by parent container, setMultiplyColor set the multiply color value of the
 
     <h3>Parameters:</h3>
     <ul>
-      <li><span class="parameter">r</span>
-       [0,1]</li>
-      <li><span class="parameter">g</span>
-       [0,1]</li>
-      <li><span class="parameter">b</span>
-       [0,1]</li>
-      <li><span class="parameter">a</span>
-       [0,1]</li>
+        <li><span class="parameter">r</span>
+         [0,1]</li>
+        <li><span class="parameter">g</span>
+         [0,1]</li>
+        <li><span class="parameter">b</span>
+         [0,1]</li>
+        <li><span class="parameter">a</span>
+         [0,1]</li>
     </ul>
 
 
@@ -781,10 +848,29 @@ default value is BlendMode.GL_FUNC_ADD
 
     <h3>Parameters:</h3>
     <ul>
-      <li><span class="parameter">blendEquation</span>
-       [optional] one of the three blend equation defined by BlendMode enum. </li>
+        <li><span class="parameter">blendEquation</span>
+         [optional] one of the three blend equation defined by BlendMode enum. </li>
     </ul>
 
+
+
+
+
+</dd>
+    <dt>
+    <a name = "DisplayObj:getBlendEquation"></a>
+    <strong>DisplayObj:getBlendEquation&nbsp;()</strong>
+    </dt>
+    <dd>
+    Get the current blend equation.
+This determines how the srcFactor and dstFactor values set with setBlendMode are interpreted.
+
+
+    <h3>Returns:</h3>
+    <ol>
+
+        blendEquation one of the three blend equation defined by BlendMode enum.
+    </ol>
 
 
 
@@ -803,10 +889,10 @@ BlendEquation.GL_FUNC_ADD
 
     <h3>Parameters:</h3>
     <ul>
-      <li><span class="parameter">srcFactor</span>
-       a blend mode factor or a BlendMode enum</li>
-      <li><span class="parameter">dstFactor</span>
-       a blend mode factor or nil (if BlendMode enum is provided as first param)</li>
+        <li><span class="parameter">srcFactor</span>
+         a blend mode factor or a BlendMode enum</li>
+        <li><span class="parameter">dstFactor</span>
+         a blend mode factor or nil (if BlendMode enum is provided as first param)</li>
     </ul>
 
 
@@ -815,18 +901,57 @@ BlendEquation.GL_FUNC_ADD
 
 </dd>
     <dt>
-    <a name = "DisplayObj:useAlphaAsOpacity"></a>
-    <strong>DisplayObj:useAlphaAsOpacity&nbsp;(bUse)</strong>
+    <a name = "DisplayObj:getBlendMode"></a>
+    <strong>DisplayObj:getBlendMode&nbsp;()</strong>
+    </dt>
+    <dd>
+    Gets the current blendMode.  that can be expressed using one of the predefined Shilke2D BlendModes
+or using two blend factors.
+
+
+    <h3>Returns:</h3>
+    <ol>
+        <li>
+        srcFactor a blend mode factor or a BlendMode enum</li>
+        <li>
+        dstFactor a blend mode factor or nil (if srcFactor is a BlendMode enum)</li>
+    </ol>
+
+
+
+
+</dd>
+    <dt>
+    <a name = "DisplayObj:setAlphaAsOpacity"></a>
+    <strong>DisplayObj:setAlphaAsOpacity&nbsp;(bUse)</strong>
     </dt>
     <dd>
     Defines if alpha value has to be used as opacity value for rgb or not
 
     <h3>Parameters:</h3>
     <ul>
-      <li><span class="parameter">bUse</span>
-       default is true</li>
+        <li><span class="parameter">bUse</span>
+         default is true</li>
     </ul>
 
+
+
+
+
+</dd>
+    <dt>
+    <a name = "DisplayObj:isAlphaAsOpacity"></a>
+    <strong>DisplayObj:isAlphaAsOpacity&nbsp;()</strong>
+    </dt>
+    <dd>
+    Returns if alpha value is used as opacity value for rgb or not
+
+
+    <h3>Returns:</h3>
+    <ol>
+
+        bool
+    </ol>
 
 
 
@@ -841,8 +966,8 @@ BlendEquation.GL_FUNC_ADD
 
     <h3>Parameters:</h3>
     <ul>
-      <li><span class="parameter">a</span>
-       alpha value [0,255]</li>
+        <li><span class="parameter">a</span>
+         alpha value [0,255]</li>
     </ul>
 
 
@@ -863,14 +988,14 @@ The following calls are valid:
 
     <h3>Parameters:</h3>
     <ul>
-      <li><span class="parameter">r</span>
-       red value [0,255] or a Color</li>
-      <li><span class="parameter">g</span>
-       green value [0,255] or nil</li>
-      <li><span class="parameter">b</span>
-       blue value [0,255] or nil</li>
-      <li><span class="parameter">a</span>
-       alpha value [0,255] or nil</li>
+        <li><span class="parameter">r</span>
+         red value [0,255] or a Color</li>
+        <li><span class="parameter">g</span>
+         green value [0,255] or nil</li>
+        <li><span class="parameter">b</span>
+         blue value [0,255] or nil</li>
+        <li><span class="parameter">a</span>
+         alpha value [0,255] or nil</li>
     </ul>
 
 
@@ -907,10 +1032,10 @@ keeping pivot point as center. By default pivot point is (0,0), depending on coo
 
     <h3>Parameters:</h3>
     <ul>
-      <li><span class="parameter">x</span>
-       pivot x position</li>
-      <li><span class="parameter">y</span>
-       pivot y position</li>
+        <li><span class="parameter">x</span>
+         pivot x position</li>
+        <li><span class="parameter">y</span>
+         pivot y position</li>
     </ul>
 
 
@@ -947,8 +1072,8 @@ keeping pivot point as center. By default pivot point is (0,0), depending on coo
 
     <h3>Parameters:</h3>
     <ul>
-      <li><span class="parameter">x</span>
-      </li>
+        <li><span class="parameter">x</span>
+        </li>
     </ul>
 
 
@@ -983,8 +1108,8 @@ keeping pivot point as center. By default pivot point is (0,0), depending on coo
 
     <h3>Parameters:</h3>
     <ul>
-      <li><span class="parameter">y</span>
-      </li>
+        <li><span class="parameter">y</span>
+        </li>
     </ul>
 
 
@@ -1019,10 +1144,10 @@ keeping pivot point as center. By default pivot point is (0,0), depending on coo
 
     <h3>Parameters:</h3>
     <ul>
-      <li><span class="parameter">x</span>
-      </li>
-      <li><span class="parameter">y</span>
-      </li>
+        <li><span class="parameter">x</span>
+        </li>
+        <li><span class="parameter">y</span>
+        </li>
     </ul>
 
 
@@ -1059,8 +1184,8 @@ keeping pivot point as center. By default pivot point is (0,0), depending on coo
 
     <h3>Parameters:</h3>
     <ul>
-      <li><span class="parameter">v</span>
-       vec2(x,y)</li>
+        <li><span class="parameter">v</span>
+         vec2(x,y)</li>
     </ul>
 
 
@@ -1095,8 +1220,8 @@ keeping pivot point as center. By default pivot point is (0,0), depending on coo
 
     <h3>Parameters:</h3>
     <ul>
-      <li><span class="parameter">x</span>
-      </li>
+        <li><span class="parameter">x</span>
+        </li>
     </ul>
 
 
@@ -1131,8 +1256,8 @@ keeping pivot point as center. By default pivot point is (0,0), depending on coo
 
     <h3>Parameters:</h3>
     <ul>
-      <li><span class="parameter">y</span>
-      </li>
+        <li><span class="parameter">y</span>
+        </li>
     </ul>
 
 
@@ -1167,10 +1292,10 @@ keeping pivot point as center. By default pivot point is (0,0), depending on coo
 
     <h3>Parameters:</h3>
     <ul>
-      <li><span class="parameter">x</span>
-      </li>
-      <li><span class="parameter">y</span>
-      </li>
+        <li><span class="parameter">x</span>
+        </li>
+        <li><span class="parameter">y</span>
+        </li>
     </ul>
 
 
@@ -1188,8 +1313,8 @@ Rotation is expressed in radians and is applied clock wise.
 
     <h3>Parameters:</h3>
     <ul>
-      <li><span class="parameter">r</span>
-       radians</li>
+        <li><span class="parameter">r</span>
+         radians</li>
     </ul>
 
 
@@ -1224,10 +1349,10 @@ Rotation is expressed in radians and is applied clock wise.
 
     <h3>Parameters:</h3>
     <ul>
-      <li><span class="parameter">x</span>
-      </li>
-      <li><span class="parameter">y</span>
-      </li>
+        <li><span class="parameter">x</span>
+        </li>
+        <li><span class="parameter">y</span>
+        </li>
     </ul>
 
 
@@ -1264,8 +1389,8 @@ Rotation is expressed in radians and is applied clock wise.
 
     <h3>Parameters:</h3>
     <ul>
-      <li><span class="parameter">v</span>
-       vec2(x,y)</li>
+        <li><span class="parameter">v</span>
+         vec2(x,y)</li>
     </ul>
 
 
@@ -1300,8 +1425,8 @@ Rotation is expressed in radians and is applied clock wise.
 
     <h3>Parameters:</h3>
     <ul>
-      <li><span class="parameter">s</span>
-      </li>
+        <li><span class="parameter">s</span>
+        </li>
     </ul>
 
 
@@ -1336,8 +1461,8 @@ Rotation is expressed in radians and is applied clock wise.
 
     <h3>Parameters:</h3>
     <ul>
-      <li><span class="parameter">s</span>
-      </li>
+        <li><span class="parameter">s</span>
+        </li>
     </ul>
 
 
@@ -1373,8 +1498,8 @@ to calculate relative position into the displayList
 
     <h3>Parameters:</h3>
     <ul>
-      <li><span class="parameter">targetSpace</span>
-       could be self, nil or an ancestor displayObj.</li>
+        <li><span class="parameter">targetSpace</span>
+         could be self, nil or an ancestor displayObj.</li>
     </ul>
 
 
@@ -1396,12 +1521,12 @@ screenspace / stage)
 
     <h3>Parameters:</h3>
     <ul>
-      <li><span class="parameter">x</span>
-       coordinate in local system</li>
-      <li><span class="parameter">y</span>
-       coordinate in local system</li>
-      <li><span class="parameter">targetSpace</span>
-       destination space of the trasnformation</li>
+        <li><span class="parameter">x</span>
+         coordinate in local system</li>
+        <li><span class="parameter">y</span>
+         coordinate in local system</li>
+        <li><span class="parameter">targetSpace</span>
+         destination space of the trasnformation</li>
     </ul>
 
 
@@ -1423,12 +1548,12 @@ If nil is considered to be the the top most container
 
     <h3>Parameters:</h3>
     <ul>
-      <li><span class="parameter">x</span>
-       coordinate in global system</li>
-      <li><span class="parameter">y</span>
-       coordinate in global system</li>
-      <li><span class="parameter">targetSpace</span>
-       source space of the trasnformation</li>
+        <li><span class="parameter">x</span>
+         coordinate in global system</li>
+        <li><span class="parameter">y</span>
+         coordinate in global system</li>
+        <li><span class="parameter">targetSpace</span>
+         source space of the trasnformation</li>
     </ul>
 
 
@@ -1448,12 +1573,12 @@ Usefull for drag and drop features
 
     <h3>Parameters:</h3>
     <ul>
-      <li><span class="parameter">x</span>
-       global coordinate</li>
-      <li><span class="parameter">y</span>
-       global coordinate</li>
-      <li><span class="parameter">targetSpace</span>
-       the coordinate system to which x,y belongs. </li>
+        <li><span class="parameter">x</span>
+         global coordinate</li>
+        <li><span class="parameter">y</span>
+         global coordinate</li>
+        <li><span class="parameter">targetSpace</span>
+         the coordinate system to which x,y belongs. </li>
     </ul>
 
 
@@ -1472,8 +1597,8 @@ If nil refers to the top most container
 
     <h3>Parameters:</h3>
     <ul>
-      <li><span class="parameter">targetSpace</span>
-       related to which position has to be transformed.</li>
+        <li><span class="parameter">targetSpace</span>
+         related to which position has to be transformed.</li>
     </ul>
 
     <h3>Returns:</h3>
@@ -1497,12 +1622,12 @@ If nil refers to the top most container
 
     <h3>Parameters:</h3>
     <ul>
-      <li><span class="parameter">dx</span>
-       x translation</li>
-      <li><span class="parameter">dy</span>
-       y translation</li>
-      <li><span class="parameter">targetSpace</span>
-       in which translation has to been applied. If nil refers to the top most container</li>
+        <li><span class="parameter">dx</span>
+         x translation</li>
+        <li><span class="parameter">dy</span>
+         y translation</li>
+        <li><span class="parameter">targetSpace</span>
+         in which translation has to been applied. If nil refers to the top most container</li>
     </ul>
 
 
@@ -1521,8 +1646,8 @@ defined for concrete displayObj classes.
 
     <h3>Parameters:</h3>
     <ul>
-      <li><span class="parameter">resultRect</span>
-       if provided is filled and returned</li>
+        <li><span class="parameter">resultRect</span>
+         if provided is filled and returned</li>
     </ul>
 
     <h3>Returns:</h3>
@@ -1540,7 +1665,7 @@ defined for concrete displayObj classes.
     <strong>DisplayObj:getWidth&nbsp;()</strong>
     </dt>
     <dd>
-    Get object width related on parent trasnformation (so with scaling applied)
+    Get object width related on parent transformation (so with scaling applied)
 
 
 
@@ -1553,7 +1678,7 @@ defined for concrete displayObj classes.
     <strong>DisplayObj:getHeight&nbsp;()</strong>
     </dt>
     <dd>
-    Get object height related on parent trasnformation (so with scaling applied)
+    Get object height related on parent transformation (so with scaling applied)
 
 
 
@@ -1571,10 +1696,10 @@ appears in another coordinate system.
 
     <h3>Parameters:</h3>
     <ul>
-      <li><span class="parameter">targetSpace</span>
-       the object related to which we want to calculate bounds</li>
-      <li><span class="parameter">resultRect</span>
-       optional, if provided is filled and returned</li>
+        <li><span class="parameter">targetSpace</span>
+         the object related to which we want to calculate bounds</li>
+        <li><span class="parameter">resultRect</span>
+         optional, if provided is filled and returned</li>
     </ul>
 
     <h3>Returns:</h3>
@@ -1598,8 +1723,8 @@ The array can be directely used for rendering
 
     <h3>Parameters:</h3>
     <ul>
-      <li><span class="parameter">targetSpace</span>
-       the object related to which we want to calculate the oriented bounds</li>
+        <li><span class="parameter">targetSpace</span>
+         the object related to which we want to calculate the oriented bounds</li>
     </ul>
 
     <h3>Returns:</h3>
@@ -1634,8 +1759,8 @@ The array can be directely used for rendering
 
     <h3>Parameters:</h3>
     <ul>
-      <li><span class="parameter">drawContainer</span>
-      </li>
+        <li><span class="parameter">drawContainer</span>
+        </li>
     </ul>
 
 
@@ -1652,14 +1777,14 @@ The array can be directely used for rendering
 
     <h3>Parameters:</h3>
     <ul>
-      <li><span class="parameter">x</span>
-       coordinate in targetSpace system</li>
-      <li><span class="parameter">y</span>
-       coordinate in targetSpace system</li>
-      <li><span class="parameter">targetSpace</span>
-       the referred coorindate system. If nil the top most container / stage</li>
-      <li><span class="parameter">forTouch</span>
-       boolean. If true the check is done only for visible and touchable object</li>
+        <li><span class="parameter">x</span>
+         coordinate in targetSpace system</li>
+        <li><span class="parameter">y</span>
+         coordinate in targetSpace system</li>
+        <li><span class="parameter">targetSpace</span>
+         the referred coorindate system. If nil the top most container / stage</li>
+        <li><span class="parameter">forTouch</span>
+         boolean. If true the check is done only for visible and touchable object</li>
     </ul>
 
     <h3>Returns:</h3>
@@ -1713,7 +1838,7 @@ with ttf)
 </div> <!-- id="content" -->
 </div> <!-- id="main" -->
 <div id="about">
-<i>generated by <a href="http://github.com/stevedonovan/LDoc">LDoc 1.3</a></i>
+<i>generated by <a href="http://github.com/stevedonovan/LDoc">LDoc 1.3.11</a></i>
 </div> <!-- id="about" -->
 </div> <!-- id="container" -->
 </body>
