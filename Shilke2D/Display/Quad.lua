@@ -45,7 +45,7 @@ end
 
 function Quad:copy(src)
 	BaseQuad.copy(self, src)
-	self:setColors(src:getColor())
+	self:setColors(src:getColors())
 end
 
 ---Inner method. It creates the quad mesh that will be displayed
