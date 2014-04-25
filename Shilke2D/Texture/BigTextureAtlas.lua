@@ -5,7 +5,7 @@ It's possible in this way use logical atlas where texture are larger
 than 2048x2048 
 --]]
 
-BigTextureAtlas = class(TextureAtlas)
+BigTextureAtlas = class(nil, ITextureAtlas)
 
 function BigTextureAtlas:init()
     --store atlas reference for each region index
@@ -13,6 +13,7 @@ function BigTextureAtlas:init()
 end
 
 function BigTextureAtlas:dispose()
+	--avoid to call twice dispose on same sub atlas
 	local tmp = {}
 	for i,v in pairs(self.regionMap) do
 		if not tmp[v] then
@@ -33,7 +34,7 @@ function BigTextureAtlas:addAtlas(atlas)
     local sortedNames = atlas:getSortedNames()
     for _,region in ipairs(sortedNames) do
         if self.regionMap[region] then
-            error("region "..region.." already added to BigAtlas")
+            error("region "..region.." already added")
         else
             self.regionMap[region] = atlas
         end
@@ -53,14 +54,40 @@ function BigTextureAtlas:removeAtlas(atlas)
     end
 end
 
+
 --[[---
-BigTextureAtlas accept only other atlas, it's not
-possible to directly add new named regions so if the 
-function is called an error is raised
+Returns all the regions sorted by name, that begin with "prefix". 
+If no prefix is provided it returns all the regions
+@param prefix optional, prefix to select region names
+@return list of regions
 --]]
-function BigTextureAtlas:addRegion(name,rect)
-    error("BigTextureAtlas do not support adding new regions")
+function BigTextureAtlas:getSortedNames(prefix)
+    local sortedRegions = {}
+	for n,_ in pairs(self.regionMap) do
+		if not prefix or string.starts(n,prefix) then
+			sortedRegions[#sortedRegions + 1] = n
+		end
+	end    
+    table.sort(sortedRegions)
+    return sortedRegions
 end
+
+--[[---
+Returns the number of textures with a name that starts with prefix.
+If no prefix is provided it returns the number of all the textures.
+@param prefix optional, prefix to select region/texture names
+@return number number of textures that match prefix
+--]]
+function BigTextureAtlas:getNumOfTextures(prefix)
+	local res = 0
+	for n,_ in pairs(self.regions) do
+		if not prefix or string.starts(n,prefix) then
+			res = res + 1
+		end
+	end    
+	return res
+end
+
 
 --if "name" is a registered named region, it get the referneced atlas
 --and returns the subtexture
@@ -72,43 +99,3 @@ function BigTextureAtlas:getTexture(name)
     return nil
 end
 
---[[---
-Returns all the regions sorted by name, that begin with "prefix". 
-If no prefix is provided it returns all the regions
-@param prefix optional, prefix to select region names
-@return list of regions
---]]
-function BigTextureAtlas:getSortedNames(prefix)
-    local sortedRegions = {}
-    if prefix then
-        for n,_ in pairs(self.regionMap) do
-            local idx = string.find(n,prefix)
-            if idx == 1 then
-                sortedRegions[#sortedRegions + 1] = n
-            end
-        end    
-    else
-        for n,_ in pairs(self.regionMap) do
-            sortedRegions[#sortedRegions + 1] = n
-        end
-    end
-    table.sort(sortedRegions)
-    return sortedRegions
-end
-
---[[---
-Returns all the textures sorted by region name, that begin with "prefix". 
-If no prefix is provided it returns all the textures.
-@param prefix optional, prefix to select region names
-@return list of textures
---]]
-function BigTextureAtlas:getTextures(prefix) 
-    local textures = {}
-    
-    local sortedRegions = self:getSortedNames(prefix)
- 
-    for _,v in ipairs(sortedRegions) do
-        table.insert(textures, self.regionMap[v]:getTexture(v))
-    end
-    return textures  
-end

@@ -12,7 +12,7 @@ possible to query for single named texure, or for a group of sorted
 texture that share a prefix in the name.
 --]]
 
-TextureAtlas = class()
+TextureAtlas = class(nil, ITextureAtlas)
 
 --[[---
 Automatic creation of a tilest starting from a texture, where all 
@@ -90,10 +90,12 @@ function TextureAtlas:init(texture)
     self.regions = {}
 end
 
----Dispose also the texture is using as atlas
+---Dispose all the subtexture created inside the atlas
 function TextureAtlas:dispose()
-	if self.baseTexture then 
-		self.baseTexture:dispose() 
+	for _,v in pairs(self.regions) do
+		if v[2] then
+			v[2]:dispose()
+		end
 	end
 	table.clear(self.regions)
 end
@@ -106,18 +108,10 @@ Named regions are uv map rect, so x,y,w,h are in the range [0,1]
 @param rect a rect with uvmap values [0,1]
 --]]
 function TextureAtlas:addRegion(name,rect)
-    self.regions[name] = rect
-end
-
----Returns a subtexture that wrap a specific named region
---@param name the name of the region to use to build the sub texture
---@return SubTexture. nil if the region name doesn't belong to current atlas
-function TextureAtlas:getTexture(name)
-    local region = self.regions[name]
-    if region then
-        return SubTexture(self.baseTexture,region)
-    end
-    return nil
+	if self.regions[name] then
+		error("region "..region.." already added to Atlas")
+	end
+	self.regions[name] = {rect, nil}
 end
 
 --[[---
@@ -127,37 +121,45 @@ If no prefix is provided it returns all the regions
 @return list of regions
 --]]
 function TextureAtlas:getSortedNames(prefix)
-    local sortedRegions = {}
-    if prefix then
-        for n,_ in pairs(self.regions) do
-            local idx = string.find(n,prefix)
-            if idx == 1 then
-                sortedRegions[#sortedRegions + 1] = n
-            end
-        end    
-    else
-        for n,_ in pairs(self.regions) do
-            sortedRegions[#sortedRegions + 1] = n
-        end
-    end
+	local sortedRegions = {}
+	for n,_ in pairs(self.regions) do
+		if not prefix or string.starts(n,prefix) then
+			sortedRegions[#sortedRegions + 1] = n
+		end
+	end
     table.sort(sortedRegions)
 	return sortedRegions
 end
 
 --[[---
-Returns all the textures sorted by region name, that begin with "prefix". 
-If no prefix is provided it returns all the textures.
-@param prefix optional, prefix to select region names
-@return list of textures
+Returns the number of textures with a name that starts with prefix.
+If no prefix is provided it returns the number of all the textures.
+@param prefix optional, prefix to select region/texture names
+@return number number of textures that match prefix
 --]]
-function TextureAtlas:getTextures(prefix) 
-    local textures = {}
-	
-    local sortedRegions = self:getSortedNames(prefix)
- 
-    for i,v in ipairs(sortedRegions) do
-        table.insert(textures,
-            Texture.fromTexture(self.baseTexture,self.regions[v]))
-    end
-    return textures  
+function TextureAtlas:getNumOfTextures(prefix)
+	local res = 0
+	for n,_ in pairs(self.regions) do
+		if not prefix or string.starts(n,prefix) then
+			res = res + 1
+		end
+	end    
+	return res
 end
+
+---Returns a subtexture that wrap a specific named region
+--@param name the name of the region to use to build the sub texture
+--@return SubTexture. nil if the region name doesn't belong to current atlas
+function TextureAtlas:getTexture(name)
+	local txt = nil
+	local region = self.regions[name]
+	if region then
+		txt = region[2]
+		if not txt then
+			txt = SubTexture(self.baseTexture,region[1])
+			region[2] = txt
+		end
+	end
+    return txt
+end
+
