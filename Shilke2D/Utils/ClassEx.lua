@@ -144,7 +144,7 @@ implements("test",'string') = true
 function implements(o,t)
 	local _t = type(o)
 	if _t == 'table' then
-		if o.is_a then
+		if o.implements then
 			return o:implements(t)
 		end
 	end
