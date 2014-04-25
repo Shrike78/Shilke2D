@@ -1,18 +1,18 @@
 --[[---
-BigTextureAtlas inherits TextureAtlas and allows to work with different atlas textures
+TextureAtlasComposer implements ITextureAtlas and allows to work with different atlas textures
 without caring about how textures are grouped together.
-It's possible in this way use logical atlas where texture are larger
+It's possible in this way to use logical atlas where texture are larger
 than 2048x2048 
 --]]
 
-BigTextureAtlas = class(nil, ITextureAtlas)
+TextureAtlasComposer = class(nil, ITextureAtlas)
 
-function BigTextureAtlas:init()
+function TextureAtlasComposer:init()
     --store atlas reference for each region index
     self.regionMap = {}
 end
 
-function BigTextureAtlas:dispose()
+function TextureAtlasComposer:dispose()
 	--avoid to call twice dispose on same sub atlas
 	local tmp = {}
 	for i,v in pairs(self.regionMap) do
@@ -30,7 +30,7 @@ Adds a new atlas and registers all the named rects of the
 new atlas. If double name is found it raises an error
 @param atlas TextureAtlas to be added
 --]]
-function BigTextureAtlas:addAtlas(atlas)
+function TextureAtlasComposer:addAtlas(atlas)
     local sortedNames = atlas:getSortedNames()
     for _,region in ipairs(sortedNames) do
         if self.regionMap[region] then
@@ -42,11 +42,11 @@ function BigTextureAtlas:addAtlas(atlas)
 end
 
 --[[---
-Removes the atlas from big atlas and clears all the named region 
+Removes the atlas and clears all the named region 
 of the removed atlas
 @param atlas TextureAtlas to be removed
 --]]
-function BigTextureAtlas:removeAtlas(atlas)
+function TextureAtlasComposer:removeAtlas(atlas)
     for i,v in pairs(self.regionMap) do
         if v == atlas then
             regionMap[i] = nil
@@ -61,7 +61,7 @@ If no prefix is provided it returns all the regions
 @param prefix optional, prefix to select region names
 @return list of regions
 --]]
-function BigTextureAtlas:getSortedNames(prefix)
+function TextureAtlasComposer:getSortedNames(prefix)
     local sortedRegions = {}
 	for n,_ in pairs(self.regionMap) do
 		if not prefix or string.starts(n,prefix) then
@@ -78,7 +78,7 @@ If no prefix is provided it returns the number of all the textures.
 @param prefix optional, prefix to select region/texture names
 @return number number of textures that match prefix
 --]]
-function BigTextureAtlas:getNumOfTextures(prefix)
+function TextureAtlasComposer:getNumOfTextures(prefix)
 	local res = 0
 	for n,_ in pairs(self.regions) do
 		if not prefix or string.starts(n,prefix) then
@@ -91,7 +91,7 @@ end
 
 --if "name" is a registered named region, it get the referneced atlas
 --and returns the subtexture
-function BigTextureAtlas:getTexture(name)
+function TextureAtlasComposer:getTexture(name)
     local atlas = self.regionMap[name]
     if atlas then
         return atlas:getTexture(name)
