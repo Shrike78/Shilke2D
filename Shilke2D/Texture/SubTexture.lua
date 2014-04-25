@@ -40,7 +40,10 @@ function SubTexture:dispose()
 		self.srcData = nil
 		self.region = nil
 		self._quad = nil
-		self.cahedImage[1] = nil
+		if self.cahedImage[1] then
+			self.cahedImage[1]:release()
+			self.cahedImage[1] = nil
+		end
 	end
 end
 
