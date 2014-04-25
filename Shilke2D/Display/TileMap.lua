@@ -73,8 +73,20 @@ function TileMap:init(mapData, mapWidth, mapHeight, tileset, pivotMode)
 	self:_setMapData(mapData)
 end
 
+function TileMap:clone()
+	error("it's not possible to clone a TileMap")
+	return nil
+end
+
+function TileMap:copy(src)
+	error("it's not possible to copy a TileMap")
+	return false
+end
+
 --[[---
-returns the correct grid given a deck
+returns the grid given a deck. If the grid doesnt' exist it creates it.
+@param deck 
+@return grid the MOAIGrid that is using the provided deck
 --]]
 function TileMap:_getGridByDeck(deck)
 	if self._grids[deck] then
