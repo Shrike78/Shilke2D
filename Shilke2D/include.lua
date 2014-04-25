@@ -3,12 +3,6 @@ Shilke2D/include is the entry point for each project based on Shilke2D
 --]]
 
 ---
-if __STARLING_TWEEN__ == nil then
-	---Used to selective include tween library.
-	--By default tween library is loaded. 
-	--Define __STARLING_TWEEN__ = false before include to disable it
-	__STARLING_TWEEN__ = true
-end
 
 
 
@@ -60,6 +54,7 @@ require("Shilke2D/Display/MovieClip")
 require("Shilke2D/Display/TextField")
 require("Shilke2D/Display/Button")
 require("Shilke2D/Display/DrawableObject")
+require("Shilke2D/Display/TileMap")
 
 --Shilke2D/Texture
 require("Shilke2D/Texture/Texture")
@@ -70,16 +65,19 @@ require("Shilke2D/Texture/TextureAtlasComposer")
 require("Shilke2D/Texture/TexturePacker")
 require("Shilke2D/Texture/TextureManager")
 
-if __STARLING_TWEEN__ then
-	--Shilke2D/Tween
-	require("Shilke2D/Tween/Tween")
-	require("Shilke2D/Tween/TweenDelay")
-	require("Shilke2D/Tween/Transition")
-	require("Shilke2D/Tween/TweenEase")
-	require("Shilke2D/Tween/Bezier")
-	require("Shilke2D/Tween/TweenBezier")
-	require("Shilke2D/Tween/TweenParallel")
-	require("Shilke2D/Tween/TweenLoop")
-	require("Shilke2D/Tween/TweenSequence")
-	require("Shilke2D/Tween/DisplayObjTweener")
-end
+--Shilke2D/Tween
+require("Shilke2D/Tween/Tween")
+require("Shilke2D/Tween/TweenDelay")
+require("Shilke2D/Tween/Transition")
+require("Shilke2D/Tween/TweenEase")
+require("Shilke2D/Tween/Bezier")
+require("Shilke2D/Tween/TweenBezier")
+require("Shilke2D/Tween/TweenParallel")
+require("Shilke2D/Tween/TweenLoop")
+require("Shilke2D/Tween/TweenSequence")
+require("Shilke2D/Tween/DisplayObjTweener")
+--Shilke2D/TileSet
+require("Shilke2D/TileSet/Tile")
+require("Shilke2D/TileSet/ITileSet")
+require("Shilke2D/TileSet/TileSet")
+require("Shilke2D/TileSet/TileSetComposer")
