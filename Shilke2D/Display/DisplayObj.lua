@@ -779,7 +779,8 @@ defined for concrete displayObj classes.
 @return Rect 
 --]]
 function DisplayObj:getRect(resultRect)
-    error("method must be overridden")
+	error("method must be overridden")
+	return resultRect
 end
 
 ---Get object width related on parent transformation (so with scaling applied)
