@@ -17,7 +17,7 @@ function TexturePacker.loadSparrowFormat(xmlFileName)
 	local dir = string.getFileDir(xmlFileName)
 	local atlasXml, err = Assets.getXml(xmlFileName)
 	if not atlasXml then
-		return err
+		return nil, err
 	end
 	return TexturePacker.parseSparrowFormat(atlasXml,dir)
 end
@@ -77,6 +77,19 @@ function TexturePacker.parseSparrowFormat(atlasXml, dir, texture)
     end
 	
     return atlas
+end
+
+
+---Load a lua file and automatically calls parseMoaiFormat and returns a texture atlas
+--@param luaFileName the path of the MOAI lua descriptor
+--@return TextureAtlas
+function TexturePacker.loadMoaiFormat(luaFileName)
+	local dir = string.getFileDir(luaFileName)
+	local atlasDescriptor, err = IO.dofile(luaFileName)
+	if not atlasDescriptor then
+		return nil, err
+	end
+	return TexturePacker.parseMoaiFormat(atlasDescriptor, dir)
 end
 
 --[[
@@ -141,12 +154,24 @@ function TexturePacker.parseMoaiFormat(descriptor, dir, texture)
         local y = subTex.uvRect.v0
         local w = subTex.uvRect.u1 - x
         local h = subTex.uvRect.v1 - y
-        
+        local rotated = subTex.textureRotated
         --Sparrow/Starling work with (0,0) as top left
-        local region = Rect(x, y+h, w, h)
-        atlas:addRegion(subTex.name,region)
+        local region = Rect(x, y, w, h)
+        atlas:addRegion(subTex.name, region, rotated)
     end
     return atlas
+end
+
+---Load a lua file and automatically calls parseCoronaFormat and returns a texture atlas
+--@param luaFileName the path of the Corona lua descriptor
+--@return TextureAtlas
+function TexturePacker.loadCoronaFormat(luaFileName)
+	local dir = string.getFileDir(luaFileName)
+	local atlasDescriptor, err = IO.dofile(luaFileName)
+	if not atlasDescriptor then
+		return nil, err
+	end
+	return TexturePacker.parseCoronaFormat(atlasDescriptor, dir)
 end
 
 --[[---
