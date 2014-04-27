@@ -14,6 +14,11 @@ texture that share a prefix in the name.
 
 TextureAtlas = class(nil, ITextureAtlas)
 
+--enum internally used for region structure rapresentation
+local REGION_RECT = 1
+local REGION_ROTATION = 2
+local REGION_TEXTURE = 3
+
 --[[---
 Automatic creation of a tilest starting from a texture, where all 
 the regions have the same size, are packed sequentially and have
@@ -88,16 +93,20 @@ end
 function TextureAtlas:init(texture)
     self.baseTexture = texture
     self.regions = {}
+	self.sortedNames = {}
+	self.bSorted = true
 end
 
 ---Dispose all the subtexture created inside the atlas
 function TextureAtlas:dispose()
 	for _,v in pairs(self.regions) do
-		if v[2] then
-			v[2]:dispose()
+		local txt = v[REGION_TEXTURE]
+		if txt then
+			txt:dispose()
 		end
 	end
 	table.clear(self.regions)
+	table.clear(self.sortedNames)	
 end
 
 
@@ -106,12 +115,19 @@ Add a new named region.
 Named regions are uv map rect, so x,y,w,h are in the range [0,1]
 @param name the name of the new region
 @param rect a rect with uvmap values [0,1]
+@param rotated (optional) if the texture is rotated, default is false
 --]]
-function TextureAtlas:addRegion(name,rect)
+function TextureAtlas:addRegion(name,rect,rotated)
 	if self.regions[name] then
 		error("region "..region.." already added to Atlas")
 	end
-	self.regions[name] = {rect, nil}
+	local newRegion = {}
+	newRegion[REGION_RECT] = rect
+	newRegion[REGION_ROTATION] = rotated == true
+	newRegion[REGION_TEXTURE] = nil
+	self.regions[name] = newRegion
+	self.sortedNames[#self.sortedNames + 1] = name
+	self.bSorted = false
 end
 
 --[[---
@@ -121,14 +137,29 @@ If no prefix is provided it returns all the regions
 @return list of regions
 --]]
 function TextureAtlas:getSortedNames(prefix)
-	local sortedRegions = {}
-	for n,_ in pairs(self.regions) do
-		if not prefix or string.starts(n,prefix) then
-			sortedRegions[#sortedRegions + 1] = n
-		end
+	--if addRegion was called, sortedNames is unsorted then sort it
+	if not self.bSorted then
+		table.sort(self.sortedNames)
+		self.bSorted = true
 	end
-    table.sort(sortedRegions)
-	return sortedRegions
+	--if a prefix is provided create a new list filled with the names that match it
+	if prefix then
+		local sortedRegions = {}
+		--used to avoid useless search. If at least one match with prefix has been found,
+		--at the first non matching name it's possible to stop iteration.
+		local bFound = false
+		for _,n in ipairs(self.sortedNames) do
+        	if string.starts(n,prefix) then
+				sortedRegions[#sortedRegions + 1] = n
+				bFound = true
+			elseif bFound then
+				break
+			end
+		end
+		return sortedRegions
+	end
+	--if no prefix is provided just return the inner sortedNames list
+	return self.sortedNames
 end
 
 --[[---
@@ -138,13 +169,29 @@ If no prefix is provided it returns the number of all the textures.
 @return number number of textures that match prefix
 --]]
 function TextureAtlas:getNumOfTextures(prefix)
-	local res = 0
-	for n,_ in pairs(self.regions) do
-		if not prefix or string.starts(n,prefix) then
-			res = res + 1
+	--if a prefix is provided an iteration over sortedNames is required
+	if prefix then
+		--if addRegion was called, sortedNames is unsorted then sort it now
+		if not self.bSorted then
+			table.sort(self.sortedNames)
+			self.bSorted = true
 		end
-	end    
-	return res
+		local res = 0
+		--used to avoid useless search. If at least one match with prefix has been found,
+		--at the first non matching name it's possible to stop iteration.
+		local bFound = false
+        for _,n in ipairs(self.sortedNames) do
+			if string.starts(n,prefix) then
+				res = res +1
+				bFound = true
+			elseif bFound then
+				break
+			end
+		end
+		return res
+	end
+	--if no prefix is provided just return the length of sortedNames list
+	return #self.sortedNames
 end
 
 ---Returns a subtexture that wrap a specific named region
@@ -154,10 +201,10 @@ function TextureAtlas:getTexture(name)
 	local txt = nil
 	local region = self.regions[name]
 	if region then
-		txt = region[2]
+		txt = region[REGION_TEXTURE]
 		if not txt then
-			txt = SubTexture(self.baseTexture,region[1])
-			region[2] = txt
+			txt = SubTexture(self.baseTexture, region[REGION_RECT], region[REGION_ROTATION])
+			region[REGION_TEXTURE] = txt
 		end
 	end
     return txt
