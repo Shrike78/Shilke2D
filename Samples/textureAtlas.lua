@@ -36,6 +36,7 @@ function setup()
 	--we load the atlas descriptor created with TexturePacker. The data was created with the
 	--sparrow format so we make use of the TexturePacker helper function. Helpers also for corona and 
 	--moai format exists.
+	--local atlas = TexturePacker.loadMoaiFormat("PlanetCute.lua")
 	local atlas = TexturePacker.loadSparrowFormat("PlanetCute.xml")
 	--we retrieve the subtexture that was originally Character Boy.png and that is now a subregion of
 	--the atlas texture
@@ -45,6 +46,9 @@ function setup()
 	--we placed the img at the bottom of the screen, in the middle
 	img:setPosition(WIDTH/2,HEIGHT)
 	stage:addChild(img)
+	
+	--for a really randomic position please uncomment this
+	--math.randomseed(os.time())
 	
 	--now we retrieve all the textures that rapresents a character.
 	--atlas:getTexture can be called with a string value that works as filter prefix on the name of the 
