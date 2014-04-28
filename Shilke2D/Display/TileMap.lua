@@ -15,26 +15,6 @@ TileMap.TILE_HIDE = MOAIGridSpace.TILE_HIDE
 ---inner mask used to handle tile flags 
 local FLAGS_MASK = MOAIGridSpace.TILE_XY_FLIP + MOAIGridSpace.TILE_HIDE
 
----inner mask used to handle tile flags 
-local FLIPPED = BitOp.bnot(FLAGS_MASK) + 1
-
-
---[[---
-Private function
-It's used to split a grid id into tile number and flip flags
-@param id the id set for a specific grid cell
-@return id the id without flip flags
-@return flags the flip flags
---]]
-local function _splitIdFlags(id)
-	if id < FLIPPED then
-		return id,0
-	else
-		local _id = id % FLIPPED
-		local flags = id - _id
-		return _id, flags
-	end
-end
 
 --[[---
 Constructor
@@ -143,17 +123,11 @@ function TileMap:_setMapData(mapData)
         for j = 1, mapWidth do
 			x = j
 			y = __USE_SIMULATION_COORDS__ and (mapHeight - i+1) or i
-			id, flags = _splitIdFlags(mapData[(i-1)*mapWidth+j])
-			--print(id, BitOp.toString(flags))
+			id, flags = BitOp.splitmask(mapData[(i-1)*mapWidth+j], FLAGS_MASK)
 			local deck, id = tileset:_getDeckInfoByGid(id)
 			if id > 0 then
-				local grid = self:_getGridByDeck(deck)
-				--grid:setTile(x,y,id)
-				--grid:setTileFlags(x,y,flags)
-				--grid:setTile(x,y,id + flags)
-				if flags ~= 0 then
-					id = BitOp.bor(id, flags)
-				end
+				local grid = self:_getGridByDeck(deck)				
+				id = id + flags
 				grid:setTile(x,y, id)
 				if not self._cells[y] then
 					self._cells[y] = {}
