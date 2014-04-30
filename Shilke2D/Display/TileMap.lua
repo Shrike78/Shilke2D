@@ -1,6 +1,12 @@
  --[[---
 A TileMap is a displayObject that displays a map built on a set of indices referring to the tiles
-of a given TileSet
+of a given TileSet.
+For each tile is possible to specify an x,y flip flag and an hide flag. No rotation flag is allowed.
+
+Current implementation force empty tiles to reset the flags to 0 for optimization purposes but that 
+could be a limitation in some situation, so it could be changed in a future. That would anyway require
+a custom logic because MOAI doesn't support tiles with id = 0 and flags != 0, it generates strange 
+results
 --]]
 
 TileMap = class(BaseQuad)
@@ -34,7 +40,6 @@ function TileMap:init(mapData, mapWidth, mapHeight, tileset, pivotMode)
 	
 	self._tileset = tileset
 	self._mapWidth , self._mapHeight = mapWidth, mapHeight
-	assert(#mapData == mapWidth * mapHeight, "mapData size not consistent with mapWidth and mapHeight")
 
 	--the render table
 	self._renderTable = {}
@@ -53,14 +58,25 @@ function TileMap:init(mapData, mapWidth, mapHeight, tileset, pivotMode)
 	self:_setMapData(mapData)
 end
 
+---clone the tilemap creating a new one with the same mapdata and tileset
+--@return TileMap
 function TileMap:clone()
-	error("it's not possible to clone a TileMap")
-	return nil
+	local tm = TileMap(self:getMapData(), self:getMapWidth(), self:getMapHeight(), self:getTileSet())
+	--there's no need to call itself because it would be unoptimezed to reset mapdata and 
+	--tileset, so creating 3 times the map data inner struct. Moreover copy of a TileMap
+	--is actually forbidden because risky
+	super(TileMap).copy(tm, self)
+	return tm
 end
 
+---copy is currently not allowed for TileMap class
 function TileMap:copy(src)
+	--[[
+	super(TileMap).copy(self, tm)
+	self:replaceTileSet(src:getTileSet())
+	self:replaceTileMap(src:getMapData(), src:getMapWidth(), src:getMapHeight())
+	--]]
 	error("it's not possible to copy a TileMap")
-	return false
 end
 
 --[[---
@@ -76,9 +92,9 @@ function TileMap:_getGridByDeck(deck)
 	--create a new grid and a new moai prop that render the grid
 	local prop = MOAIProp.new()
 	local grid = MOAIGrid.new()
-	--configure the grid with the required size (map w,h and tiles w,h)
-	grid:setSize ( self._mapWidth, self._mapHeight, self._tileset:getTileWidth(), self._tileset:getTileHeight())
-	--initialize double linked references of grid2deck / deck2grid
+	--configure the grid with the required size (map w,h and tiles w,h).
+	grid:setSize( self._mapWidth, self._mapHeight, self._tileset:getTileWidth(), self._tileset:getTileHeight())
+	--initialize double linked references of grids - decks
 	self._grids[deck] = grid
 	self._decks[grid] = deck
 	--configure the new prop setting the grid and the deck
@@ -105,15 +121,31 @@ It returns a grid if a tile is set at x,y, else nil.
 @param x the x grid coordinate
 @param y the y grid coordinate
 --]]
-function TileMap:_getGrid(x,y)
-	if self._cells[y] then
-		return self._cells[y][x]
-	end
-	return nil
+function TileMap:_getCell(x,y)
+	return self._cells[y] and self._cells[y][x] or nil
 end
 
----Set tile 0 for all the entries of all the inner moai grids
-function TileMap:_clearMapData()
+--[[---
+Inner method. 
+Used to set the correct grid based on grid coordinates. 
+@param x the x grid coordinate
+@param y the y grid coordinate
+@param grid the grid to set. can be nil (to reset value)
+--]]
+function TileMap:_setCell(x,y,grid)
+	if not self._cells[y] then
+		--if grid is and cells[y][x] doesn't exist just return
+		if not grid then
+			return
+		end
+		self._cells[y] = {}
+	end
+	self._cells[y][x] = grid
+end
+
+---Fill the tilemap with empty tiles
+function TileMap:clearMapData()
+	table.clear(self._cells)
 	for _,grid in pairs(self._grids) do
 		grid:fill(0)
 	end
@@ -130,6 +162,10 @@ function TileMap:_setMapData(mapData)
 	local mapWidth, mapHeight = self._mapWidth, self._mapHeight
 	local id, flags, x, y
 	
+	assert(#mapData == mapWidth * mapHeight, "mapData size not consistent with mapWidth and mapHeight")
+	
+	self:clearMapData()
+
 	for i = 1, mapHeight do
         for x = 1, mapWidth do
 			y = __USE_SIMULATION_COORDS__ and (mapHeight - i+1) or i
@@ -137,7 +173,7 @@ function TileMap:_setMapData(mapData)
 			id, flags = BitOp.splitmask(mapData[(i-1)*mapWidth+x], FLAGS_MASK)
 			--if a valid tile is set in that position
 			if id > 0 then
-				--use the global id to retrieve the deck, deck id infos from tileset
+				--use the global id to retrieve the (deck, deck id) infos from tileset
 				local deck, id = tileset:_getDeckInfoByGid(id)
 				--get (or create) the grid using the deck
 				local grid = self:_getGridByDeck(deck)	
@@ -145,49 +181,13 @@ function TileMap:_setMapData(mapData)
 				id = id + flags
 				--set the id+flags in the x,y position of the grid
 				grid:setTile(x,y,id)
-				--set cells[y][x] = grid 
-				if not self._cells[y] then
-					self._cells[y] = {}
-				end
-				self._cells[y][x] = grid
+				--set cells2grid map
+				self:_setCell(x,y,grid)
 			end
         end
     end
 end
 
---[[---
-Used to replace the current mapData.
-@param mapData the new mapData used to display the tilemap
---]]
-function TileMap:replaceMapData(mapData)
-	
-	assert(#mapData == self._mapWidth * self._mapHeight, 
-		"mapData cannot be replaced becuase its size is not consistent with previous map size")
-	
-	self:_clearMapData()
-	self:_setMapData(mapData)
-end
-
----Replace the current tileset leaving mapdata unchanged. It's required that the new tileset
---is equivalent to the previous one, that means same number of tiles
---@param tileset the new tileset
-function TileMap:replaceTileSet(tileset)
-	if self._tileset:getNumOfTiles() ~= tileset:getNumOfTiles() then
-		error("replaceTileSet allow to replace only tilesets of the same size")
-	end
-	
-	--get current mapData (included flags)
-	local mapData = self:getMapData()
-	--clears all the inner tables
-	table.clear(self._renderTable)
-	table.clear(self._grids)
-	table.clear(self._decks)
-	table.clear(self._cells)
-	--set new tileset
-	self._tileset = tileset
-	--create new mapdata
-	self:_setMapData(mapData)
-end
 
 --[[---
 Returns current mapdata (id and flags)
@@ -206,21 +206,69 @@ function TileMap:getMapData()
 	--_cells is filled as a sparse list of rows where each row is a sparse list of column values
 	for y,v in pairs(self._cells) do
 		for x,grid in pairs(v) do
-			--retrieve local grid id+flags
-			id = grid:getTile(x,y)
-			--split it
-			id, flags = BitOp.splitmask(id, FLAGS_MASK)
-			--retrieve global id 
-			id = self._tileset:_getGidByDeckInfo(self._decks[grid],id)
+			--retrieve local grid id+flags, split id and flags, convert id to global id and
 			--apply back flags
+			id = grid:getTile(x,y)
+			id, flags = BitOp.splitmask(id, FLAGS_MASK)
+			id = self._tileset:_getGidByDeckInfo(self._decks[grid],id)
 			id = id + flags
-			--convert y based on simulation coords.
 			local yh = __USE_SIMULATION_COORDS__ and (self._mapHeight-y) or (y-1)
 			--set id to mapdata
 			mapData[ yh * self._mapWidth + x] = id 
 		end
 	end
 	return mapData
+end
+
+
+--[[---
+Used to replace the current mapData.
+@param mapData the new mapData used to display the tilemap
+--]]
+function TileMap:replaceMapData(mapData, mapWidth, mapHeight)
+	
+	mapWidth = mapWidth or self._mapWidth
+	mapHeight = mapHeight or self._mapHeight
+	--if a tilemap with different size is provided then a reinit of almost everything is required
+	--else just a clear of data is enough
+	if self._mapWidth ~= mapWidth or self._mapHeight ~= mapHeight then
+		self:setSize(mapWidth * self._tileset:getTileWidth(), mapHeight * self._tileset:getTileHeight())
+		self._mapWidth = mapWidth
+		self._mapHeight = mapHeight
+		--resize grids based on new map size
+		for _, grid in pairs(self._grids) do
+			grid:setSize( self._mapWidth, self._mapHeight, self._tileset:getTileWidth(), self._tileset:getTileHeight())
+		end
+	end
+	self:_setMapData(mapData)
+end
+
+---Replace the current tileset leaving mapdata unchanged. 
+--@param tileset the new tileset
+function TileMap:replaceTileSet(tileset)	
+	--get current mapData (included flags)
+	local mapData = self:getMapData()
+	--Changing tileset means change all the decks. Current iplementation force to recreate 
+	--all the grids and grid2deck map binding. A possible optimization could be to keep already created grids
+	--in a pool of resources and reuse already created objects instead of destroying and recreating each time
+	table.clear(self._renderTable)
+	table.clear(self._grids)
+	table.clear(self._decks)
+	--clear of cells will be done by setMapData call
+	--table.clear(self._cells)
+	--if the tileset has different tile size update displayObj size
+	if self._tileset:getTileWidth() ~= tileset:getTileWidth() or self._tileset:getTileHeight() ~= tileset:getTileHeight() then
+		self:setSize(mapWidth * tileset:getTileWidth(), mapHeight * tileset:getTileHeight())
+	end
+	self._tileset = tileset
+	--create new mapdata
+	self:_setMapData(mapData)
+end
+
+---Returns the used tileset
+--@return TileSet the used tileset
+function TileMap:getTileSet()
+	return self._tileset
 end
 
 --[[---
@@ -230,6 +278,22 @@ Returns the size of the map
 --]]
 function TileMap:getMapSize()
 	return self._mapWidth, self._mapHeight
+end
+
+--[[---
+Returns the width of the map 
+@return width expressed in number of horizontal tiles
+--]]
+function TileMap:getMapWidth()
+	return self._mapWidth
+end
+
+--[[---
+Returns the height of the map 
+@return height expressed in number of vertical tiles
+--]]
+function TileMap:getMapHeight()
+	return self._mapHeight
 end
 
 --[[---
@@ -244,7 +308,7 @@ function TileMap:getTileId(x,y)
 	y = __USE_SIMULATION_COORDS__ and (self._mapHeight-y+1) or y
 	local id = 0
 	local flags = 0
-	local grid = self:_getGrid(x,y)
+	local grid = self:_getCell(x,y)
 	--if not tile is set at x,y, grid is nil
 	if grid then
 		id = grid:getTile(x,y)
@@ -274,7 +338,7 @@ Returns flags given map logical coordinates
 --]]
 function TileMap:getTileFlags(x,y)
 	y = __USE_SIMULATION_COORDS__ and (self._mapHeight-y+1) or y
-	local grid = self:_getGrid(x,y)
+	local grid = self:_getCell(x,y)
 	if grid then
 		return grid:getTileFlags(x,y,FLAGS_MASK)
 	end
@@ -285,7 +349,8 @@ end
 Sets a tile data (id and flags) at a given logical position in grid space
 @param x horizontal logical grid coordinate
 @param y vertical logical grid coordinate
-@param id id of the tile at the given position.
+@param id id of the tile at the given position. It can also contains a flag component (but requires 
+	the flags params to be nil)
 @param flags [optional] tile flags to set. 
 If provided it replace the current tile flags.
 If not provided it doesn't change current flags value.
@@ -293,39 +358,37 @@ If not provided it doesn't change current flags value.
 function TileMap:setTile(x,y,id,flags)
 	y = __USE_SIMULATION_COORDS__ and (self._mapHeight-y+1) or y
 	--get current tile grid in order to reset it
-	local oldGrid = self:_getGrid(x,y)
-	--if a valid is is set
+	local currGrid = self:_getCell(x,y)
+	--check if the id is a simple id or is flag modified 
+	if id >= TileMap.TILE_X_FLIP then
+		--if the id has a flag component flags parameter must be nil
+		assert(not flags, "setTile cannot be called using either flags and an id with a flag component set")
+		id, flags = BitOp.splitmask(id, FLAGS_MASK)
+	end
+	--if a valid id is set
 	if id > 0 then
 		--check for flags
 		local flags = flags or 0
-		--get deck, deck id by global tile id
+		--get (deck, deck id) by global tile id
 		local deck, id = self._tileset:_getDeckInfoByGid(id)
 		--get grid by deck
 		local grid = self:_getGridByDeck(deck)
-		--if the previous grid had a value and is different from 
-		--current grid, reset it
-		if oldGrid and grid ~= oldGrid then
-			oldGrid:setTile(x,y,0)
+		--if a valid tile was set in x,y and it was set on a different grid
+		--then reset it
+		if currGrid and grid ~= currGrid then
+			currGrid:setTile(x,y,0)
 		end
 		--set id+flags with one call
 		id = id + flags
 		grid:setTile(x,y,id)
-		--update _cells[y][x]
-		if not self._cells[y] then
-			self._cells[y] = {}
-		end
-		self._cells[y][x] = grid
+		self:_setCell(x,y,grid)
 	else
-		--if oldGrid was set, reset it
-		if oldGrid then
-			oldGrid:setTile(x,y,0)
+		--if currGrid was set, reset it
+		if currGrid then
+			currGrid:setTile(x,y,0)
 		end
 		--remove _cells[y][x] entry
-		if self._cells[y] then
-			if self._cells[y][x] then
-				self._cells[y][x] = nil
-			end
-		end
+		self:_setCell(x,y,nil)
 	end			
 end
 
@@ -338,8 +401,7 @@ Sets tile flags for a specific tile
 function TileMap:setTileFlags(x,y,flags)
 	assert(flags,"nil value passed as tile flags")
 	y = __USE_SIMULATION_COORDS__ and (self._mapHeight-y+1) or y
-	--do not set flags for empty tile
-	local grid = self:_getGrid(x,y)
+	local grid = self:_getCell(x,y)
 	if grid then
 		grid:setTileFlags(x,y,flags)
 	end
@@ -354,7 +416,7 @@ Clears tile flags for a specific tile
 function TileMap:clearTileFlags(x,y,flags)
 	assert(flags,"nil value passed as tile flags")
 	y = __USE_SIMULATION_COORDS__ and (self._mapHeight-y+1) or y
-	local grid = self:_getGrid(x,y)
+	local grid = self:_getCell(x,y)
 	if grid then
 		grid:clearTileFlags(x,y,flags)
 	end
@@ -369,8 +431,7 @@ Toggles tile flags for a specific tile
 function TileMap:toggleTileFlags(x,y,flags)
 	assert(flags,"nil value passed as tile flags")
 	y = __USE_SIMULATION_COORDS__ and (self._mapHeight-y+1) or y
-	--do not set flags for empty tile
-	local grid = self:_getGrid(x,y)
+	local grid = self:_getCell(x,y)
 	if grid then	
 		grid:toggleTileFlags(x,y,flags)
 	end
@@ -385,7 +446,7 @@ Tests a tile flag for a specific tile
 function TileMap:hasTileFlag(x,y,flag)
 	assert(flag,"nil value passed as tile flags")
 	y = __USE_SIMULATION_COORDS__ and (self._mapHeight-y+1) or y
-	local grid = self:_getGrid(x,y)
+	local grid = self:_getCell(x,y)
 	if not grid then
 		return false
 	end
