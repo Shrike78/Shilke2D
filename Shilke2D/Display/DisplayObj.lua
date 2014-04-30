@@ -127,7 +127,8 @@ end
 --[[---
 Clones the displayObj creating a new one with the same configuration. It requires that all displayObj
 implements a default empty constructor. If a displayObj has no empty constructor the function must
-be overridden.
+be overridden. Even if displayObjs inherit from EventDispatcher, clone logic doesn't apply to 
+EventDispatcher, that means that the cloning is only related to rendering and displayList.
 @return displayObj a new displayObj, exact clone of the called one
 --]]
 function DisplayObj:clone()
