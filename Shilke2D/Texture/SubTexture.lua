@@ -51,11 +51,16 @@ end
 --@return Rect
 function SubTexture:getRect()
 	local w,h = self.parent.width, self.parent.height
-	local r = Rect(math.round(self.region.x * w),
-					math.round(self.region.y * h),
-					math.round(self.region.w * w),
-					math.round(self.region.h * h))
-	return r
+	w = math.round(self.region.w * w)
+	h = math.round(self.region.h * h)
+	if resultRect then
+		resultRect.x = 0
+		resultRect.y = 0
+		resultRect.w = w
+		resultRect.h = h
+		return resultRect
+	end
+	return Rect(0, 0, w, h)
 end
 
 --[[---

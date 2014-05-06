@@ -187,10 +187,17 @@ end
 
 
 ---Returns the rect enclosing the image
+--@param resultRect if provided is filled and returned
 --@return Rect
-function Texture:getRect()
-	local r = Rect(0,0, self.width, self.height)
-	return r
+function Texture:getRect(resultRect)
+	if resultRect then
+		resultRect.x = 0
+		resultRect.y = 0
+		resultRect.w = self.width
+		resultRect.h = self.height
+		return resultRect
+	end
+	return Rect(0,0, self.width, self.height)
 end
 
 --[[---
