@@ -48,20 +48,32 @@ function SubTexture:dispose()
 end
 
 ---The rect is obtained as product of the region values and the parent texture width and height
+--@param resultRect if provided is filled and returned
 --@return Rect
-function SubTexture:getRect()
+function SubTexture:getRect(resultRect)
+	local res = resultRect or Rect()
 	local w,h = self.parent.width, self.parent.height
-	w = math.round(self.region.w * w)
-	h = math.round(self.region.h * h)
-	if resultRect then
-		resultRect.x = 0
-		resultRect.y = 0
-		resultRect.w = w
-		resultRect.h = h
-		return resultRect
-	end
-	return Rect(0, 0, w, h)
+	res.x = 0
+	res.y = 0
+	res.w = math.round(self.region.w * w)
+	res.h = math.round(self.region.h * h)
+	return res
 end
+
+
+---Returns the region as pixel rect over srcdata
+--@param resultRect if provided is filled and returned
+--@return Rect
+function SubTexture:getRegionPx(resultRect)
+	local res = resultRect or Rect()
+	local w,h = self.parent.width, self.parent.height
+	res.x = math.round(self.region.x * w)
+	res.y = math.round(self.region.y * h)
+	res.w = math.round(self.region.w * w)
+	res.h = math.round(self.region.h * h)
+	return res
+end
+
 
 --[[---
 Returns a raw image that rapresent the subtexture. To do that 
