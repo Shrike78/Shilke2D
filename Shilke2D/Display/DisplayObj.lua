@@ -784,21 +784,29 @@ function DisplayObj:getRect(resultRect)
 	return resultRect
 end
 
----Get object width related on parent transformation (so with scaling applied)
-function DisplayObj:getWidth()
-	return self:getBounds(self._parent,__helperRect).w
+---Get width of the object as it appears in another target space (width is calculated as
+--width of the axis aligned bounding box of the object in that space)
+--@param targetSpace (optional) the object related to which we want to calculate width. default value is 'self'
+function DisplayObj:getWidth(targetSpace)
+	--local targetSpace = targetSpace or self._parent
+	local targetSpace = targetSpace or self
+	return self:getBounds(targetSpace,__helperRect).w
 end
 
----Get object height related on parent transformation (so with scaling applied)
-function DisplayObj:getHeight()
-	return self:getBounds(self._parent,__helperRect).h
+---Get height of the object as it appears in another target space (height is calculated as
+--height of the axis aligned bounding box of the object in that space)
+--@param targetSpace (optional) the object related to which we want to calculate height. default value is 'self'
+function DisplayObj:getHeight(targetSpace)
+	--local targetSpace = targetSpace or self._parent
+	local targetSpace = targetSpace or self
+	return self:getBounds(targetSpace,__helperRect).h
 end
 
 --[[---
 Returns a rectangle that completely encloses the object as it 
 appears in another coordinate system.
-@param targetSpace the object related to which we want to calculate bounds
-@param resultRect optional, if provided is filled and returned
+@param targetSpace (optional) the object related to which we want to calculate bounds. default value is 'self'
+@param resultRect (optional) if provided is filled and returned
 @return Rect
 --]]
 function DisplayObj:getBounds(targetSpace,resultRect)

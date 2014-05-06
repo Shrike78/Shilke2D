@@ -181,26 +181,3 @@ function BaseQuad:getRect(resultRect)
 	return r
 end
 
-
----Get object width related on parent trasnformation (so with scaling applied)
-function BaseQuad:getWidth()
-    local w,h = self._width,self._height
-    if self._parent then
-      local r = RAD(self._prop:getAttr(MOAITransform.ATTR_Z_ROT))
-      local sx,sy = self._prop:getScl()
-      w = ABS( sx * w * COS(r)) + ABS(sy * h * SIN(r))
-    end
-    return w
-end
-
----Get object height related on parent trasnformation (so with scaling applied)
-function BaseQuad:getHeight()
-    local w,h = self._width,self._height
-    if self._parent then
-      local r = RAD(self._prop:getAttr(MOAITransform.ATTR_Z_ROT))
-      local sx,sy = self._prop:getScl() 
-      h = ABS( sx * w * SIN(r)) + ABS(sy * h * COS(r))
-    end
-    return h
-end
-
