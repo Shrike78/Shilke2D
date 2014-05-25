@@ -95,6 +95,16 @@ function DisplayObjTweener.moveScale(obj,sx,sy,time,transition)
 	return DisplayObjTweener.moveProp(obj,obj.setScale_v2,obj.getScale_v2,vec2(sx,sy),time,transition)
 end
 
+---seek animation of scale values
+function DisplayObjTweener.seekObjTransform(obj,transform, time,transition)
+	return DisplayObjTweener.seekProp(obj,obj.setObjTransform,obj.getObjTransform,transform,time,transition)
+end
+
+---move animation of scale values
+function DisplayObjTweener.moveObjTransform(obj,transform,time,transition)
+	return DisplayObjTweener.moveProp(obj,obj.setObjTransform,obj.getObjTransform,transform,time,transition)
+end
+
 ---used to follow another displayobj position
 --@param obj the displayObj to animate
 --@param target the displayObj to follow

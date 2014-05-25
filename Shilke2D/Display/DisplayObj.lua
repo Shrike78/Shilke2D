@@ -113,6 +113,29 @@ function DisplayObj:init()
 
 end
 
+--[[---
+Returns a DisplayObjTransform object filled with the current obj transform values
+@return DisplayObjTransform
+--]]
+function DisplayObj:getObjTransform()
+	local px,py = self:getPivot()
+	local x,y = self:getPosition()
+	local r self:getRotation()
+	local sx, sy = self:getScale()
+	return DisplayObjTransform(px,py,x,y,r,sx,sy)
+end
+
+--[[---
+Transforms the displayObj based on the DisplayObjTransform provided
+@param t DisplayObjTransform 
+--]]
+function DisplayObj:setObjTransform(t)
+	self:setPivot(t.px, t.py)
+	self:setPosition(t.x, t.y)
+	self:setRotation(t.r)
+	self:setScale(t.sx, t.sy)
+end
+
 ---If a derived object needs to clean up resources it must inherits this method, always remembering to 
 --call also parent dispose method
 function DisplayObj:dispose()
@@ -435,8 +458,7 @@ end
 ---Set alpha value of the object
 --@param a alpha value [0,255]
 function DisplayObj:setAlpha(a)
-	local c = self._color
-	c[4] = a * INV_255
+	self._color[4] = a * INV_255
 	self:_updateColor()
 end
 
@@ -495,6 +517,19 @@ end
 function DisplayObj:getPivot()
     local x,y = self._prop:getPiv()
     return x,y
+end
+
+---Set pivot of the object using a vec2
+--@param v vec2 
+function DisplayObj:setPivot_v2(v)
+    self._prop:setPiv(v.x,v.y,0)
+end
+
+---Return current pivot position using a vec2
+--@return vec2
+function DisplayObj:getPivot_v2()
+    local x,y = self._prop:getPiv()
+    return vec2(x,y)
 end
 
 ---Set Pivot x position
