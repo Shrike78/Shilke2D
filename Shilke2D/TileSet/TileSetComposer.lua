@@ -79,7 +79,7 @@ end
 
 
 ---returns the deck/deck id of the component tileset
---@param id the global tileset id
+--@param gid the global tileset id
 --@return deck the deck that maps the provided id
 --@return deckId the id of the tile in returned deck
 function TileSetComposer:_getDeckInfoByGid(gid)
@@ -95,7 +95,7 @@ end
 ---Search for the component tileset to which the provided deck belongs and 
 --then make it returns the gid based on the provided id
 --@param deck the deck
---@param deckId the id of the tile in the provided deck
+--@param id the id of the tile in the provided deck
 --@return int the global tileset id
 function TileSetComposer:_getGidByDeckInfo(deck,id)
 	for _,v in ipairs(self._tilesets) do

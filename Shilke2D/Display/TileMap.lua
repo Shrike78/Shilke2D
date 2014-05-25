@@ -224,6 +224,8 @@ end
 --[[---
 Used to replace the current mapData.
 @param mapData the new mapData used to display the tilemap
+@param mapWidth the width of the new tilemap
+@param mapHeight the height of the new tilemap
 --]]
 function TileMap:replaceMapData(mapData, mapWidth, mapHeight)
 	
