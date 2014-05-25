@@ -1,108 +1,151 @@
- --[[---
+--[[---
 Color class.
-- Wraps r,g,b,a floating number. There is no real assumption about the range value, they can be 
-also negative
-- the unpak_normalized() call is the only call that assumes values in the range of [0,255] and that
-returns a value divided by 255, so normalized in MOAI [0,1] color space
+
+Shilke2D uses colors in a [0..255] space, while MOAI in a [0..1]. It's assumed everywhere that a 
+color is in a Shilke2D [0..255] space, so the unpack_normalized is used whenever a color must be provided
+to MOAI interface. The call returns each color component divided by 255
+
+There is no real assumption about the values of rgba components, they can be 
+also negative. Algebrical operators between colors are defined and can produced meaningless colors, 
+with component values outside the [0..255] range. Algebrical operator are meant to support color animations 
+by tweening and should never be used explicitely.
 --]]
 Color = class()
 
-local floor = math.floor
 
----create a Color given r,g,b,a as float 0..1 values
---@param r [0..1]
---@param g [0..1]
---@param b [0..1]
---@param a [0..1]
+--[[
+todo: 
+-rgb2hsv
+-hsl2rgb
+-rgb2hsl
+-function to add / subtract / multiply / divide ecc. colors with rgb components, saturation ecc. 
+differs from algebrical operations
+--]]
+
+
+local floor = math.floor
+local clamp = math.clamp
+local INV_255 = 1/255
+local INV_256 = 1/256
+
+--[[---
+create a Color given r,g,b,a as float 0..1 values
+@param r [0..1]
+@param g [0..1]
+@param b [0..1]
+@param a [0..1]
+@return Color 
+--]]
 function Color.fromNormalizedValues(r,g,b,a)
 	return Color(r*255, g*255, b*255, a*255)
 end
 
 ---Constructor.
---if a param is not provided defaul value is 255
+--@param r number or nil. default value is 255
+--@param g number or nil. default value is 255
+--@param b number or nil. default value is 255
+--@param a number or nil. default value is 255
 function Color:init(r,g,b,a)
-	self.r = r or 255
-	self.g = g or 255
-	self.b = b or 255
-	self.a = a or 255
+	self.r = r ~= nil and r or 255
+	self.g = g ~= nil and g or 255
+	self.b = b ~= nil and b or 255
+	self.a = a ~= nil and a or 255
 end
 
 ---Returns the 4 components
---@return r
---@return g
---@return b
---@return a
-function Color:unpack()
-	return self.r,self.g,self.b,self.a
+--@param clamp if values need to be clamped in [0..255]. Optional, default is false
+--@return r number
+--@return g number
+--@return b number
+--@return a number
+function Color:unpack(clamp)
+	local r,g,b,a = self.r, self.g, self.b, self.a
+	if clamp then
+		r,g,b,a = clamp(r,0,255), clamp(g,0,255), clamp(b,0,255), clamp(a,0,255)
+	end
+	return r,g,b,a
 end
 	
----Returns the 4 components normalized (it assumes values in range [0,255]
---@return r/255
---@return g/255
---@return b/255
---@return a/255
-function Color:unpack_normalized()
-	local clamp = math.clamp
-	local INV_255 = 1/255
-	return 	clamp(self.r,0,255)*INV_255,
-			clamp(self.g,0,255)*INV_255,
-			clamp(self.b,0,255)*INV_255,
-			clamp(self.a,0,255)*INV_255
+---Returns the 4 components normalized
+--@param clamp if values need to be clamped in [0..1]. Optional, default is false
+--@return r number [0..1]
+--@return g number [0..1]
+--@return b number [0..1]
+--@return a number [0..1]
+function Color:unpack_normalized(clamp)
+	local r,g,b,a = self:unpack(clamp)
+	r,g,b,a = r * INV_255, g * INV_255, b * INV_255, a * INV_255
+	return r,g,b,a
 end
 
----sum r,g,b cjhannels of two colors
---alpha of the first color is taken
+---Force the components values to be clamped between [0..255]. They could be out of range
+--after algebrical operations
+function Color:clamp()
+	self.r = clamp(self.r,0,255)
+	self.g = clamp(self.g,0,255)
+	self.b = clamp(self.b,0,255) 
+	self.a = clamp(self.a,0,255)
+end
+
+--[[---
+sum r,g,b,a channels of two colors
+@param c1 Color
+@param c2 Color
+@return Color c1+c2
+--]]
 function Color.__add(c1,c2)
 	return Color(
 			c1.r + c2.r,
 			c1.g + c2.g,
 			c1.b + c2.b,
-			c1.a
+			c1.a + c2.a
 		)
 end
 
----subtract r,g,b channels of two colors
---alpha of the first color is taken
+---subtract r,g,b,a channels of two colors
 function Color.__sub(c1,c2)
 	return Color(
 			c1.r - c2.r,
 			c1.g - c2.g,
 			c1.b - c2.b,
-			c1.a
+			c1.a - c2.a
 		)
 end
 
----multiply r,g,b channels of a color by a number
---alpha is let unchanged
+---multiply r,g,b,a channels of a color by a number
 function Color.__mul(c1,c2)
 	if type(c1) == "number" then
 		return Color(
 			c1 * c2.r, 
 			c1 * c2.g,
 			c1 * c2.b,
-			c2.a
+			c1 * c2.a
 		)
 	elseif type(c2) == "number" then
 		return Color(
 			c2 * c1.r,
 			c2 * c1.g,
 			c2 * c1.b,
-			c1.a
+			c2 * c1.a
 		)
 	else
 		error("invalid operation on color")
 	end
 end
 
----divide r,g,b components of a color by a number
---alpha is let unchanged
+---divide r,g,b,a components of a color by a number
 function Color.__div(c,d)
 	return Color(
 		c.r/d, 
 		c.g/d,
 		c.b/d,
-		c.a
+		c.a/d
 	)
+end
+
+---the == operation
+function Color.__eq(c1,c2)
+	return c1.r == c2.r and c1.g == c2.g and c1.b == c2.b and c1.a == c2.a
 end
 
 ---print color components value
@@ -110,13 +153,18 @@ function Color:__tostring()
 	return "("..self.r..","..self.g..","..self.b..","..self.a..")"
 end
 
----blend 2 colors, taking the alpha of the first color
+---blend 2 colors
+--@param c1 first Color
+--@param c2 second Color
+--@param a blend factor
+--@return Color c1*a + c2*(1-a)
 function Color.blend(c1, c2, a)
-    return Color(c1.r * a + c2.r * (1-a),
-                 c1.g * a + c2.g * (1-a),
-                 c1.b * a + c2.b * (1-a),
-                 c1.a
-                )
+	assert(a>0 and a<1,"blend factor must be in [0..1]")
+	return Color(c1.r * a + c2.r * (1-a),
+				 c1.g * a + c2.g * (1-a),
+				 c1.b * a + c2.b * (1-a),
+				 c1.a * a + c2.a * (1-a)
+				)
 end
 
 ---color space conversion
@@ -169,8 +217,6 @@ end
 --@return b [0,255]
 --@return a [0,255]
 function Color.int2rgba(c)
-	local INV_256 = 1/256
-
 	local b = c % 256
 	c = c * INV_256
 	local g = c % 256
@@ -180,4 +226,3 @@ function Color.int2rgba(c)
 	local a = c % 256
 	return floor(r), floor(g), floor(b), floor(a)
 end
-
