@@ -53,7 +53,7 @@ function setup()
 	animJuggler:add(
 		Tween.parallel(
 			DisplayObjTweener.seekRotation(moaiImg,-20*math.pi,5),
-			DisplayObjTweener.seekColor(moaiImg,Color(255,0,0),2),
+			DisplayObjTweener.seekColor(moaiImg,ColorNames.RED ,2),
 			Tween.sequence(
 				DisplayObjTweener.movePosition(moaiImg,0,HEIGHT/2,2),
 				DisplayObjTweener.movePosition(moaiImg,WIDTH/2,-HEIGHT,2)
