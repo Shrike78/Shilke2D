@@ -52,18 +52,25 @@
   <li><a href="../modules/Display.Button.html">Display.Button</a></li>
   <li><a href="../modules/Display.DisplayObj.html">Display.DisplayObj</a></li>
   <li><a href="../modules/Display.DisplayObjContainer.html">Display.DisplayObjContainer</a></li>
+  <li><a href="../modules/Display.DisplayObjTransform.html">Display.DisplayObjTransform</a></li>
   <li><a href="../modules/Display.DrawableObject.html">Display.DrawableObject</a></li>
   <li><a href="../modules/Display.Image.html">Display.Image</a></li>
   <li><a href="../modules/Display.MovieClip.html">Display.MovieClip</a></li>
   <li><a href="../modules/Display.Quad.html">Display.Quad</a></li>
   <li><a href="../modules/Display.Stage.html">Display.Stage</a></li>
   <li><a href="../modules/Display.TextField.html">Display.TextField</a></li>
-  <li><a href="../modules/Texture.BigTextureAtlas.html">Texture.BigTextureAtlas</a></li>
+  <li><a href="../modules/Display.TileMap.html">Display.TileMap</a></li>
+  <li><a href="../modules/Texture.ITextureAtlas.html">Texture.ITextureAtlas</a></li>
   <li><a href="../modules/Texture.SubTexture.html">Texture.SubTexture</a></li>
   <li><a href="../modules/Texture.Texture.html">Texture.Texture</a></li>
   <li><strong>Texture.TextureAtlas</strong></li>
+  <li><a href="../modules/Texture.TextureAtlasComposer.html">Texture.TextureAtlasComposer</a></li>
   <li><a href="../modules/Texture.TextureManager.html">Texture.TextureManager</a></li>
   <li><a href="../modules/Texture.TexturePacker.html">Texture.TexturePacker</a></li>
+  <li><a href="../modules/TileSet.ITileSet.html">TileSet.ITileSet</a></li>
+  <li><a href="../modules/TileSet.Tile.html">TileSet.Tile</a></li>
+  <li><a href="../modules/TileSet.TileSet.html">TileSet.TileSet</a></li>
+  <li><a href="../modules/TileSet.TileSetComposer.html">TileSet.TileSetComposer</a></li>
   <li><a href="../modules/Tween.Bezier.html">Tween.Bezier</a></li>
   <li><a href="../modules/Tween.DisplayObjTweener.html">Tween.DisplayObjTweener</a></li>
   <li><a href="../modules/Tween.Transition.html">Tween.Transition</a></li>
@@ -79,6 +86,7 @@
   <li><a href="../modules/Utils.ClassEx.html">Utils.ClassEx</a></li>
   <li><a href="../modules/Utils.CollisionKit.html">Utils.CollisionKit</a></li>
   <li><a href="../modules/Utils.Color.html">Utils.Color</a></li>
+  <li><a href="../modules/Utils.ColorNames.html">Utils.ColorNames</a></li>
   <li><a href="../modules/Utils.Coroutines.html">Utils.Coroutines</a></li>
   <li><a href="../modules/Utils.IO.html">Utils.IO</a></li>
   <li><a href="../modules/Utils.IniFile.html">Utils.IniFile</a></li>
@@ -130,23 +138,23 @@ no hole in the middle of the sequence.</td>
 	</tr>
 	<tr>
 	<td class="name" nowrap><a href="#TextureAtlas:dispose">TextureAtlas:dispose&nbsp;()</a></td>
-	<td class="summary">Dispose also the texture is using as atlas</td>
+	<td class="summary">Dispose all the subtexture created inside the atlas</td>
 	</tr>
 	<tr>
-	<td class="name" nowrap><a href="#TextureAtlas:addRegion">TextureAtlas:addRegion&nbsp;(name, rect)</a></td>
+	<td class="name" nowrap><a href="#TextureAtlas:addRegion">TextureAtlas:addRegion&nbsp;(name, rect, rotated)</a></td>
 	<td class="summary">Add a new named region.</td>
-	</tr>
-	<tr>
-	<td class="name" nowrap><a href="#TextureAtlas:getTexture">TextureAtlas:getTexture&nbsp;(name)</a></td>
-	<td class="summary">Returns a subtexture that wrap a specific named region</td>
 	</tr>
 	<tr>
 	<td class="name" nowrap><a href="#TextureAtlas:getSortedNames">TextureAtlas:getSortedNames&nbsp;(prefix)</a></td>
 	<td class="summary">Returns all the regions sorted by name, that begin with "prefix".</td>
 	</tr>
 	<tr>
-	<td class="name" nowrap><a href="#TextureAtlas:getTextures">TextureAtlas:getTextures&nbsp;(prefix)</a></td>
-	<td class="summary">Returns all the textures sorted by region name, that begin with "prefix".</td>
+	<td class="name" nowrap><a href="#TextureAtlas:getNumOfTextures">TextureAtlas:getNumOfTextures&nbsp;(prefix)</a></td>
+	<td class="summary">Returns the number of textures with a name that starts with prefix.</td>
+	</tr>
+	<tr>
+	<td class="name" nowrap><a href="#TextureAtlas:getTexture">TextureAtlas:getTexture&nbsp;(name)</a></td>
+	<td class="summary">Returns a subtexture that wrap a specific named region</td>
 	</tr>
 </table>
 
@@ -224,7 +232,7 @@ is loaded using Assets.getTexture function, using defaul cache logic</li>
     <strong>TextureAtlas:dispose&nbsp;()</strong>
     </dt>
     <dd>
-    Dispose also the texture is using as atlas
+    Dispose all the subtexture created inside the atlas
 
 
 
@@ -234,7 +242,7 @@ is loaded using Assets.getTexture function, using defaul cache logic</li>
 </dd>
     <dt>
     <a name = "TextureAtlas:addRegion"></a>
-    <strong>TextureAtlas:addRegion&nbsp;(name, rect)</strong>
+    <strong>TextureAtlas:addRegion&nbsp;(name, rect, rotated)</strong>
     </dt>
     <dd>
     Add a new named region.
@@ -246,31 +254,10 @@ Named regions are uv map rect, so x,y,w,h are in the range [0,1]
          the name of the new region</li>
         <li><span class="parameter">rect</span>
          a rect with uvmap values [0,1]</li>
+        <li><span class="parameter">rotated</span>
+         (optional) if the texture is rotated, default is false</li>
     </ul>
 
-
-
-
-
-</dd>
-    <dt>
-    <a name = "TextureAtlas:getTexture"></a>
-    <strong>TextureAtlas:getTexture&nbsp;(name)</strong>
-    </dt>
-    <dd>
-    Returns a subtexture that wrap a specific named region
-
-    <h3>Parameters:</h3>
-    <ul>
-        <li><span class="parameter">name</span>
-         the name of the region to use to build the sub texture</li>
-    </ul>
-
-    <h3>Returns:</h3>
-    <ol>
-
-        SubTexture. nil if the region name doesn't belong to current atlas
-    </ol>
 
 
 
@@ -301,23 +288,46 @@ If no prefix is provided it returns all the regions
 
 </dd>
     <dt>
-    <a name = "TextureAtlas:getTextures"></a>
-    <strong>TextureAtlas:getTextures&nbsp;(prefix)</strong>
+    <a name = "TextureAtlas:getNumOfTextures"></a>
+    <strong>TextureAtlas:getNumOfTextures&nbsp;(prefix)</strong>
     </dt>
     <dd>
-    Returns all the textures sorted by region name, that begin with "prefix".
-If no prefix is provided it returns all the textures.
+    Returns the number of textures with a name that starts with prefix.
+If no prefix is provided it returns the number of all the textures.
 
     <h3>Parameters:</h3>
     <ul>
         <li><span class="parameter">prefix</span>
-         optional, prefix to select region names</li>
+         optional, prefix to select region/texture names</li>
     </ul>
 
     <h3>Returns:</h3>
     <ol>
 
-        list of textures
+        number number of textures that match prefix
+    </ol>
+
+
+
+
+</dd>
+    <dt>
+    <a name = "TextureAtlas:getTexture"></a>
+    <strong>TextureAtlas:getTexture&nbsp;(name)</strong>
+    </dt>
+    <dd>
+    Returns a subtexture that wrap a specific named region
+
+    <h3>Parameters:</h3>
+    <ul>
+        <li><span class="parameter">name</span>
+         the name of the region to use to build the sub texture</li>
+    </ul>
+
+    <h3>Returns:</h3>
+    <ol>
+
+        SubTexture. nil if the region name doesn't belong to current atlas
     </ol>
 
 

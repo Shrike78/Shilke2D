@@ -69,9 +69,9 @@
   <li><a href="../modules/Texture.TexturePacker.html">Texture.TexturePacker</a></li>
   <li><a href="../modules/TileSet.ITileSet.html">TileSet.ITileSet</a></li>
   <li><a href="../modules/TileSet.Tile.html">TileSet.Tile</a></li>
-  <li><a href="../modules/TileSet.TileSet.html">TileSet.TileSet</a></li>
+  <li><strong>TileSet.TileSet</strong></li>
   <li><a href="../modules/TileSet.TileSetComposer.html">TileSet.TileSetComposer</a></li>
-  <li><strong>Tween.Bezier</strong></li>
+  <li><a href="../modules/Tween.Bezier.html">Tween.Bezier</a></li>
   <li><a href="../modules/Tween.DisplayObjTweener.html">Tween.DisplayObjTweener</a></li>
   <li><a href="../modules/Tween.Transition.html">Tween.Transition</a></li>
   <li><a href="../modules/Tween.Tween.html">Tween.Tween</a></li>
@@ -110,26 +110,53 @@
 
 <div id="content">
 
-<h1>Module <code>Tween.Bezier</code></h1>
+<h1>Module <code>TileSet.TileSet</code></h1>
 
-<p>Bezier curve implementation.</p>
+<p>TileSet is the most common type of tileset that can be used in Shilke2D.</p>
 <p>
-Source ported from http://paulbourke.net/geometry/bezier/index2.html  </p>
+<p>- It wraps exactly one single texture atlas made on a single texture.
+- It allows to replace the texture atlas if the size and the number of the textures
+is the same
+</p>
 
 
 <h2><a href="#Functions">Functions</a></h2>
 <table class="function_list">
 	<tr>
-	<td class="name" nowrap><a href="#bezier3">bezier3&nbsp;(mu, p)</a></td>
-	<td class="summary">Three control point Bezier interpolation</td>
+	<td class="name" nowrap><a href="#TileSet:init">TileSet:init&nbsp;(atlas, name, properties, tilesProperties)</a></td>
+	<td class="summary">Constructor</td>
 	</tr>
 	<tr>
-	<td class="name" nowrap><a href="#bezier4">bezier4&nbsp;(mu, p)</a></td>
-	<td class="summary">Four control point Bezier interpolation</td>
+	<td class="name" nowrap><a href="#TileSet:replaceAtlas">TileSet:replaceAtlas&nbsp;(atlas)</a></td>
+	<td class="summary">Replace the tileset texture set with a new texture set defined by the atlas</td>
 	</tr>
 	<tr>
-	<td class="name" nowrap><a href="#bezier">bezier&nbsp;(mu, p)</a></td>
-	<td class="summary">n-control point Bezier interpolation</td>
+	<td class="name" nowrap><a href="#TileSet:_getDeckInfoByGid">TileSet:_getDeckInfoByGid&nbsp;(id)</a></td>
+	<td class="summary">convert a global tileset id to a deck + deck id</td>
+	</tr>
+	<tr>
+	<td class="name" nowrap><a href="#TileSet:_getGidByDeckInfo">TileSet:_getGidByDeckInfo&nbsp;(deck, deckId)</a></td>
+	<td class="summary">convert a deck + deck id to a global tileset id</td>
+	</tr>
+	<tr>
+	<td class="name" nowrap><a href="#TileSet:_hasDeck">TileSet:_hasDeck&nbsp;(deck)</a></td>
+	<td class="summary">used to check if a deck is valid for a given tileset</td>
+	</tr>
+	<tr>
+	<td class="name" nowrap><a href="#TileSet:getTileWidth">TileSet:getTileWidth&nbsp;()</a></td>
+	<td class="summary">Returns the width of the tiles of the tileset</td>
+	</tr>
+	<tr>
+	<td class="name" nowrap><a href="#TileSet:getTileHeight">TileSet:getTileHeight&nbsp;()</a></td>
+	<td class="summary">Returns the height of the tiles of the tileset</td>
+	</tr>
+	<tr>
+	<td class="name" nowrap><a href="#TileSet:getNumOfTiles">TileSet:getNumOfTiles&nbsp;()</a></td>
+	<td class="summary">Returns the number of tiles of the tileset</td>
+	</tr>
+	<tr>
+	<td class="name" nowrap><a href="#TileSet:getTile">TileSet:getTile&nbsp;(id)</a></td>
+	<td class="summary">Returns a tile given the global id</td>
 	</tr>
 </table>
 
@@ -140,18 +167,22 @@ Source ported from http://paulbourke.net/geometry/bezier/index2.html  </p>
     <h2><a name="Functions"></a>Functions</h2>
     <dl class="function">
     <dt>
-    <a name = "bezier3"></a>
-    <strong>bezier3&nbsp;(mu, p)</strong>
+    <a name = "TileSet:init"></a>
+    <strong>TileSet:init&nbsp;(atlas, name, properties, tilesProperties)</strong>
     </dt>
     <dd>
-    Three control point Bezier interpolation
+    Constructor
 
     <h3>Parameters:</h3>
     <ul>
-        <li><span class="parameter">mu</span>
-         range [0,1], interpolation point between start and end of the curve</li>
-        <li><span class="parameter">p</span>
-         list of 3 control points for bezier definition</li>
+        <li><span class="parameter">atlas</span>
+         the texture atlas containing the textures on which the tileset is built.</li>
+        <li><span class="parameter">name</span>
+         the name of the tileset (optional)</li>
+        <li><span class="parameter">properties</span>
+         a collection of properties of the tileset (optional)</li>
+        <li><span class="parameter">tilesProperties</span>
+         a collection of collection of properties of the tiles (optional)</li>
     </ul>
 
 
@@ -160,18 +191,16 @@ Source ported from http://paulbourke.net/geometry/bezier/index2.html  </p>
 
 </dd>
     <dt>
-    <a name = "bezier4"></a>
-    <strong>bezier4&nbsp;(mu, p)</strong>
+    <a name = "TileSet:replaceAtlas"></a>
+    <strong>TileSet:replaceAtlas&nbsp;(atlas)</strong>
     </dt>
     <dd>
-    Four control point Bezier interpolation
+    Replace the tileset texture set with a new texture set defined by the atlas
 
     <h3>Parameters:</h3>
     <ul>
-        <li><span class="parameter">mu</span>
-         range [0,1], interpolation point between start and end of the curve</li>
-        <li><span class="parameter">p</span>
-         list of 4 control points for bezier definition</li>
+        <li><span class="parameter">atlas</span>
+         the atlas with the new texture set</li>
     </ul>
 
 
@@ -180,20 +209,150 @@ Source ported from http://paulbourke.net/geometry/bezier/index2.html  </p>
 
 </dd>
     <dt>
-    <a name = "bezier"></a>
-    <strong>bezier&nbsp;(mu, p)</strong>
+    <a name = "TileSet:_getDeckInfoByGid"></a>
+    <strong>TileSet:_getDeckInfoByGid&nbsp;(id)</strong>
     </dt>
     <dd>
-    n-control point Bezier interpolation
+    convert a global tileset id to a deck + deck id
 
     <h3>Parameters:</h3>
     <ul>
-        <li><span class="parameter">mu</span>
-         range [0,1], interpolation point between start and end of the curve</li>
-        <li><span class="parameter">p</span>
-         list of n-control points for bezier definition, with n>4</li>
+        <li><span class="parameter">id</span>
+         the global tileset id</li>
     </ul>
 
+    <h3>Returns:</h3>
+    <ol>
+        <li>
+        deck the deck that maps the provided id</li>
+        <li>
+        deckId the id of the tile in returned deck</li>
+    </ol>
+
+
+
+
+</dd>
+    <dt>
+    <a name = "TileSet:_getGidByDeckInfo"></a>
+    <strong>TileSet:_getGidByDeckInfo&nbsp;(deck, deckId)</strong>
+    </dt>
+    <dd>
+    convert a deck + deck id to a global tileset id
+
+    <h3>Parameters:</h3>
+    <ul>
+        <li><span class="parameter">deck</span>
+         the deck</li>
+        <li><span class="parameter">deckId</span>
+         the id of the tile in the provided deck</li>
+    </ul>
+
+    <h3>Returns:</h3>
+    <ol>
+
+        int the global tileset id
+    </ol>
+
+
+
+
+</dd>
+    <dt>
+    <a name = "TileSet:_hasDeck"></a>
+    <strong>TileSet:_hasDeck&nbsp;(deck)</strong>
+    </dt>
+    <dd>
+    used to check if a deck is valid for a given tileset
+
+    <h3>Parameters:</h3>
+    <ul>
+        <li><span class="parameter">deck</span>
+         the deck to be checked</li>
+    </ul>
+
+    <h3>Returns:</h3>
+    <ol>
+
+        bool if the deck is handled by the tileset
+    </ol>
+
+
+
+
+</dd>
+    <dt>
+    <a name = "TileSet:getTileWidth"></a>
+    <strong>TileSet:getTileWidth&nbsp;()</strong>
+    </dt>
+    <dd>
+    Returns the width of the tiles of the tileset
+
+
+    <h3>Returns:</h3>
+    <ol>
+
+        int width of the tiles
+    </ol>
+
+
+
+
+</dd>
+    <dt>
+    <a name = "TileSet:getTileHeight"></a>
+    <strong>TileSet:getTileHeight&nbsp;()</strong>
+    </dt>
+    <dd>
+    Returns the height of the tiles of the tileset
+
+
+    <h3>Returns:</h3>
+    <ol>
+
+        int height of the tiles
+    </ol>
+
+
+
+
+</dd>
+    <dt>
+    <a name = "TileSet:getNumOfTiles"></a>
+    <strong>TileSet:getNumOfTiles&nbsp;()</strong>
+    </dt>
+    <dd>
+    Returns the number of tiles of the tileset
+
+
+    <h3>Returns:</h3>
+    <ol>
+
+        int number of tiles
+    </ol>
+
+
+
+
+</dd>
+    <dt>
+    <a name = "TileSet:getTile"></a>
+    <strong>TileSet:getTile&nbsp;(id)</strong>
+    </dt>
+    <dd>
+    Returns a tile given the global id
+
+    <h3>Parameters:</h3>
+    <ul>
+        <li><span class="parameter">id</span>
+         tile id</li>
+    </ul>
+
+    <h3>Returns:</h3>
+    <ol>
+
+        Tile
+    </ol>
 
 
 

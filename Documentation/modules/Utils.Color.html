@@ -52,18 +52,25 @@
   <li><a href="../modules/Display.Button.html">Display.Button</a></li>
   <li><a href="../modules/Display.DisplayObj.html">Display.DisplayObj</a></li>
   <li><a href="../modules/Display.DisplayObjContainer.html">Display.DisplayObjContainer</a></li>
+  <li><a href="../modules/Display.DisplayObjTransform.html">Display.DisplayObjTransform</a></li>
   <li><a href="../modules/Display.DrawableObject.html">Display.DrawableObject</a></li>
   <li><a href="../modules/Display.Image.html">Display.Image</a></li>
   <li><a href="../modules/Display.MovieClip.html">Display.MovieClip</a></li>
   <li><a href="../modules/Display.Quad.html">Display.Quad</a></li>
   <li><a href="../modules/Display.Stage.html">Display.Stage</a></li>
   <li><a href="../modules/Display.TextField.html">Display.TextField</a></li>
-  <li><a href="../modules/Texture.BigTextureAtlas.html">Texture.BigTextureAtlas</a></li>
+  <li><a href="../modules/Display.TileMap.html">Display.TileMap</a></li>
+  <li><a href="../modules/Texture.ITextureAtlas.html">Texture.ITextureAtlas</a></li>
   <li><a href="../modules/Texture.SubTexture.html">Texture.SubTexture</a></li>
   <li><a href="../modules/Texture.Texture.html">Texture.Texture</a></li>
   <li><a href="../modules/Texture.TextureAtlas.html">Texture.TextureAtlas</a></li>
+  <li><a href="../modules/Texture.TextureAtlasComposer.html">Texture.TextureAtlasComposer</a></li>
   <li><a href="../modules/Texture.TextureManager.html">Texture.TextureManager</a></li>
   <li><a href="../modules/Texture.TexturePacker.html">Texture.TexturePacker</a></li>
+  <li><a href="../modules/TileSet.ITileSet.html">TileSet.ITileSet</a></li>
+  <li><a href="../modules/TileSet.Tile.html">TileSet.Tile</a></li>
+  <li><a href="../modules/TileSet.TileSet.html">TileSet.TileSet</a></li>
+  <li><a href="../modules/TileSet.TileSetComposer.html">TileSet.TileSetComposer</a></li>
   <li><a href="../modules/Tween.Bezier.html">Tween.Bezier</a></li>
   <li><a href="../modules/Tween.DisplayObjTweener.html">Tween.DisplayObjTweener</a></li>
   <li><a href="../modules/Tween.Transition.html">Tween.Transition</a></li>
@@ -79,6 +86,7 @@
   <li><a href="../modules/Utils.ClassEx.html">Utils.ClassEx</a></li>
   <li><a href="../modules/Utils.CollisionKit.html">Utils.CollisionKit</a></li>
   <li><strong>Utils.Color</strong></li>
+  <li><a href="../modules/Utils.ColorNames.html">Utils.ColorNames</a></li>
   <li><a href="../modules/Utils.Coroutines.html">Utils.Coroutines</a></li>
   <li><a href="../modules/Utils.IO.html">Utils.IO</a></li>
   <li><a href="../modules/Utils.IniFile.html">Utils.IniFile</a></li>
@@ -106,10 +114,13 @@
 
 <p>Color class.</p>
 <p>
-- Wraps r,g,b,a floating number. There is no real assumption about the range value, they can be
-also negative
-- the unpak_normalized() call is the only call that assumes values in the range of [0,255] and that
-returns a value divided by 255, so normalized in MOAI [0,1] color space</p>
+<p>Shilke2D uses colors in a [0..255] space, while MOAI in a [0..1]. It's assumed everywhere that a
+color is in a Shilke2D [0..255] space, so the unpack_normalized is used whenever a color must be provided
+to MOAI interface. The call returns each color component divided by 255
+<p>There is no real assumption about the values of rgba components, they can be
+also negative. Algebrical operators between colors are defined and can produced meaningless colors,
+with component values outside the [0..255] range. Algebrical operator are meant to support color animations
+by tweening and should never be used explicitely.</p>
 
 
 <h2><a href="#Functions">Functions</a></h2>
@@ -123,32 +134,36 @@ returns a value divided by 255, so normalized in MOAI [0,1] color space</p>
 	<td class="summary">Constructor.</td>
 	</tr>
 	<tr>
-	<td class="name" nowrap><a href="#Color:unpack">Color:unpack&nbsp;()</a></td>
+	<td class="name" nowrap><a href="#Color:unpack">Color:unpack&nbsp;(clamp)</a></td>
 	<td class="summary">Returns the 4 components</td>
 	</tr>
 	<tr>
-	<td class="name" nowrap><a href="#Color:unpack_normalized">Color:unpack_normalized&nbsp;()</a></td>
-	<td class="summary">Returns the 4 components normalized (it assumes values in range [0,255]</td>
+	<td class="name" nowrap><a href="#Color:unpack_normalized">Color:unpack_normalized&nbsp;(clamp)</a></td>
+	<td class="summary">Returns the 4 components normalized</td>
+	</tr>
+	<tr>
+	<td class="name" nowrap><a href="#Color:clamp">Color:clamp&nbsp;()</a></td>
+	<td class="summary">Force the components values to be clamped between [0..255].</td>
 	</tr>
 	<tr>
 	<td class="name" nowrap><a href="#__add">__add&nbsp;(c1, c2)</a></td>
-	<td class="summary">sum r,g,b cjhannels of two colors
-alpha of the first color is taken</td>
+	<td class="summary">sum r,g,b,a channels of two colors</td>
 	</tr>
 	<tr>
 	<td class="name" nowrap><a href="#__sub">__sub&nbsp;(c1, c2)</a></td>
-	<td class="summary">subtract r,g,b channels of two colors
-alpha of the first color is taken</td>
+	<td class="summary">subtract r,g,b,a channels of two colors</td>
 	</tr>
 	<tr>
 	<td class="name" nowrap><a href="#__mul">__mul&nbsp;(c1, c2)</a></td>
-	<td class="summary">multiply r,g,b channels of a color by a number
-alpha is let unchanged</td>
+	<td class="summary">multiply r,g,b,a channels of a color by a number</td>
 	</tr>
 	<tr>
 	<td class="name" nowrap><a href="#__div">__div&nbsp;(c, d)</a></td>
-	<td class="summary">divide r,g,b components of a color by a number
-alpha is let unchanged</td>
+	<td class="summary">divide r,g,b,a components of a color by a number</td>
+	</tr>
+	<tr>
+	<td class="name" nowrap><a href="#__eq">__eq&nbsp;(c1, c2)</a></td>
+	<td class="summary">the == operation</td>
 	</tr>
 	<tr>
 	<td class="name" nowrap><a href="#Color:__tostring">Color:__tostring&nbsp;()</a></td>
@@ -156,7 +171,7 @@ alpha is let unchanged</td>
 	</tr>
 	<tr>
 	<td class="name" nowrap><a href="#blend">blend&nbsp;(c1, c2, a)</a></td>
-	<td class="summary">blend 2 colors, taking the alpha of the first color</td>
+	<td class="summary">blend 2 colors</td>
 	</tr>
 	<tr>
 	<td class="name" nowrap><a href="#hsv2rgb">hsv2rgb&nbsp;(h, s, v)</a></td>
@@ -197,6 +212,11 @@ alpha is let unchanged</td>
          [0..1]</li>
     </ul>
 
+    <h3>Returns:</h3>
+    <ol>
+
+        Color
+    </ol>
 
 
 
@@ -208,18 +228,17 @@ alpha is let unchanged</td>
     </dt>
     <dd>
     Constructor.
-if a param is not provided defaul value is 255
 
     <h3>Parameters:</h3>
     <ul>
         <li><span class="parameter">r</span>
-        </li>
+         number or nil. default value is 255</li>
         <li><span class="parameter">g</span>
-        </li>
+         number or nil. default value is 255</li>
         <li><span class="parameter">b</span>
-        </li>
+         number or nil. default value is 255</li>
         <li><span class="parameter">a</span>
-        </li>
+         number or nil. default value is 255</li>
     </ul>
 
 
@@ -229,22 +248,27 @@ if a param is not provided defaul value is 255
 </dd>
     <dt>
     <a name = "Color:unpack"></a>
-    <strong>Color:unpack&nbsp;()</strong>
+    <strong>Color:unpack&nbsp;(clamp)</strong>
     </dt>
     <dd>
     Returns the 4 components
 
+    <h3>Parameters:</h3>
+    <ul>
+        <li><span class="parameter">clamp</span>
+         if values need to be clamped in [0..255]. Optional, default is false</li>
+    </ul>
 
     <h3>Returns:</h3>
     <ol>
         <li>
-        r</li>
+        r number</li>
         <li>
-        g</li>
+        g number</li>
         <li>
-        b</li>
+        b number</li>
         <li>
-        a</li>
+        a number</li>
     </ol>
 
 
@@ -253,23 +277,42 @@ if a param is not provided defaul value is 255
 </dd>
     <dt>
     <a name = "Color:unpack_normalized"></a>
-    <strong>Color:unpack_normalized&nbsp;()</strong>
+    <strong>Color:unpack_normalized&nbsp;(clamp)</strong>
     </dt>
     <dd>
-    Returns the 4 components normalized (it assumes values in range [0,255]
+    Returns the 4 components normalized
 
+    <h3>Parameters:</h3>
+    <ul>
+        <li><span class="parameter">clamp</span>
+         if values need to be clamped in [0..1]. Optional, default is false</li>
+    </ul>
 
     <h3>Returns:</h3>
     <ol>
         <li>
-        r/255</li>
+        r number [0..1]</li>
         <li>
-        g/255</li>
+        g number [0..1]</li>
         <li>
-        b/255</li>
+        b number [0..1]</li>
         <li>
-        a/255</li>
+        a number [0..1]</li>
     </ol>
+
+
+
+
+</dd>
+    <dt>
+    <a name = "Color:clamp"></a>
+    <strong>Color:clamp&nbsp;()</strong>
+    </dt>
+    <dd>
+    Force the components values to be clamped between [0..255].  They could be out of range
+after algebrical operations
+
+
 
 
 
@@ -280,17 +323,21 @@ if a param is not provided defaul value is 255
     <strong>__add&nbsp;(c1, c2)</strong>
     </dt>
     <dd>
-    sum r,g,b cjhannels of two colors
-alpha of the first color is taken
+    sum r,g,b,a channels of two colors
 
     <h3>Parameters:</h3>
     <ul>
         <li><span class="parameter">c1</span>
-        </li>
+         Color</li>
         <li><span class="parameter">c2</span>
-        </li>
+         Color</li>
     </ul>
 
+    <h3>Returns:</h3>
+    <ol>
+
+        Color c1+c2
+    </ol>
 
 
 
@@ -301,8 +348,7 @@ alpha of the first color is taken
     <strong>__sub&nbsp;(c1, c2)</strong>
     </dt>
     <dd>
-    subtract r,g,b channels of two colors
-alpha of the first color is taken
+    subtract r,g,b,a channels of two colors
 
     <h3>Parameters:</h3>
     <ul>
@@ -322,8 +368,7 @@ alpha of the first color is taken
     <strong>__mul&nbsp;(c1, c2)</strong>
     </dt>
     <dd>
-    multiply r,g,b channels of a color by a number
-alpha is let unchanged
+    multiply r,g,b,a channels of a color by a number
 
     <h3>Parameters:</h3>
     <ul>
@@ -343,14 +388,33 @@ alpha is let unchanged
     <strong>__div&nbsp;(c, d)</strong>
     </dt>
     <dd>
-    divide r,g,b components of a color by a number
-alpha is let unchanged
+    divide r,g,b,a components of a color by a number
 
     <h3>Parameters:</h3>
     <ul>
         <li><span class="parameter">c</span>
         </li>
         <li><span class="parameter">d</span>
+        </li>
+    </ul>
+
+
+
+
+
+</dd>
+    <dt>
+    <a name = "__eq"></a>
+    <strong>__eq&nbsp;(c1, c2)</strong>
+    </dt>
+    <dd>
+    the == operation
+
+    <h3>Parameters:</h3>
+    <ul>
+        <li><span class="parameter">c1</span>
+        </li>
+        <li><span class="parameter">c2</span>
         </li>
     </ul>
 
@@ -377,18 +441,23 @@ alpha is let unchanged
     <strong>blend&nbsp;(c1, c2, a)</strong>
     </dt>
     <dd>
-    blend 2 colors, taking the alpha of the first color
+    blend 2 colors
 
     <h3>Parameters:</h3>
     <ul>
         <li><span class="parameter">c1</span>
-        </li>
+         first Color</li>
         <li><span class="parameter">c2</span>
-        </li>
+         second Color</li>
         <li><span class="parameter">a</span>
-        </li>
+         blend factor</li>
     </ul>
 
+    <h3>Returns:</h3>
+    <ol>
+
+        Color c1*a + c2*(1-a)
+    </ol>
 
 
 

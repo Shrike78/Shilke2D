@@ -49,7 +49,7 @@
   <li><a href="../modules/Core.TouchSensor.html">Core.TouchSensor</a></li>
   <li><a href="../modules/Display.BaseQuad.html">Display.BaseQuad</a></li>
   <li><a href="../modules/Display.BlendMode.html">Display.BlendMode</a></li>
-  <li><strong>Display.Button</strong></li>
+  <li><a href="../modules/Display.Button.html">Display.Button</a></li>
   <li><a href="../modules/Display.DisplayObj.html">Display.DisplayObj</a></li>
   <li><a href="../modules/Display.DisplayObjContainer.html">Display.DisplayObjContainer</a></li>
   <li><a href="../modules/Display.DisplayObjTransform.html">Display.DisplayObjTransform</a></li>
@@ -70,7 +70,7 @@
   <li><a href="../modules/TileSet.ITileSet.html">TileSet.ITileSet</a></li>
   <li><a href="../modules/TileSet.Tile.html">TileSet.Tile</a></li>
   <li><a href="../modules/TileSet.TileSet.html">TileSet.TileSet</a></li>
-  <li><a href="../modules/TileSet.TileSetComposer.html">TileSet.TileSetComposer</a></li>
+  <li><strong>TileSet.TileSetComposer</strong></li>
   <li><a href="../modules/Tween.Bezier.html">Tween.Bezier</a></li>
   <li><a href="../modules/Tween.DisplayObjTweener.html">Tween.DisplayObjTweener</a></li>
   <li><a href="../modules/Tween.Transition.html">Tween.Transition</a></li>
@@ -110,62 +110,61 @@
 
 <div id="content">
 
-<h1>Module <code>Display.Button</code></h1>
+<h1>Module <code>TileSet.TileSetComposer</code></h1>
 
-<p>A simple button composed of an image and, optionally, text.</p>
+<p>TileSetComposer is used when multiple atlas are required.</p>
 <p>
-<p>It's possible to set a texture for up and downstate of the button.
-If a down state is not provided the button is simply scaled a
-little when it is touched.
-<p>In addition, you can overlay a text on the button. To customize the
-text, almost the same options as those of text fields are provided.
-
-To react on touches on a button, there is special triggered-event type,
-dispatched when the touch.state is ENDED and the button was hitted</p>
+<p>Following the composite pattern, a TileSetComposer implements ITileSet itself
+and is composed by multiple ITileSet component.
+<p>The resulting tileset is the union of all the tiles of the single tilesets, with
+tile ids remapped based on add order.
+<p>Each new ITileSet tile indexing has an offset equals to the number of the tiles
+handled at adding time.</p>
 
 
 <h2><a href="#Functions">Functions</a></h2>
 <table class="function_list">
 	<tr>
-	<td class="name" nowrap><a href="#Button:init">Button:init&nbsp;(upState, downState, label)</a></td>
-	<td class="summary">Creates a button with textures for upState, downState or text.</td>
+	<td class="name" nowrap><a href="#TileSetComposer:init">TileSetComposer:init&nbsp;(name, properties)</a></td>
+	<td class="summary">Constructor</td>
 	</tr>
 	<tr>
-	<td class="name" nowrap><a href="#Button:resetContents">Button:resetContents&nbsp;()</a></td>
-	<td class="summary">Resets button state at default values</td>
+	<td class="name" nowrap><a href="#TileSetComposer:addTileSet">TileSetComposer:addTileSet&nbsp;(tileset)</a></td>
+	<td class="summary">Extends the logical tileset virtually adding all the tiles of the given tileset to the current
+tile set</td>
 	</tr>
 	<tr>
-	<td class="name" nowrap><a href="#Button:getTextField">Button:getTextField&nbsp;()</a></td>
-	<td class="summary">Returns the textfield (if it exists)</td>
+	<td class="name" nowrap><a href="#TileSetComposer:getTileWidth">TileSetComposer:getTileWidth&nbsp;()</a></td>
+	<td class="summary">Returns the width of the tiles of the tileset</td>
 	</tr>
 	<tr>
-	<td class="name" nowrap><a href="#Button:getScaleWhenDown">Button:getScaleWhenDown&nbsp;()</a></td>
-	<td class="summary">The scale factor of the button on touch.</td>
+	<td class="name" nowrap><a href="#TileSetComposer:getTileHeight">TileSetComposer:getTileHeight&nbsp;()</a></td>
+	<td class="summary">Returns the height of the tiles of the tileset</td>
 	</tr>
 	<tr>
-	<td class="name" nowrap><a href="#Button:setScaleWhenDown">Button:setScaleWhenDown&nbsp;(value)</a></td>
-	<td class="summary">The scale factor of the button on touch.</td>
+	<td class="name" nowrap><a href="#TileSetComposer:getTileSetByGid">TileSetComposer:getTileSetByGid&nbsp;(gid)</a></td>
+	<td class="summary">Returns the proper inner tileset given a gid</td>
 	</tr>
 	<tr>
-	<td class="name" nowrap><a href="#Button:getAlphaWhenDisabled">Button:getAlphaWhenDisabled&nbsp;()</a></td>
-	<td class="summary">The alpha value of the button when it is disabled.</td>
+	<td class="name" nowrap><a href="#TileSetComposer:_getDeckInfoByGid">TileSetComposer:_getDeckInfoByGid&nbsp;(gid)</a></td>
+	<td class="summary">returns the deck/deck id of the component tileset</td>
 	</tr>
 	<tr>
-	<td class="name" nowrap><a href="#Button:setAlphaWhenDisabled">Button:setAlphaWhenDisabled&nbsp;(value)</a></td>
-	<td class="summary">The alpha value of the button when it is disabled.</td>
+	<td class="name" nowrap><a href="#TileSetComposer:_getGidByDeckInfo">TileSetComposer:_getGidByDeckInfo&nbsp;(deck, id)</a></td>
+	<td class="summary">Search for the component tileset to which the provided deck belongs and
+then make it returns the gid based on the provided id</td>
 	</tr>
 	<tr>
-	<td class="name" nowrap><a href="#Button:isEnabled">Button:isEnabled&nbsp;()</a></td>
-	<td class="summary">Indicates if the button can be triggered.</td>
+	<td class="name" nowrap><a href="#TileSetComposer:_hasDeck">TileSetComposer:_hasDeck&nbsp;(deck)</a></td>
+	<td class="summary">used to check if a deck is valid for a given tileset</td>
 	</tr>
 	<tr>
-	<td class="name" nowrap><a href="#Button:setEnabled">Button:setEnabled&nbsp;(value)</a></td>
-	<td class="summary">Enable/Disable button.</td>
+	<td class="name" nowrap><a href="#TileSetComposer:getNumOfTiles">TileSetComposer:getNumOfTiles&nbsp;()</a></td>
+	<td class="summary">Returns the number of tiles of the tileset</td>
 	</tr>
 	<tr>
-	<td class="name" nowrap><a href="#Button:onTouch">Button:onTouch&nbsp;(e)</a></td>
-	<td class="summary">Inner method used to handle touch event and translate it into a trigger event when
-touch is released</td>
+	<td class="name" nowrap><a href="#TileSetComposer:getTile">TileSetComposer:getTile&nbsp;(gid)</a></td>
+	<td class="summary">Returns a tile given the global id</td>
 	</tr>
 </table>
 
@@ -176,21 +175,18 @@ touch is released</td>
     <h2><a name="Functions"></a>Functions</h2>
     <dl class="function">
     <dt>
-    <a name = "Button:init"></a>
-    <strong>Button:init&nbsp;(upState, downState, label)</strong>
+    <a name = "TileSetComposer:init"></a>
+    <strong>TileSetComposer:init&nbsp;(name, properties)</strong>
     </dt>
     <dd>
-    Creates a button with textures for upState, downState or text.
+    Constructor
 
     <h3>Parameters:</h3>
     <ul>
-        <li><span class="parameter">upState</span>
-         a texture to be used for the up state</li>
-        <li><span class="parameter">downState</span>
-         (optional) a texture to be used for the down state. If nil
-the upState texture will be used, but scaled of a factor of 0.9</li>
-        <li><span class="parameter">label</span>
-         (optional) a text to be added to the button</li>
+        <li><span class="parameter">name</span>
+         the name of the tileset (optional)</li>
+        <li><span class="parameter">properties</span>
+         a collection of properties of the tileset (optional)</li>
     </ul>
 
 
@@ -199,30 +195,24 @@ the upState texture will be used, but scaled of a factor of 0.9</li>
 
 </dd>
     <dt>
-    <a name = "Button:resetContents"></a>
-    <strong>Button:resetContents&nbsp;()</strong>
+    <a name = "TileSetComposer:addTileSet"></a>
+    <strong>TileSetComposer:addTileSet&nbsp;(tileset)</strong>
     </dt>
     <dd>
-    Resets button state at default values
+    Extends the logical tileset virtually adding all the tiles of the given tileset to the current
+tile set
+address the tiles of the given tileset in the logical extended tileset.
 
-
-
-
-
-
-</dd>
-    <dt>
-    <a name = "Button:getTextField"></a>
-    <strong>Button:getTextField&nbsp;()</strong>
-    </dt>
-    <dd>
-    Returns the textfield (if it exists)
-
+    <h3>Parameters:</h3>
+    <ul>
+        <li><span class="parameter">tileset</span>
+         the new tileset to add</li>
+    </ul>
 
     <h3>Returns:</h3>
     <ol>
 
-        TextField or nil
+        gid the base gid of the newly added tileset. It represents the offset that will be used to
     </ol>
 
 
@@ -230,18 +220,17 @@ the upState texture will be used, but scaled of a factor of 0.9</li>
 
 </dd>
     <dt>
-    <a name = "Button:getScaleWhenDown"></a>
-    <strong>Button:getScaleWhenDown&nbsp;()</strong>
+    <a name = "TileSetComposer:getTileWidth"></a>
+    <strong>TileSetComposer:getTileWidth&nbsp;()</strong>
     </dt>
     <dd>
-    The scale factor of the button on touch.  Per default,
-a button with a down state texture won't scale.
+    Returns the width of the tiles of the tileset
 
 
     <h3>Returns:</h3>
     <ol>
 
-        scale value
+        int width of the tiles
     </ol>
 
 
@@ -249,37 +238,17 @@ a button with a down state texture won't scale.
 
 </dd>
     <dt>
-    <a name = "Button:setScaleWhenDown"></a>
-    <strong>Button:setScaleWhenDown&nbsp;(value)</strong>
+    <a name = "TileSetComposer:getTileHeight"></a>
+    <strong>TileSetComposer:getTileHeight&nbsp;()</strong>
     </dt>
     <dd>
-    The scale factor of the button on touch.  Per default,
-a button with a down state texture won't scale.
-
-    <h3>Parameters:</h3>
-    <ul>
-        <li><span class="parameter">value</span>
-         scale value</li>
-    </ul>
-
-
-
-
-
-</dd>
-    <dt>
-    <a name = "Button:getAlphaWhenDisabled"></a>
-    <strong>Button:getAlphaWhenDisabled&nbsp;()</strong>
-    </dt>
-    <dd>
-    The alpha value of the button when it is disabled.
-default = 128
+    Returns the height of the tiles of the tileset
 
 
     <h3>Returns:</h3>
     <ol>
 
-        alpha value [0,255]
+        int height of the tiles
     </ol>
 
 
@@ -287,36 +256,24 @@ default = 128
 
 </dd>
     <dt>
-    <a name = "Button:setAlphaWhenDisabled"></a>
-    <strong>Button:setAlphaWhenDisabled&nbsp;(value)</strong>
+    <a name = "TileSetComposer:getTileSetByGid"></a>
+    <strong>TileSetComposer:getTileSetByGid&nbsp;(gid)</strong>
     </dt>
     <dd>
-    The alpha value of the button when it is disabled.
-default = 128
+    Returns the proper inner tileset given a gid
 
     <h3>Parameters:</h3>
     <ul>
-        <li><span class="parameter">value</span>
-         [0,255]</li>
+        <li><span class="parameter">gid</span>
+         the gid to which the searched tileset belong</li>
     </ul>
-
-
-
-
-
-</dd>
-    <dt>
-    <a name = "Button:isEnabled"></a>
-    <strong>Button:isEnabled&nbsp;()</strong>
-    </dt>
-    <dd>
-    Indicates if the button can be triggered.
-
 
     <h3>Returns:</h3>
     <ol>
-
-        bool
+        <li>
+        tileset the searched tileset</li>
+        <li>
+        id the local id (conversion from composite tileset id to component tile id)</li>
     </ol>
 
 
@@ -324,37 +281,115 @@ default = 128
 
 </dd>
     <dt>
-    <a name = "Button:setEnabled"></a>
-    <strong>Button:setEnabled&nbsp;(value)</strong>
+    <a name = "TileSetComposer:_getDeckInfoByGid"></a>
+    <strong>TileSetComposer:_getDeckInfoByGid&nbsp;(gid)</strong>
     </dt>
     <dd>
-    Enable/Disable button.
+    returns the deck/deck id of the component tileset
 
     <h3>Parameters:</h3>
     <ul>
-        <li><span class="parameter">value</span>
-         boolean</li>
+        <li><span class="parameter">gid</span>
+         the global tileset id</li>
     </ul>
 
+    <h3>Returns:</h3>
+    <ol>
+        <li>
+        deck the deck that maps the provided id</li>
+        <li>
+        deckId the id of the tile in returned deck</li>
+    </ol>
 
 
 
 
 </dd>
     <dt>
-    <a name = "Button:onTouch"></a>
-    <strong>Button:onTouch&nbsp;(e)</strong>
+    <a name = "TileSetComposer:_getGidByDeckInfo"></a>
+    <strong>TileSetComposer:_getGidByDeckInfo&nbsp;(deck, id)</strong>
     </dt>
     <dd>
-    Inner method used to handle touch event and translate it into a trigger event when
-touch is released
+    Search for the component tileset to which the provided deck belongs and
+then make it returns the gid based on the provided id
 
     <h3>Parameters:</h3>
     <ul>
-        <li><span class="parameter">e</span>
-         touch event</li>
+        <li><span class="parameter">deck</span>
+         the deck</li>
+        <li><span class="parameter">id</span>
+         the id of the tile in the provided deck</li>
     </ul>
 
+    <h3>Returns:</h3>
+    <ol>
+
+        int the global tileset id
+    </ol>
+
+
+
+
+</dd>
+    <dt>
+    <a name = "TileSetComposer:_hasDeck"></a>
+    <strong>TileSetComposer:_hasDeck&nbsp;(deck)</strong>
+    </dt>
+    <dd>
+    used to check if a deck is valid for a given tileset
+
+    <h3>Parameters:</h3>
+    <ul>
+        <li><span class="parameter">deck</span>
+         the deck to be checked</li>
+    </ul>
+
+    <h3>Returns:</h3>
+    <ol>
+
+        bool if the deck is handled by the tileset
+    </ol>
+
+
+
+
+</dd>
+    <dt>
+    <a name = "TileSetComposer:getNumOfTiles"></a>
+    <strong>TileSetComposer:getNumOfTiles&nbsp;()</strong>
+    </dt>
+    <dd>
+    Returns the number of tiles of the tileset
+
+
+    <h3>Returns:</h3>
+    <ol>
+
+        int number of tiles
+    </ol>
+
+
+
+
+</dd>
+    <dt>
+    <a name = "TileSetComposer:getTile"></a>
+    <strong>TileSetComposer:getTile&nbsp;(gid)</strong>
+    </dt>
+    <dd>
+    Returns a tile given the global id
+
+    <h3>Parameters:</h3>
+    <ul>
+        <li><span class="parameter">gid</span>
+         the global id of the tile</li>
+    </ul>
+
+    <h3>Returns:</h3>
+    <ol>
+
+        Tile
+    </ol>
 
 
 

@@ -68,10 +68,10 @@
   <li><a href="../modules/Texture.TextureManager.html">Texture.TextureManager</a></li>
   <li><a href="../modules/Texture.TexturePacker.html">Texture.TexturePacker</a></li>
   <li><a href="../modules/TileSet.ITileSet.html">TileSet.ITileSet</a></li>
-  <li><a href="../modules/TileSet.Tile.html">TileSet.Tile</a></li>
+  <li><strong>TileSet.Tile</strong></li>
   <li><a href="../modules/TileSet.TileSet.html">TileSet.TileSet</a></li>
   <li><a href="../modules/TileSet.TileSetComposer.html">TileSet.TileSetComposer</a></li>
-  <li><strong>Tween.Bezier</strong></li>
+  <li><a href="../modules/Tween.Bezier.html">Tween.Bezier</a></li>
   <li><a href="../modules/Tween.DisplayObjTweener.html">Tween.DisplayObjTweener</a></li>
   <li><a href="../modules/Tween.Transition.html">Tween.Transition</a></li>
   <li><a href="../modules/Tween.Tween.html">Tween.Tween</a></li>
@@ -110,26 +110,46 @@
 
 <div id="content">
 
-<h1>Module <code>Tween.Bezier</code></h1>
+<h1>Module <code>TileSet.Tile</code></h1>
 
-<p>Bezier curve implementation.</p>
+<p>Tile is the base object for tilemap management.</p>
 <p>
-Source ported from http://paulbourke.net/geometry/bezier/index2.html  </p>
+A tile is always part of a tileset, a collection of tiles, and
+it's nothing more than a wrapper of a texture with some more
+properties.
+<p>It's possible to create custom tiles extending Tile class and registering
+new classes using TileManager. </p>
 
 
 <h2><a href="#Functions">Functions</a></h2>
 <table class="function_list">
 	<tr>
-	<td class="name" nowrap><a href="#bezier3">bezier3&nbsp;(mu, p)</a></td>
-	<td class="summary">Three control point Bezier interpolation</td>
+	<td class="name" nowrap><a href="#Tile:init">Tile:init&nbsp;(tileset, id, texture, properties)</a></td>
+	<td class="summary">Constructor</td>
 	</tr>
 	<tr>
-	<td class="name" nowrap><a href="#bezier4">bezier4&nbsp;(mu, p)</a></td>
-	<td class="summary">Four control point Bezier interpolation</td>
+	<td class="name" nowrap><a href="#Tile:_replaceTexture">Tile:_replaceTexture&nbsp;(texture)</a></td>
+	<td class="summary">Internal function.</td>
 	</tr>
 	<tr>
-	<td class="name" nowrap><a href="#bezier">bezier&nbsp;(mu, p)</a></td>
-	<td class="summary">n-control point Bezier interpolation</td>
+	<td class="name" nowrap><a href="#Tile:getRect">Tile:getRect&nbsp;()</a></td>
+	<td class="summary">Returns the rect of the tile.</td>
+	</tr>
+	<tr>
+	<td class="name" nowrap><a href="#Tile:getWidth">Tile:getWidth&nbsp;()</a></td>
+	<td class="summary">Returns the width of the tile.</td>
+	</tr>
+	<tr>
+	<td class="name" nowrap><a href="#Tile:getHeight">Tile:getHeight&nbsp;()</a></td>
+	<td class="summary">Returns the height of the tile.</td>
+	</tr>
+	<tr>
+	<td class="name" nowrap><a href="#Tile:setProperty">Tile:setProperty&nbsp;(name, value)</a></td>
+	<td class="summary">Sets a property of the tile.</td>
+	</tr>
+	<tr>
+	<td class="name" nowrap><a href="#Tile:getProperty">Tile:getProperty&nbsp;(name)</a></td>
+	<td class="summary">Gets a property of the tile.</td>
 	</tr>
 </table>
 
@@ -140,18 +160,22 @@ Source ported from http://paulbourke.net/geometry/bezier/index2.html  </p>
     <h2><a name="Functions"></a>Functions</h2>
     <dl class="function">
     <dt>
-    <a name = "bezier3"></a>
-    <strong>bezier3&nbsp;(mu, p)</strong>
+    <a name = "Tile:init"></a>
+    <strong>Tile:init&nbsp;(tileset, id, texture, properties)</strong>
     </dt>
     <dd>
-    Three control point Bezier interpolation
+    Constructor
 
     <h3>Parameters:</h3>
     <ul>
-        <li><span class="parameter">mu</span>
-         range [0,1], interpolation point between start and end of the curve</li>
-        <li><span class="parameter">p</span>
-         list of 3 control points for bezier definition</li>
+        <li><span class="parameter">tileset</span>
+         the tileset to which the tile belongs to</li>
+        <li><span class="parameter">id</span>
+         the id of the tile in the tileset</li>
+        <li><span class="parameter">texture</span>
+         the texture wrapped by the tile</li>
+        <li><span class="parameter">properties</span>
+         an (optional) collection of properties of the tile</li>
     </ul>
 
 
@@ -160,18 +184,18 @@ Source ported from http://paulbourke.net/geometry/bezier/index2.html  </p>
 
 </dd>
     <dt>
-    <a name = "bezier4"></a>
-    <strong>bezier4&nbsp;(mu, p)</strong>
+    <a name = "Tile:_replaceTexture"></a>
+    <strong>Tile:_replaceTexture&nbsp;(texture)</strong>
     </dt>
     <dd>
-    Four control point Bezier interpolation
+    Internal function.
+Replaces inner texture.
+Called from TileSet for atlas replacement
 
     <h3>Parameters:</h3>
     <ul>
-        <li><span class="parameter">mu</span>
-         range [0,1], interpolation point between start and end of the curve</li>
-        <li><span class="parameter">p</span>
-         list of 4 control points for bezier definition</li>
+        <li><span class="parameter">texture</span>
+         new texture for replacement</li>
     </ul>
 
 
@@ -180,20 +204,100 @@ Source ported from http://paulbourke.net/geometry/bezier/index2.html  </p>
 
 </dd>
     <dt>
-    <a name = "bezier"></a>
-    <strong>bezier&nbsp;(mu, p)</strong>
+    <a name = "Tile:getRect"></a>
+    <strong>Tile:getRect&nbsp;()</strong>
     </dt>
     <dd>
-    n-control point Bezier interpolation
+    Returns the rect of the tile.
+It wraps the texture getRect()
+
+
+    <h3>Returns:</h3>
+    <ol>
+
+        Rect
+    </ol>
+
+
+
+
+</dd>
+    <dt>
+    <a name = "Tile:getWidth"></a>
+    <strong>Tile:getWidth&nbsp;()</strong>
+    </dt>
+    <dd>
+    Returns the width of the tile.
+It wraps the texture.width
+
+
+    <h3>Returns:</h3>
+    <ol>
+
+        int
+    </ol>
+
+
+
+
+</dd>
+    <dt>
+    <a name = "Tile:getHeight"></a>
+    <strong>Tile:getHeight&nbsp;()</strong>
+    </dt>
+    <dd>
+    Returns the height of the tile.
+It wraps the texture.height
+
+
+    <h3>Returns:</h3>
+    <ol>
+
+        int
+    </ol>
+
+
+
+
+</dd>
+    <dt>
+    <a name = "Tile:setProperty"></a>
+    <strong>Tile:setProperty&nbsp;(name, value)</strong>
+    </dt>
+    <dd>
+    Sets a property of the tile.
 
     <h3>Parameters:</h3>
     <ul>
-        <li><span class="parameter">mu</span>
-         range [0,1], interpolation point between start and end of the curve</li>
-        <li><span class="parameter">p</span>
-         list of n-control points for bezier definition, with n>4</li>
+        <li><span class="parameter">name</span>
+         the name of the property</li>
+        <li><span class="parameter">value</span>
+         the value of the property</li>
     </ul>
 
+
+
+
+
+</dd>
+    <dt>
+    <a name = "Tile:getProperty"></a>
+    <strong>Tile:getProperty&nbsp;(name)</strong>
+    </dt>
+    <dd>
+    Gets a property of the tile.
+
+    <h3>Parameters:</h3>
+    <ul>
+        <li><span class="parameter">name</span>
+         the name of the property</li>
+    </ul>
+
+    <h3>Returns:</h3>
+    <ol>
+
+        the value of the property
+    </ol>
 
 
 

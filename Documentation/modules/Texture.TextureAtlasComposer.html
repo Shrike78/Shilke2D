@@ -64,14 +64,14 @@
   <li><a href="../modules/Texture.SubTexture.html">Texture.SubTexture</a></li>
   <li><a href="../modules/Texture.Texture.html">Texture.Texture</a></li>
   <li><a href="../modules/Texture.TextureAtlas.html">Texture.TextureAtlas</a></li>
-  <li><a href="../modules/Texture.TextureAtlasComposer.html">Texture.TextureAtlasComposer</a></li>
+  <li><strong>Texture.TextureAtlasComposer</strong></li>
   <li><a href="../modules/Texture.TextureManager.html">Texture.TextureManager</a></li>
   <li><a href="../modules/Texture.TexturePacker.html">Texture.TexturePacker</a></li>
   <li><a href="../modules/TileSet.ITileSet.html">TileSet.ITileSet</a></li>
   <li><a href="../modules/TileSet.Tile.html">TileSet.Tile</a></li>
   <li><a href="../modules/TileSet.TileSet.html">TileSet.TileSet</a></li>
   <li><a href="../modules/TileSet.TileSetComposer.html">TileSet.TileSetComposer</a></li>
-  <li><strong>Tween.Bezier</strong></li>
+  <li><a href="../modules/Tween.Bezier.html">Tween.Bezier</a></li>
   <li><a href="../modules/Tween.DisplayObjTweener.html">Tween.DisplayObjTweener</a></li>
   <li><a href="../modules/Tween.Transition.html">Tween.Transition</a></li>
   <li><a href="../modules/Tween.Tween.html">Tween.Tween</a></li>
@@ -110,26 +110,34 @@
 
 <div id="content">
 
-<h1>Module <code>Tween.Bezier</code></h1>
+<h1>Module <code>Texture.TextureAtlasComposer</code></h1>
 
-<p>Bezier curve implementation.</p>
+<p>TextureAtlasComposer implements ITextureAtlas and allows to work with different atlas textures
+without caring about how textures are grouped together.</p>
 <p>
-Source ported from http://paulbourke.net/geometry/bezier/index2.html  </p>
+It's possible in this way to use logical atlas where texture are larger
+than 2048x2048 </p>
 
 
 <h2><a href="#Functions">Functions</a></h2>
 <table class="function_list">
 	<tr>
-	<td class="name" nowrap><a href="#bezier3">bezier3&nbsp;(mu, p)</a></td>
-	<td class="summary">Three control point Bezier interpolation</td>
+	<td class="name" nowrap><a href="#TextureAtlasComposer:addAtlas">TextureAtlasComposer:addAtlas&nbsp;(atlas)</a></td>
+	<td class="summary">Adds a new atlas and registers all the named rects of the
+new atlas.</td>
 	</tr>
 	<tr>
-	<td class="name" nowrap><a href="#bezier4">bezier4&nbsp;(mu, p)</a></td>
-	<td class="summary">Four control point Bezier interpolation</td>
+	<td class="name" nowrap><a href="#TextureAtlasComposer:removeAtlas">TextureAtlasComposer:removeAtlas&nbsp;(atlas)</a></td>
+	<td class="summary">Removes the atlas and clears all the named region
+of the removed atlas</td>
 	</tr>
 	<tr>
-	<td class="name" nowrap><a href="#bezier">bezier&nbsp;(mu, p)</a></td>
-	<td class="summary">n-control point Bezier interpolation</td>
+	<td class="name" nowrap><a href="#TextureAtlasComposer:getSortedNames">TextureAtlasComposer:getSortedNames&nbsp;(prefix)</a></td>
+	<td class="summary">Returns all the regions sorted by name, that begin with "prefix".</td>
+	</tr>
+	<tr>
+	<td class="name" nowrap><a href="#TextureAtlasComposer:getNumOfTextures">TextureAtlasComposer:getNumOfTextures&nbsp;(prefix)</a></td>
+	<td class="summary">Returns the number of textures with a name that starts with prefix.</td>
 	</tr>
 </table>
 
@@ -140,18 +148,17 @@ Source ported from http://paulbourke.net/geometry/bezier/index2.html  </p>
     <h2><a name="Functions"></a>Functions</h2>
     <dl class="function">
     <dt>
-    <a name = "bezier3"></a>
-    <strong>bezier3&nbsp;(mu, p)</strong>
+    <a name = "TextureAtlasComposer:addAtlas"></a>
+    <strong>TextureAtlasComposer:addAtlas&nbsp;(atlas)</strong>
     </dt>
     <dd>
-    Three control point Bezier interpolation
+    Adds a new atlas and registers all the named rects of the
+new atlas.  If double name is found it raises an error
 
     <h3>Parameters:</h3>
     <ul>
-        <li><span class="parameter">mu</span>
-         range [0,1], interpolation point between start and end of the curve</li>
-        <li><span class="parameter">p</span>
-         list of 3 control points for bezier definition</li>
+        <li><span class="parameter">atlas</span>
+         TextureAtlas to be added</li>
     </ul>
 
 
@@ -160,18 +167,17 @@ Source ported from http://paulbourke.net/geometry/bezier/index2.html  </p>
 
 </dd>
     <dt>
-    <a name = "bezier4"></a>
-    <strong>bezier4&nbsp;(mu, p)</strong>
+    <a name = "TextureAtlasComposer:removeAtlas"></a>
+    <strong>TextureAtlasComposer:removeAtlas&nbsp;(atlas)</strong>
     </dt>
     <dd>
-    Four control point Bezier interpolation
+    Removes the atlas and clears all the named region
+of the removed atlas
 
     <h3>Parameters:</h3>
     <ul>
-        <li><span class="parameter">mu</span>
-         range [0,1], interpolation point between start and end of the curve</li>
-        <li><span class="parameter">p</span>
-         list of 4 control points for bezier definition</li>
+        <li><span class="parameter">atlas</span>
+         TextureAtlas to be removed</li>
     </ul>
 
 
@@ -180,20 +186,48 @@ Source ported from http://paulbourke.net/geometry/bezier/index2.html  </p>
 
 </dd>
     <dt>
-    <a name = "bezier"></a>
-    <strong>bezier&nbsp;(mu, p)</strong>
+    <a name = "TextureAtlasComposer:getSortedNames"></a>
+    <strong>TextureAtlasComposer:getSortedNames&nbsp;(prefix)</strong>
     </dt>
     <dd>
-    n-control point Bezier interpolation
+    Returns all the regions sorted by name, that begin with "prefix".
+If no prefix is provided it returns all the regions
 
     <h3>Parameters:</h3>
     <ul>
-        <li><span class="parameter">mu</span>
-         range [0,1], interpolation point between start and end of the curve</li>
-        <li><span class="parameter">p</span>
-         list of n-control points for bezier definition, with n>4</li>
+        <li><span class="parameter">prefix</span>
+         optional, prefix to select region names</li>
     </ul>
 
+    <h3>Returns:</h3>
+    <ol>
+
+        list of regions
+    </ol>
+
+
+
+
+</dd>
+    <dt>
+    <a name = "TextureAtlasComposer:getNumOfTextures"></a>
+    <strong>TextureAtlasComposer:getNumOfTextures&nbsp;(prefix)</strong>
+    </dt>
+    <dd>
+    Returns the number of textures with a name that starts with prefix.
+If no prefix is provided it returns the number of all the textures.
+
+    <h3>Parameters:</h3>
+    <ul>
+        <li><span class="parameter">prefix</span>
+         optional, prefix to select region/texture names</li>
+    </ul>
+
+    <h3>Returns:</h3>
+    <ol>
+
+        number number of textures that match prefix
+    </ol>
 
 
 

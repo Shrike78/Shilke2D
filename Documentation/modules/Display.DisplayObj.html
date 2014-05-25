@@ -53,18 +53,25 @@
   <li><a href="../modules/Display.Button.html">Display.Button</a></li>
   <li><strong>Display.DisplayObj</strong></li>
   <li><a href="../modules/Display.DisplayObjContainer.html">Display.DisplayObjContainer</a></li>
+  <li><a href="../modules/Display.DisplayObjTransform.html">Display.DisplayObjTransform</a></li>
   <li><a href="../modules/Display.DrawableObject.html">Display.DrawableObject</a></li>
   <li><a href="../modules/Display.Image.html">Display.Image</a></li>
   <li><a href="../modules/Display.MovieClip.html">Display.MovieClip</a></li>
   <li><a href="../modules/Display.Quad.html">Display.Quad</a></li>
   <li><a href="../modules/Display.Stage.html">Display.Stage</a></li>
   <li><a href="../modules/Display.TextField.html">Display.TextField</a></li>
-  <li><a href="../modules/Texture.BigTextureAtlas.html">Texture.BigTextureAtlas</a></li>
+  <li><a href="../modules/Display.TileMap.html">Display.TileMap</a></li>
+  <li><a href="../modules/Texture.ITextureAtlas.html">Texture.ITextureAtlas</a></li>
   <li><a href="../modules/Texture.SubTexture.html">Texture.SubTexture</a></li>
   <li><a href="../modules/Texture.Texture.html">Texture.Texture</a></li>
   <li><a href="../modules/Texture.TextureAtlas.html">Texture.TextureAtlas</a></li>
+  <li><a href="../modules/Texture.TextureAtlasComposer.html">Texture.TextureAtlasComposer</a></li>
   <li><a href="../modules/Texture.TextureManager.html">Texture.TextureManager</a></li>
   <li><a href="../modules/Texture.TexturePacker.html">Texture.TexturePacker</a></li>
+  <li><a href="../modules/TileSet.ITileSet.html">TileSet.ITileSet</a></li>
+  <li><a href="../modules/TileSet.Tile.html">TileSet.Tile</a></li>
+  <li><a href="../modules/TileSet.TileSet.html">TileSet.TileSet</a></li>
+  <li><a href="../modules/TileSet.TileSetComposer.html">TileSet.TileSetComposer</a></li>
   <li><a href="../modules/Tween.Bezier.html">Tween.Bezier</a></li>
   <li><a href="../modules/Tween.DisplayObjTweener.html">Tween.DisplayObjTweener</a></li>
   <li><a href="../modules/Tween.Transition.html">Tween.Transition</a></li>
@@ -80,6 +87,7 @@
   <li><a href="../modules/Utils.ClassEx.html">Utils.ClassEx</a></li>
   <li><a href="../modules/Utils.CollisionKit.html">Utils.CollisionKit</a></li>
   <li><a href="../modules/Utils.Color.html">Utils.Color</a></li>
+  <li><a href="../modules/Utils.ColorNames.html">Utils.ColorNames</a></li>
   <li><a href="../modules/Utils.Coroutines.html">Utils.Coroutines</a></li>
   <li><a href="../modules/Utils.IO.html">Utils.IO</a></li>
   <li><a href="../modules/Utils.IniFile.html">Utils.IniFile</a></li>
@@ -145,6 +153,14 @@ DisplayObject:
 	<tr>
 	<td class="name" nowrap><a href="#DisplayObj:init">DisplayObj:init&nbsp;()</a></td>
 	<td class="summary">Initialization.</td>
+	</tr>
+	<tr>
+	<td class="name" nowrap><a href="#DisplayObj:getObjTransform">DisplayObj:getObjTransform&nbsp;()</a></td>
+	<td class="summary">Returns a DisplayObjTransform object filled with the current obj transform values</td>
+	</tr>
+	<tr>
+	<td class="name" nowrap><a href="#DisplayObj:setObjTransform">DisplayObj:setObjTransform&nbsp;(t)</a></td>
+	<td class="summary">Transforms the displayObj based on the DisplayObjTransform provided</td>
 	</tr>
 	<tr>
 	<td class="name" nowrap><a href="#DisplayObj:dispose">DisplayObj:dispose&nbsp;()</a></td>
@@ -275,6 +291,14 @@ Used for example for images when a pixel shader is set for special effects.</td>
 	<td class="summary">Return current pivot position</td>
 	</tr>
 	<tr>
+	<td class="name" nowrap><a href="#DisplayObj:setPivot_v2">DisplayObj:setPivot_v2&nbsp;(v)</a></td>
+	<td class="summary">Set pivot of the object using a vec2</td>
+	</tr>
+	<tr>
+	<td class="name" nowrap><a href="#DisplayObj:getPivot_v2">DisplayObj:getPivot_v2&nbsp;()</a></td>
+	<td class="summary">Return current pivot position using a vec2</td>
+	</tr>
+	<tr>
 	<td class="name" nowrap><a href="#DisplayObj:setPivotX">DisplayObj:setPivotX&nbsp;(x)</a></td>
 	<td class="summary">Set Pivot x position</td>
 	</tr>
@@ -400,12 +424,14 @@ container coordinates (usually the stage).</td>
 	<td class="summary">Bounding rect in local coordinates of the displayObj.</td>
 	</tr>
 	<tr>
-	<td class="name" nowrap><a href="#DisplayObj:getWidth">DisplayObj:getWidth&nbsp;()</a></td>
-	<td class="summary">Get object width related on parent transformation (so with scaling applied)</td>
+	<td class="name" nowrap><a href="#DisplayObj:getWidth">DisplayObj:getWidth&nbsp;(targetSpace)</a></td>
+	<td class="summary">Get width of the object as it appears in another target space (width is calculated as
+width of the axis aligned bounding box of the object in that space)</td>
 	</tr>
 	<tr>
-	<td class="name" nowrap><a href="#DisplayObj:getHeight">DisplayObj:getHeight&nbsp;()</a></td>
-	<td class="summary">Get object height related on parent transformation (so with scaling applied)</td>
+	<td class="name" nowrap><a href="#DisplayObj:getHeight">DisplayObj:getHeight&nbsp;(targetSpace)</a></td>
+	<td class="summary">Get height of the object as it appears in another target space (height is calculated as
+height of the axis aligned bounding box of the object in that space)</td>
 	</tr>
 	<tr>
 	<td class="name" nowrap><a href="#DisplayObj:getBounds">DisplayObj:getBounds&nbsp;(targetSpace, resultRect)</a></td>
@@ -463,6 +489,42 @@ resulting color on screen is automatically affected by hierarchy colors.</td>
 
 </dd>
     <dt>
+    <a name = "DisplayObj:getObjTransform"></a>
+    <strong>DisplayObj:getObjTransform&nbsp;()</strong>
+    </dt>
+    <dd>
+    Returns a DisplayObjTransform object filled with the current obj transform values
+
+
+    <h3>Returns:</h3>
+    <ol>
+
+        DisplayObjTransform
+    </ol>
+
+
+
+
+</dd>
+    <dt>
+    <a name = "DisplayObj:setObjTransform"></a>
+    <strong>DisplayObj:setObjTransform&nbsp;(t)</strong>
+    </dt>
+    <dd>
+    Transforms the displayObj based on the DisplayObjTransform provided
+
+    <h3>Parameters:</h3>
+    <ul>
+        <li><span class="parameter">t</span>
+         DisplayObjTransform</li>
+    </ul>
+
+
+
+
+
+</dd>
+    <dt>
     <a name = "DisplayObj:dispose"></a>
     <strong>DisplayObj:dispose&nbsp;()</strong>
     </dt>
@@ -483,7 +545,8 @@ call also parent dispose method
     <dd>
     Clones the displayObj creating a new one with the same configuration.  It requires that all displayObj
 implements a default empty constructor. If a displayObj has no empty constructor the function must
-be overridden.
+be overridden. Even if displayObjs inherit from EventDispatcher, clone logic doesn't apply to
+EventDispatcher, that means that the cloning is only related to rendering and displayList.
 
 
     <h3>Returns:</h3>
@@ -1057,6 +1120,42 @@ keeping pivot point as center. By default pivot point is (0,0), depending on coo
         x</li>
         <li>
         y</li>
+    </ol>
+
+
+
+
+</dd>
+    <dt>
+    <a name = "DisplayObj:setPivot_v2"></a>
+    <strong>DisplayObj:setPivot_v2&nbsp;(v)</strong>
+    </dt>
+    <dd>
+    Set pivot of the object using a vec2
+
+    <h3>Parameters:</h3>
+    <ul>
+        <li><span class="parameter">v</span>
+         vec2</li>
+    </ul>
+
+
+
+
+
+</dd>
+    <dt>
+    <a name = "DisplayObj:getPivot_v2"></a>
+    <strong>DisplayObj:getPivot_v2&nbsp;()</strong>
+    </dt>
+    <dd>
+    Return current pivot position using a vec2
+
+
+    <h3>Returns:</h3>
+    <ol>
+
+        vec2
     </ol>
 
 
@@ -1662,11 +1761,17 @@ defined for concrete displayObj classes.
 </dd>
     <dt>
     <a name = "DisplayObj:getWidth"></a>
-    <strong>DisplayObj:getWidth&nbsp;()</strong>
+    <strong>DisplayObj:getWidth&nbsp;(targetSpace)</strong>
     </dt>
     <dd>
-    Get object width related on parent transformation (so with scaling applied)
+    Get width of the object as it appears in another target space (width is calculated as
+width of the axis aligned bounding box of the object in that space)
 
+    <h3>Parameters:</h3>
+    <ul>
+        <li><span class="parameter">targetSpace</span>
+         (optional) the object related to which we want to calculate width. default value is 'self'</li>
+    </ul>
 
 
 
@@ -1675,11 +1780,17 @@ defined for concrete displayObj classes.
 </dd>
     <dt>
     <a name = "DisplayObj:getHeight"></a>
-    <strong>DisplayObj:getHeight&nbsp;()</strong>
+    <strong>DisplayObj:getHeight&nbsp;(targetSpace)</strong>
     </dt>
     <dd>
-    Get object height related on parent transformation (so with scaling applied)
+    Get height of the object as it appears in another target space (height is calculated as
+height of the axis aligned bounding box of the object in that space)
 
+    <h3>Parameters:</h3>
+    <ul>
+        <li><span class="parameter">targetSpace</span>
+         (optional) the object related to which we want to calculate height. default value is 'self'</li>
+    </ul>
 
 
 
@@ -1697,9 +1808,9 @@ appears in another coordinate system.
     <h3>Parameters:</h3>
     <ul>
         <li><span class="parameter">targetSpace</span>
-         the object related to which we want to calculate bounds</li>
+         (optional) the object related to which we want to calculate bounds. default value is 'self'</li>
         <li><span class="parameter">resultRect</span>
-         optional, if provided is filled and returned</li>
+         (optional) if provided is filled and returned</li>
     </ul>
 
     <h3>Returns:</h3>

@@ -52,18 +52,25 @@
   <li><a href="../modules/Display.Button.html">Display.Button</a></li>
   <li><a href="../modules/Display.DisplayObj.html">Display.DisplayObj</a></li>
   <li><a href="../modules/Display.DisplayObjContainer.html">Display.DisplayObjContainer</a></li>
+  <li><a href="../modules/Display.DisplayObjTransform.html">Display.DisplayObjTransform</a></li>
   <li><a href="../modules/Display.DrawableObject.html">Display.DrawableObject</a></li>
   <li><a href="../modules/Display.Image.html">Display.Image</a></li>
   <li><a href="../modules/Display.MovieClip.html">Display.MovieClip</a></li>
   <li><a href="../modules/Display.Quad.html">Display.Quad</a></li>
   <li><a href="../modules/Display.Stage.html">Display.Stage</a></li>
   <li><a href="../modules/Display.TextField.html">Display.TextField</a></li>
-  <li><a href="../modules/Texture.BigTextureAtlas.html">Texture.BigTextureAtlas</a></li>
+  <li><a href="../modules/Display.TileMap.html">Display.TileMap</a></li>
+  <li><a href="../modules/Texture.ITextureAtlas.html">Texture.ITextureAtlas</a></li>
   <li><a href="../modules/Texture.SubTexture.html">Texture.SubTexture</a></li>
   <li><a href="../modules/Texture.Texture.html">Texture.Texture</a></li>
   <li><a href="../modules/Texture.TextureAtlas.html">Texture.TextureAtlas</a></li>
+  <li><a href="../modules/Texture.TextureAtlasComposer.html">Texture.TextureAtlasComposer</a></li>
   <li><a href="../modules/Texture.TextureManager.html">Texture.TextureManager</a></li>
   <li><a href="../modules/Texture.TexturePacker.html">Texture.TexturePacker</a></li>
+  <li><a href="../modules/TileSet.ITileSet.html">TileSet.ITileSet</a></li>
+  <li><a href="../modules/TileSet.Tile.html">TileSet.Tile</a></li>
+  <li><a href="../modules/TileSet.TileSet.html">TileSet.TileSet</a></li>
+  <li><a href="../modules/TileSet.TileSetComposer.html">TileSet.TileSetComposer</a></li>
   <li><a href="../modules/Tween.Bezier.html">Tween.Bezier</a></li>
   <li><a href="../modules/Tween.DisplayObjTweener.html">Tween.DisplayObjTweener</a></li>
   <li><a href="../modules/Tween.Transition.html">Tween.Transition</a></li>
@@ -79,6 +86,7 @@
   <li><a href="../modules/Utils.ClassEx.html">Utils.ClassEx</a></li>
   <li><a href="../modules/Utils.CollisionKit.html">Utils.CollisionKit</a></li>
   <li><a href="../modules/Utils.Color.html">Utils.Color</a></li>
+  <li><a href="../modules/Utils.ColorNames.html">Utils.ColorNames</a></li>
   <li><a href="../modules/Utils.Coroutines.html">Utils.Coroutines</a></li>
   <li><a href="../modules/Utils.IO.html">Utils.IO</a></li>
   <li><a href="../modules/Utils.IniFile.html">Utils.IniFile</a></li>
@@ -104,8 +112,9 @@
 
 <h1>Module <code>Utils.BitOp</code></h1>
 
-<p>Utility functions to work with bitfields</p>
-<p></p>
+<p>Utility functions to work with bitfields.</p>
+<p>
+It's based on 32 bit bitfields logic and requires lua to be compiled with 64 bit precision</p>
 
 
 <h2><a href="#Functions">Functions</a></h2>
@@ -149,6 +158,14 @@
 	<tr>
 	<td class="name" nowrap><a href="#toString">toString&nbsp;(a)</a></td>
 	<td class="summary">Converts a bitfield to a string</td>
+	</tr>
+	<tr>
+	<td class="name" nowrap><a href="#splitmask">splitmask&nbsp;(a, mask)</a></td>
+	<td class="summary">split a bitfield into two bitfields given a mask that indicates low (0) and high (1) bits</td>
+	</tr>
+	<tr>
+	<td class="name" nowrap><a href="#splitbits">splitbits&nbsp;(a, hbits)</a></td>
+	<td class="summary">split a bitfield into two bitfields given a size for the high mask</td>
 	</tr>
 </table>
 
@@ -372,6 +389,84 @@
 
 
 
+
+</dd>
+    <dt>
+    <a name = "splitmask"></a>
+    <strong>splitmask&nbsp;(a, mask)</strong>
+    </dt>
+    <dd>
+    split a bitfield into two bitfields given a mask that indicates low (0) and high (1) bits
+
+    <h3>Parameters:</h3>
+    <ul>
+        <li><span class="parameter">a</span>
+         input bitfield</li>
+        <li><span class="parameter">mask</span>
+         the mask bitfield used to split into high, low values</li>
+    </ul>
+
+    <h3>Returns:</h3>
+    <ol>
+        <li>
+        l the low part of the bitfield (0 values on the mask)</li>
+        <li>
+        h the hih part of the bitfield (1 values on the mask)</li>
+    </ol>
+
+
+
+    <h3>Usage:</h3>
+    <ul>
+        <pre class="example">
+
+a 		= <span class="number">00100000000000000000000000000010</span>
+mask 	= <span class="number">11111111000000000000000000000000</span>
+
+l,h 	= BitOp.splitmask(a, mask)
+
+l	=&gt; <span class="number">00000000000000000000000000000010</span>
+h	=&gt; <span class="number">00100000000000000000000000000000</span></pre>
+    </ul>
+
+</dd>
+    <dt>
+    <a name = "splitbits"></a>
+    <strong>splitbits&nbsp;(a, hbits)</strong>
+    </dt>
+    <dd>
+    split a bitfield into two bitfields given a size for the high mask
+
+    <h3>Parameters:</h3>
+    <ul>
+        <li><span class="parameter">a</span>
+         input bitfield</li>
+        <li><span class="parameter">hbits</span>
+         the number of bit used to mask high value</li>
+    </ul>
+
+    <h3>Returns:</h3>
+    <ol>
+        <li>
+        l the low part of the bitfield (0 values on the mask)</li>
+        <li>
+        h the hih part of the bitfield (1 values on the mask)</li>
+    </ol>
+
+
+
+    <h3>Usage:</h3>
+    <ul>
+        <pre class="example">
+
+a 		= <span class="number">00100000000000000000000000000010</span>
+hbits 	= <span class="number">8</span> (=&gt; mask = <span class="number">11111111000000000000000000000000</span>)
+
+l,h 	= BitOp.splitbits(a, hbits)
+
+l	=&gt; <span class="number">00000000000000000000000000000010</span>
+h	=&gt; <span class="number">00100000000000000000000000000000</span></pre>
+    </ul>
 
 </dd>
 </dl>

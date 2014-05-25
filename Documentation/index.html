@@ -45,18 +45,25 @@
   <li><a href="modules/Display.Button.html">Display.Button</a></li>
   <li><a href="modules/Display.DisplayObj.html">Display.DisplayObj</a></li>
   <li><a href="modules/Display.DisplayObjContainer.html">Display.DisplayObjContainer</a></li>
+  <li><a href="modules/Display.DisplayObjTransform.html">Display.DisplayObjTransform</a></li>
   <li><a href="modules/Display.DrawableObject.html">Display.DrawableObject</a></li>
   <li><a href="modules/Display.Image.html">Display.Image</a></li>
   <li><a href="modules/Display.MovieClip.html">Display.MovieClip</a></li>
   <li><a href="modules/Display.Quad.html">Display.Quad</a></li>
   <li><a href="modules/Display.Stage.html">Display.Stage</a></li>
   <li><a href="modules/Display.TextField.html">Display.TextField</a></li>
-  <li><a href="modules/Texture.BigTextureAtlas.html">Texture.BigTextureAtlas</a></li>
+  <li><a href="modules/Display.TileMap.html">Display.TileMap</a></li>
+  <li><a href="modules/Texture.ITextureAtlas.html">Texture.ITextureAtlas</a></li>
   <li><a href="modules/Texture.SubTexture.html">Texture.SubTexture</a></li>
   <li><a href="modules/Texture.Texture.html">Texture.Texture</a></li>
   <li><a href="modules/Texture.TextureAtlas.html">Texture.TextureAtlas</a></li>
+  <li><a href="modules/Texture.TextureAtlasComposer.html">Texture.TextureAtlasComposer</a></li>
   <li><a href="modules/Texture.TextureManager.html">Texture.TextureManager</a></li>
   <li><a href="modules/Texture.TexturePacker.html">Texture.TexturePacker</a></li>
+  <li><a href="modules/TileSet.ITileSet.html">TileSet.ITileSet</a></li>
+  <li><a href="modules/TileSet.Tile.html">TileSet.Tile</a></li>
+  <li><a href="modules/TileSet.TileSet.html">TileSet.TileSet</a></li>
+  <li><a href="modules/TileSet.TileSetComposer.html">TileSet.TileSetComposer</a></li>
   <li><a href="modules/Tween.Bezier.html">Tween.Bezier</a></li>
   <li><a href="modules/Tween.DisplayObjTweener.html">Tween.DisplayObjTweener</a></li>
   <li><a href="modules/Tween.Transition.html">Tween.Transition</a></li>
@@ -72,6 +79,7 @@
   <li><a href="modules/Utils.ClassEx.html">Utils.ClassEx</a></li>
   <li><a href="modules/Utils.CollisionKit.html">Utils.CollisionKit</a></li>
   <li><a href="modules/Utils.Color.html">Utils.Color</a></li>
+  <li><a href="modules/Utils.ColorNames.html">Utils.ColorNames</a></li>
   <li><a href="modules/Utils.Coroutines.html">Utils.Coroutines</a></li>
   <li><a href="modules/Utils.IO.html">Utils.IO</a></li>
   <li><a href="modules/Utils.IniFile.html">Utils.IniFile</a></li>
@@ -163,6 +171,16 @@ objects that are rendered on the screen.</td>
 		<td class="summary">A DisplayObjectContainer represents a collection of display objects.</td>
 	</tr>
 	<tr>
+		<td class="name"  nowrap><a href="modules/Display.DisplayObjTransform.html">Display.DisplayObjTransform</a></td>
+		<td class="summary">A DisplayObj position and transformation in space is defined by 3 vec2 and a scalar value:
+-pivot
+-position
+-rotation
+-scale
+<p>DisplayObjTransform is a class containing all this values and can be used to define in a compact way the
+position/transformation of a generic DisplayObj.</td>
+	</tr>
+	<tr>
 		<td class="name"  nowrap><a href="modules/Display.DrawableObject.html">Display.DrawableObject</a></td>
 		<td class="summary">A DrawableObject is a displayObj that implements MOAIScriptDeck, so that allows vectorial drawing.</td>
 	</tr>
@@ -188,9 +206,13 @@ of textures.</td>
 		<td class="summary">A TextField is a particolar displayObject used to displays text.</td>
 	</tr>
 	<tr>
-		<td class="name"  nowrap><a href="modules/Texture.BigTextureAtlas.html">Texture.BigTextureAtlas</a></td>
-		<td class="summary">BigTextureAtlas inherits TextureAtlas and allows to work with different atlas textures
-without caring about how textures are grouped together.</td>
+		<td class="name"  nowrap><a href="modules/Display.TileMap.html">Display.TileMap</a></td>
+		<td class="summary">A TileMap is a displayObject that displays a map built on a set of indices referring to the tiles
+of a given TileSet.</td>
+	</tr>
+	<tr>
+		<td class="name"  nowrap><a href="modules/Texture.ITextureAtlas.html">Texture.ITextureAtlas</a></td>
+		<td class="summary">Interface for TextureAtlas classes.</td>
 	</tr>
 	<tr>
 		<td class="name"  nowrap><a href="modules/Texture.SubTexture.html">Texture.SubTexture</a></td>
@@ -206,12 +228,35 @@ without caring about how textures are grouped together.</td>
 image.</td>
 	</tr>
 	<tr>
+		<td class="name"  nowrap><a href="modules/Texture.TextureAtlasComposer.html">Texture.TextureAtlasComposer</a></td>
+		<td class="summary">TextureAtlasComposer implements ITextureAtlas and allows to work with different atlas textures
+without caring about how textures are grouped together.</td>
+	</tr>
+	<tr>
 		<td class="name"  nowrap><a href="modules/Texture.TextureManager.html">Texture.TextureManager</a></td>
 		<td class="summary">TextureManager allows to mount a texture atlas as a logical resource path.</td>
 	</tr>
 	<tr>
 		<td class="name"  nowrap><a href="modules/Texture.TexturePacker.html">Texture.TexturePacker</a></td>
 		<td class="summary">There are several ways to create a texture atlas.</td>
+	</tr>
+	<tr>
+		<td class="name"  nowrap><a href="modules/TileSet.ITileSet.html">TileSet.ITileSet</a></td>
+		<td class="summary">ITileset defines a common interface for all TileSet class types, giving implementation rules:
+
+- A TileSet is a collection of tiles built upon a texture set.</td>
+	</tr>
+	<tr>
+		<td class="name"  nowrap><a href="modules/TileSet.Tile.html">TileSet.Tile</a></td>
+		<td class="summary">Tile is the base object for tilemap management.</td>
+	</tr>
+	<tr>
+		<td class="name"  nowrap><a href="modules/TileSet.TileSet.html">TileSet.TileSet</a></td>
+		<td class="summary">TileSet is the most common type of tileset that can be used in Shilke2D.</td>
+	</tr>
+	<tr>
+		<td class="name"  nowrap><a href="modules/TileSet.TileSetComposer.html">TileSet.TileSetComposer</a></td>
+		<td class="summary">TileSetComposer is used when multiple atlas are required.</td>
 	</tr>
 	<tr>
 		<td class="name"  nowrap><a href="modules/Tween.Bezier.html">Tween.Bezier</a></td>
@@ -261,7 +306,7 @@ tween</td>
 	</tr>
 	<tr>
 		<td class="name"  nowrap><a href="modules/Utils.BitOp.html">Utils.BitOp</a></td>
-		<td class="summary">Utility functions to work with bitfields</td>
+		<td class="summary">Utility functions to work with bitfields.</td>
 	</tr>
 	<tr>
 		<td class="name"  nowrap><a href="modules/Utils.Callbacks.html">Utils.Callbacks</a></td>
@@ -279,6 +324,10 @@ Compatible with Lua 5.1 (not 5.0).</td>
 	<tr>
 		<td class="name"  nowrap><a href="modules/Utils.Color.html">Utils.Color</a></td>
 		<td class="summary">Color class.</td>
+	</tr>
+	<tr>
+		<td class="name"  nowrap><a href="modules/Utils.ColorNames.html">Utils.ColorNames</a></td>
+		<td class="summary">A set of predefined named colors.</td>
 	</tr>
 	<tr>
 		<td class="name"  nowrap><a href="modules/Utils.Coroutines.html">Utils.Coroutines</a></td>
