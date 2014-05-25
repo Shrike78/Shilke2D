@@ -39,6 +39,13 @@ function vec2:init(x,y)
 	self.y = y or 0
 end
 
+---sets x,y copying from c
+--@param c the vec2 to be copied
+function vec2:copy(c)
+	self.x = c.x
+	self.y = c.y
+end
+
 ---Returns a copy of self, with x,y also cloned from self
 function vec2:clone()
 	return vec2(self.x, self.y)
