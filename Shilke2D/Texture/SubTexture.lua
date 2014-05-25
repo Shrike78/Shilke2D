@@ -47,21 +47,12 @@ function SubTexture:dispose()
 	end
 end
 
----The rect is obtained as product of the region values and the parent texture width and height
---@param resultRect if provided is filled and returned
---@return Rect
-function SubTexture:getRect(resultRect)
-	local res = resultRect or Rect()
-	local w,h = self.parent.width, self.parent.height
-	res.x = 0
-	res.y = 0
-	res.w = math.round(self.region.w * w)
-	res.h = math.round(self.region.h * h)
-	return res
+--SubTexture copy implementation
+function SubTexture:copy()
+	return SubTexture(self.parent, self.region, self.rotated)
 end
 
-
----Returns the region as pixel rect over srcdata
+---Returns the region as pixel rect over srcdata. It doesn't take care of the rotated flag
 --@param resultRect if provided is filled and returned
 --@return Rect
 function SubTexture:getRegionPx(resultRect)

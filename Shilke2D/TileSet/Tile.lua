@@ -45,14 +45,14 @@ end
 --It wraps the texture.width
 --@return int
 function Tile:getWidth()
-	return self.texture.width
+	return self.texture:getWidth()
 end
 
 ---Returns the height of the tile.
 --It wraps the texture.height
 --@return int
 function Tile:getHeight()
-	return self.texture.height
+	return self.texture:getHeight()
 end
 
 ---Sets a property of the tile.

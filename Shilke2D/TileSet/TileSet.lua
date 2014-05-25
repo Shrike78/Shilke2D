@@ -36,19 +36,11 @@ function TileSet:init(atlas, name, properties, tilesProperties)
 	local tile, r = nil, nil
 	
 	for i,texture in ipairs(textures) do
+		assert(texture.width == self.tilewidth and texture.height == self.tileheight, 
+			"all the tiles must have the same size")
+		assert(texture.textureData == textureData, "all the tile must have the same textureData")
 		tile = Tile(self, i, texture, tilesProperties[i])
-		r = texture.region
-		if __USE_SIMULATION_COORDS__ then
-			gfxQuadDeck:setUVRect(i,r.x, r.y + r.h, r.x + r.w, r.y)	
-		else
-			gfxQuadDeck:setUVRect(i,r.x, r.y, r.x + r.w, r.y + r.h)	
-		end
-		if texture.width ~= self.tilewidth or texture.height ~= self.tileheight then
-			error("all the tiles must have the same size")
-		end
-		if texture.textureData ~= textureData then
-			error("all the tile must have the same textureData")
-		end
+		texture:_fillQuadDeckUV(gfxQuadDeck, i)
 		self.tiles[#self.tiles+1] = tile
 	end
 end
@@ -60,8 +52,7 @@ function TileSet:replaceAtlas(atlas)
 	
 	local textures = atlas:getTextures()
 	
-	assert(#textures == #self.tiles,
-		"replace of atlas cannot be done if number of textures is not the same")
+	assert(#textures == #self.tiles, "replace of atlas cannot be done if number of textures is not the same")
 	
 	assert(self.tilewidth == textures[1].width and self.tileheight == textures[1].height,
 		"replace of atlas cannot be done if texture size is not the same")
@@ -71,19 +62,11 @@ function TileSet:replaceAtlas(atlas)
 	local gfxQuadDeck = self._gfxQuadDeck 
 	gfxQuadDeck:setTexture ( textureData )
 	for i,texture in ipairs(textures) do
+		assert(texture.width == self.tilewidth and texture.height == self.tileheight, 
+			"all the tiles must have the same size")
+		assert(texture.textureData == textureData, "all the tile must have the same textureData")
 		self.tiles[i]:_replaceTexture(texture)
-		r = texture.region
-		if __USE_SIMULATION_COORDS__ then
-			gfxQuadDeck:setUVRect(i,r.x, r.y + r.h, r.x + r.w, r.y)	
-		else
-			gfxQuadDeck:setUVRect(i,r.x, r.y, r.x + r.w, r.y + r.h)	
-		end
-		if texture.width ~= self.tilewidth or texture.height ~= self.tileheight then
-			error("all the tiles must have the same size")
-		end
-		if texture.textureData ~= textureData then
-			error("all the tile must have the same textureData")
-		end
+		texture:_fillQuadDeckUV(gfxQuadDeck, i)
 	end
 
 end	

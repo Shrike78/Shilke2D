@@ -42,7 +42,7 @@ function Texture.fromColor(width, height, r, g, b, a)
 		_r = r/255
 		_g = g/255
 		_b = b/255
-		_a = a and a / 255 or 1
+		_a = (a ~= nil) and (a / 255) or 1
 	else
 		_r, _g, _b, _a = r:unpack_normalized()
 	end	
@@ -57,12 +57,14 @@ end
 --@param rotated boolean. if true the region is rotated of 90° clockwise
 --@return SubTexture
 function Texture.fromTexture(texture, region, rotated)
-    if region.x == 0 and region.y == 0 and 
-        region.w == 1 and region.h == 1 then
-            return texture
-    else
-        return SubTexture(texture,region,rotated)
-    end
+	assert(class_type(texture) == Texture, "only object of class Texture can be used")
+	assert(region, "A region must be provided")
+	local rotated = (rotated == true)
+	if region.x == 0 and region.y == 0 and region.w == 1 and region.h == 1 and not rotated then
+		return texture:copy()
+	else
+		return SubTexture(texture,region,rotated)
+	end
 end
 
 
@@ -98,6 +100,13 @@ function Texture:init(srcData)
 	self.width, self.height = self.textureData:getSize()
 	self.region = Rect(0,0,1,1)
 	self.rotated = false
+end
+
+--copy function must be implemented for each specific texture implementation
+function Texture:copy()
+	--this is specific for framebuffer textures.
+	local srcData = self.srcData or self.textureData
+	return Texture(srcData)
 end
 
 ---When called textureData (MOAITexture) is released
@@ -145,6 +154,63 @@ function Texture:getColor(x,y)
 	return Color(r*255,g*255,b*255,a*255)
 end
 
+function Texture:_fillQuadUV(quad)
+	local r = self.region
+	if not self.rotated then
+		if __USE_SIMULATION_COORDS__ then
+			quad:setUVRect(r.x, r.y + r.h, r.x + r.w, r.y )
+		else
+			quad:setUVRect(r.x, r.y, r.x + r.w, r.y + r.h )
+		end
+	else
+		if __USE_SIMULATION_COORDS__ then
+			quad:setUVQuad (	
+						r.x + r.w, r.y,
+						r.x + r.w, r.y + r.h,
+						r.x, r.y + r.h,
+						r.x, r.y
+				)
+		else
+			quad:setUVQuad (	
+						r.x, r.y,
+						r.x, r.y + r.h,
+						r.x + r.w, r.y + r.h,
+						r.x + r.w, r.y
+				)
+		end
+	end
+end
+
+
+function Texture:_fillQuadDeckUV(quadDeck, index)
+	local r = self.region
+	if not self.rotated then
+		if __USE_SIMULATION_COORDS__ then
+			quadDeck:setUVRect(index, r.x, r.y + r.h, r.x + r.w, r.y )
+		else
+			quadDeck:setUVRect(index, r.x, r.y, r.x + r.w, r.y + r.h )
+		end
+	else
+		if __USE_SIMULATION_COORDS__ then
+			quadDeck:setUVQuad (	
+						index, 
+						r.x + r.w, r.y,
+						r.x + r.w, r.y + r.h,
+						r.x, r.y + r.h,
+						r.x, r.y
+				)
+		else
+			quadDeck:setUVQuad (
+						index, 	
+						r.x, r.y,
+						r.x, r.y + r.h,
+						r.x + r.w, r.y + r.h,
+						r.x + r.w, r.y
+				)
+		end
+	end
+end
+
 
 --[[---
 Inner method. 
@@ -155,36 +221,12 @@ If a texture is not binded to an Image the MOAIGfxQuad2D is never created
 function Texture:_getQuad()
     if not self._quad then
         self._quad = MOAIGfxQuad2D.new()
-        self._quad:setTexture(self.textureData)
-        local r = self.region
-		if not self.rotated then
-if __USE_SIMULATION_COORDS__ then
-			self._quad:setUVRect(r.x, r.y + r.h, r.x + r.w, r.y )
-else
-			self._quad:setUVRect(r.x, r.y, r.x + r.w, r.y + r.h )
-end
-		else
-if __USE_SIMULATION_COORDS__ then
-			self._quad:setUVQuad (	
-									r.x + r.w, r.y,
-									r.x + r.w, r.y + r.h,
-									r.x, r.y + r.h,
-									r.x, r.y
-							)
-else
-			self._quad:setUVQuad (	
-									r.x, r.y,
-									r.x, r.y + r.h,
-									r.x + r.w, r.y + r.h,
-									r.x + r.w, r.y
-							)
-end
-		end
-        self._quad:setRect(0, 0, self.width, self.height)
+		self._quad:setTexture(self.textureData)
+		self._quad:setRect(0, 0, self.width, self.height)
+		self:_fillQuadUV(self._quad)
     end
     return self._quad
 end
-
 
 ---Returns the rect enclosing the image
 --@param resultRect if provided is filled and returned
@@ -198,7 +240,19 @@ function Texture:getRect(resultRect)
 	return res
 end
 
----Returns the region as pixel rect over srcdata
+---Returns the width of the texture in pixels
+--@return int
+function Texture:getWidth()
+	return self.width
+end
+
+---Returns the height of the texture in pixels
+--@return int
+function Texture:getHeight()
+	return self.height
+end
+
+---Returns the region as pixel rect over srcdata. It doesn't take care of the rotated flag
 --@param resultRect if provided is filled and returned
 --@return Rect
 function Texture:getRegionPx(resultRect)
@@ -211,7 +265,8 @@ function Texture:getRegionPx(resultRect)
 	return res
 end
 
----Returns the region as uv rect over srcdata
+
+---Returns the region as uv rect over srcdata. It doesn't take care of the rotated flag
 --@param resultRect if provided is filled and returned
 --@return Rect (values are [0..1])
 function Texture:getRegionUV(resultRect)
