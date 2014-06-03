@@ -1,9 +1,46 @@
 --[[---
-Shilke2D/include is the entry point for each project based on Shilke2D
+Shilke2D/include is the entry point for each project based on Shilke2D.
+There are some specific Shilke2D configuration options that must be set before to include
+this file.
 --]]
 
----
+if __DEBUG_CALLBACKS__ == nil then
+	--[[---
+	Used to enable debug of default Shilke2D callbacks  (post draw and input callbacks)
+	This feature relies on ZeroBraneStudio mobdebug feature so it can be enabled only
+	when debugging from this IDE. By default is set to false
+	--]]
+	__DEBUG_CALLBACKS__ = false
+end
 
+
+if __USE_SIMULATION_COORDS__ == nil then
+	--[[---
+	--Shilke2D default coordinate system has (0,0) as topleft point and y grows from top to bottom. 
+	It's possible to change coordinate system having (0,0) as bottomleft point and y growing from 
+	bottom to top (so called coordinate system) setting this option to true
+	By default is set to false
+	--]]
+	__USE_SIMULATION_COORDS__ = false
+end
+
+if __SHILKE2D_TWEEN__ == nil then
+	--[[---
+	Used to selective include tween library.
+	By default tween library is loaded. 
+	Define __SHILKE2D_TWEEN__ = false before include to disable it
+	--]]
+	__SHILKE2D_TWEEN__ = true
+end
+
+if __SHILKE2D_TILEMAP__ == nil then
+	--[[---
+	Used to selective include tilemap library.
+	By default tilemap library is loaded. 
+	Define __SHILKE2D_TILEMAP__ = false before include to disable it
+	--]]
+	__SHILKE2D_TILEMAP__ = true
+end
 
 
 require("Shilke2D/Utils/ClassEx")
@@ -15,7 +52,6 @@ require("Shilke2D/Utils/BitOp")
 require("Shilke2D/Utils/Math")
 require("Shilke2D/Utils/Vector")
 require("Shilke2D/Utils/Color")
-require("Shilke2D/Utils/ColorNames")
 require("Shilke2D/Utils/Shape")
 require("Shilke2D/Utils/String")
 require("Shilke2D/Utils/Table")
@@ -56,7 +92,6 @@ require("Shilke2D/Display/MovieClip")
 require("Shilke2D/Display/TextField")
 require("Shilke2D/Display/Button")
 require("Shilke2D/Display/DrawableObject")
-require("Shilke2D/Display/TileMap")
 
 --Shilke2D/Texture
 require("Shilke2D/Texture/Texture")
@@ -67,19 +102,25 @@ require("Shilke2D/Texture/TextureAtlasComposer")
 require("Shilke2D/Texture/TexturePacker")
 require("Shilke2D/Texture/TextureManager")
 
---Shilke2D/Tween
-require("Shilke2D/Tween/Tween")
-require("Shilke2D/Tween/TweenDelay")
-require("Shilke2D/Tween/Transition")
-require("Shilke2D/Tween/TweenEase")
-require("Shilke2D/Tween/Bezier")
-require("Shilke2D/Tween/TweenBezier")
-require("Shilke2D/Tween/TweenParallel")
-require("Shilke2D/Tween/TweenLoop")
-require("Shilke2D/Tween/TweenSequence")
-require("Shilke2D/Tween/DisplayObjTweener")
---Shilke2D/TileSet
-require("Shilke2D/TileSet/Tile")
-require("Shilke2D/TileSet/ITileSet")
-require("Shilke2D/TileSet/TileSet")
-require("Shilke2D/TileSet/TileSetComposer")
+if __SHILKE2D_TWEEN__ then
+	--Shilke2D/Tween
+	require("Shilke2D/Tween/Tween")
+	require("Shilke2D/Tween/TweenDelay")
+	require("Shilke2D/Tween/Transition")
+	require("Shilke2D/Tween/TweenEase")
+	require("Shilke2D/Tween/Bezier")
+	require("Shilke2D/Tween/TweenBezier")
+	require("Shilke2D/Tween/TweenParallel")
+	require("Shilke2D/Tween/TweenLoop")
+	require("Shilke2D/Tween/TweenSequence")
+	require("Shilke2D/Tween/DisplayObjTweener")
+end
+
+
+if __SHILKE2D_TILEMAP__ then
+	require("Shilke2D/Display/TileMap")
+	require("Shilke2D/TileSet/Tile")
+	require("Shilke2D/TileSet/ITileSet")
+	require("Shilke2D/TileSet/TileSet")
+	require("Shilke2D/TileSet/TileSetComposer")
+end
