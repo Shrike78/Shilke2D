@@ -122,7 +122,7 @@ end
 function BaseQuad:setSize(width,height)
 	self._width = width
 	self._height = height
-    BaseQuad.__pivotModeFunctions[self._pivotMode](self)
+	BaseQuad.__pivotModeFunctions[self._pivotMode](self)
 end
 
 
@@ -147,25 +147,38 @@ end
 
 --[[---
 Set pivot coordinates.
-That means to set a CUSTOM pivot defining pivot point, that will not change event if 
-size of the object would be changed
+A CUSTOM pivot point is not recalculated when object size changes
 @param x pivot x coordinate
 @param y pivot y coordinate
 --]]
 function BaseQuad:setPivot(x,y)
-    self:setPivotMode(PivotMode.CUSTOM)
+	if self._pivotMode ~= PivotMode.CUSTOM then
+		self:setPivotMode(PivotMode.CUSTOM)
+	end
 	self._prop:setPiv(x,y,0)
 end
 
----Set Pivot x position
+--[[---
+Set Pivot x position
+A CUSTOM pivot point is not recalculated when object size changes
+@param x pivot x coordinate
+--]]
 function BaseQuad:setPivotX(x)
-    self:setPivotMode(PivotMode.CUSTOM)
+	if self._pivotMode ~= PivotMode.CUSTOM then
+		self:setPivotMode(PivotMode.CUSTOM)
+	end
 	self._prop:setAttr(MOAITransform.ATTR_X_PIV, x)    
 end
 
----Set Pivot y position
+--[[---
+Set Pivot y position
+A CUSTOM pivot point is not recalculated when object size changes
+@param y pivot y coordinate
+--]]
 function BaseQuad:setPivotY(y)
-    self:setPivotMode(PivotMode.CUSTOM)
+	if self._pivotMode ~= PivotMode.CUSTOM then
+		self:setPivotMode(PivotMode.CUSTOM)
+	end
 	self._prop:setAttr(MOAITransform.ATTR_Y_PIV, y)
 end
 
