@@ -63,7 +63,7 @@ if not __USE_SIMULATION_COORDS__ then
 			end
 		end
 	end
-else
+else --__USE_SIMULATION_COORDS__
 	r1.y = h1 - r1.y
 	r2.y = h2 - r2.y
 	
@@ -217,7 +217,7 @@ if not __USE_SIMULATION_COORDS__ then
 			end
 		end
 	end
-else
+else --__USE_SIMULATION_COORDS__
 	if not rot1 and not rot2 then
 		local _x1,_y1 = (o1x + r1.x), (o1y + h1 - r1.y)
 		local _x2,_y2 = (o2x + r2.x), (o2y + h2 - r2.y)

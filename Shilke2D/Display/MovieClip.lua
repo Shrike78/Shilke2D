@@ -163,28 +163,27 @@ end
 ---IAnimatable interface implementation.
 --@param deltaTime millisec elapsed since last frame
 function MovieClip:advanceTime(deltaTime)
-    if self.playing and not self.paused then
-        self.elapsedTime = self.elapsedTime + deltaTime
-        if self.elapsedTime > self.animTime then
-            self.currentFrame = (self.currentFrame % 
-                self.numFrames) + 1
-                if self.currentFrame == 1 and 
-                        (self.currentCount < self.repeatCount or
-                        self.repeatCount <=0 ) then
-                            
-                    self.currentCount = self.currentCount + 1
-					
-		    self:dispatchEvent(Event(Event.COMPLETED))
-               
-                    if self.currentCount == self.repeatCount then
-                        self:stop()
-                    else
-                        self:setTexture(self.textures[self.currentFrame])
-                    end
-                else
-                    self:setTexture(self.textures[self.currentFrame])
-                end
-            self.elapsedTime = self.elapsedTime - self.animTime
-        end
-    end
+	if self.playing and not self.paused then
+		self.elapsedTime = self.elapsedTime + deltaTime
+		if self.elapsedTime > self.animTime then
+			self.currentFrame = (self.currentFrame % 
+			self.numFrames) + 1
+			if self.currentFrame == 1 and 
+				(self.currentCount < self.repeatCount or
+				self.repeatCount <=0 ) then
+
+				self.currentCount = self.currentCount + 1
+				self:dispatchEvent(Event(Event.COMPLETED))
+
+				if self.currentCount == self.repeatCount then
+					self:stop()
+				else
+					self:setTexture(self.textures[self.currentFrame])
+				end
+			else
+				self:setTexture(self.textures[self.currentFrame])
+			end
+			self.elapsedTime = self.elapsedTime - self.animTime
+		end
+	end
 end
