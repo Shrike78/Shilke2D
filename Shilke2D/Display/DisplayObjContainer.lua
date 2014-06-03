@@ -641,7 +641,7 @@ function DisplayObjContainer:createFrameBufferImage(bUpdate,width,height)
 	
 	--6)Create an image with correct coorindate system to handle onscreen rendering
 	local pivotMode = __USE_SIMULATION_COORDS__ == true and PivotMode.BOTTOM_LEFT	or PivotMode.TOP_LEFT 
-	local frameBufferImg = Image(Texture(frameBuffer),pivotMode)
+	local frameBufferImg = Image(Texture.fromData(frameBuffer),pivotMode)
 	
 	--7)bind this new image (just as prop) to the current layer
 	if not bUpdate then

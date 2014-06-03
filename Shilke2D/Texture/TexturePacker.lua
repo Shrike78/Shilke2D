@@ -65,15 +65,27 @@ function TexturePacker.parseSparrowFormat(atlasXml, dir, texture)
 		--be aligned to all the other atlas format and moreover to be transparent
 		--when loading a texture using TextureManager
         local name = subTex:getAttribute("name") .. extension
-        --divide for width/height to have a [0..1] range
-        local x = subTex:getAttributeN("x") / texture.width
-        local y = subTex:getAttributeN("y") / texture.height
-        local w = subTex:getAttributeN("width") / texture.width
-        local h = subTex:getAttributeN("height") / texture.height
-        
-        --Sparrow/Starling work with (0,0) as top left
+        local rotated = subTex:getAttributeBool("rotated") ~= nil
+        local trimmed = subTex:getAttribute("frameX") ~= nil
+		
+        local x = subTex:getAttributeN("x")
+        local y = subTex:getAttributeN("y")
+        local w = subTex:getAttributeN("width")
+        local h = subTex:getAttributeN("height")
+		--Sparrow/Starling work with (0,0) as top left
         local region = Rect(x, y, w, h)
-        atlas:addRegion(name,region)
+		
+		local frame = nil
+		if trimmed then
+			--sparrow format uses inverse logic for frameX, frameY
+			local frameX = -subTex:getAttributeN("frameX")
+			local frameY = -subTex:getAttributeN("frameY")
+			local frameW = subTex:getAttributeN("frameWidth")
+			local frameH = subTex:getAttributeN("frameHeight")
+			frame = Rect(frameX,frameY,frameW,frameH)
+        end
+		
+        atlas:addRegion(name,region,rotated,frame)
     end
 	
     return atlas
@@ -147,19 +159,36 @@ function TexturePacker.parseMoaiFormat(descriptor, dir, texture)
 		texture = Assets.getTexture(dir .. imgName)
 	end
 	
-    local atlas = TextureAtlas(texture)
-	
-    for _,subTex in pairs(descriptor.frames) do
-        local x = subTex.uvRect.u0
-        local y = subTex.uvRect.v0
-        local w = subTex.uvRect.u1 - x
-        local h = subTex.uvRect.v1 - y
-        local rotated = subTex.textureRotated
-        --Sparrow/Starling work with (0,0) as top left
-        local region = Rect(x, y, w, h)
-        atlas:addRegion(subTex.name, region, rotated)
-    end
-    return atlas
+	local atlas = TextureAtlas(texture)
+
+	for _,subTex in pairs(descriptor.frames) do
+		local rotated = subTex.textureRotated
+		local trimmed = subTex.spriteTrimmed
+		
+		local w,h
+		if not rotated then
+			w = subTex.spriteColorRect.width
+			h = subTex.spriteColorRect.height
+		else
+			h = subTex.spriteColorRect.width
+			w = subTex.spriteColorRect.height
+		end
+		local x = subTex.uvRect.u0 * w / (subTex.uvRect.u1 - subTex.uvRect.u0)
+		local y = subTex.uvRect.v0 * h / (subTex.uvRect.v1 - subTex.uvRect.v0)
+		
+		local region = Rect(x, y, w, h)
+		
+		local frame = nil
+		if trimmed then
+			local frameX = subTex.spriteColorRect.x
+			local frameY = subTex.spriteColorRect.y
+			local frameW = subTex.spriteSourceSize.width
+			local frameH = subTex.spriteSourceSize.height
+			frame = Rect(frameX,frameY,frameW,frameH)
+		end
+		atlas:addRegion(subTex.name, region, rotated, frame)
+	end
+	return atlas
 end
 
 ---Load a lua file and automatically calls parseCoronaFormat and returns a texture atlas
@@ -183,15 +212,16 @@ The descriptor must be a lua table with Corona texture packer export info
 --]]
 function TexturePacker.parseCoronaFormat(descriptor,texture)
 	local atlas = TextureAtlas(texture)
-    for _,subTex in pairs(descriptor.frames) do
-        local x = subTex.textureRect.x / texture.width
-        local y = subTex.textureRect.y / texture.height
-        local w = subTex.textureRect.width / texture.width
-        local h = subTex.textureRect.height / texture.height
-        
-        --Sparrow/Starling work with (0,0) as top left
-        local region = Rect(x, y, w, h)
-        atlas:addRegion(subTex.name,region)
-    end
-    return atlas
+	for _,subTex in pairs(descriptor.frames) do
+		local x = subTex.textureRect.x
+		local y = subTex.textureRect.y
+		local w = subTex.textureRect.width
+		local h = subTex.textureRect.height
+
+		local region = Rect(x, y, w, h)
+		local rotated = false
+		local frame = nil
+		atlas:addRegion(subTex.name, region, rotated,frame)
+	end
+	return atlas
 end

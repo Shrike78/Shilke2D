@@ -18,6 +18,7 @@ TextureAtlas = class(nil, ITextureAtlas)
 local REGION_RECT = 1
 local REGION_ROTATION = 2
 local REGION_TEXTURE = 3
+local REGION_FRAME = 4
 
 --[[---
 Automatic creation of a tilest starting from a texture, where all 
@@ -56,37 +57,35 @@ function TextureAtlas.fromTexture(texture,regionWidth,regionHeight,
 	local prefix = prefix or "image_"
 	local _format = prefix.."%0"..padding.."d"
    
-    --remove margin left/right and add 1 spacing value, because
-    --num of spacing is numOfTiles-1, so adding one spacing value
-    --allows to divide for (regionAidth+spacing) to find out
-    --exact num of tiles
-    local numX = (texture.width - margin*2 + spacing) / 
-        (regionWidth+spacing)
-        
-    local numY = (texture.height - margin*2 + spacing) / 
-        (regionHeight+spacing)
-    
-    --translate all positional infos to percentage in [0..1]
-    --range (region are UV map over base texture)
-    local w = regionWidth / texture.width
-    local h = regionHeight / texture.height
-    local sw = spacing / texture.width
-    local sh = spacing / texture.height
-    local mw = margin / texture.width
-    local mh = margin / texture.height
-    
-    local counter = 1
-    for j = 1,numY do
-        for i = 1,numX do
-            --each region start after one margin plus n*(tile+spacing)
-            local region = Rect(mw+(i-1)*(w+sw),mh+(numY-j)*(h+sh),w,h)
-			region.y = 1 - (region.y+region.h) 
-            local frameName = string.format(_format,counter)
-            atlas:addRegion(frameName,region)
-            counter = counter + 1
-        end
-    end
-    return atlas
+	--remove margin left/right and add 1 spacing value, because
+	--num of spacing is numOfTiles-1, so adding one spacing value
+	--allows to divide for (regionAidth+spacing) to find out
+	--exact num of tiles
+	local numX = (texture.width - margin*2 + spacing) / 
+	(regionWidth+spacing)
+
+	local numY = (texture.height - margin*2 + spacing) / 
+	(regionHeight+spacing)
+
+	local w = regionWidth
+	local h = regionHeight
+	local sw = spacing
+	local sh = spacing
+	local mw = margin
+	local mh = margin
+
+	local counter = 1
+	for j = 1,numY do
+		for i = 1,numX do
+			--each region start after one margin plus n*(tile+spacing)
+			local region = Rect(mw+(i-1)*(w+sw),mh+(numY-j)*(h+sh),w,h)
+			region.y = texture.height - (region.y+region.h) 
+			local frameName = string.format(_format,counter)
+			atlas:addRegion(frameName,region)
+			counter = counter + 1
+		end
+	end
+	return atlas
 end
 
 ---A texture atlas is always built over a texture
@@ -116,8 +115,9 @@ Named regions are uv map rect, so x,y,w,h are in the range [0,1]
 @param name the name of the new region
 @param rect a rect with uvmap values [0,1]
 @param rotated (optional) if the texture is rotated, default is false
+@param frame (optional) if the texture is trimmed frame must be provided
 --]]
-function TextureAtlas:addRegion(name,rect,rotated)
+function TextureAtlas:addRegion(name,rect,rotated,frame)
 	if self.regions[name] then
 		error("region "..region.." already added to Atlas")
 	end
@@ -125,6 +125,7 @@ function TextureAtlas:addRegion(name,rect,rotated)
 	newRegion[REGION_RECT] = rect
 	newRegion[REGION_ROTATION] = rotated == true
 	newRegion[REGION_TEXTURE] = nil
+	newRegion[REGION_FRAME] = frame
 	self.regions[name] = newRegion
 	self.sortedNames[#self.sortedNames + 1] = name
 	self.bSorted = false
@@ -203,7 +204,7 @@ function TextureAtlas:getTexture(name)
 	if region then
 		txt = region[REGION_TEXTURE]
 		if not txt then
-			txt = SubTexture(self.baseTexture, region[REGION_RECT], region[REGION_ROTATION])
+			txt = Texture.fromTexture(self.baseTexture, region[REGION_RECT], region[REGION_ROTATION], region[REGION_FRAME])
 			region[REGION_TEXTURE] = txt
 		end
 	end
