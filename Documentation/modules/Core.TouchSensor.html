@@ -87,7 +87,6 @@
   <li><a href="../modules/Utils.ClassEx.html">Utils.ClassEx</a></li>
   <li><a href="../modules/Utils.CollisionKit.html">Utils.CollisionKit</a></li>
   <li><a href="../modules/Utils.Color.html">Utils.Color</a></li>
-  <li><a href="../modules/Utils.ColorNames.html">Utils.ColorNames</a></li>
   <li><a href="../modules/Utils.Coroutines.html">Utils.Coroutines</a></li>
   <li><a href="../modules/Utils.IO.html">Utils.IO</a></li>
   <li><a href="../modules/Utils.IniFile.html">Utils.IniFile</a></li>
@@ -141,6 +140,10 @@ Initializes the mouse/touch sensors and set the proper callbacks that can be red
 	<tr>
 	<td class="name" nowrap><a href="#onLeftClick">onLeftClick&nbsp;(down)</a></td>
 	<td class="summary">Inner function.</td>
+	</tr>
+	<tr>
+	<td class="name" nowrap><a href="#getPointerPosition">getPointerPosition&nbsp;()</a></td>
+	<td class="summary">Defined only when device is mouse (pointer), mainly for debug purposes.</td>
 	</tr>
 </table>
 <h2><a href="#Tables">Tables</a></h2>
@@ -258,6 +261,27 @@ coordinates system
          if true a touch began, else a touch ended</li>
     </ul>
 
+
+
+
+
+</dd>
+    <dt>
+    <a name = "getPointerPosition"></a>
+    <strong>getPointerPosition&nbsp;()</strong>
+    </dt>
+    <dd>
+    Defined only when device is mouse (pointer), mainly for debug purposes.
+	It returns the mouse pointer position coordinates in Shilke2D screen space
+
+
+    <h3>Returns:</h3>
+    <ol>
+        <li>
+        x</li>
+        <li>
+        y</li>
+    </ol>
 
 
 

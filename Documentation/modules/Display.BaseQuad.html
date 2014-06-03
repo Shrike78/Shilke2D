@@ -87,7 +87,6 @@
   <li><a href="../modules/Utils.ClassEx.html">Utils.ClassEx</a></li>
   <li><a href="../modules/Utils.CollisionKit.html">Utils.CollisionKit</a></li>
   <li><a href="../modules/Utils.Color.html">Utils.Color</a></li>
-  <li><a href="../modules/Utils.ColorNames.html">Utils.ColorNames</a></li>
   <li><a href="../modules/Utils.Coroutines.html">Utils.Coroutines</a></li>
   <li><a href="../modules/Utils.IO.html">Utils.IO</a></li>
   <li><a href="../modules/Utils.IniFile.html">Utils.IniFile</a></li>
@@ -149,11 +148,13 @@ as a middle class that has no meeaning to be instantiated by itself.</p>
 	</tr>
 	<tr>
 	<td class="name" nowrap><a href="#BaseQuad:setPivotX">BaseQuad:setPivotX&nbsp;(x)</a></td>
-	<td class="summary">Set Pivot x position</td>
+	<td class="summary">Set Pivot x position
+A CUSTOM pivot point is not recalculated when object size changes</td>
 	</tr>
 	<tr>
 	<td class="name" nowrap><a href="#BaseQuad:setPivotY">BaseQuad:setPivotY&nbsp;(y)</a></td>
-	<td class="summary">Set Pivot y position</td>
+	<td class="summary">Set Pivot y position
+A CUSTOM pivot point is not recalculated when object size changes</td>
 	</tr>
 	<tr>
 	<td class="name" nowrap><a href="#BaseQuad:getRect">BaseQuad:getRect&nbsp;(resultRect)</a></td>
@@ -279,8 +280,7 @@ If pivotMode is not custom then it recalculate pivot depending on pivotMode logi
     </dt>
     <dd>
     Set pivot coordinates.
-That means to set a CUSTOM pivot defining pivot point, that will not change event if
-size of the object would be changed
+A CUSTOM pivot point is not recalculated when object size changes
 
     <h3>Parameters:</h3>
     <ul>
@@ -301,11 +301,12 @@ size of the object would be changed
     </dt>
     <dd>
     Set Pivot x position
+A CUSTOM pivot point is not recalculated when object size changes
 
     <h3>Parameters:</h3>
     <ul>
         <li><span class="parameter">x</span>
-        </li>
+         pivot x coordinate</li>
     </ul>
 
 
@@ -319,11 +320,12 @@ size of the object would be changed
     </dt>
     <dd>
     Set Pivot y position
+A CUSTOM pivot point is not recalculated when object size changes
 
     <h3>Parameters:</h3>
     <ul>
         <li><span class="parameter">y</span>
-        </li>
+         pivot y coordinate</li>
     </ul>
 
 

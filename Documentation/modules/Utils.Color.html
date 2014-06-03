@@ -33,6 +33,7 @@
 <h2>Contents</h2>
 <ul>
 <li><a href="#Functions">Functions</a></li>
+<li><a href="#Fields">Fields</a></li>
 </ul>
 
 
@@ -86,7 +87,6 @@
   <li><a href="../modules/Utils.ClassEx.html">Utils.ClassEx</a></li>
   <li><a href="../modules/Utils.CollisionKit.html">Utils.CollisionKit</a></li>
   <li><strong>Utils.Color</strong></li>
-  <li><a href="../modules/Utils.ColorNames.html">Utils.ColorNames</a></li>
   <li><a href="../modules/Utils.Coroutines.html">Utils.Coroutines</a></li>
   <li><a href="../modules/Utils.IO.html">Utils.IO</a></li>
   <li><a href="../modules/Utils.IniFile.html">Utils.IniFile</a></li>
@@ -120,7 +120,11 @@ to MOAI interface. The call returns each color component divided by 255
 <p>There is no real assumption about the values of rgba components, they can be
 also negative. Algebrical operators between colors are defined and can produced meaningless colors,
 with component values outside the [0..255] range. Algebrical operator are meant to support color animations
-by tweening and should never be used explicitely.</p>
+by tweening and should never be used explicitely.
+<p>A set of predefined named colors is also provided. All the color are fully opaque(alpha is 255).
+The color definition is taken from:
+<p><a href="http://www.w3.org/TR/SVG/types.html#ColorKeywords">http://www.w3.org/TR/SVG/types.html#ColorKeywords</a>
+</p>
 
 
 <h2><a href="#Functions">Functions</a></h2>
@@ -184,6 +188,593 @@ by tweening and should never be used explicitely.</p>
 	<tr>
 	<td class="name" nowrap><a href="#int2rgba">int2rgba&nbsp;(c)</a></td>
 	<td class="summary">Unpack an int value to a set of r,g,b,a values</td>
+	</tr>
+</table>
+<h2><a href="#Fields">Fields</a></h2>
+<table class="function_list">
+	<tr>
+	<td class="name" nowrap><a href="#ANTIQUEWHITE">ANTIQUEWHITE</a></td>
+	<td class="summary">(240,248,255)</td>
+	</tr>
+	<tr>
+	<td class="name" nowrap><a href="#AQUA">AQUA</a></td>
+	<td class="summary">(250,235,215)</td>
+	</tr>
+	<tr>
+	<td class="name" nowrap><a href="#AQUAMARINE">AQUAMARINE</a></td>
+	<td class="summary">(0,255,255)</td>
+	</tr>
+	<tr>
+	<td class="name" nowrap><a href="#AZURE">AZURE</a></td>
+	<td class="summary">(127,255,212)</td>
+	</tr>
+	<tr>
+	<td class="name" nowrap><a href="#BEIGE">BEIGE</a></td>
+	<td class="summary">(240,255,255)</td>
+	</tr>
+	<tr>
+	<td class="name" nowrap><a href="#BISQUE">BISQUE</a></td>
+	<td class="summary">(245,245,220)</td>
+	</tr>
+	<tr>
+	<td class="name" nowrap><a href="#BLACK">BLACK</a></td>
+	<td class="summary">(255,228,196)</td>
+	</tr>
+	<tr>
+	<td class="name" nowrap><a href="#BLANCHEDALMOND">BLANCHEDALMOND</a></td>
+	<td class="summary">(0,0,0)</td>
+	</tr>
+	<tr>
+	<td class="name" nowrap><a href="#BLUE">BLUE</a></td>
+	<td class="summary">(255,235,205)</td>
+	</tr>
+	<tr>
+	<td class="name" nowrap><a href="#BLUEVIOLET">BLUEVIOLET</a></td>
+	<td class="summary">(0,0,255)</td>
+	</tr>
+	<tr>
+	<td class="name" nowrap><a href="#BROWN">BROWN</a></td>
+	<td class="summary">(138,43,226)</td>
+	</tr>
+	<tr>
+	<td class="name" nowrap><a href="#BURLYWOOD">BURLYWOOD</a></td>
+	<td class="summary">(165,42,42)</td>
+	</tr>
+	<tr>
+	<td class="name" nowrap><a href="#CADETBLUE">CADETBLUE</a></td>
+	<td class="summary">(222,184,135)</td>
+	</tr>
+	<tr>
+	<td class="name" nowrap><a href="#CHARTREUSE">CHARTREUSE</a></td>
+	<td class="summary">(95,158,160)</td>
+	</tr>
+	<tr>
+	<td class="name" nowrap><a href="#CHOCOLATE">CHOCOLATE</a></td>
+	<td class="summary">(127,255,0)</td>
+	</tr>
+	<tr>
+	<td class="name" nowrap><a href="#CORAL">CORAL</a></td>
+	<td class="summary">(210,105,30)</td>
+	</tr>
+	<tr>
+	<td class="name" nowrap><a href="#CORNFLOWERBLUE">CORNFLOWERBLUE</a></td>
+	<td class="summary">(255,127,80)</td>
+	</tr>
+	<tr>
+	<td class="name" nowrap><a href="#CORNSILK">CORNSILK</a></td>
+	<td class="summary">(100,149,237)</td>
+	</tr>
+	<tr>
+	<td class="name" nowrap><a href="#CRIMSON">CRIMSON</a></td>
+	<td class="summary">(255,248,220)</td>
+	</tr>
+	<tr>
+	<td class="name" nowrap><a href="#CYAN">CYAN</a></td>
+	<td class="summary">(220,20,60)</td>
+	</tr>
+	<tr>
+	<td class="name" nowrap><a href="#DARKBLUE">DARKBLUE</a></td>
+	<td class="summary">(0,255,255)</td>
+	</tr>
+	<tr>
+	<td class="name" nowrap><a href="#DARKCYAN">DARKCYAN</a></td>
+	<td class="summary">(0,0,139)</td>
+	</tr>
+	<tr>
+	<td class="name" nowrap><a href="#DARKGOLDENROD">DARKGOLDENROD</a></td>
+	<td class="summary">(0,139,139)</td>
+	</tr>
+	<tr>
+	<td class="name" nowrap><a href="#DARKGRAY">DARKGRAY</a></td>
+	<td class="summary">(184,134,11)</td>
+	</tr>
+	<tr>
+	<td class="name" nowrap><a href="#DARKGREEN">DARKGREEN</a></td>
+	<td class="summary">(169,169,169)</td>
+	</tr>
+	<tr>
+	<td class="name" nowrap><a href="#DARKGREY">DARKGREY</a></td>
+	<td class="summary">(0,100,0)</td>
+	</tr>
+	<tr>
+	<td class="name" nowrap><a href="#DARKKHAKI">DARKKHAKI</a></td>
+	<td class="summary">(169,169,169)</td>
+	</tr>
+	<tr>
+	<td class="name" nowrap><a href="#DARKMAGENTA">DARKMAGENTA</a></td>
+	<td class="summary">(189,183,107)</td>
+	</tr>
+	<tr>
+	<td class="name" nowrap><a href="#DARKOLIVEGREEN">DARKOLIVEGREEN</a></td>
+	<td class="summary">(139,0,139)</td>
+	</tr>
+	<tr>
+	<td class="name" nowrap><a href="#DARKORANGE">DARKORANGE</a></td>
+	<td class="summary">(85,107,47)</td>
+	</tr>
+	<tr>
+	<td class="name" nowrap><a href="#DARKORCHID">DARKORCHID</a></td>
+	<td class="summary">(255,140,0)</td>
+	</tr>
+	<tr>
+	<td class="name" nowrap><a href="#DARKRED">DARKRED</a></td>
+	<td class="summary">(153,50,204)</td>
+	</tr>
+	<tr>
+	<td class="name" nowrap><a href="#DARKSALMON">DARKSALMON</a></td>
+	<td class="summary">(139,0,0)</td>
+	</tr>
+	<tr>
+	<td class="name" nowrap><a href="#DARKSEAGREEN">DARKSEAGREEN</a></td>
+	<td class="summary">(233,150,122)</td>
+	</tr>
+	<tr>
+	<td class="name" nowrap><a href="#DARKSLATEBLUE">DARKSLATEBLUE</a></td>
+	<td class="summary">(143,188,143)</td>
+	</tr>
+	<tr>
+	<td class="name" nowrap><a href="#DARKSLATEGRAY">DARKSLATEGRAY</a></td>
+	<td class="summary">(72,61,139)</td>
+	</tr>
+	<tr>
+	<td class="name" nowrap><a href="#DARKSLATEGREY">DARKSLATEGREY</a></td>
+	<td class="summary">(47,79,79)</td>
+	</tr>
+	<tr>
+	<td class="name" nowrap><a href="#DARKTURQUOISE">DARKTURQUOISE</a></td>
+	<td class="summary">(47,79,79)</td>
+	</tr>
+	<tr>
+	<td class="name" nowrap><a href="#DARKVIOLET">DARKVIOLET</a></td>
+	<td class="summary">(0,206,209)</td>
+	</tr>
+	<tr>
+	<td class="name" nowrap><a href="#DEEPPINK">DEEPPINK</a></td>
+	<td class="summary">(148,0,211)</td>
+	</tr>
+	<tr>
+	<td class="name" nowrap><a href="#DEEPSKYBLUE">DEEPSKYBLUE</a></td>
+	<td class="summary">(255,20,147)</td>
+	</tr>
+	<tr>
+	<td class="name" nowrap><a href="#DIMGRAY">DIMGRAY</a></td>
+	<td class="summary">(0,191,255)</td>
+	</tr>
+	<tr>
+	<td class="name" nowrap><a href="#DIMGREY">DIMGREY</a></td>
+	<td class="summary">(105,105,105)</td>
+	</tr>
+	<tr>
+	<td class="name" nowrap><a href="#DODGERBLUE">DODGERBLUE</a></td>
+	<td class="summary">(105,105,105)</td>
+	</tr>
+	<tr>
+	<td class="name" nowrap><a href="#FIREBRICK">FIREBRICK</a></td>
+	<td class="summary">(30,144,255)</td>
+	</tr>
+	<tr>
+	<td class="name" nowrap><a href="#FLORALWHITE">FLORALWHITE</a></td>
+	<td class="summary">(178,34,34)</td>
+	</tr>
+	<tr>
+	<td class="name" nowrap><a href="#FORESTGREEN">FORESTGREEN</a></td>
+	<td class="summary">(255,250,240)</td>
+	</tr>
+	<tr>
+	<td class="name" nowrap><a href="#FUCHSIA">FUCHSIA</a></td>
+	<td class="summary">(34,139,34)</td>
+	</tr>
+	<tr>
+	<td class="name" nowrap><a href="#GAINSBORO">GAINSBORO</a></td>
+	<td class="summary">(255,0,255)</td>
+	</tr>
+	<tr>
+	<td class="name" nowrap><a href="#GHOSTWHITE">GHOSTWHITE</a></td>
+	<td class="summary">(220,220,220)</td>
+	</tr>
+	<tr>
+	<td class="name" nowrap><a href="#GOLD">GOLD</a></td>
+	<td class="summary">(248,248,255)</td>
+	</tr>
+	<tr>
+	<td class="name" nowrap><a href="#GOLDENROD">GOLDENROD</a></td>
+	<td class="summary">(255,215,0)</td>
+	</tr>
+	<tr>
+	<td class="name" nowrap><a href="#GRAY">GRAY</a></td>
+	<td class="summary">(218,165,32)</td>
+	</tr>
+	<tr>
+	<td class="name" nowrap><a href="#GREY">GREY</a></td>
+	<td class="summary">(128,128,128)</td>
+	</tr>
+	<tr>
+	<td class="name" nowrap><a href="#GREEN">GREEN</a></td>
+	<td class="summary">(128,128,128)</td>
+	</tr>
+	<tr>
+	<td class="name" nowrap><a href="#GREENYELLOW">GREENYELLOW</a></td>
+	<td class="summary">(0,128,0)</td>
+	</tr>
+	<tr>
+	<td class="name" nowrap><a href="#HONEYDEW">HONEYDEW</a></td>
+	<td class="summary">(173,255,47)</td>
+	</tr>
+	<tr>
+	<td class="name" nowrap><a href="#HOTPINK">HOTPINK</a></td>
+	<td class="summary">(240,255,240)</td>
+	</tr>
+	<tr>
+	<td class="name" nowrap><a href="#INDIANRED">INDIANRED</a></td>
+	<td class="summary">(255,105,180)</td>
+	</tr>
+	<tr>
+	<td class="name" nowrap><a href="#INDIGO">INDIGO</a></td>
+	<td class="summary">(205,92,92)</td>
+	</tr>
+	<tr>
+	<td class="name" nowrap><a href="#IVORY">IVORY</a></td>
+	<td class="summary">(75,0,130)</td>
+	</tr>
+	<tr>
+	<td class="name" nowrap><a href="#KHAKI">KHAKI</a></td>
+	<td class="summary">(255,255,240)</td>
+	</tr>
+	<tr>
+	<td class="name" nowrap><a href="#LAVENDER">LAVENDER</a></td>
+	<td class="summary">(240,230,140)</td>
+	</tr>
+	<tr>
+	<td class="name" nowrap><a href="#LAVENDERBLUSH">LAVENDERBLUSH</a></td>
+	<td class="summary">(230,230,250)</td>
+	</tr>
+	<tr>
+	<td class="name" nowrap><a href="#LAWNGREEN">LAWNGREEN</a></td>
+	<td class="summary">(255,240,245)</td>
+	</tr>
+	<tr>
+	<td class="name" nowrap><a href="#LEMONCHIFFON">LEMONCHIFFON</a></td>
+	<td class="summary">(124,252,0)</td>
+	</tr>
+	<tr>
+	<td class="name" nowrap><a href="#LIGHTBLUE">LIGHTBLUE</a></td>
+	<td class="summary">(255,250,205)</td>
+	</tr>
+	<tr>
+	<td class="name" nowrap><a href="#LIGHTCORAL">LIGHTCORAL</a></td>
+	<td class="summary">(173,216,230)</td>
+	</tr>
+	<tr>
+	<td class="name" nowrap><a href="#LIGHTCYAN">LIGHTCYAN</a></td>
+	<td class="summary">(240,128,128)</td>
+	</tr>
+	<tr>
+	<td class="name" nowrap><a href="#LIGHTGOLDENRODYELLOW">LIGHTGOLDENRODYELLOW</a></td>
+	<td class="summary">(224,255,255)</td>
+	</tr>
+	<tr>
+	<td class="name" nowrap><a href="#LIGHTGRAY">LIGHTGRAY</a></td>
+	<td class="summary">(250,250,210)</td>
+	</tr>
+	<tr>
+	<td class="name" nowrap><a href="#LIGHTGREEN">LIGHTGREEN</a></td>
+	<td class="summary">(211,211,211)</td>
+	</tr>
+	<tr>
+	<td class="name" nowrap><a href="#LIGHTGREY">LIGHTGREY</a></td>
+	<td class="summary">(144,238,144)</td>
+	</tr>
+	<tr>
+	<td class="name" nowrap><a href="#LIGHTPINK">LIGHTPINK</a></td>
+	<td class="summary">(211,211,211)</td>
+	</tr>
+	<tr>
+	<td class="name" nowrap><a href="#LIGHTSALMON">LIGHTSALMON</a></td>
+	<td class="summary">(255,182,193)</td>
+	</tr>
+	<tr>
+	<td class="name" nowrap><a href="#LIGHTSEAGREEN">LIGHTSEAGREEN</a></td>
+	<td class="summary">(255,160,122)</td>
+	</tr>
+	<tr>
+	<td class="name" nowrap><a href="#LIGHTSKYBLUE">LIGHTSKYBLUE</a></td>
+	<td class="summary">(32,178,170)</td>
+	</tr>
+	<tr>
+	<td class="name" nowrap><a href="#LIGHTSLATEGRAY">LIGHTSLATEGRAY</a></td>
+	<td class="summary">(135,206,250)</td>
+	</tr>
+	<tr>
+	<td class="name" nowrap><a href="#LIGHTSLATEGREY">LIGHTSLATEGREY</a></td>
+	<td class="summary">(119,136,153)</td>
+	</tr>
+	<tr>
+	<td class="name" nowrap><a href="#LIGHTSTEELBLUE">LIGHTSTEELBLUE</a></td>
+	<td class="summary">(119,136,153)</td>
+	</tr>
+	<tr>
+	<td class="name" nowrap><a href="#LIGHTYELLOW">LIGHTYELLOW</a></td>
+	<td class="summary">(176,196,222)</td>
+	</tr>
+	<tr>
+	<td class="name" nowrap><a href="#LIME">LIME</a></td>
+	<td class="summary">(255,255,224)</td>
+	</tr>
+	<tr>
+	<td class="name" nowrap><a href="#LIMEGREEN">LIMEGREEN</a></td>
+	<td class="summary">(0,255,0)</td>
+	</tr>
+	<tr>
+	<td class="name" nowrap><a href="#LINEN">LINEN</a></td>
+	<td class="summary">(50,205,50)</td>
+	</tr>
+	<tr>
+	<td class="name" nowrap><a href="#MAGENTA">MAGENTA</a></td>
+	<td class="summary">(250,240,230)</td>
+	</tr>
+	<tr>
+	<td class="name" nowrap><a href="#MAROON">MAROON</a></td>
+	<td class="summary">(255,0,255)</td>
+	</tr>
+	<tr>
+	<td class="name" nowrap><a href="#MEDIUMAQUAMARINE">MEDIUMAQUAMARINE</a></td>
+	<td class="summary">(128,0,0)</td>
+	</tr>
+	<tr>
+	<td class="name" nowrap><a href="#MEDIUMBLUE">MEDIUMBLUE</a></td>
+	<td class="summary">(102,205,170)</td>
+	</tr>
+	<tr>
+	<td class="name" nowrap><a href="#MEDIUMORCHID">MEDIUMORCHID</a></td>
+	<td class="summary">(0,0,205)</td>
+	</tr>
+	<tr>
+	<td class="name" nowrap><a href="#MEDIUMPURPLE">MEDIUMPURPLE</a></td>
+	<td class="summary">(186,85,211)</td>
+	</tr>
+	<tr>
+	<td class="name" nowrap><a href="#MEDIUMSEAGREEN">MEDIUMSEAGREEN</a></td>
+	<td class="summary">(147,112,219)</td>
+	</tr>
+	<tr>
+	<td class="name" nowrap><a href="#MEDIUMSLATEBLUE">MEDIUMSLATEBLUE</a></td>
+	<td class="summary">(60,179,113)</td>
+	</tr>
+	<tr>
+	<td class="name" nowrap><a href="#MEDIUMSPRINGGREEN">MEDIUMSPRINGGREEN</a></td>
+	<td class="summary">(123,104,238)</td>
+	</tr>
+	<tr>
+	<td class="name" nowrap><a href="#MEDIUMTURQUOISE">MEDIUMTURQUOISE</a></td>
+	<td class="summary">(0,250,154)</td>
+	</tr>
+	<tr>
+	<td class="name" nowrap><a href="#MEDIUMVIOLETRED">MEDIUMVIOLETRED</a></td>
+	<td class="summary">(72,209,204)</td>
+	</tr>
+	<tr>
+	<td class="name" nowrap><a href="#MIDNIGHTBLUE">MIDNIGHTBLUE</a></td>
+	<td class="summary">(199,21,133)</td>
+	</tr>
+	<tr>
+	<td class="name" nowrap><a href="#MINTCREAM">MINTCREAM</a></td>
+	<td class="summary">(25,25,112)</td>
+	</tr>
+	<tr>
+	<td class="name" nowrap><a href="#MISTYROSE">MISTYROSE</a></td>
+	<td class="summary">(245,255,250)</td>
+	</tr>
+	<tr>
+	<td class="name" nowrap><a href="#MOCCASIN">MOCCASIN</a></td>
+	<td class="summary">(255,228,225)</td>
+	</tr>
+	<tr>
+	<td class="name" nowrap><a href="#NAVAJOWHITE">NAVAJOWHITE</a></td>
+	<td class="summary">(255,228,181)</td>
+	</tr>
+	<tr>
+	<td class="name" nowrap><a href="#NAVY">NAVY</a></td>
+	<td class="summary">(255,222,173)</td>
+	</tr>
+	<tr>
+	<td class="name" nowrap><a href="#OLDLACE">OLDLACE</a></td>
+	<td class="summary">(0,0,128)</td>
+	</tr>
+	<tr>
+	<td class="name" nowrap><a href="#OLIVE">OLIVE</a></td>
+	<td class="summary">(253,245,230)</td>
+	</tr>
+	<tr>
+	<td class="name" nowrap><a href="#OLIVEDRAB">OLIVEDRAB</a></td>
+	<td class="summary">(128,128,0)</td>
+	</tr>
+	<tr>
+	<td class="name" nowrap><a href="#ORANGE">ORANGE</a></td>
+	<td class="summary">(107,142,35)</td>
+	</tr>
+	<tr>
+	<td class="name" nowrap><a href="#ORANGERED">ORANGERED</a></td>
+	<td class="summary">(255,165,0)</td>
+	</tr>
+	<tr>
+	<td class="name" nowrap><a href="#ORCHID">ORCHID</a></td>
+	<td class="summary">(255,69,0)</td>
+	</tr>
+	<tr>
+	<td class="name" nowrap><a href="#PALEGOLDENROD">PALEGOLDENROD</a></td>
+	<td class="summary">(218,112,214)</td>
+	</tr>
+	<tr>
+	<td class="name" nowrap><a href="#PALEGREEN">PALEGREEN</a></td>
+	<td class="summary">(238,232,170)</td>
+	</tr>
+	<tr>
+	<td class="name" nowrap><a href="#PALETURQUOISE">PALETURQUOISE</a></td>
+	<td class="summary">(152,251,152)</td>
+	</tr>
+	<tr>
+	<td class="name" nowrap><a href="#PALEVIOLETRED">PALEVIOLETRED</a></td>
+	<td class="summary">(175,238,238)</td>
+	</tr>
+	<tr>
+	<td class="name" nowrap><a href="#PAPAYAWHIP">PAPAYAWHIP</a></td>
+	<td class="summary">(219,112,147)</td>
+	</tr>
+	<tr>
+	<td class="name" nowrap><a href="#PEACHPUFF">PEACHPUFF</a></td>
+	<td class="summary">(255,239,213)</td>
+	</tr>
+	<tr>
+	<td class="name" nowrap><a href="#PERU">PERU</a></td>
+	<td class="summary">(255,218,185)</td>
+	</tr>
+	<tr>
+	<td class="name" nowrap><a href="#PINK">PINK</a></td>
+	<td class="summary">(205,133,63)</td>
+	</tr>
+	<tr>
+	<td class="name" nowrap><a href="#PLUM">PLUM</a></td>
+	<td class="summary">(255,192,203)</td>
+	</tr>
+	<tr>
+	<td class="name" nowrap><a href="#POWDERBLUE">POWDERBLUE</a></td>
+	<td class="summary">(221,160,221)</td>
+	</tr>
+	<tr>
+	<td class="name" nowrap><a href="#PURPLE">PURPLE</a></td>
+	<td class="summary">(176,224,230)</td>
+	</tr>
+	<tr>
+	<td class="name" nowrap><a href="#RED">RED</a></td>
+	<td class="summary">(128,0,128)</td>
+	</tr>
+	<tr>
+	<td class="name" nowrap><a href="#ROSYBROWN">ROSYBROWN</a></td>
+	<td class="summary">(255,0,0)</td>
+	</tr>
+	<tr>
+	<td class="name" nowrap><a href="#ROYALBLUE">ROYALBLUE</a></td>
+	<td class="summary">(188,143,143)</td>
+	</tr>
+	<tr>
+	<td class="name" nowrap><a href="#SADDLEBROWN">SADDLEBROWN</a></td>
+	<td class="summary">(65,105,225)</td>
+	</tr>
+	<tr>
+	<td class="name" nowrap><a href="#SALMON">SALMON</a></td>
+	<td class="summary">(139,69,19)</td>
+	</tr>
+	<tr>
+	<td class="name" nowrap><a href="#SANDYBROWN">SANDYBROWN</a></td>
+	<td class="summary">(250,128,114)</td>
+	</tr>
+	<tr>
+	<td class="name" nowrap><a href="#SEAGREEN">SEAGREEN</a></td>
+	<td class="summary">(244,164,96)</td>
+	</tr>
+	<tr>
+	<td class="name" nowrap><a href="#SEASHELL">SEASHELL</a></td>
+	<td class="summary">(46,139,87)</td>
+	</tr>
+	<tr>
+	<td class="name" nowrap><a href="#SIENNA">SIENNA</a></td>
+	<td class="summary">(255,245,238)</td>
+	</tr>
+	<tr>
+	<td class="name" nowrap><a href="#SILVER">SILVER</a></td>
+	<td class="summary">(160,82,45)</td>
+	</tr>
+	<tr>
+	<td class="name" nowrap><a href="#SKYBLUE">SKYBLUE</a></td>
+	<td class="summary">(192,192,192)</td>
+	</tr>
+	<tr>
+	<td class="name" nowrap><a href="#SLATEBLUE">SLATEBLUE</a></td>
+	<td class="summary">(135,206,235)</td>
+	</tr>
+	<tr>
+	<td class="name" nowrap><a href="#SLATEGRAY">SLATEGRAY</a></td>
+	<td class="summary">(106,90,205)</td>
+	</tr>
+	<tr>
+	<td class="name" nowrap><a href="#SLATEGREY">SLATEGREY</a></td>
+	<td class="summary">(112,128,144)</td>
+	</tr>
+	<tr>
+	<td class="name" nowrap><a href="#SNOW">SNOW</a></td>
+	<td class="summary">(112,128,144)</td>
+	</tr>
+	<tr>
+	<td class="name" nowrap><a href="#SPRINGGREEN">SPRINGGREEN</a></td>
+	<td class="summary">(255,250,250)</td>
+	</tr>
+	<tr>
+	<td class="name" nowrap><a href="#STEELBLUE">STEELBLUE</a></td>
+	<td class="summary">(0,255,127)</td>
+	</tr>
+	<tr>
+	<td class="name" nowrap><a href="#TAN">TAN</a></td>
+	<td class="summary">(70,130,180)</td>
+	</tr>
+	<tr>
+	<td class="name" nowrap><a href="#TEAL">TEAL</a></td>
+	<td class="summary">(210,180,140)</td>
+	</tr>
+	<tr>
+	<td class="name" nowrap><a href="#THISTLE">THISTLE</a></td>
+	<td class="summary">(0,128,128)</td>
+	</tr>
+	<tr>
+	<td class="name" nowrap><a href="#TOMATO">TOMATO</a></td>
+	<td class="summary">(216,191,216)</td>
+	</tr>
+	<tr>
+	<td class="name" nowrap><a href="#TURQUOISE">TURQUOISE</a></td>
+	<td class="summary">(255,99,71)</td>
+	</tr>
+	<tr>
+	<td class="name" nowrap><a href="#VIOLET">VIOLET</a></td>
+	<td class="summary">(64,224,208)</td>
+	</tr>
+	<tr>
+	<td class="name" nowrap><a href="#WHEAT">WHEAT</a></td>
+	<td class="summary">(238,130,238)</td>
+	</tr>
+	<tr>
+	<td class="name" nowrap><a href="#WHITE">WHITE</a></td>
+	<td class="summary">(245,222,179)</td>
+	</tr>
+	<tr>
+	<td class="name" nowrap><a href="#WHITESMOKE">WHITESMOKE</a></td>
+	<td class="summary">(255,255,255)</td>
+	</tr>
+	<tr>
+	<td class="name" nowrap><a href="#YELLOW">YELLOW</a></td>
+	<td class="summary">(245,245,245)</td>
+	</tr>
+	<tr>
+	<td class="name" nowrap><a href="#YELLOWGREEN">YELLOWGREEN</a></td>
+	<td class="summary">(255,255,0)</td>
 	</tr>
 </table>
 
@@ -538,6 +1129,1907 @@ after algebrical operations
         <li>
         a [0,255]</li>
     </ol>
+
+
+
+
+</dd>
+</dl>
+    <h2><a name="Fields"></a>Fields</h2>
+    <dl class="function">
+    <dt>
+    <a name = "ANTIQUEWHITE"></a>
+    <strong>ANTIQUEWHITE</strong>
+    </dt>
+    <dd>
+    (240,248,255)
+
+
+
+
+
+
+</dd>
+    <dt>
+    <a name = "AQUA"></a>
+    <strong>AQUA</strong>
+    </dt>
+    <dd>
+    (250,235,215)
+
+
+
+
+
+
+</dd>
+    <dt>
+    <a name = "AQUAMARINE"></a>
+    <strong>AQUAMARINE</strong>
+    </dt>
+    <dd>
+    (0,255,255)
+
+
+
+
+
+
+</dd>
+    <dt>
+    <a name = "AZURE"></a>
+    <strong>AZURE</strong>
+    </dt>
+    <dd>
+    (127,255,212)
+
+
+
+
+
+
+</dd>
+    <dt>
+    <a name = "BEIGE"></a>
+    <strong>BEIGE</strong>
+    </dt>
+    <dd>
+    (240,255,255)
+
+
+
+
+
+
+</dd>
+    <dt>
+    <a name = "BISQUE"></a>
+    <strong>BISQUE</strong>
+    </dt>
+    <dd>
+    (245,245,220)
+
+
+
+
+
+
+</dd>
+    <dt>
+    <a name = "BLACK"></a>
+    <strong>BLACK</strong>
+    </dt>
+    <dd>
+    (255,228,196)
+
+
+
+
+
+
+</dd>
+    <dt>
+    <a name = "BLANCHEDALMOND"></a>
+    <strong>BLANCHEDALMOND</strong>
+    </dt>
+    <dd>
+    (0,0,0)
+
+
+
+
+
+
+</dd>
+    <dt>
+    <a name = "BLUE"></a>
+    <strong>BLUE</strong>
+    </dt>
+    <dd>
+    (255,235,205)
+
+
+
+
+
+
+</dd>
+    <dt>
+    <a name = "BLUEVIOLET"></a>
+    <strong>BLUEVIOLET</strong>
+    </dt>
+    <dd>
+    (0,0,255)
+
+
+
+
+
+
+</dd>
+    <dt>
+    <a name = "BROWN"></a>
+    <strong>BROWN</strong>
+    </dt>
+    <dd>
+    (138,43,226)
+
+
+
+
+
+
+</dd>
+    <dt>
+    <a name = "BURLYWOOD"></a>
+    <strong>BURLYWOOD</strong>
+    </dt>
+    <dd>
+    (165,42,42)
+
+
+
+
+
+
+</dd>
+    <dt>
+    <a name = "CADETBLUE"></a>
+    <strong>CADETBLUE</strong>
+    </dt>
+    <dd>
+    (222,184,135)
+
+
+
+
+
+
+</dd>
+    <dt>
+    <a name = "CHARTREUSE"></a>
+    <strong>CHARTREUSE</strong>
+    </dt>
+    <dd>
+    (95,158,160)
+
+
+
+
+
+
+</dd>
+    <dt>
+    <a name = "CHOCOLATE"></a>
+    <strong>CHOCOLATE</strong>
+    </dt>
+    <dd>
+    (127,255,0)
+
+
+
+
+
+
+</dd>
+    <dt>
+    <a name = "CORAL"></a>
+    <strong>CORAL</strong>
+    </dt>
+    <dd>
+    (210,105,30)
+
+
+
+
+
+
+</dd>
+    <dt>
+    <a name = "CORNFLOWERBLUE"></a>
+    <strong>CORNFLOWERBLUE</strong>
+    </dt>
+    <dd>
+    (255,127,80)
+
+
+
+
+
+
+</dd>
+    <dt>
+    <a name = "CORNSILK"></a>
+    <strong>CORNSILK</strong>
+    </dt>
+    <dd>
+    (100,149,237)
+
+
+
+
+
+
+</dd>
+    <dt>
+    <a name = "CRIMSON"></a>
+    <strong>CRIMSON</strong>
+    </dt>
+    <dd>
+    (255,248,220)
+
+
+
+
+
+
+</dd>
+    <dt>
+    <a name = "CYAN"></a>
+    <strong>CYAN</strong>
+    </dt>
+    <dd>
+    (220,20,60)
+
+
+
+
+
+
+</dd>
+    <dt>
+    <a name = "DARKBLUE"></a>
+    <strong>DARKBLUE</strong>
+    </dt>
+    <dd>
+    (0,255,255)
+
+
+
+
+
+
+</dd>
+    <dt>
+    <a name = "DARKCYAN"></a>
+    <strong>DARKCYAN</strong>
+    </dt>
+    <dd>
+    (0,0,139)
+
+
+
+
+
+
+</dd>
+    <dt>
+    <a name = "DARKGOLDENROD"></a>
+    <strong>DARKGOLDENROD</strong>
+    </dt>
+    <dd>
+    (0,139,139)
+
+
+
+
+
+
+</dd>
+    <dt>
+    <a name = "DARKGRAY"></a>
+    <strong>DARKGRAY</strong>
+    </dt>
+    <dd>
+    (184,134,11)
+
+
+
+
+
+
+</dd>
+    <dt>
+    <a name = "DARKGREEN"></a>
+    <strong>DARKGREEN</strong>
+    </dt>
+    <dd>
+    (169,169,169)
+
+
+
+
+
+
+</dd>
+    <dt>
+    <a name = "DARKGREY"></a>
+    <strong>DARKGREY</strong>
+    </dt>
+    <dd>
+    (0,100,0)
+
+
+
+
+
+
+</dd>
+    <dt>
+    <a name = "DARKKHAKI"></a>
+    <strong>DARKKHAKI</strong>
+    </dt>
+    <dd>
+    (169,169,169)
+
+
+
+
+
+
+</dd>
+    <dt>
+    <a name = "DARKMAGENTA"></a>
+    <strong>DARKMAGENTA</strong>
+    </dt>
+    <dd>
+    (189,183,107)
+
+
+
+
+
+
+</dd>
+    <dt>
+    <a name = "DARKOLIVEGREEN"></a>
+    <strong>DARKOLIVEGREEN</strong>
+    </dt>
+    <dd>
+    (139,0,139)
+
+
+
+
+
+
+</dd>
+    <dt>
+    <a name = "DARKORANGE"></a>
+    <strong>DARKORANGE</strong>
+    </dt>
+    <dd>
+    (85,107,47)
+
+
+
+
+
+
+</dd>
+    <dt>
+    <a name = "DARKORCHID"></a>
+    <strong>DARKORCHID</strong>
+    </dt>
+    <dd>
+    (255,140,0)
+
+
+
+
+
+
+</dd>
+    <dt>
+    <a name = "DARKRED"></a>
+    <strong>DARKRED</strong>
+    </dt>
+    <dd>
+    (153,50,204)
+
+
+
+
+
+
+</dd>
+    <dt>
+    <a name = "DARKSALMON"></a>
+    <strong>DARKSALMON</strong>
+    </dt>
+    <dd>
+    (139,0,0)
+
+
+
+
+
+
+</dd>
+    <dt>
+    <a name = "DARKSEAGREEN"></a>
+    <strong>DARKSEAGREEN</strong>
+    </dt>
+    <dd>
+    (233,150,122)
+
+
+
+
+
+
+</dd>
+    <dt>
+    <a name = "DARKSLATEBLUE"></a>
+    <strong>DARKSLATEBLUE</strong>
+    </dt>
+    <dd>
+    (143,188,143)
+
+
+
+
+
+
+</dd>
+    <dt>
+    <a name = "DARKSLATEGRAY"></a>
+    <strong>DARKSLATEGRAY</strong>
+    </dt>
+    <dd>
+    (72,61,139)
+
+
+
+
+
+
+</dd>
+    <dt>
+    <a name = "DARKSLATEGREY"></a>
+    <strong>DARKSLATEGREY</strong>
+    </dt>
+    <dd>
+    (47,79,79)
+
+
+
+
+
+
+</dd>
+    <dt>
+    <a name = "DARKTURQUOISE"></a>
+    <strong>DARKTURQUOISE</strong>
+    </dt>
+    <dd>
+    (47,79,79)
+
+
+
+
+
+
+</dd>
+    <dt>
+    <a name = "DARKVIOLET"></a>
+    <strong>DARKVIOLET</strong>
+    </dt>
+    <dd>
+    (0,206,209)
+
+
+
+
+
+
+</dd>
+    <dt>
+    <a name = "DEEPPINK"></a>
+    <strong>DEEPPINK</strong>
+    </dt>
+    <dd>
+    (148,0,211)
+
+
+
+
+
+
+</dd>
+    <dt>
+    <a name = "DEEPSKYBLUE"></a>
+    <strong>DEEPSKYBLUE</strong>
+    </dt>
+    <dd>
+    (255,20,147)
+
+
+
+
+
+
+</dd>
+    <dt>
+    <a name = "DIMGRAY"></a>
+    <strong>DIMGRAY</strong>
+    </dt>
+    <dd>
+    (0,191,255)
+
+
+
+
+
+
+</dd>
+    <dt>
+    <a name = "DIMGREY"></a>
+    <strong>DIMGREY</strong>
+    </dt>
+    <dd>
+    (105,105,105)
+
+
+
+
+
+
+</dd>
+    <dt>
+    <a name = "DODGERBLUE"></a>
+    <strong>DODGERBLUE</strong>
+    </dt>
+    <dd>
+    (105,105,105)
+
+
+
+
+
+
+</dd>
+    <dt>
+    <a name = "FIREBRICK"></a>
+    <strong>FIREBRICK</strong>
+    </dt>
+    <dd>
+    (30,144,255)
+
+
+
+
+
+
+</dd>
+    <dt>
+    <a name = "FLORALWHITE"></a>
+    <strong>FLORALWHITE</strong>
+    </dt>
+    <dd>
+    (178,34,34)
+
+
+
+
+
+
+</dd>
+    <dt>
+    <a name = "FORESTGREEN"></a>
+    <strong>FORESTGREEN</strong>
+    </dt>
+    <dd>
+    (255,250,240)
+
+
+
+
+
+
+</dd>
+    <dt>
+    <a name = "FUCHSIA"></a>
+    <strong>FUCHSIA</strong>
+    </dt>
+    <dd>
+    (34,139,34)
+
+
+
+
+
+
+</dd>
+    <dt>
+    <a name = "GAINSBORO"></a>
+    <strong>GAINSBORO</strong>
+    </dt>
+    <dd>
+    (255,0,255)
+
+
+
+
+
+
+</dd>
+    <dt>
+    <a name = "GHOSTWHITE"></a>
+    <strong>GHOSTWHITE</strong>
+    </dt>
+    <dd>
+    (220,220,220)
+
+
+
+
+
+
+</dd>
+    <dt>
+    <a name = "GOLD"></a>
+    <strong>GOLD</strong>
+    </dt>
+    <dd>
+    (248,248,255)
+
+
+
+
+
+
+</dd>
+    <dt>
+    <a name = "GOLDENROD"></a>
+    <strong>GOLDENROD</strong>
+    </dt>
+    <dd>
+    (255,215,0)
+
+
+
+
+
+
+</dd>
+    <dt>
+    <a name = "GRAY"></a>
+    <strong>GRAY</strong>
+    </dt>
+    <dd>
+    (218,165,32)
+
+
+
+
+
+
+</dd>
+    <dt>
+    <a name = "GREY"></a>
+    <strong>GREY</strong>
+    </dt>
+    <dd>
+    (128,128,128)
+
+
+
+
+
+
+</dd>
+    <dt>
+    <a name = "GREEN"></a>
+    <strong>GREEN</strong>
+    </dt>
+    <dd>
+    (128,128,128)
+
+
+
+
+
+
+</dd>
+    <dt>
+    <a name = "GREENYELLOW"></a>
+    <strong>GREENYELLOW</strong>
+    </dt>
+    <dd>
+    (0,128,0)
+
+
+
+
+
+
+</dd>
+    <dt>
+    <a name = "HONEYDEW"></a>
+    <strong>HONEYDEW</strong>
+    </dt>
+    <dd>
+    (173,255,47)
+
+
+
+
+
+
+</dd>
+    <dt>
+    <a name = "HOTPINK"></a>
+    <strong>HOTPINK</strong>
+    </dt>
+    <dd>
+    (240,255,240)
+
+
+
+
+
+
+</dd>
+    <dt>
+    <a name = "INDIANRED"></a>
+    <strong>INDIANRED</strong>
+    </dt>
+    <dd>
+    (255,105,180)
+
+
+
+
+
+
+</dd>
+    <dt>
+    <a name = "INDIGO"></a>
+    <strong>INDIGO</strong>
+    </dt>
+    <dd>
+    (205,92,92)
+
+
+
+
+
+
+</dd>
+    <dt>
+    <a name = "IVORY"></a>
+    <strong>IVORY</strong>
+    </dt>
+    <dd>
+    (75,0,130)
+
+
+
+
+
+
+</dd>
+    <dt>
+    <a name = "KHAKI"></a>
+    <strong>KHAKI</strong>
+    </dt>
+    <dd>
+    (255,255,240)
+
+
+
+
+
+
+</dd>
+    <dt>
+    <a name = "LAVENDER"></a>
+    <strong>LAVENDER</strong>
+    </dt>
+    <dd>
+    (240,230,140)
+
+
+
+
+
+
+</dd>
+    <dt>
+    <a name = "LAVENDERBLUSH"></a>
+    <strong>LAVENDERBLUSH</strong>
+    </dt>
+    <dd>
+    (230,230,250)
+
+
+
+
+
+
+</dd>
+    <dt>
+    <a name = "LAWNGREEN"></a>
+    <strong>LAWNGREEN</strong>
+    </dt>
+    <dd>
+    (255,240,245)
+
+
+
+
+
+
+</dd>
+    <dt>
+    <a name = "LEMONCHIFFON"></a>
+    <strong>LEMONCHIFFON</strong>
+    </dt>
+    <dd>
+    (124,252,0)
+
+
+
+
+
+
+</dd>
+    <dt>
+    <a name = "LIGHTBLUE"></a>
+    <strong>LIGHTBLUE</strong>
+    </dt>
+    <dd>
+    (255,250,205)
+
+
+
+
+
+
+</dd>
+    <dt>
+    <a name = "LIGHTCORAL"></a>
+    <strong>LIGHTCORAL</strong>
+    </dt>
+    <dd>
+    (173,216,230)
+
+
+
+
+
+
+</dd>
+    <dt>
+    <a name = "LIGHTCYAN"></a>
+    <strong>LIGHTCYAN</strong>
+    </dt>
+    <dd>
+    (240,128,128)
+
+
+
+
+
+
+</dd>
+    <dt>
+    <a name = "LIGHTGOLDENRODYELLOW"></a>
+    <strong>LIGHTGOLDENRODYELLOW</strong>
+    </dt>
+    <dd>
+    (224,255,255)
+
+
+
+
+
+
+</dd>
+    <dt>
+    <a name = "LIGHTGRAY"></a>
+    <strong>LIGHTGRAY</strong>
+    </dt>
+    <dd>
+    (250,250,210)
+
+
+
+
+
+
+</dd>
+    <dt>
+    <a name = "LIGHTGREEN"></a>
+    <strong>LIGHTGREEN</strong>
+    </dt>
+    <dd>
+    (211,211,211)
+
+
+
+
+
+
+</dd>
+    <dt>
+    <a name = "LIGHTGREY"></a>
+    <strong>LIGHTGREY</strong>
+    </dt>
+    <dd>
+    (144,238,144)
+
+
+
+
+
+
+</dd>
+    <dt>
+    <a name = "LIGHTPINK"></a>
+    <strong>LIGHTPINK</strong>
+    </dt>
+    <dd>
+    (211,211,211)
+
+
+
+
+
+
+</dd>
+    <dt>
+    <a name = "LIGHTSALMON"></a>
+    <strong>LIGHTSALMON</strong>
+    </dt>
+    <dd>
+    (255,182,193)
+
+
+
+
+
+
+</dd>
+    <dt>
+    <a name = "LIGHTSEAGREEN"></a>
+    <strong>LIGHTSEAGREEN</strong>
+    </dt>
+    <dd>
+    (255,160,122)
+
+
+
+
+
+
+</dd>
+    <dt>
+    <a name = "LIGHTSKYBLUE"></a>
+    <strong>LIGHTSKYBLUE</strong>
+    </dt>
+    <dd>
+    (32,178,170)
+
+
+
+
+
+
+</dd>
+    <dt>
+    <a name = "LIGHTSLATEGRAY"></a>
+    <strong>LIGHTSLATEGRAY</strong>
+    </dt>
+    <dd>
+    (135,206,250)
+
+
+
+
+
+
+</dd>
+    <dt>
+    <a name = "LIGHTSLATEGREY"></a>
+    <strong>LIGHTSLATEGREY</strong>
+    </dt>
+    <dd>
+    (119,136,153)
+
+
+
+
+
+
+</dd>
+    <dt>
+    <a name = "LIGHTSTEELBLUE"></a>
+    <strong>LIGHTSTEELBLUE</strong>
+    </dt>
+    <dd>
+    (119,136,153)
+
+
+
+
+
+
+</dd>
+    <dt>
+    <a name = "LIGHTYELLOW"></a>
+    <strong>LIGHTYELLOW</strong>
+    </dt>
+    <dd>
+    (176,196,222)
+
+
+
+
+
+
+</dd>
+    <dt>
+    <a name = "LIME"></a>
+    <strong>LIME</strong>
+    </dt>
+    <dd>
+    (255,255,224)
+
+
+
+
+
+
+</dd>
+    <dt>
+    <a name = "LIMEGREEN"></a>
+    <strong>LIMEGREEN</strong>
+    </dt>
+    <dd>
+    (0,255,0)
+
+
+
+
+
+
+</dd>
+    <dt>
+    <a name = "LINEN"></a>
+    <strong>LINEN</strong>
+    </dt>
+    <dd>
+    (50,205,50)
+
+
+
+
+
+
+</dd>
+    <dt>
+    <a name = "MAGENTA"></a>
+    <strong>MAGENTA</strong>
+    </dt>
+    <dd>
+    (250,240,230)
+
+
+
+
+
+
+</dd>
+    <dt>
+    <a name = "MAROON"></a>
+    <strong>MAROON</strong>
+    </dt>
+    <dd>
+    (255,0,255)
+
+
+
+
+
+
+</dd>
+    <dt>
+    <a name = "MEDIUMAQUAMARINE"></a>
+    <strong>MEDIUMAQUAMARINE</strong>
+    </dt>
+    <dd>
+    (128,0,0)
+
+
+
+
+
+
+</dd>
+    <dt>
+    <a name = "MEDIUMBLUE"></a>
+    <strong>MEDIUMBLUE</strong>
+    </dt>
+    <dd>
+    (102,205,170)
+
+
+
+
+
+
+</dd>
+    <dt>
+    <a name = "MEDIUMORCHID"></a>
+    <strong>MEDIUMORCHID</strong>
+    </dt>
+    <dd>
+    (0,0,205)
+
+
+
+
+
+
+</dd>
+    <dt>
+    <a name = "MEDIUMPURPLE"></a>
+    <strong>MEDIUMPURPLE</strong>
+    </dt>
+    <dd>
+    (186,85,211)
+
+
+
+
+
+
+</dd>
+    <dt>
+    <a name = "MEDIUMSEAGREEN"></a>
+    <strong>MEDIUMSEAGREEN</strong>
+    </dt>
+    <dd>
+    (147,112,219)
+
+
+
+
+
+
+</dd>
+    <dt>
+    <a name = "MEDIUMSLATEBLUE"></a>
+    <strong>MEDIUMSLATEBLUE</strong>
+    </dt>
+    <dd>
+    (60,179,113)
+
+
+
+
+
+
+</dd>
+    <dt>
+    <a name = "MEDIUMSPRINGGREEN"></a>
+    <strong>MEDIUMSPRINGGREEN</strong>
+    </dt>
+    <dd>
+    (123,104,238)
+
+
+
+
+
+
+</dd>
+    <dt>
+    <a name = "MEDIUMTURQUOISE"></a>
+    <strong>MEDIUMTURQUOISE</strong>
+    </dt>
+    <dd>
+    (0,250,154)
+
+
+
+
+
+
+</dd>
+    <dt>
+    <a name = "MEDIUMVIOLETRED"></a>
+    <strong>MEDIUMVIOLETRED</strong>
+    </dt>
+    <dd>
+    (72,209,204)
+
+
+
+
+
+
+</dd>
+    <dt>
+    <a name = "MIDNIGHTBLUE"></a>
+    <strong>MIDNIGHTBLUE</strong>
+    </dt>
+    <dd>
+    (199,21,133)
+
+
+
+
+
+
+</dd>
+    <dt>
+    <a name = "MINTCREAM"></a>
+    <strong>MINTCREAM</strong>
+    </dt>
+    <dd>
+    (25,25,112)
+
+
+
+
+
+
+</dd>
+    <dt>
+    <a name = "MISTYROSE"></a>
+    <strong>MISTYROSE</strong>
+    </dt>
+    <dd>
+    (245,255,250)
+
+
+
+
+
+
+</dd>
+    <dt>
+    <a name = "MOCCASIN"></a>
+    <strong>MOCCASIN</strong>
+    </dt>
+    <dd>
+    (255,228,225)
+
+
+
+
+
+
+</dd>
+    <dt>
+    <a name = "NAVAJOWHITE"></a>
+    <strong>NAVAJOWHITE</strong>
+    </dt>
+    <dd>
+    (255,228,181)
+
+
+
+
+
+
+</dd>
+    <dt>
+    <a name = "NAVY"></a>
+    <strong>NAVY</strong>
+    </dt>
+    <dd>
+    (255,222,173)
+
+
+
+
+
+
+</dd>
+    <dt>
+    <a name = "OLDLACE"></a>
+    <strong>OLDLACE</strong>
+    </dt>
+    <dd>
+    (0,0,128)
+
+
+
+
+
+
+</dd>
+    <dt>
+    <a name = "OLIVE"></a>
+    <strong>OLIVE</strong>
+    </dt>
+    <dd>
+    (253,245,230)
+
+
+
+
+
+
+</dd>
+    <dt>
+    <a name = "OLIVEDRAB"></a>
+    <strong>OLIVEDRAB</strong>
+    </dt>
+    <dd>
+    (128,128,0)
+
+
+
+
+
+
+</dd>
+    <dt>
+    <a name = "ORANGE"></a>
+    <strong>ORANGE</strong>
+    </dt>
+    <dd>
+    (107,142,35)
+
+
+
+
+
+
+</dd>
+    <dt>
+    <a name = "ORANGERED"></a>
+    <strong>ORANGERED</strong>
+    </dt>
+    <dd>
+    (255,165,0)
+
+
+
+
+
+
+</dd>
+    <dt>
+    <a name = "ORCHID"></a>
+    <strong>ORCHID</strong>
+    </dt>
+    <dd>
+    (255,69,0)
+
+
+
+
+
+
+</dd>
+    <dt>
+    <a name = "PALEGOLDENROD"></a>
+    <strong>PALEGOLDENROD</strong>
+    </dt>
+    <dd>
+    (218,112,214)
+
+
+
+
+
+
+</dd>
+    <dt>
+    <a name = "PALEGREEN"></a>
+    <strong>PALEGREEN</strong>
+    </dt>
+    <dd>
+    (238,232,170)
+
+
+
+
+
+
+</dd>
+    <dt>
+    <a name = "PALETURQUOISE"></a>
+    <strong>PALETURQUOISE</strong>
+    </dt>
+    <dd>
+    (152,251,152)
+
+
+
+
+
+
+</dd>
+    <dt>
+    <a name = "PALEVIOLETRED"></a>
+    <strong>PALEVIOLETRED</strong>
+    </dt>
+    <dd>
+    (175,238,238)
+
+
+
+
+
+
+</dd>
+    <dt>
+    <a name = "PAPAYAWHIP"></a>
+    <strong>PAPAYAWHIP</strong>
+    </dt>
+    <dd>
+    (219,112,147)
+
+
+
+
+
+
+</dd>
+    <dt>
+    <a name = "PEACHPUFF"></a>
+    <strong>PEACHPUFF</strong>
+    </dt>
+    <dd>
+    (255,239,213)
+
+
+
+
+
+
+</dd>
+    <dt>
+    <a name = "PERU"></a>
+    <strong>PERU</strong>
+    </dt>
+    <dd>
+    (255,218,185)
+
+
+
+
+
+
+</dd>
+    <dt>
+    <a name = "PINK"></a>
+    <strong>PINK</strong>
+    </dt>
+    <dd>
+    (205,133,63)
+
+
+
+
+
+
+</dd>
+    <dt>
+    <a name = "PLUM"></a>
+    <strong>PLUM</strong>
+    </dt>
+    <dd>
+    (255,192,203)
+
+
+
+
+
+
+</dd>
+    <dt>
+    <a name = "POWDERBLUE"></a>
+    <strong>POWDERBLUE</strong>
+    </dt>
+    <dd>
+    (221,160,221)
+
+
+
+
+
+
+</dd>
+    <dt>
+    <a name = "PURPLE"></a>
+    <strong>PURPLE</strong>
+    </dt>
+    <dd>
+    (176,224,230)
+
+
+
+
+
+
+</dd>
+    <dt>
+    <a name = "RED"></a>
+    <strong>RED</strong>
+    </dt>
+    <dd>
+    (128,0,128)
+
+
+
+
+
+
+</dd>
+    <dt>
+    <a name = "ROSYBROWN"></a>
+    <strong>ROSYBROWN</strong>
+    </dt>
+    <dd>
+    (255,0,0)
+
+
+
+
+
+
+</dd>
+    <dt>
+    <a name = "ROYALBLUE"></a>
+    <strong>ROYALBLUE</strong>
+    </dt>
+    <dd>
+    (188,143,143)
+
+
+
+
+
+
+</dd>
+    <dt>
+    <a name = "SADDLEBROWN"></a>
+    <strong>SADDLEBROWN</strong>
+    </dt>
+    <dd>
+    (65,105,225)
+
+
+
+
+
+
+</dd>
+    <dt>
+    <a name = "SALMON"></a>
+    <strong>SALMON</strong>
+    </dt>
+    <dd>
+    (139,69,19)
+
+
+
+
+
+
+</dd>
+    <dt>
+    <a name = "SANDYBROWN"></a>
+    <strong>SANDYBROWN</strong>
+    </dt>
+    <dd>
+    (250,128,114)
+
+
+
+
+
+
+</dd>
+    <dt>
+    <a name = "SEAGREEN"></a>
+    <strong>SEAGREEN</strong>
+    </dt>
+    <dd>
+    (244,164,96)
+
+
+
+
+
+
+</dd>
+    <dt>
+    <a name = "SEASHELL"></a>
+    <strong>SEASHELL</strong>
+    </dt>
+    <dd>
+    (46,139,87)
+
+
+
+
+
+
+</dd>
+    <dt>
+    <a name = "SIENNA"></a>
+    <strong>SIENNA</strong>
+    </dt>
+    <dd>
+    (255,245,238)
+
+
+
+
+
+
+</dd>
+    <dt>
+    <a name = "SILVER"></a>
+    <strong>SILVER</strong>
+    </dt>
+    <dd>
+    (160,82,45)
+
+
+
+
+
+
+</dd>
+    <dt>
+    <a name = "SKYBLUE"></a>
+    <strong>SKYBLUE</strong>
+    </dt>
+    <dd>
+    (192,192,192)
+
+
+
+
+
+
+</dd>
+    <dt>
+    <a name = "SLATEBLUE"></a>
+    <strong>SLATEBLUE</strong>
+    </dt>
+    <dd>
+    (135,206,235)
+
+
+
+
+
+
+</dd>
+    <dt>
+    <a name = "SLATEGRAY"></a>
+    <strong>SLATEGRAY</strong>
+    </dt>
+    <dd>
+    (106,90,205)
+
+
+
+
+
+
+</dd>
+    <dt>
+    <a name = "SLATEGREY"></a>
+    <strong>SLATEGREY</strong>
+    </dt>
+    <dd>
+    (112,128,144)
+
+
+
+
+
+
+</dd>
+    <dt>
+    <a name = "SNOW"></a>
+    <strong>SNOW</strong>
+    </dt>
+    <dd>
+    (112,128,144)
+
+
+
+
+
+
+</dd>
+    <dt>
+    <a name = "SPRINGGREEN"></a>
+    <strong>SPRINGGREEN</strong>
+    </dt>
+    <dd>
+    (255,250,250)
+
+
+
+
+
+
+</dd>
+    <dt>
+    <a name = "STEELBLUE"></a>
+    <strong>STEELBLUE</strong>
+    </dt>
+    <dd>
+    (0,255,127)
+
+
+
+
+
+
+</dd>
+    <dt>
+    <a name = "TAN"></a>
+    <strong>TAN</strong>
+    </dt>
+    <dd>
+    (70,130,180)
+
+
+
+
+
+
+</dd>
+    <dt>
+    <a name = "TEAL"></a>
+    <strong>TEAL</strong>
+    </dt>
+    <dd>
+    (210,180,140)
+
+
+
+
+
+
+</dd>
+    <dt>
+    <a name = "THISTLE"></a>
+    <strong>THISTLE</strong>
+    </dt>
+    <dd>
+    (0,128,128)
+
+
+
+
+
+
+</dd>
+    <dt>
+    <a name = "TOMATO"></a>
+    <strong>TOMATO</strong>
+    </dt>
+    <dd>
+    (216,191,216)
+
+
+
+
+
+
+</dd>
+    <dt>
+    <a name = "TURQUOISE"></a>
+    <strong>TURQUOISE</strong>
+    </dt>
+    <dd>
+    (255,99,71)
+
+
+
+
+
+
+</dd>
+    <dt>
+    <a name = "VIOLET"></a>
+    <strong>VIOLET</strong>
+    </dt>
+    <dd>
+    (64,224,208)
+
+
+
+
+
+
+</dd>
+    <dt>
+    <a name = "WHEAT"></a>
+    <strong>WHEAT</strong>
+    </dt>
+    <dd>
+    (238,130,238)
+
+
+
+
+
+
+</dd>
+    <dt>
+    <a name = "WHITE"></a>
+    <strong>WHITE</strong>
+    </dt>
+    <dd>
+    (245,222,179)
+
+
+
+
+
+
+</dd>
+    <dt>
+    <a name = "WHITESMOKE"></a>
+    <strong>WHITESMOKE</strong>
+    </dt>
+    <dd>
+    (255,255,255)
+
+
+
+
+
+
+</dd>
+    <dt>
+    <a name = "YELLOW"></a>
+    <strong>YELLOW</strong>
+    </dt>
+    <dd>
+    (245,245,245)
+
+
+
+
+
+
+</dd>
+    <dt>
+    <a name = "YELLOWGREEN"></a>
+    <strong>YELLOWGREEN</strong>
+    </dt>
+    <dd>
+    (255,255,0)
+
+
 
 
 

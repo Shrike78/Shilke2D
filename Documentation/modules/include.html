@@ -30,6 +30,10 @@
   <li><a href="../index.html">Index</a></li>
 </ul>
 
+<h2>Contents</h2>
+<ul>
+<li><a href="#Fields">Fields</a></li>
+</ul>
 
 
 <h2>Modules</h2>
@@ -82,7 +86,6 @@
   <li><a href="../modules/Utils.ClassEx.html">Utils.ClassEx</a></li>
   <li><a href="../modules/Utils.CollisionKit.html">Utils.CollisionKit</a></li>
   <li><a href="../modules/Utils.Color.html">Utils.Color</a></li>
-  <li><a href="../modules/Utils.ColorNames.html">Utils.ColorNames</a></li>
   <li><a href="../modules/Utils.Coroutines.html">Utils.Coroutines</a></li>
   <li><a href="../modules/Utils.IO.html">Utils.IO</a></li>
   <li><a href="../modules/Utils.IniFile.html">Utils.IniFile</a></li>
@@ -108,15 +111,102 @@
 
 <h1>Module <code>include</code></h1>
 
-<p>Shilke2D/include is the entry point for each project based on Shilke2D</p>
-<p></p>
+<p>Shilke2D/include is the entry point for each project based on Shilke2D.</p>
+<p>
+There are some specific Shilke2D configuration options that must be set before to include
+this file.</p>
 
 
+<h2><a href="#Fields">Fields</a></h2>
+<table class="function_list">
+	<tr>
+	<td class="name" nowrap><a href="#__DEBUG_CALLBACKS__">__DEBUG_CALLBACKS__</a></td>
+	<td class="summary">Used to enable debug of default Shilke2D callbacks  (post draw and input callbacks)
+	This feature relies on ZeroBraneStudio mobdebug feature so it can be enabled only
+	when debugging from this IDE.</td>
+	</tr>
+	<tr>
+	<td class="name" nowrap><a href="#__USE_SIMULATION_COORDS__">__USE_SIMULATION_COORDS__</a></td>
+	<td class="summary">--Shilke2D default coordinate system has (0,0) as topleft point and y grows from top to bottom.</td>
+	</tr>
+	<tr>
+	<td class="name" nowrap><a href="#__SHILKE2D_TWEEN__">__SHILKE2D_TWEEN__</a></td>
+	<td class="summary">Used to selective include tween library.</td>
+	</tr>
+	<tr>
+	<td class="name" nowrap><a href="#__SHILKE2D_TILEMAP__">__SHILKE2D_TILEMAP__</a></td>
+	<td class="summary">Used to selective include tilemap library.</td>
+	</tr>
+</table>
 
 <br/>
 <br/>
 
 
+    <h2><a name="Fields"></a>Fields</h2>
+    <dl class="function">
+    <dt>
+    <a name = "__DEBUG_CALLBACKS__"></a>
+    <strong>__DEBUG_CALLBACKS__</strong>
+    </dt>
+    <dd>
+    Used to enable debug of default Shilke2D callbacks  (post draw and input callbacks)
+	This feature relies on ZeroBraneStudio mobdebug feature so it can be enabled only
+	when debugging from this IDE.  By default is set to false
+
+
+
+
+
+
+</dd>
+    <dt>
+    <a name = "__USE_SIMULATION_COORDS__"></a>
+    <strong>__USE_SIMULATION_COORDS__</strong>
+    </dt>
+    <dd>
+    --Shilke2D default coordinate system has (0,0) as topleft point and y grows from top to bottom.
+	It's possible to change coordinate system having (0,0) as bottomleft point and y growing from
+	bottom to top (so called coordinate system) setting this option to true
+	By default is set to false
+
+
+
+
+
+
+</dd>
+    <dt>
+    <a name = "__SHILKE2D_TWEEN__"></a>
+    <strong>__SHILKE2D_TWEEN__</strong>
+    </dt>
+    <dd>
+    Used to selective include tween library.
+	By default tween library is loaded.
+	Define __SHILKE2D_TWEEN__ = false before include to disable it
+
+
+
+
+
+
+</dd>
+    <dt>
+    <a name = "__SHILKE2D_TILEMAP__"></a>
+    <strong>__SHILKE2D_TILEMAP__</strong>
+    </dt>
+    <dd>
+    Used to selective include tilemap library.
+	By default tilemap library is loaded.
+	Define __SHILKE2D_TILEMAP__ = false before include to disable it
+
+
+
+
+
+
+</dd>
+</dl>
 
 
 </div> <!-- id="content" -->
