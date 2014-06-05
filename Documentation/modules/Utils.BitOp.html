@@ -37,7 +37,7 @@
 
 
 <h2>Modules</h2>
-<ul>
+<ul class="$(kind=='Topics' and '' or 'nowrap'">
   <li><a href="../modules/Core.Assets.html">Core.Assets</a></li>
   <li><a href="../modules/Core.Event.html">Core.Event</a></li>
   <li><a href="../modules/Core.EventDispatcher.html">Core.EventDispatcher</a></li>
@@ -60,6 +60,7 @@
   <li><a href="../modules/Display.Stage.html">Display.Stage</a></li>
   <li><a href="../modules/Display.TextField.html">Display.TextField</a></li>
   <li><a href="../modules/Display.TileMap.html">Display.TileMap</a></li>
+  <li><a href="../modules/include.html">include</a></li>
   <li><a href="../modules/Texture.ITextureAtlas.html">Texture.ITextureAtlas</a></li>
   <li><a href="../modules/Texture.SubTexture.html">Texture.SubTexture</a></li>
   <li><a href="../modules/Texture.Texture.html">Texture.Texture</a></li>
@@ -87,9 +88,9 @@
   <li><a href="../modules/Utils.CollisionKit.html">Utils.CollisionKit</a></li>
   <li><a href="../modules/Utils.Color.html">Utils.Color</a></li>
   <li><a href="../modules/Utils.Coroutines.html">Utils.Coroutines</a></li>
-  <li><a href="../modules/Utils.IO.html">Utils.IO</a></li>
   <li><a href="../modules/Utils.IniFile.html">Utils.IniFile</a></li>
   <li><a href="../modules/Utils.IniParser.html">Utils.IniParser</a></li>
+  <li><a href="../modules/Utils.IO.html">Utils.IO</a></li>
   <li><a href="../modules/Utils.Log.html">Utils.Log</a></li>
   <li><a href="../modules/Utils.Math.html">Utils.Math</a></li>
   <li><a href="../modules/Utils.PerformanceTimer.html">Utils.PerformanceTimer</a></li>
@@ -102,7 +103,6 @@
   <li><a href="../modules/Utils.Vector.html">Utils.Vector</a></li>
   <li><a href="../modules/Utils.XmlNode.html">Utils.XmlNode</a></li>
   <li><a href="../modules/Utils.XmlParser.html">Utils.XmlParser</a></li>
-  <li><a href="../modules/include.html">include</a></li>
 </ul>
 
 </div>
@@ -110,60 +110,61 @@
 <div id="content">
 
 <h1>Module <code>Utils.BitOp</code></h1>
-
 <p>Utility functions to work with bitfields.</p>
 <p>
-It's based on 32 bit bitfields logic and requires lua to be compiled with 64 bit precision</p>
+
+It's based on 32 bit bitfields logic and requires lua to be compiled with 64 bit precision
+</p>
 
 
 <h2><a href="#Functions">Functions</a></h2>
 <table class="function_list">
 	<tr>
-	<td class="name" nowrap><a href="#bnot">bnot&nbsp;(a)</a></td>
+	<td class="name" nowrap><a href="#bnot">bnot (a)</a></td>
 	<td class="summary">logical not operator</td>
 	</tr>
 	<tr>
-	<td class="name" nowrap><a href="#bxor">bxor&nbsp;(a, b)</a></td>
+	<td class="name" nowrap><a href="#bxor">bxor (a, b)</a></td>
 	<td class="summary">logical xor operator</td>
 	</tr>
 	<tr>
-	<td class="name" nowrap><a href="#band">band&nbsp;(a, b)</a></td>
+	<td class="name" nowrap><a href="#band">band (a, b)</a></td>
 	<td class="summary">logical and operator</td>
 	</tr>
 	<tr>
-	<td class="name" nowrap><a href="#bor">bor&nbsp;(a, b)</a></td>
+	<td class="name" nowrap><a href="#bor">bor (a, b)</a></td>
 	<td class="summary">logical or operator</td>
 	</tr>
 	<tr>
-	<td class="name" nowrap><a href="#rshift">rshift&nbsp;(a, disp)</a></td>
+	<td class="name" nowrap><a href="#rshift">rshift (a, disp)</a></td>
 	<td class="summary">right shift</td>
 	</tr>
 	<tr>
-	<td class="name" nowrap><a href="#lshift">lshift&nbsp;(a, disp)</a></td>
+	<td class="name" nowrap><a href="#lshift">lshift (a, disp)</a></td>
 	<td class="summary">left shift</td>
 	</tr>
 	<tr>
-	<td class="name" nowrap><a href="#testflag">testflag&nbsp;(a, flag)</a></td>
+	<td class="name" nowrap><a href="#testflag">testflag (a, flag)</a></td>
 	<td class="summary">Tests if a specific flag is true in a bitfield</td>
 	</tr>
 	<tr>
-	<td class="name" nowrap><a href="#setflag">setflag&nbsp;(a, flag)</a></td>
+	<td class="name" nowrap><a href="#setflag">setflag (a, flag)</a></td>
 	<td class="summary">Sets a specific flag in a bitfield</td>
 	</tr>
 	<tr>
-	<td class="name" nowrap><a href="#clrflag">clrflag&nbsp;(a, flag)</a></td>
+	<td class="name" nowrap><a href="#clrflag">clrflag (a, flag)</a></td>
 	<td class="summary">Clears a specific flag in a bitfield</td>
 	</tr>
 	<tr>
-	<td class="name" nowrap><a href="#toString">toString&nbsp;(a)</a></td>
+	<td class="name" nowrap><a href="#toString">toString (a)</a></td>
 	<td class="summary">Converts a bitfield to a string</td>
 	</tr>
 	<tr>
-	<td class="name" nowrap><a href="#splitmask">splitmask&nbsp;(a, mask)</a></td>
+	<td class="name" nowrap><a href="#splitmask">splitmask (a, mask)</a></td>
 	<td class="summary">split a bitfield into two bitfields given a mask that indicates low (0) and high (1) bits</td>
 	</tr>
 	<tr>
-	<td class="name" nowrap><a href="#splitbits">splitbits&nbsp;(a, hbits)</a></td>
+	<td class="name" nowrap><a href="#splitbits">splitbits (a, hbits)</a></td>
 	<td class="summary">split a bitfield into two bitfields given a size for the high mask</td>
 	</tr>
 </table>
@@ -176,14 +177,16 @@ It's based on 32 bit bitfields logic and requires lua to be compiled with 64 bit
     <dl class="function">
     <dt>
     <a name = "bnot"></a>
-    <strong>bnot&nbsp;(a)</strong>
+    <strong>bnot (a)</strong>
     </dt>
     <dd>
     logical not operator
 
+
     <h3>Parameters:</h3>
     <ul>
         <li><span class="parameter">a</span>
+
         </li>
     </ul>
 
@@ -194,16 +197,19 @@ It's based on 32 bit bitfields logic and requires lua to be compiled with 64 bit
 </dd>
     <dt>
     <a name = "bxor"></a>
-    <strong>bxor&nbsp;(a, b)</strong>
+    <strong>bxor (a, b)</strong>
     </dt>
     <dd>
     logical xor operator
 
+
     <h3>Parameters:</h3>
     <ul>
         <li><span class="parameter">a</span>
+
         </li>
         <li><span class="parameter">b</span>
+
         </li>
     </ul>
 
@@ -214,16 +220,19 @@ It's based on 32 bit bitfields logic and requires lua to be compiled with 64 bit
 </dd>
     <dt>
     <a name = "band"></a>
-    <strong>band&nbsp;(a, b)</strong>
+    <strong>band (a, b)</strong>
     </dt>
     <dd>
     logical and operator
 
+
     <h3>Parameters:</h3>
     <ul>
         <li><span class="parameter">a</span>
+
         </li>
         <li><span class="parameter">b</span>
+
         </li>
     </ul>
 
@@ -234,16 +243,19 @@ It's based on 32 bit bitfields logic and requires lua to be compiled with 64 bit
 </dd>
     <dt>
     <a name = "bor"></a>
-    <strong>bor&nbsp;(a, b)</strong>
+    <strong>bor (a, b)</strong>
     </dt>
     <dd>
     logical or operator
 
+
     <h3>Parameters:</h3>
     <ul>
         <li><span class="parameter">a</span>
+
         </li>
         <li><span class="parameter">b</span>
+
         </li>
     </ul>
 
@@ -254,17 +266,20 @@ It's based on 32 bit bitfields logic and requires lua to be compiled with 64 bit
 </dd>
     <dt>
     <a name = "rshift"></a>
-    <strong>rshift&nbsp;(a, disp)</strong>
+    <strong>rshift (a, disp)</strong>
     </dt>
     <dd>
     right shift
 
+
     <h3>Parameters:</h3>
     <ul>
         <li><span class="parameter">a</span>
-         the bitfield to be r shifted</li>
+         the bitfield to be r shifted
+        </li>
         <li><span class="parameter">disp</span>
-         the number of shift to perform</li>
+         the number of shift to perform
+        </li>
     </ul>
 
 
@@ -274,17 +289,20 @@ It's based on 32 bit bitfields logic and requires lua to be compiled with 64 bit
 </dd>
     <dt>
     <a name = "lshift"></a>
-    <strong>lshift&nbsp;(a, disp)</strong>
+    <strong>lshift (a, disp)</strong>
     </dt>
     <dd>
     left shift
 
+
     <h3>Parameters:</h3>
     <ul>
         <li><span class="parameter">a</span>
-         the bitfield to be l shifted</li>
+         the bitfield to be l shifted
+        </li>
         <li><span class="parameter">disp</span>
-         the number of shift to perform</li>
+         the number of shift to perform
+        </li>
     </ul>
 
 
@@ -294,17 +312,20 @@ It's based on 32 bit bitfields logic and requires lua to be compiled with 64 bit
 </dd>
     <dt>
     <a name = "testflag"></a>
-    <strong>testflag&nbsp;(a, flag)</strong>
+    <strong>testflag (a, flag)</strong>
     </dt>
     <dd>
     Tests if a specific flag is true in a bitfield
 
+
     <h3>Parameters:</h3>
     <ul>
         <li><span class="parameter">a</span>
-         the bitfield</li>
+         the bitfield
+        </li>
         <li><span class="parameter">flag</span>
-         the flag to test</li>
+         the flag to test
+        </li>
     </ul>
 
     <h3>Returns:</h3>
@@ -319,17 +340,20 @@ It's based on 32 bit bitfields logic and requires lua to be compiled with 64 bit
 </dd>
     <dt>
     <a name = "setflag"></a>
-    <strong>setflag&nbsp;(a, flag)</strong>
+    <strong>setflag (a, flag)</strong>
     </dt>
     <dd>
     Sets a specific flag in a bitfield
 
+
     <h3>Parameters:</h3>
     <ul>
         <li><span class="parameter">a</span>
-         the bitfield</li>
+         the bitfield
+        </li>
         <li><span class="parameter">flag</span>
-         the flag to set</li>
+         the flag to set
+        </li>
     </ul>
 
     <h3>Returns:</h3>
@@ -344,17 +368,20 @@ It's based on 32 bit bitfields logic and requires lua to be compiled with 64 bit
 </dd>
     <dt>
     <a name = "clrflag"></a>
-    <strong>clrflag&nbsp;(a, flag)</strong>
+    <strong>clrflag (a, flag)</strong>
     </dt>
     <dd>
     Clears a specific flag in a bitfield
 
+
     <h3>Parameters:</h3>
     <ul>
         <li><span class="parameter">a</span>
-         the bitfield</li>
+         the bitfield
+        </li>
         <li><span class="parameter">flag</span>
-         the flag to clear</li>
+         the flag to clear
+        </li>
     </ul>
 
     <h3>Returns:</h3>
@@ -369,15 +396,17 @@ It's based on 32 bit bitfields logic and requires lua to be compiled with 64 bit
 </dd>
     <dt>
     <a name = "toString"></a>
-    <strong>toString&nbsp;(a)</strong>
+    <strong>toString (a)</strong>
     </dt>
     <dd>
     Converts a bitfield to a string
 
+
     <h3>Parameters:</h3>
     <ul>
         <li><span class="parameter">a</span>
-         the bitfield to convert as string</li>
+         the bitfield to convert as string
+        </li>
     </ul>
 
     <h3>Returns:</h3>
@@ -392,17 +421,20 @@ It's based on 32 bit bitfields logic and requires lua to be compiled with 64 bit
 </dd>
     <dt>
     <a name = "splitmask"></a>
-    <strong>splitmask&nbsp;(a, mask)</strong>
+    <strong>splitmask (a, mask)</strong>
     </dt>
     <dd>
     split a bitfield into two bitfields given a mask that indicates low (0) and high (1) bits
 
+
     <h3>Parameters:</h3>
     <ul>
         <li><span class="parameter">a</span>
-         input bitfield</li>
+         input bitfield
+        </li>
         <li><span class="parameter">mask</span>
-         the mask bitfield used to split into high, low values</li>
+         the mask bitfield used to split into high, low values
+        </li>
     </ul>
 
     <h3>Returns:</h3>
@@ -419,29 +451,43 @@ It's based on 32 bit bitfields logic and requires lua to be compiled with 64 bit
     <ul>
         <pre class="example">
 
+
+
 a 		= <span class="number">00100000000000000000000000000010</span>
+
 mask 	= <span class="number">11111111000000000000000000000000</span>
+
+
 
 l,h 	= BitOp.splitmask(a, mask)
 
+
+
 l	=&gt; <span class="number">00000000000000000000000000000010</span>
-h	=&gt; <span class="number">00100000000000000000000000000000</span></pre>
+
+h	=&gt; <span class="number">00100000000000000000000000000000</span>
+
+
+</pre>
     </ul>
 
 </dd>
     <dt>
     <a name = "splitbits"></a>
-    <strong>splitbits&nbsp;(a, hbits)</strong>
+    <strong>splitbits (a, hbits)</strong>
     </dt>
     <dd>
     split a bitfield into two bitfields given a size for the high mask
 
+
     <h3>Parameters:</h3>
     <ul>
         <li><span class="parameter">a</span>
-         input bitfield</li>
+         input bitfield
+        </li>
         <li><span class="parameter">hbits</span>
-         the number of bit used to mask high value</li>
+         the number of bit used to mask high value
+        </li>
     </ul>
 
     <h3>Returns:</h3>
@@ -458,13 +504,24 @@ h	=&gt; <span class="number">00100000000000000000000000000000</span></pre>
     <ul>
         <pre class="example">
 
+
+
 a 		= <span class="number">00100000000000000000000000000010</span>
+
 hbits 	= <span class="number">8</span> (=&gt; mask = <span class="number">11111111000000000000000000000000</span>)
+
+
 
 l,h 	= BitOp.splitbits(a, hbits)
 
+
+
 l	=&gt; <span class="number">00000000000000000000000000000010</span>
-h	=&gt; <span class="number">00100000000000000000000000000000</span></pre>
+
+h	=&gt; <span class="number">00100000000000000000000000000000</span>
+
+
+</pre>
     </ul>
 
 </dd>
@@ -474,7 +531,7 @@ h	=&gt; <span class="number">00100000000000000000000000000000</span></pre>
 </div> <!-- id="content" -->
 </div> <!-- id="main" -->
 <div id="about">
-<i>generated by <a href="http://github.com/stevedonovan/LDoc">LDoc 1.3.11</a></i>
+<i>generated by <a href="http://github.com/stevedonovan/LDoc">LDoc 1.4.2</a></i>
 </div> <!-- id="about" -->
 </div> <!-- id="container" -->
 </body>

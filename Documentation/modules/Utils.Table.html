@@ -37,7 +37,7 @@
 
 
 <h2>Modules</h2>
-<ul>
+<ul class="$(kind=='Topics' and '' or 'nowrap'">
   <li><a href="../modules/Core.Assets.html">Core.Assets</a></li>
   <li><a href="../modules/Core.Event.html">Core.Event</a></li>
   <li><a href="../modules/Core.EventDispatcher.html">Core.EventDispatcher</a></li>
@@ -60,6 +60,7 @@
   <li><a href="../modules/Display.Stage.html">Display.Stage</a></li>
   <li><a href="../modules/Display.TextField.html">Display.TextField</a></li>
   <li><a href="../modules/Display.TileMap.html">Display.TileMap</a></li>
+  <li><a href="../modules/include.html">include</a></li>
   <li><a href="../modules/Texture.ITextureAtlas.html">Texture.ITextureAtlas</a></li>
   <li><a href="../modules/Texture.SubTexture.html">Texture.SubTexture</a></li>
   <li><a href="../modules/Texture.Texture.html">Texture.Texture</a></li>
@@ -87,9 +88,9 @@
   <li><a href="../modules/Utils.CollisionKit.html">Utils.CollisionKit</a></li>
   <li><a href="../modules/Utils.Color.html">Utils.Color</a></li>
   <li><a href="../modules/Utils.Coroutines.html">Utils.Coroutines</a></li>
-  <li><a href="../modules/Utils.IO.html">Utils.IO</a></li>
   <li><a href="../modules/Utils.IniFile.html">Utils.IniFile</a></li>
   <li><a href="../modules/Utils.IniParser.html">Utils.IniParser</a></li>
+  <li><a href="../modules/Utils.IO.html">Utils.IO</a></li>
   <li><a href="../modules/Utils.Log.html">Utils.Log</a></li>
   <li><a href="../modules/Utils.Math.html">Utils.Math</a></li>
   <li><a href="../modules/Utils.PerformanceTimer.html">Utils.PerformanceTimer</a></li>
@@ -102,7 +103,6 @@
   <li><a href="../modules/Utils.Vector.html">Utils.Vector</a></li>
   <li><a href="../modules/Utils.XmlNode.html">Utils.XmlNode</a></li>
   <li><a href="../modules/Utils.XmlParser.html">Utils.XmlParser</a></li>
-  <li><a href="../modules/include.html">include</a></li>
 </ul>
 
 </div>
@@ -110,7 +110,6 @@
 <div id="content">
 
 <h1>Module <code>Utils.Table</code></h1>
-
 <p>Extends table namespace</p>
 <p></p>
 
@@ -118,39 +117,39 @@
 <h2><a href="#Functions">Functions</a></h2>
 <table class="function_list">
 	<tr>
-	<td class="name" nowrap><a href="#table.clear">table.clear&nbsp;(t, recursive)</a></td>
+	<td class="name" nowrap><a href="#table.clear">table.clear (t, recursive)</a></td>
 	<td class="summary">clears a table, setting all the values to nil</td>
 	</tr>
 	<tr>
-	<td class="name" nowrap><a href="#table.copy">table.copy&nbsp;(t)</a></td>
+	<td class="name" nowrap><a href="#table.copy">table.copy (t)</a></td>
 	<td class="summary">make a copy of the values of a table and assign the same metatable</td>
 	</tr>
 	<tr>
-	<td class="name" nowrap><a href="#table.deepcopy">table.deepcopy&nbsp;(t)</a></td>
+	<td class="name" nowrap><a href="#table.deepcopy">table.deepcopy (t)</a></td>
 	<td class="summary">Make a deep copy of the values of a table and assign the same metatable.</td>
 	</tr>
 	<tr>
-	<td class="name" nowrap><a href="#table.removeKey">table.removeKey&nbsp;(table, key)</a></td>
+	<td class="name" nowrap><a href="#table.removeKey">table.removeKey (table, key)</a></td>
 	<td class="summary">Sets to nil a key and returns previous value</td>
 	</tr>
 	<tr>
-	<td class="name" nowrap><a href="#table.find">table.find&nbsp;(t, o)</a></td>
+	<td class="name" nowrap><a href="#table.find">table.find (t, o)</a></td>
 	<td class="summary">Returns position of o in table t</td>
 	</tr>
 	<tr>
-	<td class="name" nowrap><a href="#table.removeObj">table.removeObj&nbsp;(t, o)</a></td>
+	<td class="name" nowrap><a href="#table.removeObj">table.removeObj (t, o)</a></td>
 	<td class="summary">Removes an object from a table</td>
 	</tr>
 	<tr>
-	<td class="name" nowrap><a href="#table.invert">table.invert&nbsp;(t)</a></td>
+	<td class="name" nowrap><a href="#table.invert">table.invert (t)</a></td>
 	<td class="summary">Returns a new table that contains the same elements in inverse order.</td>
 	</tr>
 	<tr>
-	<td class="name" nowrap><a href="#table.slice">table.slice&nbsp;(t, i1, i2)</a></td>
+	<td class="name" nowrap><a href="#table.slice">table.slice (t, i1, i2)</a></td>
 	<td class="summary">Returns a new table that is a copy of a section af a given table.</td>
 	</tr>
 	<tr>
-	<td class="name" nowrap><a href="#table.dump">table.dump&nbsp;(t, outFunc)</a></td>
+	<td class="name" nowrap><a href="#table.dump">table.dump (t, outFunc)</a></td>
 	<td class="summary">prints the content of a table using outFunc</td>
 	</tr>
 </table>
@@ -163,17 +162,20 @@
     <dl class="function">
     <dt>
     <a name = "table.clear"></a>
-    <strong>table.clear&nbsp;(t, recursive)</strong>
+    <strong>table.clear (t, recursive)</strong>
     </dt>
     <dd>
     clears a table, setting all the values to nil
 
+
     <h3>Parameters:</h3>
     <ul>
         <li><span class="parameter">t</span>
-         the table to clear</li>
+         the table to clear
+        </li>
         <li><span class="parameter">recursive</span>
-         [optional] if true clear all subtables deeply. Default value is false</li>
+         [optional] if true clear all subtables deeply. Default value is false
+        </li>
     </ul>
 
 
@@ -183,14 +185,16 @@
 </dd>
     <dt>
     <a name = "table.copy"></a>
-    <strong>table.copy&nbsp;(t)</strong>
+    <strong>table.copy (t)</strong>
     </dt>
     <dd>
     make a copy of the values of a table and assign the same metatable
 
+
     <h3>Parameters:</h3>
     <ul>
         <li><span class="parameter">t</span>
+
         </li>
     </ul>
 
@@ -208,15 +212,19 @@
 </dd>
     <dt>
     <a name = "table.deepcopy"></a>
-    <strong>table.deepcopy&nbsp;(t)</strong>
+    <strong>table.deepcopy (t)</strong>
     </dt>
     <dd>
     Make a deep copy of the values of a table and assign the same metatable.
+
 Deep copy means that each value of type table is deepcopied itself
+
+
 
     <h3>Parameters:</h3>
     <ul>
         <li><span class="parameter">t</span>
+
         </li>
     </ul>
 
@@ -234,17 +242,20 @@ Deep copy means that each value of type table is deepcopied itself
 </dd>
     <dt>
     <a name = "table.removeKey"></a>
-    <strong>table.removeKey&nbsp;(table, key)</strong>
+    <strong>table.removeKey (table, key)</strong>
     </dt>
     <dd>
     Sets to nil a key and returns previous value
 
+
     <h3>Parameters:</h3>
     <ul>
         <li><span class="parameter">table</span>
-         the table to modify</li>
+         the table to modify
+        </li>
         <li><span class="parameter">key</span>
-         the key to reset</li>
+         the key to reset
+        </li>
     </ul>
 
     <h3>Returns:</h3>
@@ -259,24 +270,28 @@ Deep copy means that each value of type table is deepcopied itself
 </dd>
     <dt>
     <a name = "table.find"></a>
-    <strong>table.find&nbsp;(t, o)</strong>
+    <strong>table.find (t, o)</strong>
     </dt>
     <dd>
     Returns position of o in table t
-0 if the table doesn't contain the object.
+
 
     <h3>Parameters:</h3>
     <ul>
         <li><span class="parameter">t</span>
-         the table where to search</li>
+         the table where to search
+        </li>
         <li><span class="parameter">o</span>
-         the object to be searched</li>
+         the object to be searched
+        </li>
     </ul>
 
     <h3>Returns:</h3>
     <ol>
 
         index of the object into the table.
+
+0 if the table doesn't contain the object.
     </ol>
 
 
@@ -285,17 +300,20 @@ Deep copy means that each value of type table is deepcopied itself
 </dd>
     <dt>
     <a name = "table.removeObj"></a>
-    <strong>table.removeObj&nbsp;(t, o)</strong>
+    <strong>table.removeObj (t, o)</strong>
     </dt>
     <dd>
     Removes an object from a table
 
+
     <h3>Parameters:</h3>
     <ul>
         <li><span class="parameter">t</span>
-         the table to modify</li>
+         the table to modify
+        </li>
         <li><span class="parameter">o</span>
-         the object to be removed</li>
+         the object to be removed
+        </li>
     </ul>
 
     <h3>Returns:</h3>
@@ -310,16 +328,20 @@ Deep copy means that each value of type table is deepcopied itself
 </dd>
     <dt>
     <a name = "table.invert"></a>
-    <strong>table.invert&nbsp;(t)</strong>
+    <strong>table.invert (t)</strong>
     </dt>
     <dd>
     Returns a new table that contains the same elements in inverse order.
+
 Threats the table as normal indexed array
+
+
 
     <h3>Parameters:</h3>
     <ul>
         <li><span class="parameter">t</span>
-         the array to invert</li>
+         the array to invert
+        </li>
     </ul>
 
     <h3>Returns:</h3>
@@ -334,19 +356,23 @@ Threats the table as normal indexed array
 </dd>
     <dt>
     <a name = "table.slice"></a>
-    <strong>table.slice&nbsp;(t, i1, i2)</strong>
+    <strong>table.slice (t, i1, i2)</strong>
     </dt>
     <dd>
     Returns a new table that is a copy of a section af a given table.
 
+
     <h3>Parameters:</h3>
     <ul>
         <li><span class="parameter">t</span>
-         the source table</li>
+         the source table
+        </li>
         <li><span class="parameter">i1</span>
-         start index of the copy section</li>
+         start index of the copy section
+        </li>
         <li><span class="parameter">i2</span>
-         end index of the copy section</li>
+         end index of the copy section
+        </li>
     </ul>
 
     <h3>Returns:</h3>
@@ -361,17 +387,20 @@ Threats the table as normal indexed array
 </dd>
     <dt>
     <a name = "table.dump"></a>
-    <strong>table.dump&nbsp;(t, outFunc)</strong>
+    <strong>table.dump (t, outFunc)</strong>
     </dt>
     <dd>
     prints the content of a table using outFunc
 
+
     <h3>Parameters:</h3>
     <ul>
         <li><span class="parameter">t</span>
-         the table to dump</li>
+         the table to dump
+        </li>
         <li><span class="parameter">outFunc</span>
-         the function to be used for dumping. default is "print"</li>
+         the function to be used for dumping. default is "print"
+        </li>
     </ul>
 
 
@@ -385,7 +414,7 @@ Threats the table as normal indexed array
 </div> <!-- id="content" -->
 </div> <!-- id="main" -->
 <div id="about">
-<i>generated by <a href="http://github.com/stevedonovan/LDoc">LDoc 1.3.11</a></i>
+<i>generated by <a href="http://github.com/stevedonovan/LDoc">LDoc 1.4.2</a></i>
 </div> <!-- id="about" -->
 </div> <!-- id="container" -->
 </body>

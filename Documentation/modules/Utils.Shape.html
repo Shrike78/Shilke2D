@@ -33,11 +33,12 @@
 <h2>Contents</h2>
 <ul>
 <li><a href="#Functions">Functions</a></li>
+<li><a href="#Local_Functions">Local Functions</a></li>
 </ul>
 
 
 <h2>Modules</h2>
-<ul>
+<ul class="$(kind=='Topics' and '' or 'nowrap'">
   <li><a href="../modules/Core.Assets.html">Core.Assets</a></li>
   <li><a href="../modules/Core.Event.html">Core.Event</a></li>
   <li><a href="../modules/Core.EventDispatcher.html">Core.EventDispatcher</a></li>
@@ -60,6 +61,7 @@
   <li><a href="../modules/Display.Stage.html">Display.Stage</a></li>
   <li><a href="../modules/Display.TextField.html">Display.TextField</a></li>
   <li><a href="../modules/Display.TileMap.html">Display.TileMap</a></li>
+  <li><a href="../modules/include.html">include</a></li>
   <li><a href="../modules/Texture.ITextureAtlas.html">Texture.ITextureAtlas</a></li>
   <li><a href="../modules/Texture.SubTexture.html">Texture.SubTexture</a></li>
   <li><a href="../modules/Texture.Texture.html">Texture.Texture</a></li>
@@ -87,9 +89,9 @@
   <li><a href="../modules/Utils.CollisionKit.html">Utils.CollisionKit</a></li>
   <li><a href="../modules/Utils.Color.html">Utils.Color</a></li>
   <li><a href="../modules/Utils.Coroutines.html">Utils.Coroutines</a></li>
-  <li><a href="../modules/Utils.IO.html">Utils.IO</a></li>
   <li><a href="../modules/Utils.IniFile.html">Utils.IniFile</a></li>
   <li><a href="../modules/Utils.IniParser.html">Utils.IniParser</a></li>
+  <li><a href="../modules/Utils.IO.html">Utils.IO</a></li>
   <li><a href="../modules/Utils.Log.html">Utils.Log</a></li>
   <li><a href="../modules/Utils.Math.html">Utils.Math</a></li>
   <li><a href="../modules/Utils.PerformanceTimer.html">Utils.PerformanceTimer</a></li>
@@ -102,7 +104,6 @@
   <li><a href="../modules/Utils.Vector.html">Utils.Vector</a></li>
   <li><a href="../modules/Utils.XmlNode.html">Utils.XmlNode</a></li>
   <li><a href="../modules/Utils.XmlParser.html">Utils.XmlParser</a></li>
-  <li><a href="../modules/include.html">include</a></li>
 </ul>
 
 </div>
@@ -110,101 +111,107 @@
 <div id="content">
 
 <h1>Module <code>Utils.Shape</code></h1>
-
 <p>Basic geometry classes with draw and intersection helpers.</p>
 <p>
-<p>Shape is an abstract base class, Circle and Rect are concrete classes</p>
+
+
+
+Shape is an abstract base class, Circle and Rect are concrete classes
+</p>
 
 
 <h2><a href="#Functions">Functions</a></h2>
 <table class="function_list">
 	<tr>
-	<td class="name" nowrap><a href="#Shape:clone">Shape:clone&nbsp;()</a></td>
+	<td class="name" nowrap><a href="#clone">clone ()</a></td>
 	<td class="summary">returns a clone of the current shape</td>
 	</tr>
 	<tr>
-	<td class="name" nowrap><a href="#Shape:copy">Shape:copy&nbsp;(s)</a></td>
+	<td class="name" nowrap><a href="#copy">copy (s)</a></td>
 	<td class="summary">abstract method</td>
 	</tr>
 	<tr>
-	<td class="name" nowrap><a href="#Shape:containsPoint">Shape:containsPoint&nbsp;(x, y)</a></td>
+	<td class="name" nowrap><a href="#containsPoint">containsPoint (x, y)</a></td>
 	<td class="summary">abstract method</td>
 	</tr>
 	<tr>
-	<td class="name" nowrap><a href="#Shape:intersects">Shape:intersects&nbsp;(s2)</a></td>
+	<td class="name" nowrap><a href="#intersects">intersects (s2)</a></td>
 	<td class="summary">abstract intersection method between 2 shapes</td>
 	</tr>
 	<tr>
-	<td class="name" nowrap><a href="#Shape:draw">Shape:draw&nbsp;()</a></td>
+	<td class="name" nowrap><a href="#draw">draw ()</a></td>
 	<td class="summary">abstract draw method</td>
 	</tr>
 	<tr>
-	<td class="name" nowrap><a href="#int_rect2rect">int_rect2rect&nbsp;(r1, r2)</a></td>
-	<td class="summary">Checks intersection of two rectangles</td>
-	</tr>
-	<tr>
-	<td class="name" nowrap><a href="#int_circle2circle">int_circle2circle&nbsp;(c1, c2)</a></td>
-	<td class="summary">Checks intersection of two circles</td>
-	</tr>
-	<tr>
-	<td class="name" nowrap><a href="#int_rect2circle">int_rect2circle&nbsp;(r, c)</a></td>
-	<td class="summary">Checks intersection of a rectangle and a circle</td>
-	</tr>
-	<tr>
-	<td class="name" nowrap><a href="#Rect.__tostring">Rect.__tostring&nbsp;(r)</a></td>
+	<td class="name" nowrap><a href="#Rect.__tostring">Rect.__tostring (r)</a></td>
 	<td class="summary">returns a string describing rect components</td>
 	</tr>
 	<tr>
-	<td class="name" nowrap><a href="#Rect:init">Rect:init&nbsp;(x, y, w, h)</a></td>
+	<td class="name" nowrap><a href="#Rect:init">Rect:init (x, y, w, h)</a></td>
 	<td class="summary">Constructor</td>
 	</tr>
 	<tr>
-	<td class="name" nowrap><a href="#Rect:copy">Rect:copy&nbsp;(r)</a></td>
+	<td class="name" nowrap><a href="#Rect:copy">Rect:copy (r)</a></td>
 	<td class="summary">Updates itself copying another rect</td>
 	</tr>
 	<tr>
-	<td class="name" nowrap><a href="#Rect:getCenter">Rect:getCenter&nbsp;()</a></td>
+	<td class="name" nowrap><a href="#Rect:getCenter">Rect:getCenter ()</a></td>
 	<td class="summary">Returns the center of the rect</td>
 	</tr>
 	<tr>
-	<td class="name" nowrap><a href="#Rect:containsPoint">Rect:containsPoint&nbsp;(x, y)</a></td>
+	<td class="name" nowrap><a href="#Rect:containsPoint">Rect:containsPoint (x, y)</a></td>
 	<td class="summary">Checks if a point is inside the rect</td>
 	</tr>
 	<tr>
-	<td class="name" nowrap><a href="#Rect:intersects">Rect:intersects&nbsp;(s2)</a></td>
+	<td class="name" nowrap><a href="#Rect:intersects">Rect:intersects (s2)</a></td>
 	<td class="summary">Checks intersection with other Shapes (rect or circle)</td>
 	</tr>
 	<tr>
-	<td class="name" nowrap><a href="#Rect:intersection">Rect:intersection&nbsp;(r2)</a></td>
+	<td class="name" nowrap><a href="#Rect:intersection">Rect:intersection (r2)</a></td>
 	<td class="summary">Returns the intersection area between two rects</td>
 	</tr>
 	<tr>
-	<td class="name" nowrap><a href="#Rect:draw">Rect:draw&nbsp;()</a></td>
+	<td class="name" nowrap><a href="#Rect:draw">Rect:draw ()</a></td>
 	<td class="summary">Wraps the MOAIDraw.drawRect call</td>
 	</tr>
 	<tr>
-	<td class="name" nowrap><a href="#Circle.__tostring">Circle.__tostring&nbsp;(c)</a></td>
+	<td class="name" nowrap><a href="#Circle.__tostring">Circle.__tostring (c)</a></td>
 	<td class="summary">returns a string describing circle components</td>
 	</tr>
 	<tr>
-	<td class="name" nowrap><a href="#Circle:init">Circle:init&nbsp;(x, y, r)</a></td>
+	<td class="name" nowrap><a href="#Circle:init">Circle:init (x, y, r)</a></td>
 	<td class="summary">Constructor</td>
 	</tr>
 	<tr>
-	<td class="name" nowrap><a href="#Circle:copy">Circle:copy&nbsp;(c)</a></td>
+	<td class="name" nowrap><a href="#Circle:copy">Circle:copy (c)</a></td>
 	<td class="summary">Updates itself copying another circle</td>
 	</tr>
 	<tr>
-	<td class="name" nowrap><a href="#Circle:containsPoint">Circle:containsPoint&nbsp;(x, y)</a></td>
+	<td class="name" nowrap><a href="#Circle:containsPoint">Circle:containsPoint (x, y)</a></td>
 	<td class="summary">Checks if a point is inside the circle</td>
 	</tr>
 	<tr>
-	<td class="name" nowrap><a href="#Circle:intersects">Circle:intersects&nbsp;(s2)</a></td>
+	<td class="name" nowrap><a href="#Circle:intersects">Circle:intersects (s2)</a></td>
 	<td class="summary">Checks intersection with other Shapes (rect or circle)</td>
 	</tr>
 	<tr>
-	<td class="name" nowrap><a href="#Circle:draw">Circle:draw&nbsp;()</a></td>
+	<td class="name" nowrap><a href="#Circle:draw">Circle:draw ()</a></td>
 	<td class="summary">Wraps the MOAIDraw.drawCircle call</td>
+	</tr>
+</table>
+<h2><a href="#Local_Functions">Local Functions</a></h2>
+<table class="function_list">
+	<tr>
+	<td class="name" nowrap><a href="#int_rect2rect">int_rect2rect (r1, r2)</a></td>
+	<td class="summary">Checks intersection of two rectangles</td>
+	</tr>
+	<tr>
+	<td class="name" nowrap><a href="#int_circle2circle">int_circle2circle (c1, c2)</a></td>
+	<td class="summary">Checks intersection of two circles</td>
+	</tr>
+	<tr>
+	<td class="name" nowrap><a href="#int_rect2circle">int_rect2circle (r, c)</a></td>
+	<td class="summary">Checks intersection of a rectangle and a circle</td>
 	</tr>
 </table>
 
@@ -215,8 +222,8 @@
     <h2><a name="Functions"></a>Functions</h2>
     <dl class="function">
     <dt>
-    <a name = "Shape:clone"></a>
-    <strong>Shape:clone&nbsp;()</strong>
+    <a name = "clone"></a>
+    <strong>clone ()</strong>
     </dt>
     <dd>
     returns a clone of the current shape
@@ -226,17 +233,20 @@
 
 
 
+
 </dd>
     <dt>
-    <a name = "Shape:copy"></a>
-    <strong>Shape:copy&nbsp;(s)</strong>
+    <a name = "copy"></a>
+    <strong>copy (s)</strong>
     </dt>
     <dd>
     abstract method
+
 
     <h3>Parameters:</h3>
     <ul>
         <li><span class="parameter">s</span>
+
         </li>
     </ul>
 
@@ -246,17 +256,20 @@
 
 </dd>
     <dt>
-    <a name = "Shape:containsPoint"></a>
-    <strong>Shape:containsPoint&nbsp;(x, y)</strong>
+    <a name = "containsPoint"></a>
+    <strong>containsPoint (x, y)</strong>
     </dt>
     <dd>
     abstract method
 
+
     <h3>Parameters:</h3>
     <ul>
         <li><span class="parameter">x</span>
+
         </li>
         <li><span class="parameter">y</span>
+
         </li>
     </ul>
 
@@ -266,15 +279,17 @@
 
 </dd>
     <dt>
-    <a name = "Shape:intersects"></a>
-    <strong>Shape:intersects&nbsp;(s2)</strong>
+    <a name = "intersects"></a>
+    <strong>intersects (s2)</strong>
     </dt>
     <dd>
     abstract intersection method between 2 shapes
 
+
     <h3>Parameters:</h3>
     <ul>
         <li><span class="parameter">s2</span>
+
         </li>
     </ul>
 
@@ -284,8 +299,8 @@
 
 </dd>
     <dt>
-    <a name = "Shape:draw"></a>
-    <strong>Shape:draw&nbsp;()</strong>
+    <a name = "draw"></a>
+    <strong>draw ()</strong>
     </dt>
     <dd>
     abstract draw method
@@ -295,92 +310,20 @@
 
 
 
-</dd>
-    <dt>
-    <a name = "int_rect2rect"></a>
-    <strong>int_rect2rect&nbsp;(r1, r2)</strong>
-    </dt>
-    <dd>
-    Checks intersection of two rectangles
-
-    <h3>Parameters:</h3>
-    <ul>
-        <li><span class="parameter">r1</span>
-         Rect</li>
-        <li><span class="parameter">r2</span>
-         Rect</li>
-    </ul>
-
-    <h3>Returns:</h3>
-    <ol>
-
-        bool
-    </ol>
-
-
-
-
-</dd>
-    <dt>
-    <a name = "int_circle2circle"></a>
-    <strong>int_circle2circle&nbsp;(c1, c2)</strong>
-    </dt>
-    <dd>
-    Checks intersection of two circles
-
-    <h3>Parameters:</h3>
-    <ul>
-        <li><span class="parameter">c1</span>
-         Circle</li>
-        <li><span class="parameter">c2</span>
-         Circle</li>
-    </ul>
-
-    <h3>Returns:</h3>
-    <ol>
-
-        bool
-    </ol>
-
-
-
-
-</dd>
-    <dt>
-    <a name = "int_rect2circle"></a>
-    <strong>int_rect2circle&nbsp;(r, c)</strong>
-    </dt>
-    <dd>
-    Checks intersection of a rectangle and a circle
-
-    <h3>Parameters:</h3>
-    <ul>
-        <li><span class="parameter">r</span>
-         rect</li>
-        <li><span class="parameter">c</span>
-         Circle</li>
-    </ul>
-
-    <h3>Returns:</h3>
-    <ol>
-
-        bool
-    </ol>
-
-
-
 
 </dd>
     <dt>
     <a name = "Rect.__tostring"></a>
-    <strong>Rect.__tostring&nbsp;(r)</strong>
+    <strong>Rect.__tostring (r)</strong>
     </dt>
     <dd>
     returns a string describing rect components
 
+
     <h3>Parameters:</h3>
     <ul>
         <li><span class="parameter">r</span>
+
         </li>
     </ul>
 
@@ -391,21 +334,26 @@
 </dd>
     <dt>
     <a name = "Rect:init"></a>
-    <strong>Rect:init&nbsp;(x, y, w, h)</strong>
+    <strong>Rect:init (x, y, w, h)</strong>
     </dt>
     <dd>
     Constructor
 
+
     <h3>Parameters:</h3>
     <ul>
         <li><span class="parameter">x</span>
-         default 0</li>
+         default 0
+        </li>
         <li><span class="parameter">y</span>
-         default 0</li>
+         default 0
+        </li>
         <li><span class="parameter">w</span>
-         default 0</li>
+         default 0
+        </li>
         <li><span class="parameter">h</span>
-         default 0</li>
+         default 0
+        </li>
     </ul>
 
 
@@ -415,15 +363,17 @@
 </dd>
     <dt>
     <a name = "Rect:copy"></a>
-    <strong>Rect:copy&nbsp;(r)</strong>
+    <strong>Rect:copy (r)</strong>
     </dt>
     <dd>
     Updates itself copying another rect
 
+
     <h3>Parameters:</h3>
     <ul>
         <li><span class="parameter">r</span>
-         the rect to be copied</li>
+         the rect to be copied
+        </li>
     </ul>
 
     <h3>Returns:</h3>
@@ -438,10 +388,11 @@
 </dd>
     <dt>
     <a name = "Rect:getCenter"></a>
-    <strong>Rect:getCenter&nbsp;()</strong>
+    <strong>Rect:getCenter ()</strong>
     </dt>
     <dd>
     Returns the center of the rect
+
 
 
     <h3>Returns:</h3>
@@ -458,16 +409,19 @@
 </dd>
     <dt>
     <a name = "Rect:containsPoint"></a>
-    <strong>Rect:containsPoint&nbsp;(x, y)</strong>
+    <strong>Rect:containsPoint (x, y)</strong>
     </dt>
     <dd>
     Checks if a point is inside the rect
 
+
     <h3>Parameters:</h3>
     <ul>
         <li><span class="parameter">x</span>
+
         </li>
         <li><span class="parameter">y</span>
+
         </li>
     </ul>
 
@@ -483,15 +437,17 @@
 </dd>
     <dt>
     <a name = "Rect:intersects"></a>
-    <strong>Rect:intersects&nbsp;(s2)</strong>
+    <strong>Rect:intersects (s2)</strong>
     </dt>
     <dd>
     Checks intersection with other Shapes (rect or circle)
 
+
     <h3>Parameters:</h3>
     <ul>
         <li><span class="parameter">s2</span>
-         the other shape</li>
+         the other shape
+        </li>
     </ul>
 
     <h3>Returns:</h3>
@@ -506,22 +462,25 @@
 </dd>
     <dt>
     <a name = "Rect:intersection"></a>
-    <strong>Rect:intersection&nbsp;(r2)</strong>
+    <strong>Rect:intersection (r2)</strong>
     </dt>
     <dd>
     Returns the intersection area between two rects
-Rect with each component at 0
+
 
     <h3>Parameters:</h3>
     <ul>
         <li><span class="parameter">r2</span>
-         the second rect</li>
+         the second rect
+        </li>
     </ul>
 
     <h3>Returns:</h3>
     <ol>
 
         Rect. if the intersection is nil it returns a defaul
+
+Rect with each component at 0
     </ol>
 
 
@@ -530,7 +489,7 @@ Rect with each component at 0
 </dd>
     <dt>
     <a name = "Rect:draw"></a>
-    <strong>Rect:draw&nbsp;()</strong>
+    <strong>Rect:draw ()</strong>
     </dt>
     <dd>
     Wraps the MOAIDraw.drawRect call
@@ -540,17 +499,20 @@ Rect with each component at 0
 
 
 
+
 </dd>
     <dt>
     <a name = "Circle.__tostring"></a>
-    <strong>Circle.__tostring&nbsp;(c)</strong>
+    <strong>Circle.__tostring (c)</strong>
     </dt>
     <dd>
     returns a string describing circle components
 
+
     <h3>Parameters:</h3>
     <ul>
         <li><span class="parameter">c</span>
+
         </li>
     </ul>
 
@@ -561,19 +523,23 @@ Rect with each component at 0
 </dd>
     <dt>
     <a name = "Circle:init"></a>
-    <strong>Circle:init&nbsp;(x, y, r)</strong>
+    <strong>Circle:init (x, y, r)</strong>
     </dt>
     <dd>
     Constructor
 
+
     <h3>Parameters:</h3>
     <ul>
         <li><span class="parameter">x</span>
-         center x of the circle</li>
+         center x of the circle
+        </li>
         <li><span class="parameter">y</span>
-         center y of the circle</li>
+         center y of the circle
+        </li>
         <li><span class="parameter">r</span>
-         radius of the circle</li>
+         radius of the circle
+        </li>
     </ul>
 
 
@@ -583,15 +549,17 @@ Rect with each component at 0
 </dd>
     <dt>
     <a name = "Circle:copy"></a>
-    <strong>Circle:copy&nbsp;(c)</strong>
+    <strong>Circle:copy (c)</strong>
     </dt>
     <dd>
     Updates itself copying another circle
 
+
     <h3>Parameters:</h3>
     <ul>
         <li><span class="parameter">c</span>
-         the circle to be copied</li>
+         the circle to be copied
+        </li>
     </ul>
 
     <h3>Returns:</h3>
@@ -606,16 +574,19 @@ Rect with each component at 0
 </dd>
     <dt>
     <a name = "Circle:containsPoint"></a>
-    <strong>Circle:containsPoint&nbsp;(x, y)</strong>
+    <strong>Circle:containsPoint (x, y)</strong>
     </dt>
     <dd>
     Checks if a point is inside the circle
 
+
     <h3>Parameters:</h3>
     <ul>
         <li><span class="parameter">x</span>
+
         </li>
         <li><span class="parameter">y</span>
+
         </li>
     </ul>
 
@@ -631,15 +602,17 @@ Rect with each component at 0
 </dd>
     <dt>
     <a name = "Circle:intersects"></a>
-    <strong>Circle:intersects&nbsp;(s2)</strong>
+    <strong>Circle:intersects (s2)</strong>
     </dt>
     <dd>
     Checks intersection with other Shapes (rect or circle)
 
+
     <h3>Parameters:</h3>
     <ul>
         <li><span class="parameter">s2</span>
-         the other shape</li>
+         the other shape
+        </li>
     </ul>
 
     <h3>Returns:</h3>
@@ -654,12 +627,100 @@ Rect with each component at 0
 </dd>
     <dt>
     <a name = "Circle:draw"></a>
-    <strong>Circle:draw&nbsp;()</strong>
+    <strong>Circle:draw ()</strong>
     </dt>
     <dd>
     Wraps the MOAIDraw.drawCircle call
 
 
+
+
+
+
+
+</dd>
+</dl>
+    <h2><a name="Local_Functions"></a>Local Functions</h2>
+    <dl class="function">
+    <dt>
+    <a name = "int_rect2rect"></a>
+    <strong>int_rect2rect (r1, r2)</strong>
+    </dt>
+    <dd>
+    Checks intersection of two rectangles
+
+
+    <h3>Parameters:</h3>
+    <ul>
+        <li><span class="parameter">r1</span>
+         Rect
+        </li>
+        <li><span class="parameter">r2</span>
+         Rect
+        </li>
+    </ul>
+
+    <h3>Returns:</h3>
+    <ol>
+
+        bool
+    </ol>
+
+
+
+
+</dd>
+    <dt>
+    <a name = "int_circle2circle"></a>
+    <strong>int_circle2circle (c1, c2)</strong>
+    </dt>
+    <dd>
+    Checks intersection of two circles
+
+
+    <h3>Parameters:</h3>
+    <ul>
+        <li><span class="parameter">c1</span>
+         Circle
+        </li>
+        <li><span class="parameter">c2</span>
+         Circle
+        </li>
+    </ul>
+
+    <h3>Returns:</h3>
+    <ol>
+
+        bool
+    </ol>
+
+
+
+
+</dd>
+    <dt>
+    <a name = "int_rect2circle"></a>
+    <strong>int_rect2circle (r, c)</strong>
+    </dt>
+    <dd>
+    Checks intersection of a rectangle and a circle
+
+
+    <h3>Parameters:</h3>
+    <ul>
+        <li><span class="parameter">r</span>
+         rect
+        </li>
+        <li><span class="parameter">c</span>
+         Circle
+        </li>
+    </ul>
+
+    <h3>Returns:</h3>
+    <ol>
+
+        bool
+    </ol>
 
 
 
@@ -671,7 +732,7 @@ Rect with each component at 0
 </div> <!-- id="content" -->
 </div> <!-- id="main" -->
 <div id="about">
-<i>generated by <a href="http://github.com/stevedonovan/LDoc">LDoc 1.3.11</a></i>
+<i>generated by <a href="http://github.com/stevedonovan/LDoc">LDoc 1.4.2</a></i>
 </div> <!-- id="about" -->
 </div> <!-- id="container" -->
 </body>

@@ -37,7 +37,7 @@
 
 
 <h2>Modules</h2>
-<ul>
+<ul class="$(kind=='Topics' and '' or 'nowrap'">
   <li><a href="../modules/Core.Assets.html">Core.Assets</a></li>
   <li><a href="../modules/Core.Event.html">Core.Event</a></li>
   <li><a href="../modules/Core.EventDispatcher.html">Core.EventDispatcher</a></li>
@@ -60,6 +60,7 @@
   <li><a href="../modules/Display.Stage.html">Display.Stage</a></li>
   <li><a href="../modules/Display.TextField.html">Display.TextField</a></li>
   <li><a href="../modules/Display.TileMap.html">Display.TileMap</a></li>
+  <li><a href="../modules/include.html">include</a></li>
   <li><a href="../modules/Texture.ITextureAtlas.html">Texture.ITextureAtlas</a></li>
   <li><strong>Texture.SubTexture</strong></li>
   <li><a href="../modules/Texture.Texture.html">Texture.Texture</a></li>
@@ -87,9 +88,9 @@
   <li><a href="../modules/Utils.CollisionKit.html">Utils.CollisionKit</a></li>
   <li><a href="../modules/Utils.Color.html">Utils.Color</a></li>
   <li><a href="../modules/Utils.Coroutines.html">Utils.Coroutines</a></li>
-  <li><a href="../modules/Utils.IO.html">Utils.IO</a></li>
   <li><a href="../modules/Utils.IniFile.html">Utils.IniFile</a></li>
   <li><a href="../modules/Utils.IniParser.html">Utils.IniParser</a></li>
+  <li><a href="../modules/Utils.IO.html">Utils.IO</a></li>
   <li><a href="../modules/Utils.Log.html">Utils.Log</a></li>
   <li><a href="../modules/Utils.Math.html">Utils.Math</a></li>
   <li><a href="../modules/Utils.PerformanceTimer.html">Utils.PerformanceTimer</a></li>
@@ -102,7 +103,6 @@
   <li><a href="../modules/Utils.Vector.html">Utils.Vector</a></li>
   <li><a href="../modules/Utils.XmlNode.html">Utils.XmlNode</a></li>
   <li><a href="../modules/Utils.XmlParser.html">Utils.XmlParser</a></li>
-  <li><a href="../modules/include.html">include</a></li>
 </ul>
 
 </div>
@@ -110,7 +110,6 @@
 <div id="content">
 
 <h1>Module <code>Texture.SubTexture</code></h1>
-
 <p>A SubTexture represents a section of another texture.</p>
 <p>
 It's not possible at now to create subtextures of subtextures.</p>
@@ -119,28 +118,28 @@ It's not possible at now to create subtextures of subtextures.</p>
 <h2><a href="#Functions">Functions</a></h2>
 <table class="function_list">
 	<tr>
-	<td class="name" nowrap><a href="#SubTexture:init">SubTexture:init&nbsp;(parentTexture, region, rotated, frame)</a></td>
+	<td class="name" nowrap><a href="#init">init (parentTexture, region, rotated, frame)</a></td>
 	<td class="summary">Constructor.</td>
 	</tr>
 	<tr>
-	<td class="name" nowrap><a href="#SubTexture:dispose">SubTexture:dispose&nbsp;()</a></td>
+	<td class="name" nowrap><a href="#dispose">dispose ()</a></td>
 	<td class="summary">Dispose doesn't release textureData but release every reference to textureData.</td>
 	</tr>
 	<tr>
-	<td class="name" nowrap><a href="#SubTexture:getRegionUV">SubTexture:getRegionUV&nbsp;(resultRect)</a></td>
+	<td class="name" nowrap><a href="#getRegionUV">getRegionUV (resultRect)</a></td>
 	<td class="summary">Returns the region as uv rect over srcdata.</td>
 	</tr>
 	<tr>
-	<td class="name" nowrap><a href="#SubTexture:image">SubTexture:image&nbsp;()</a></td>
+	<td class="name" nowrap><a href="#image">image ()</a></td>
 	<td class="summary">Returns a raw image rapresenting the subtexture.</td>
 	</tr>
 	<tr>
-	<td class="name" nowrap><a href="#SubTexture:getColor32">SubTexture:getColor32&nbsp;(x, y)</a></td>
+	<td class="name" nowrap><a href="#getColor32">getColor32 (x, y)</a></td>
 	<td class="summary">Get value of the pixel at x,y coord as 32bit number
 Override Texture:getColor32 because needs to remap x,y coords on parent texture.</td>
 	</tr>
 	<tr>
-	<td class="name" nowrap><a href="#SubTexture:getRGBA">SubTexture:getRGBA&nbsp;(x, y)</a></td>
+	<td class="name" nowrap><a href="#getRGBA">getRGBA (x, y)</a></td>
 	<td class="summary">Get rgba value of the pixel at x,y coord
 Override Texture:getRGBA because needs to remap x,y coords on parent texture.</td>
 	</tr>
@@ -153,25 +152,30 @@ Override Texture:getRGBA because needs to remap x,y coords on parent texture.</t
     <h2><a name="Functions"></a>Functions</h2>
     <dl class="function">
     <dt>
-    <a name = "SubTexture:init"></a>
-    <strong>SubTexture:init&nbsp;(parentTexture, region, rotated, frame)</strong>
+    <a name = "init"></a>
+    <strong>init (parentTexture, region, rotated, frame)</strong>
     </dt>
     <dd>
     Constructor.
 A sub texture is created as sub region of another texture.
 The regions can be 90° clockwise rotated.
-must be provided to correctly identify real texture size / rect
+
 
     <h3>Parameters:</h3>
     <ul>
         <li><span class="parameter">parentTexture</span>
-         the src texture from which the subtexture is created</li>
+         the src texture from which the subtexture is created
+        </li>
         <li><span class="parameter">region</span>
-         the region that defines the sub texture</li>
+         the region that defines the sub texture
+        </li>
         <li><span class="parameter">rotated</span>
-         boolean value. If true the region is 90° clockwise rotated</li>
+         boolean value. If true the region is 90° clockwise rotated
+        </li>
         <li><span class="parameter">frame</span>
-         if the src image has been trimmed when packed in a atlas, frame</li>
+         if the src image has been trimmed when packed in a atlas, frame
+must be provided to correctly identify real texture size / rect
+        </li>
     </ul>
 
 
@@ -180,8 +184,8 @@ must be provided to correctly identify real texture size / rect
 
 </dd>
     <dt>
-    <a name = "SubTexture:dispose"></a>
-    <strong>SubTexture:dispose&nbsp;()</strong>
+    <a name = "dispose"></a>
+    <strong>dispose ()</strong>
     </dt>
     <dd>
     Dispose doesn't release textureData but release every reference to textureData.
@@ -191,18 +195,21 @@ must be provided to correctly identify real texture size / rect
 
 
 
+
 </dd>
     <dt>
-    <a name = "SubTexture:getRegionUV"></a>
-    <strong>SubTexture:getRegionUV&nbsp;(resultRect)</strong>
+    <a name = "getRegionUV"></a>
+    <strong>getRegionUV (resultRect)</strong>
     </dt>
     <dd>
     Returns the region as uv rect over srcdata.  It doesn't take care of the rotated flag
 
+
     <h3>Parameters:</h3>
     <ul>
         <li><span class="parameter">resultRect</span>
-         if provided is filled and returned</li>
+         if provided is filled and returned
+        </li>
     </ul>
 
     <h3>Returns:</h3>
@@ -216,14 +223,15 @@ must be provided to correctly identify real texture size / rect
 
 </dd>
     <dt>
-    <a name = "SubTexture:image"></a>
-    <strong>SubTexture:image&nbsp;()</strong>
+    <a name = "image"></a>
+    <strong>image ()</strong>
     </dt>
     <dd>
     Returns a raw image rapresenting the subtexture.  It creates a
 new image obtained copying pixels from the parent texture.
 It caches the resulting image so it's already available
 for next requests.
+
 
 
     <h3>Returns:</h3>
@@ -237,20 +245,23 @@ for next requests.
 
 </dd>
     <dt>
-    <a name = "SubTexture:getColor32"></a>
-    <strong>SubTexture:getColor32&nbsp;(x, y)</strong>
+    <a name = "getColor32"></a>
+    <strong>getColor32 (x, y)</strong>
     </dt>
     <dd>
     Get value of the pixel at x,y coord as 32bit number
 Override Texture:getColor32 because needs to remap x,y coords on parent texture.
 The function extends and wraps the original MOAIImage:getColor32
 
+
     <h3>Parameters:</h3>
     <ul>
         <li><span class="parameter">x</span>
-         x coord of the pixel</li>
+         x coord of the pixel
+        </li>
         <li><span class="parameter">y</span>
-         y coord of the pixel</li>
+         y coord of the pixel
+        </li>
     </ul>
 
     <h3>Returns:</h3>
@@ -264,8 +275,8 @@ The function extends and wraps the original MOAIImage:getColor32
 
 </dd>
     <dt>
-    <a name = "SubTexture:getRGBA"></a>
-    <strong>SubTexture:getRGBA&nbsp;(x, y)</strong>
+    <a name = "getRGBA"></a>
+    <strong>getRGBA (x, y)</strong>
     </dt>
     <dd>
     Get rgba value of the pixel at x,y coord
@@ -273,12 +284,15 @@ Override Texture:getRGBA because needs to remap x,y coords on parent texture.
 The function extends and wraps the original MOAIImage:getRGBA and use the same space, so
 returns values in the range [0,1]
 
+
     <h3>Parameters:</h3>
     <ul>
         <li><span class="parameter">x</span>
-         x coord of the pixel</li>
+         x coord of the pixel
+        </li>
         <li><span class="parameter">y</span>
-         y coord of the pixel</li>
+         y coord of the pixel
+        </li>
     </ul>
 
     <h3>Returns:</h3>
@@ -297,7 +311,7 @@ returns values in the range [0,1]
 </div> <!-- id="content" -->
 </div> <!-- id="main" -->
 <div id="about">
-<i>generated by <a href="http://github.com/stevedonovan/LDoc">LDoc 1.3.11</a></i>
+<i>generated by <a href="http://github.com/stevedonovan/LDoc">LDoc 1.4.2</a></i>
 </div> <!-- id="about" -->
 </div> <!-- id="container" -->
 </body>

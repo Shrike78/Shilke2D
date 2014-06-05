@@ -37,7 +37,7 @@
 
 
 <h2>Modules</h2>
-<ul>
+<ul class="$(kind=='Topics' and '' or 'nowrap'">
   <li><a href="../modules/Core.Assets.html">Core.Assets</a></li>
   <li><a href="../modules/Core.Event.html">Core.Event</a></li>
   <li><a href="../modules/Core.EventDispatcher.html">Core.EventDispatcher</a></li>
@@ -60,6 +60,7 @@
   <li><a href="../modules/Display.Stage.html">Display.Stage</a></li>
   <li><a href="../modules/Display.TextField.html">Display.TextField</a></li>
   <li><a href="../modules/Display.TileMap.html">Display.TileMap</a></li>
+  <li><a href="../modules/include.html">include</a></li>
   <li><a href="../modules/Texture.ITextureAtlas.html">Texture.ITextureAtlas</a></li>
   <li><a href="../modules/Texture.SubTexture.html">Texture.SubTexture</a></li>
   <li><a href="../modules/Texture.Texture.html">Texture.Texture</a></li>
@@ -87,9 +88,9 @@
   <li><a href="../modules/Utils.CollisionKit.html">Utils.CollisionKit</a></li>
   <li><a href="../modules/Utils.Color.html">Utils.Color</a></li>
   <li><a href="../modules/Utils.Coroutines.html">Utils.Coroutines</a></li>
-  <li><a href="../modules/Utils.IO.html">Utils.IO</a></li>
   <li><a href="../modules/Utils.IniFile.html">Utils.IniFile</a></li>
   <li><a href="../modules/Utils.IniParser.html">Utils.IniParser</a></li>
+  <li><a href="../modules/Utils.IO.html">Utils.IO</a></li>
   <li><a href="../modules/Utils.Log.html">Utils.Log</a></li>
   <li><a href="../modules/Utils.Math.html">Utils.Math</a></li>
   <li><a href="../modules/Utils.PerformanceTimer.html">Utils.PerformanceTimer</a></li>
@@ -102,7 +103,6 @@
   <li><a href="../modules/Utils.Vector.html">Utils.Vector</a></li>
   <li><strong>Utils.XmlNode</strong></li>
   <li><a href="../modules/Utils.XmlParser.html">Utils.XmlParser</a></li>
-  <li><a href="../modules/include.html">include</a></li>
 </ul>
 
 </div>
@@ -110,80 +110,85 @@
 <div id="content">
 
 <h1>Module <code>Utils.XmlNode</code></h1>
-
 <p>XmlNode is an helper class to work with xmls.</p>
 <p>
+
 A XmlNode object has a name, a value, attributes, children nodes and a father.
+
 An XmlNode without a father is a root node.
+
 It's possible to convert product of XmlParser into an XmlNode.
-It's also possible to add / remove children and attributes from a node.</p>
+
+It's also possible to add / remove children and attributes from a node.
+</p>
 
 
 <h2><a href="#Functions">Functions</a></h2>
 <table class="function_list">
 	<tr>
-	<td class="name" nowrap><a href="#XmlNode:init">XmlNode:init&nbsp;(name, attributes, value, children)</a></td>
+	<td class="name" nowrap><a href="#init">init (name, attributes, value, children)</a></td>
 	<td class="summary">Constructor.</td>
 	</tr>
 	<tr>
-	<td class="name" nowrap><a href="#fromLuaXml">fromLuaXml&nbsp;(xml, parent)</a></td>
+	<td class="name" nowrap><a href="#fromLuaXml">fromLuaXml (xml, parent)</a></td>
 	<td class="summary">Creates a XmlNode starting from the product of XmlParser.parse.</td>
 	</tr>
 	<tr>
-	<td class="name" nowrap><a href="#fromString">fromString&nbsp;(xml, parent)</a></td>
+	<td class="name" nowrap><a href="#fromString">fromString (xml, parent)</a></td>
 	<td class="summary">Builds an XmlNode starting from a string.</td>
 	</tr>
 	<tr>
-	<td class="name" nowrap><a href="#XmlNode:addChild">XmlNode:addChild&nbsp;(child)</a></td>
+	<td class="name" nowrap><a href="#addChild">addChild (child)</a></td>
 	<td class="summary">Adds a child to the current XmlNode</td>
 	</tr>
 	<tr>
-	<td class="name" nowrap><a href="#XmlNode:removeChild">XmlNode:removeChild&nbsp;(child)</a></td>
+	<td class="name" nowrap><a href="#removeChild">removeChild (child)</a></td>
 	<td class="summary">Removes a child from the current XmlNode</td>
 	</tr>
 	<tr>
-	<td class="name" nowrap><a href="#XmlNode:getAttribute">XmlNode:getAttribute&nbsp;(name, default)</a></td>
+	<td class="name" nowrap><a href="#getAttribute">getAttribute (name, default)</a></td>
 	<td class="summary">Returns the value of an attribute</td>
 	</tr>
 	<tr>
-	<td class="name" nowrap><a href="#XmlNode:addAttribute">XmlNode:addAttribute&nbsp;(name, value)</a></td>
+	<td class="name" nowrap><a href="#addAttribute">addAttribute (name, value)</a></td>
 	<td class="summary">Adds a new attribute
+
 if the attribute was already defined it replaces the attribute value</td>
 	</tr>
 	<tr>
-	<td class="name" nowrap><a href="#XmlNode:removeAttribute">XmlNode:removeAttribute&nbsp;(name)</a></td>
+	<td class="name" nowrap><a href="#removeAttribute">removeAttribute (name)</a></td>
 	<td class="summary">Removes an attribute</td>
 	</tr>
 	<tr>
-	<td class="name" nowrap><a href="#XmlNode:getAttributeN">XmlNode:getAttributeN&nbsp;(name, default)</a></td>
+	<td class="name" nowrap><a href="#getAttributeN">getAttributeN (name, default)</a></td>
 	<td class="summary">Returns an attribute value converted as number.</td>
 	</tr>
 	<tr>
-	<td class="name" nowrap><a href="#XmlNode:getAttributeBool">XmlNode:getAttributeBool&nbsp;(name, default)</a></td>
+	<td class="name" nowrap><a href="#getAttributeBool">getAttributeBool (name, default)</a></td>
 	<td class="summary">Returns an attribute value converted as boolean.</td>
 	</tr>
 	<tr>
-	<td class="name" nowrap><a href="#XmlNode:getAttributeName">XmlNode:getAttributeName&nbsp;(idx)</a></td>
+	<td class="name" nowrap><a href="#getAttributeName">getAttributeName (idx)</a></td>
 	<td class="summary">Returns the attribute name of attribute number 'idx'</td>
 	</tr>
 	<tr>
-	<td class="name" nowrap><a href="#XmlNode:getNumAttributes">XmlNode:getNumAttributes&nbsp;()</a></td>
+	<td class="name" nowrap><a href="#getNumAttributes">getNumAttributes ()</a></td>
 	<td class="summary">Returns the number of attributes</td>
 	</tr>
 	<tr>
-	<td class="name" nowrap><a href="#XmlNode:getChildren">XmlNode:getChildren&nbsp;(name)</a></td>
+	<td class="name" nowrap><a href="#getChildren">getChildren (name)</a></td>
 	<td class="summary">Returns a children list of child with a given name</td>
 	</tr>
 	<tr>
-	<td class="name" nowrap><a href="#XmlNode:getParent">XmlNode:getParent&nbsp;()</a></td>
+	<td class="name" nowrap><a href="#getParent">getParent ()</a></td>
 	<td class="summary">Returns the parent node</td>
 	</tr>
 	<tr>
-	<td class="name" nowrap><a href="#XmlNode:dump">XmlNode:dump&nbsp;(stringbuilder)</a></td>
+	<td class="name" nowrap><a href="#dump">dump (stringbuilder)</a></td>
 	<td class="summary">Dumps xmlnode content over a StringBuilder</td>
 	</tr>
 	<tr>
-	<td class="name" nowrap><a href="#XmlNode:strDump">XmlNode:strDump&nbsp;()</a></td>
+	<td class="name" nowrap><a href="#strDump">strDump ()</a></td>
 	<td class="summary">Prints the content of an XmlNode</td>
 	</tr>
 </table>
@@ -195,21 +200,26 @@ if the attribute was already defined it replaces the attribute value</td>
     <h2><a name="Functions"></a>Functions</h2>
     <dl class="function">
     <dt>
-    <a name = "XmlNode:init"></a>
-    <strong>XmlNode:init&nbsp;(name, attributes, value, children)</strong>
+    <a name = "init"></a>
+    <strong>init (name, attributes, value, children)</strong>
     </dt>
     <dd>
     Constructor.
 
+
     <h3>Parameters:</h3>
     <ul>
         <li><span class="parameter">name</span>
+
         </li>
         <li><span class="parameter">attributes</span>
+
         </li>
         <li><span class="parameter">value</span>
+
         </li>
         <li><span class="parameter">children</span>
+
         </li>
     </ul>
 
@@ -220,18 +230,23 @@ if the attribute was already defined it replaces the attribute value</td>
 </dd>
     <dt>
     <a name = "fromLuaXml"></a>
-    <strong>fromLuaXml&nbsp;(xml, parent)</strong>
+    <strong>fromLuaXml (xml, parent)</strong>
     </dt>
     <dd>
     Creates a XmlNode starting from the product of XmlParser.parse.
+
 Attaches the new xmlNode to "parent"
+
+
 
     <h3>Parameters:</h3>
     <ul>
         <li><span class="parameter">xml</span>
-         a xml lua table obtained by XmlParser.parse</li>
+         a xml lua table obtained by XmlParser.parse
+        </li>
         <li><span class="parameter">parent</span>
-         optional, if provided the new node is attached to the parent node</li>
+         optional, if provided the new node is attached to the parent node
+        </li>
     </ul>
 
     <h3>Returns:</h3>
@@ -246,18 +261,23 @@ Attaches the new xmlNode to "parent"
 </dd>
     <dt>
     <a name = "fromString"></a>
-    <strong>fromString&nbsp;(xml, parent)</strong>
+    <strong>fromString (xml, parent)</strong>
     </dt>
     <dd>
     Builds an XmlNode starting from a string.
+
 Uses XmlParser.ParseXmlText to easily load the string
+
+
 
     <h3>Parameters:</h3>
     <ul>
         <li><span class="parameter">xml</span>
-         the xml string to use for creating the node structure</li>
+         the xml string to use for creating the node structure
+        </li>
         <li><span class="parameter">parent</span>
-         optional, if provided the new node is attached to the parent node</li>
+         optional, if provided the new node is attached to the parent node
+        </li>
     </ul>
 
     <h3>Returns:</h3>
@@ -271,16 +291,18 @@ Uses XmlParser.ParseXmlText to easily load the string
 
 </dd>
     <dt>
-    <a name = "XmlNode:addChild"></a>
-    <strong>XmlNode:addChild&nbsp;(child)</strong>
+    <a name = "addChild"></a>
+    <strong>addChild (child)</strong>
     </dt>
     <dd>
     Adds a child to the current XmlNode
 
+
     <h3>Parameters:</h3>
     <ul>
         <li><span class="parameter">child</span>
-         the XmlNode to attach as a child</li>
+         the XmlNode to attach as a child
+        </li>
     </ul>
 
 
@@ -289,16 +311,18 @@ Uses XmlParser.ParseXmlText to easily load the string
 
 </dd>
     <dt>
-    <a name = "XmlNode:removeChild"></a>
-    <strong>XmlNode:removeChild&nbsp;(child)</strong>
+    <a name = "removeChild"></a>
+    <strong>removeChild (child)</strong>
     </dt>
     <dd>
     Removes a child from the current XmlNode
 
+
     <h3>Parameters:</h3>
     <ul>
         <li><span class="parameter">child</span>
-         the XmlNode to remove from children list</li>
+         the XmlNode to remove from children list
+        </li>
     </ul>
 
     <h3>Returns:</h3>
@@ -312,18 +336,21 @@ Uses XmlParser.ParseXmlText to easily load the string
 
 </dd>
     <dt>
-    <a name = "XmlNode:getAttribute"></a>
-    <strong>XmlNode:getAttribute&nbsp;(name, default)</strong>
+    <a name = "getAttribute"></a>
+    <strong>getAttribute (name, default)</strong>
     </dt>
     <dd>
     Returns the value of an attribute
 
+
     <h3>Parameters:</h3>
     <ul>
         <li><span class="parameter">name</span>
-         attribute key</li>
+         attribute key
+        </li>
         <li><span class="parameter">default</span>
-         [optional] if the attribute doesn't exist returns it. default value is nil</li>
+         [optional] if the attribute doesn't exist returns it. default value is nil
+        </li>
     </ul>
 
     <h3>Returns:</h3>
@@ -337,19 +364,23 @@ Uses XmlParser.ParseXmlText to easily load the string
 
 </dd>
     <dt>
-    <a name = "XmlNode:addAttribute"></a>
-    <strong>XmlNode:addAttribute&nbsp;(name, value)</strong>
+    <a name = "addAttribute"></a>
+    <strong>addAttribute (name, value)</strong>
     </dt>
     <dd>
     Adds a new attribute
+
 if the attribute was already defined it replaces the attribute value
+
 
     <h3>Parameters:</h3>
     <ul>
         <li><span class="parameter">name</span>
-         attribute name</li>
+         attribute name
+        </li>
         <li><span class="parameter">value</span>
-         attribute value</li>
+         attribute value
+        </li>
     </ul>
 
 
@@ -358,16 +389,18 @@ if the attribute was already defined it replaces the attribute value
 
 </dd>
     <dt>
-    <a name = "XmlNode:removeAttribute"></a>
-    <strong>XmlNode:removeAttribute&nbsp;(name)</strong>
+    <a name = "removeAttribute"></a>
+    <strong>removeAttribute (name)</strong>
     </dt>
     <dd>
     Removes an attribute
 
+
     <h3>Parameters:</h3>
     <ul>
         <li><span class="parameter">name</span>
-         the name of the attribute to remove</li>
+         the name of the attribute to remove
+        </li>
     </ul>
 
     <h3>Returns:</h3>
@@ -381,18 +414,22 @@ if the attribute was already defined it replaces the attribute value
 
 </dd>
     <dt>
-    <a name = "XmlNode:getAttributeN"></a>
-    <strong>XmlNode:getAttributeN&nbsp;(name, default)</strong>
+    <a name = "getAttributeN"></a>
+    <strong>getAttributeN (name, default)</strong>
     </dt>
     <dd>
     Returns an attribute value converted as number.
 
+
+
     <h3>Parameters:</h3>
     <ul>
         <li><span class="parameter">name</span>
-         attribute key</li>
+         attribute key
+        </li>
         <li><span class="parameter">default</span>
-         [optional] if the attribute doesn't exist returns it. default value is nil</li>
+         [optional] if the attribute doesn't exist returns it. default value is nil
+        </li>
     </ul>
 
     <h3>Returns:</h3>
@@ -406,18 +443,22 @@ if the attribute was already defined it replaces the attribute value
 
 </dd>
     <dt>
-    <a name = "XmlNode:getAttributeBool"></a>
-    <strong>XmlNode:getAttributeBool&nbsp;(name, default)</strong>
+    <a name = "getAttributeBool"></a>
+    <strong>getAttributeBool (name, default)</strong>
     </dt>
     <dd>
     Returns an attribute value converted as boolean.
 
+
+
     <h3>Parameters:</h3>
     <ul>
         <li><span class="parameter">name</span>
-         attribute key</li>
+         attribute key
+        </li>
         <li><span class="parameter">default</span>
-         [optional] if the attribute doesn't exist returns it. default value is nil</li>
+         [optional] if the attribute doesn't exist returns it. default value is nil
+        </li>
     </ul>
 
     <h3>Returns:</h3>
@@ -431,16 +472,18 @@ if the attribute was already defined it replaces the attribute value
 
 </dd>
     <dt>
-    <a name = "XmlNode:getAttributeName"></a>
-    <strong>XmlNode:getAttributeName&nbsp;(idx)</strong>
+    <a name = "getAttributeName"></a>
+    <strong>getAttributeName (idx)</strong>
     </dt>
     <dd>
     Returns the attribute name of attribute number 'idx'
 
+
     <h3>Parameters:</h3>
     <ul>
         <li><span class="parameter">idx</span>
-         the index of the attribute</li>
+         the index of the attribute
+        </li>
     </ul>
 
     <h3>Returns:</h3>
@@ -454,11 +497,12 @@ if the attribute was already defined it replaces the attribute value
 
 </dd>
     <dt>
-    <a name = "XmlNode:getNumAttributes"></a>
-    <strong>XmlNode:getNumAttributes&nbsp;()</strong>
+    <a name = "getNumAttributes"></a>
+    <strong>getNumAttributes ()</strong>
     </dt>
     <dd>
     Returns the number of attributes
+
 
 
     <h3>Returns:</h3>
@@ -472,17 +516,20 @@ if the attribute was already defined it replaces the attribute value
 
 </dd>
     <dt>
-    <a name = "XmlNode:getChildren"></a>
-    <strong>XmlNode:getChildren&nbsp;(name)</strong>
+    <a name = "getChildren"></a>
+    <strong>getChildren (name)</strong>
     </dt>
     <dd>
     Returns a children list of child with a given name
-If not provided the method returns all the children of the node
+
 
     <h3>Parameters:</h3>
     <ul>
         <li><span class="parameter">name</span>
-         [optional] the name of the children element we want to retrieve. </li>
+         [optional] the name of the children element we want to retrieve.
+
+If not provided the method returns all the children of the node
+        </li>
     </ul>
 
     <h3>Returns:</h3>
@@ -496,11 +543,12 @@ If not provided the method returns all the children of the node
 
 </dd>
     <dt>
-    <a name = "XmlNode:getParent"></a>
-    <strong>XmlNode:getParent&nbsp;()</strong>
+    <a name = "getParent"></a>
+    <strong>getParent ()</strong>
     </dt>
     <dd>
     Returns the parent node
+
 
 
     <h3>Returns:</h3>
@@ -514,16 +562,18 @@ If not provided the method returns all the children of the node
 
 </dd>
     <dt>
-    <a name = "XmlNode:dump"></a>
-    <strong>XmlNode:dump&nbsp;(stringbuilder)</strong>
+    <a name = "dump"></a>
+    <strong>dump (stringbuilder)</strong>
     </dt>
     <dd>
     Dumps xmlnode content over a StringBuilder
 
+
     <h3>Parameters:</h3>
     <ul>
         <li><span class="parameter">stringbuilder</span>
-         the StringBuilder o use to dump the content of the node</li>
+         the StringBuilder o use to dump the content of the node
+        </li>
     </ul>
 
 
@@ -532,11 +582,12 @@ If not provided the method returns all the children of the node
 
 </dd>
     <dt>
-    <a name = "XmlNode:strDump"></a>
-    <strong>XmlNode:strDump&nbsp;()</strong>
+    <a name = "strDump"></a>
+    <strong>strDump ()</strong>
     </dt>
     <dd>
     Prints the content of an XmlNode
+
 
 
     <h3>Returns:</h3>
@@ -555,7 +606,7 @@ If not provided the method returns all the children of the node
 </div> <!-- id="content" -->
 </div> <!-- id="main" -->
 <div id="about">
-<i>generated by <a href="http://github.com/stevedonovan/LDoc">LDoc 1.3.11</a></i>
+<i>generated by <a href="http://github.com/stevedonovan/LDoc">LDoc 1.4.2</a></i>
 </div> <!-- id="about" -->
 </div> <!-- id="container" -->
 </body>

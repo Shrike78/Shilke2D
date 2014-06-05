@@ -37,7 +37,7 @@
 
 
 <h2>Modules</h2>
-<ul>
+<ul class="$(kind=='Topics' and '' or 'nowrap'">
   <li><a href="../modules/Core.Assets.html">Core.Assets</a></li>
   <li><a href="../modules/Core.Event.html">Core.Event</a></li>
   <li><a href="../modules/Core.EventDispatcher.html">Core.EventDispatcher</a></li>
@@ -60,6 +60,7 @@
   <li><a href="../modules/Display.Stage.html">Display.Stage</a></li>
   <li><a href="../modules/Display.TextField.html">Display.TextField</a></li>
   <li><a href="../modules/Display.TileMap.html">Display.TileMap</a></li>
+  <li><a href="../modules/include.html">include</a></li>
   <li><a href="../modules/Texture.ITextureAtlas.html">Texture.ITextureAtlas</a></li>
   <li><a href="../modules/Texture.SubTexture.html">Texture.SubTexture</a></li>
   <li><a href="../modules/Texture.Texture.html">Texture.Texture</a></li>
@@ -87,9 +88,9 @@
   <li><a href="../modules/Utils.CollisionKit.html">Utils.CollisionKit</a></li>
   <li><a href="../modules/Utils.Color.html">Utils.Color</a></li>
   <li><a href="../modules/Utils.Coroutines.html">Utils.Coroutines</a></li>
-  <li><a href="../modules/Utils.IO.html">Utils.IO</a></li>
   <li><strong>Utils.IniFile</strong></li>
   <li><a href="../modules/Utils.IniParser.html">Utils.IniParser</a></li>
+  <li><a href="../modules/Utils.IO.html">Utils.IO</a></li>
   <li><a href="../modules/Utils.Log.html">Utils.Log</a></li>
   <li><a href="../modules/Utils.Math.html">Utils.Math</a></li>
   <li><a href="../modules/Utils.PerformanceTimer.html">Utils.PerformanceTimer</a></li>
@@ -102,7 +103,6 @@
   <li><a href="../modules/Utils.Vector.html">Utils.Vector</a></li>
   <li><a href="../modules/Utils.XmlNode.html">Utils.XmlNode</a></li>
   <li><a href="../modules/Utils.XmlParser.html">Utils.XmlParser</a></li>
-  <li><a href="../modules/include.html">include</a></li>
 </ul>
 
 </div>
@@ -110,41 +110,43 @@
 <div id="content">
 
 <h1>Module <code>Utils.IniFile</code></h1>
-
 <p>Helper to read ini files.</p>
 <p>
+
 Wraps a table obtained parsing a file ini and exposes functions to easily
-access and read data</p>
+
+access and read data
+</p>
 
 
 <h2><a href="#Functions">Functions</a></h2>
 <table class="function_list">
 	<tr>
-	<td class="name" nowrap><a href="#fromFile">fromFile&nbsp;(fileName)</a></td>
+	<td class="name" nowrap><a href="#fromFile">fromFile (fileName)</a></td>
 	<td class="summary">Loads a file ini and parse it</td>
 	</tr>
 	<tr>
-	<td class="name" nowrap><a href="#fromText">fromText&nbsp;(text)</a></td>
+	<td class="name" nowrap><a href="#fromText">fromText (text)</a></td>
 	<td class="summary">Create a IniFile object starting from text</td>
 	</tr>
 	<tr>
-	<td class="name" nowrap><a href="#IniFile:init">IniFile:init&nbsp;(t)</a></td>
+	<td class="name" nowrap><a href="#init">init (t)</a></td>
 	<td class="summary">Constructor</td>
 	</tr>
 	<tr>
-	<td class="name" nowrap><a href="#IniFile:hasSection">IniFile:hasSection&nbsp;(section)</a></td>
+	<td class="name" nowrap><a href="#hasSection">hasSection (section)</a></td>
 	<td class="summary">Checks section existence</td>
 	</tr>
 	<tr>
-	<td class="name" nowrap><a href="#IniFile:getValue">IniFile:getValue&nbsp;(section, key, default)</a></td>
+	<td class="name" nowrap><a href="#getValue">getValue (section, key, default)</a></td>
 	<td class="summary">Returns a section/key value</td>
 	</tr>
 	<tr>
-	<td class="name" nowrap><a href="#IniFile:getValueN">IniFile:getValueN&nbsp;(section, key, default)</a></td>
+	<td class="name" nowrap><a href="#getValueN">getValueN (section, key, default)</a></td>
 	<td class="summary">Returns a section/key value as number</td>
 	</tr>
 	<tr>
-	<td class="name" nowrap><a href="#IniFile:getValueBool">IniFile:getValueBool&nbsp;(section, key, default)</a></td>
+	<td class="name" nowrap><a href="#getValueBool">getValueBool (section, key, default)</a></td>
 	<td class="summary">Returns a section/key value as bool</td>
 	</tr>
 </table>
@@ -157,15 +159,17 @@ access and read data</p>
     <dl class="function">
     <dt>
     <a name = "fromFile"></a>
-    <strong>fromFile&nbsp;(fileName)</strong>
+    <strong>fromFile (fileName)</strong>
     </dt>
     <dd>
     Loads a file ini and parse it
 
+
     <h3>Parameters:</h3>
     <ul>
         <li><span class="parameter">fileName</span>
-         the path of the file to load</li>
+         the path of the file to load
+        </li>
     </ul>
 
     <h3>Returns:</h3>
@@ -182,15 +186,17 @@ access and read data</p>
 </dd>
     <dt>
     <a name = "fromText"></a>
-    <strong>fromText&nbsp;(text)</strong>
+    <strong>fromText (text)</strong>
     </dt>
     <dd>
     Create a IniFile object starting from text
 
+
     <h3>Parameters:</h3>
     <ul>
         <li><span class="parameter">text</span>
-         the text of</li>
+         the text of
+        </li>
     </ul>
 
     <h3>Returns:</h3>
@@ -206,16 +212,18 @@ access and read data</p>
 
 </dd>
     <dt>
-    <a name = "IniFile:init"></a>
-    <strong>IniFile:init&nbsp;(t)</strong>
+    <a name = "init"></a>
+    <strong>init (t)</strong>
     </dt>
     <dd>
     Constructor
 
+
     <h3>Parameters:</h3>
     <ul>
         <li><span class="parameter">t</span>
-         a table obtained parsing a ini file with IniParser</li>
+         a table obtained parsing a ini file with IniParser
+        </li>
     </ul>
 
 
@@ -224,16 +232,18 @@ access and read data</p>
 
 </dd>
     <dt>
-    <a name = "IniFile:hasSection"></a>
-    <strong>IniFile:hasSection&nbsp;(section)</strong>
+    <a name = "hasSection"></a>
+    <strong>hasSection (section)</strong>
     </dt>
     <dd>
     Checks section existence
 
+
     <h3>Parameters:</h3>
     <ul>
         <li><span class="parameter">section</span>
-         name of the section</li>
+         name of the section
+        </li>
     </ul>
 
     <h3>Returns:</h3>
@@ -247,20 +257,24 @@ access and read data</p>
 
 </dd>
     <dt>
-    <a name = "IniFile:getValue"></a>
-    <strong>IniFile:getValue&nbsp;(section, key, default)</strong>
+    <a name = "getValue"></a>
+    <strong>getValue (section, key, default)</strong>
     </dt>
     <dd>
     Returns a section/key value
 
+
     <h3>Parameters:</h3>
     <ul>
         <li><span class="parameter">section</span>
-         name of the section</li>
+         name of the section
+        </li>
         <li><span class="parameter">key</span>
-         name of the key</li>
+         name of the key
+        </li>
         <li><span class="parameter">default</span>
-         default value to return if section/key has no value. (optional)</li>
+         default value to return if section/key has no value. (optional)
+        </li>
     </ul>
 
     <h3>Returns:</h3>
@@ -274,20 +288,24 @@ access and read data</p>
 
 </dd>
     <dt>
-    <a name = "IniFile:getValueN"></a>
-    <strong>IniFile:getValueN&nbsp;(section, key, default)</strong>
+    <a name = "getValueN"></a>
+    <strong>getValueN (section, key, default)</strong>
     </dt>
     <dd>
     Returns a section/key value as number
 
+
     <h3>Parameters:</h3>
     <ul>
         <li><span class="parameter">section</span>
-         name of the section</li>
+         name of the section
+        </li>
         <li><span class="parameter">key</span>
-         name of the key</li>
+         name of the key
+        </li>
         <li><span class="parameter">default</span>
-         default value to return if section/key has no value. (optional)</li>
+         default value to return if section/key has no value. (optional)
+        </li>
     </ul>
 
     <h3>Returns:</h3>
@@ -301,20 +319,24 @@ access and read data</p>
 
 </dd>
     <dt>
-    <a name = "IniFile:getValueBool"></a>
-    <strong>IniFile:getValueBool&nbsp;(section, key, default)</strong>
+    <a name = "getValueBool"></a>
+    <strong>getValueBool (section, key, default)</strong>
     </dt>
     <dd>
     Returns a section/key value as bool
 
+
     <h3>Parameters:</h3>
     <ul>
         <li><span class="parameter">section</span>
-         name of the section</li>
+         name of the section
+        </li>
         <li><span class="parameter">key</span>
-         name of the key</li>
+         name of the key
+        </li>
         <li><span class="parameter">default</span>
-         default value to return if section/key has no value. (optional)</li>
+         default value to return if section/key has no value. (optional)
+        </li>
     </ul>
 
     <h3>Returns:</h3>
@@ -333,7 +355,7 @@ access and read data</p>
 </div> <!-- id="content" -->
 </div> <!-- id="main" -->
 <div id="about">
-<i>generated by <a href="http://github.com/stevedonovan/LDoc">LDoc 1.3.11</a></i>
+<i>generated by <a href="http://github.com/stevedonovan/LDoc">LDoc 1.4.2</a></i>
 </div> <!-- id="about" -->
 </div> <!-- id="container" -->
 </body>

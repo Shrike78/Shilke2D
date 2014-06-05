@@ -38,7 +38,7 @@
 
 
 <h2>Modules</h2>
-<ul>
+<ul class="$(kind=='Topics' and '' or 'nowrap'">
   <li><a href="../modules/Core.Assets.html">Core.Assets</a></li>
   <li><a href="../modules/Core.Event.html">Core.Event</a></li>
   <li><a href="../modules/Core.EventDispatcher.html">Core.EventDispatcher</a></li>
@@ -61,6 +61,7 @@
   <li><a href="../modules/Display.Stage.html">Display.Stage</a></li>
   <li><a href="../modules/Display.TextField.html">Display.TextField</a></li>
   <li><a href="../modules/Display.TileMap.html">Display.TileMap</a></li>
+  <li><a href="../modules/include.html">include</a></li>
   <li><a href="../modules/Texture.ITextureAtlas.html">Texture.ITextureAtlas</a></li>
   <li><a href="../modules/Texture.SubTexture.html">Texture.SubTexture</a></li>
   <li><a href="../modules/Texture.Texture.html">Texture.Texture</a></li>
@@ -88,9 +89,9 @@
   <li><a href="../modules/Utils.CollisionKit.html">Utils.CollisionKit</a></li>
   <li><a href="../modules/Utils.Color.html">Utils.Color</a></li>
   <li><a href="../modules/Utils.Coroutines.html">Utils.Coroutines</a></li>
-  <li><a href="../modules/Utils.IO.html">Utils.IO</a></li>
   <li><a href="../modules/Utils.IniFile.html">Utils.IniFile</a></li>
   <li><a href="../modules/Utils.IniParser.html">Utils.IniParser</a></li>
+  <li><a href="../modules/Utils.IO.html">Utils.IO</a></li>
   <li><a href="../modules/Utils.Log.html">Utils.Log</a></li>
   <li><a href="../modules/Utils.Math.html">Utils.Math</a></li>
   <li><a href="../modules/Utils.PerformanceTimer.html">Utils.PerformanceTimer</a></li>
@@ -103,7 +104,6 @@
   <li><a href="../modules/Utils.Vector.html">Utils.Vector</a></li>
   <li><a href="../modules/Utils.XmlNode.html">Utils.XmlNode</a></li>
   <li><a href="../modules/Utils.XmlParser.html">Utils.XmlParser</a></li>
-  <li><a href="../modules/include.html">include</a></li>
 </ul>
 
 </div>
@@ -111,38 +111,45 @@
 <div id="content">
 
 <h1>Module <code>Core.TouchSensor</code></h1>
-
 <p>Touch Sensor is an inner class used by Shilke2D to handle mouse and touch events.</p>
 <p>
+
 Initializes the mouse/touch sensors and set the proper callbacks that can be redefined by user.
-<p>Mouse left click and move are redirected as touch events with always the same id.
-<p>Touch phases are {BEGAN, MOVING, ENDED, CANCELLED}</p>
+
+
+
+Mouse left click and move are redirected as touch events with always the same id.
+
+
+
+Touch phases are {BEGAN, MOVING, ENDED, CANCELLED}
+</p>
 
 
 <h2><a href="#Functions">Functions</a></h2>
 <table class="function_list">
 	<tr>
-	<td class="name" nowrap><a href="#setTouchSensorCorrection">setTouchSensorCorrection&nbsp;(scalex, scaley, height)</a></td>
+	<td class="name" nowrap><a href="#setTouchSensorCorrection">setTouchSensorCorrection (scalex, scaley, height)</a></td>
 	<td class="summary">Inner method.</td>
 	</tr>
 	<tr>
-	<td class="name" nowrap><a href="#touched">touched&nbsp;(touch)</a></td>
+	<td class="name" nowrap><a href="#touched">touched (touch)</a></td>
 	<td class="summary">default touched callback.</td>
 	</tr>
 	<tr>
-	<td class="name" nowrap><a href="#onEvent">onEvent&nbsp;(eventType, idx, x, y, tapCount)</a></td>
+	<td class="name" nowrap><a href="#onEvent">onEvent (eventType, idx, x, y, tapCount)</a></td>
 	<td class="summary">Inner event handling method to which touch and mouse events are redirected</td>
 	</tr>
 	<tr>
-	<td class="name" nowrap><a href="#onPointer">onPointer&nbsp;(x, y)</a></td>
+	<td class="name" nowrap><a href="#onPointer">onPointer (x, y)</a></td>
 	<td class="summary">Inner function.</td>
 	</tr>
 	<tr>
-	<td class="name" nowrap><a href="#onLeftClick">onLeftClick&nbsp;(down)</a></td>
+	<td class="name" nowrap><a href="#onLeftClick">onLeftClick (down)</a></td>
 	<td class="summary">Inner function.</td>
 	</tr>
 	<tr>
-	<td class="name" nowrap><a href="#getPointerPosition">getPointerPosition&nbsp;()</a></td>
+	<td class="name" nowrap><a href="#getPointerPosition">getPointerPosition ()</a></td>
 	<td class="summary">Defined only when device is mouse (pointer), mainly for debug purposes.</td>
 	</tr>
 </table>
@@ -162,21 +169,28 @@ Initializes the mouse/touch sensors and set the proper callbacks that can be red
     <dl class="function">
     <dt>
     <a name = "setTouchSensorCorrection"></a>
-    <strong>setTouchSensorCorrection&nbsp;(scalex, scaley, height)</strong>
+    <strong>setTouchSensorCorrection (scalex, scaley, height)</strong>
     </dt>
     <dd>
     Inner method.
+
 Used to apply a transformation to point coordinates depending on stage scaling and
+
 coordinates system
+
+
 
     <h3>Parameters:</h3>
     <ul>
         <li><span class="parameter">scalex</span>
-         stage width scaling factor</li>
+         stage width scaling factor
+        </li>
         <li><span class="parameter">scaley</span>
-         stage height scaling factor</li>
+         stage height scaling factor
+        </li>
         <li><span class="parameter">height</span>
-         height of the logical stage</li>
+         height of the logical stage
+        </li>
     </ul>
 
 
@@ -186,15 +200,18 @@ coordinates system
 </dd>
     <dt>
     <a name = "touched"></a>
-    <strong>touched&nbsp;(touch)</strong>
+    <strong>touched (touch)</strong>
     </dt>
     <dd>
     default touched callback.  can be override just defining a function with the same name
 
+
+
     <h3>Parameters:</h3>
     <ul>
         <li><span class="parameter">touch</span>
-         touch event occurred</li>
+         touch event occurred
+        </li>
     </ul>
 
 
@@ -204,23 +221,29 @@ coordinates system
 </dd>
     <dt>
     <a name = "onEvent"></a>
-    <strong>onEvent&nbsp;(eventType, idx, x, y, tapCount)</strong>
+    <strong>onEvent (eventType, idx, x, y, tapCount)</strong>
     </dt>
     <dd>
     Inner event handling method to which touch and mouse events are redirected
 
+
     <h3>Parameters:</h3>
     <ul>
         <li><span class="parameter">eventType</span>
-         MOAITouchSensor event type on which redirect touch phase</li>
+         MOAITouchSensor event type on which redirect touch phase
+        </li>
         <li><span class="parameter">idx</span>
-         the id of the current touch event in progress. on desktop id is always -1</li>
+         the id of the current touch event in progress. on desktop id is always -1
+        </li>
         <li><span class="parameter">x</span>
-         logical stage x coordinate of the touch event</li>
+         logical stage x coordinate of the touch event
+        </li>
         <li><span class="parameter">y</span>
-         logical stage y coordinate of the touch event</li>
+         logical stage y coordinate of the touch event
+        </li>
         <li><span class="parameter">tapCount</span>
-         for multiTap touch event the idx value doesn't change but the tapCount increase each tap</li>
+         for multiTap touch event the idx value doesn't change but the tapCount increase each tap
+        </li>
     </ul>
 
 
@@ -230,17 +253,21 @@ coordinates system
 </dd>
     <dt>
     <a name = "onPointer"></a>
-    <strong>onPointer&nbsp;(x, y)</strong>
+    <strong>onPointer (x, y)</strong>
     </dt>
     <dd>
     Inner function.  Mouse position event handler
 
+
+
     <h3>Parameters:</h3>
     <ul>
         <li><span class="parameter">x</span>
-         logical stage x coordinate of the mouse position</li>
+         logical stage x coordinate of the mouse position
+        </li>
         <li><span class="parameter">y</span>
-         logical stage y coordinate of the mouse position</li>
+         logical stage y coordinate of the mouse position
+        </li>
     </ul>
 
 
@@ -250,15 +277,18 @@ coordinates system
 </dd>
     <dt>
     <a name = "onLeftClick"></a>
-    <strong>onLeftClick&nbsp;(down)</strong>
+    <strong>onLeftClick (down)</strong>
     </dt>
     <dd>
     Inner function.  Mouse leftClick event handler
 
+
+
     <h3>Parameters:</h3>
     <ul>
         <li><span class="parameter">down</span>
-         if true a touch began, else a touch ended</li>
+         if true a touch began, else a touch ended
+        </li>
     </ul>
 
 
@@ -268,11 +298,14 @@ coordinates system
 </dd>
     <dt>
     <a name = "getPointerPosition"></a>
-    <strong>getPointerPosition&nbsp;()</strong>
+    <strong>getPointerPosition ()</strong>
     </dt>
     <dd>
     Defined only when device is mouse (pointer), mainly for debug purposes.
+
 	It returns the mouse pointer position coordinates in Shilke2D screen space
+
+
 
 
     <h3>Returns:</h3>
@@ -297,15 +330,20 @@ coordinates system
     <dd>
     Touch states
 
+
     <h3>Fields:</h3>
     <ul>
         <li><span class="parameter">BEGAN</span>
+
         </li>
         <li><span class="parameter">MOVING</span>
+
         </li>
         <li><span class="parameter">ENDED</span>
+
         </li>
         <li><span class="parameter">CANCELLED</span>
+
         </li>
     </ul>
 
@@ -320,7 +358,7 @@ coordinates system
 </div> <!-- id="content" -->
 </div> <!-- id="main" -->
 <div id="about">
-<i>generated by <a href="http://github.com/stevedonovan/LDoc">LDoc 1.3.11</a></i>
+<i>generated by <a href="http://github.com/stevedonovan/LDoc">LDoc 1.4.2</a></i>
 </div> <!-- id="about" -->
 </div> <!-- id="container" -->
 </body>

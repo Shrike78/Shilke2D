@@ -37,7 +37,7 @@
 
 
 <h2>Modules</h2>
-<ul>
+<ul class="$(kind=='Topics' and '' or 'nowrap'">
   <li><a href="../modules/Core.Assets.html">Core.Assets</a></li>
   <li><a href="../modules/Core.Event.html">Core.Event</a></li>
   <li><a href="../modules/Core.EventDispatcher.html">Core.EventDispatcher</a></li>
@@ -60,6 +60,7 @@
   <li><a href="../modules/Display.Stage.html">Display.Stage</a></li>
   <li><a href="../modules/Display.TextField.html">Display.TextField</a></li>
   <li><a href="../modules/Display.TileMap.html">Display.TileMap</a></li>
+  <li><a href="../modules/include.html">include</a></li>
   <li><a href="../modules/Texture.ITextureAtlas.html">Texture.ITextureAtlas</a></li>
   <li><a href="../modules/Texture.SubTexture.html">Texture.SubTexture</a></li>
   <li><a href="../modules/Texture.Texture.html">Texture.Texture</a></li>
@@ -87,9 +88,9 @@
   <li><a href="../modules/Utils.CollisionKit.html">Utils.CollisionKit</a></li>
   <li><a href="../modules/Utils.Color.html">Utils.Color</a></li>
   <li><a href="../modules/Utils.Coroutines.html">Utils.Coroutines</a></li>
-  <li><a href="../modules/Utils.IO.html">Utils.IO</a></li>
   <li><a href="../modules/Utils.IniFile.html">Utils.IniFile</a></li>
   <li><a href="../modules/Utils.IniParser.html">Utils.IniParser</a></li>
+  <li><a href="../modules/Utils.IO.html">Utils.IO</a></li>
   <li><a href="../modules/Utils.Log.html">Utils.Log</a></li>
   <li><a href="../modules/Utils.Math.html">Utils.Math</a></li>
   <li><a href="../modules/Utils.PerformanceTimer.html">Utils.PerformanceTimer</a></li>
@@ -102,7 +103,6 @@
   <li><a href="../modules/Utils.Vector.html">Utils.Vector</a></li>
   <li><a href="../modules/Utils.XmlNode.html">Utils.XmlNode</a></li>
   <li><a href="../modules/Utils.XmlParser.html">Utils.XmlParser</a></li>
-  <li><a href="../modules/include.html">include</a></li>
 </ul>
 
 </div>
@@ -110,80 +110,120 @@
 <div id="content">
 
 <h1>Module <code>Utils.ClassEx</code></h1>
-
 <p>Class.lua
+
 Compatible with Lua 5.1 (not 5.0).</p>
 <p>
-<p>Used to implements simple object oriented logic in lua, with single inheritance
+
+
+
+Used to implements simple object oriented logic in lua, with single inheritance
+
 and interface implementation.
+
+
 </p>
     <h3>Usage:</h3>
     <ul>
         <pre class="example">
 
+
+
 - class can be used to define base classes and derived classes:
 
+
+
 A = class()
+
 B = class(A)
 
+
+
 b = B()
+
 b:is_a(A) == true
+
 class_type(b) == A -&gt; false
+
 class_type(b) == B -&gt; true
 
+
+
 - Multiple inheritance is not allowed, but it&apos;s possible to define
+
 interfaces (always using class) and to require that a class implements them:
 
+
+
 iC = class()
+
 D = class(B,iC)
 
+
+
 d = D()
+
 d:is_a(A) = true
+
 d:is_a(B) = true
+
 d:is_a(iC) = false
+
 d:is_a(D) = true
+
 d:implements(iC) = true
+
+
 
 - It&apos;s also possible to implements one or more interfaces without inheritance:
 
+
+
 iE = class()
+
 F = class(nil,iC,iE)
 
+
+
 f = F()
+
 f:is_a(iC) = false
+
 f:implements(iC) = true
-f:implements(iE) = true</pre>
+
+f:implements(iE) = true
+</pre>
     </ul>
 
 
 <h2><a href="#Functions">Functions</a></h2>
 <table class="function_list">
 	<tr>
-	<td class="name" nowrap><a href="#class_type">class_type&nbsp;(o)</a></td>
+	<td class="name" nowrap><a href="#class_type">class_type (o)</a></td>
 	<td class="summary">Extends the basic lua type keyword, providing a way to check if an obj is also of a given class type.</td>
 	</tr>
 	<tr>
-	<td class="name" nowrap><a href="#is_a">is_a&nbsp;(o, t)</a></td>
+	<td class="name" nowrap><a href="#is_a">is_a (o, t)</a></td>
 	<td class="summary">Used to check if a given object is of a given type.</td>
 	</tr>
 	<tr>
-	<td class="name" nowrap><a href="#implements">implements&nbsp;(o, t)</a></td>
+	<td class="name" nowrap><a href="#implements">implements (o, t)</a></td>
 	<td class="summary">Used to check if a given object implements a given interface.</td>
 	</tr>
 	<tr>
-	<td class="name" nowrap><a href="#super">super&nbsp;(c)</a></td>
+	<td class="name" nowrap><a href="#super">super (c)</a></td>
 	<td class="summary">Returns the super class of a given class.</td>
 	</tr>
 	<tr>
-	<td class="name" nowrap><a href="#class">class&nbsp;(...)</a></td>
+	<td class="name" nowrap><a href="#class">class (...)</a></td>
 	<td class="summary">Creates a new class type, allowing single inheritance and multiple interface implementation</td>
 	</tr>
 	<tr>
-	<td class="name" nowrap><a href="#c.is_a">c.is_a&nbsp;(self, klass)</a></td>
+	<td class="name" nowrap><a href="#c.is_a">c.is_a (self, klass)</a></td>
 	<td class="summary">Allows to check if a class inherits from another</td>
 	</tr>
 	<tr>
-	<td class="name" nowrap><a href="#c.implements">c.implements&nbsp;(self, interface)</a></td>
+	<td class="name" nowrap><a href="#c.implements">c.implements (self, interface)</a></td>
 	<td class="summary">Allows to check if a class implements a specific interface</td>
 	</tr>
 </table>
@@ -196,22 +236,25 @@ f:implements(iE) = true</pre>
     <dl class="function">
     <dt>
     <a name = "class_type"></a>
-    <strong>class_type&nbsp;(o)</strong>
+    <strong>class_type (o)</strong>
     </dt>
     <dd>
     Extends the basic lua type keyword, providing a way to check if an obj is also of a given class type.
-class prototype (aka metatable) for class object instances
+
 
     <h3>Parameters:</h3>
     <ul>
         <li><span class="parameter">o</span>
-         the object to be testet</li>
+         the object to be testet
+        </li>
     </ul>
 
     <h3>Returns:</h3>
     <ol>
 
         string/metatable the 'type' of the object, a string for basic lua types or the
+
+class prototype (aka metatable) for class object instances
     </ol>
 
 
@@ -219,42 +262,62 @@ class prototype (aka metatable) for class object instances
     <h3>Usage:</h3>
     <ul>
         <pre class="example">
+
 A = class()
+
 B = class(A)
 
+
+
 a = A()
+
 b = B()
 
+
+
 class_type(a) -&gt; A
+
 class_type(b) -&gt; B
+
 class_type(<span class="string">"test"</span>) -&gt; <span class="string">'string'</span>
-class_type({<span class="number">1</span>,<span class="number">2</span>,<span class="number">3</span>}) -&gt; <span class="string">'table'</span></pre>
+
+class_type({<span class="number">1</span>,<span class="number">2</span>,<span class="number">3</span>}) -&gt; <span class="string">'table'</span>
+</pre>
     </ul>
 
 </dd>
     <dt>
     <a name = "is_a"></a>
-    <strong>is_a&nbsp;(o, t)</strong>
+    <strong>is_a (o, t)</strong>
     </dt>
     <dd>
     Used to check if a given object is of a given type.
+
 It can be used on generic types and on class object instances
-NB: Even if a class object isntance is always also a table in lua, this function
-return false if trying to check a class object instance over a 'table' type.
+
 
 
     <h3>Parameters:</h3>
     <ul>
         <li><span class="parameter">o</span>
-         the object to be checked</li>
+         the object to be checked
+        </li>
         <li><span class="parameter">t</span>
-         the type to be checked</li>
+         the type to be checked
+        </li>
     </ul>
 
     <h3>Returns:</h3>
     <ol>
 
          bool true if the object is of the given type, false if not.
+
+NB: Even if a class object isntance is always also a table in lua, this function
+
+return false if trying to check a class object instance over a 'table' type.
+
+
+
     </ol>
 
 
@@ -262,47 +325,74 @@ return false if trying to check a class object instance over a 'table' type.
     <h3>Usage:</h3>
     <ul>
         <pre class="example">
+
 A = class()
+
 B = class(A)
 
+
+
 a = A()
+
 b = B()
 
+
+
 is_a(a,A) -&gt; <span class="keyword">true</span>
+
 is_a(a,B) -&gt; <span class="keyword">false</span>
 
+
+
 is_a(b,A) -&gt; <span class="keyword">true</span>
+
 is_a(b,B) -&gt; <span class="keyword">true</span>
+
+
 
 is_a(a,<span class="string">'table'</span>) -&gt; <span class="keyword">false</span>
 
+
+
 is_a(<span class="string">'test'</span>,<span class="string">'string'</span>) -&gt; <span class="keyword">true</span>
-is_a({<span class="number">1</span>,<span class="number">2</span>,<span class="number">3</span>},<span class="string">'table'</span>) -&gt; <span class="keyword">true</span></pre>
+
+is_a({<span class="number">1</span>,<span class="number">2</span>,<span class="number">3</span>},<span class="string">'table'</span>) -&gt; <span class="keyword">true</span>
+
+
+</pre>
     </ul>
 
 </dd>
     <dt>
     <a name = "implements"></a>
-    <strong>implements&nbsp;(o, t)</strong>
+    <strong>implements (o, t)</strong>
     </dt>
     <dd>
     Used to check if a given object implements a given interface.
+
 It can be used on generic types and on class object instances
-NB: we assume that a basic lua object always implements only the interface of its base type
+
 
 
     <h3>Parameters:</h3>
     <ul>
         <li><span class="parameter">o</span>
-         the object to be checked</li>
+         the object to be checked
+        </li>
         <li><span class="parameter">t</span>
-         the interface type to be checked</li>
+         the interface type to be checked
+        </li>
     </ul>
 
     <h3>Returns:</h3>
     <ol>
 
          bool true if the object implements the given interface, false if not.
+
+NB: we assume that a basic lua object always implements only the interface of its base type
+
+
+
     </ol>
 
 
@@ -310,45 +400,76 @@ NB: we assume that a basic lua object always implements only the interface of it
     <h3>Usage:</h3>
     <ul>
         <pre class="example">
+
 iA = class()
+
 iB = class()
+
 C = class(<span class="keyword">nil</span>,iA,iB)
+
+
 
 c = C()
 
+
+
 implements(c,iA) = <span class="keyword">true</span>
+
 implements(c,iB) = <span class="keyword">true</span>
+
 implements(c,C) = <span class="keyword">true</span>
+
 implements(<span class="string">"test"</span>,C) = <span class="keyword">false</span>
-implements(<span class="string">"test"</span>,<span class="string">'string'</span>) = <span class="keyword">true</span></pre>
+
+implements(<span class="string">"test"</span>,<span class="string">'string'</span>) = <span class="keyword">true</span>
+
+
+</pre>
     </ul>
 
 </dd>
     <dt>
     <a name = "super"></a>
-    <strong>super&nbsp;(c)</strong>
+    <strong>super (c)</strong>
     </dt>
     <dd>
     Returns the super class of a given class.
+
 	Useful to create polimorfic calls without caring of the actual superclass
+
 	that could change in future
+
+
 
 	ex:
 
+
+
 	A = class()
+
 	B = class(A)
+
 	C = class(B)
+
 	o = C()
 
+
+
 	super(C) -> B
+
 	super(B) -> A
+
 	super(A) -> nil
+
+
+
 
 
     <h3>Parameters:</h3>
     <ul>
         <li><span class="parameter">c</span>
-         class</li>
+         class
+        </li>
     </ul>
 
     <h3>Returns:</h3>
@@ -363,15 +484,17 @@ implements(<span class="string">"test"</span>,<span class="string">'string'</spa
 </dd>
     <dt>
     <a name = "class"></a>
-    <strong>class&nbsp;(...)</strong>
+    <strong>class (...)</strong>
     </dt>
     <dd>
     Creates a new class type, allowing single inheritance and multiple interface implementation
 
+
     <h3>Parameters:</h3>
     <ul>
         <li><span class="parameter">...</span>
-         p1 is a base class for inheritance (can be null), following are interface to implement</li>
+         p1 is a base class for inheritance (can be null), following are interface to implement
+        </li>
     </ul>
 
 
@@ -381,16 +504,19 @@ implements(<span class="string">"test"</span>,<span class="string">'string'</spa
 </dd>
     <dt>
     <a name = "c.is_a"></a>
-    <strong>c.is_a&nbsp;(self, klass)</strong>
+    <strong>c.is_a (self, klass)</strong>
     </dt>
     <dd>
     Allows to check if a class inherits from another
 
+
     <h3>Parameters:</h3>
     <ul>
         <li><span class="parameter">self</span>
+
         </li>
         <li><span class="parameter">klass</span>
+
         </li>
     </ul>
 
@@ -401,17 +527,20 @@ implements(<span class="string">"test"</span>,<span class="string">'string'</spa
 </dd>
     <dt>
     <a name = "c.implements"></a>
-    <strong>c.implements&nbsp;(self, interface)</strong>
+    <strong>c.implements (self, interface)</strong>
     </dt>
     <dd>
     Allows to check if a class implements a specific interface
 
+
     <h3>Parameters:</h3>
     <ul>
         <li><span class="parameter">self</span>
+
         </li>
         <li><span class="parameter">interface</span>
-        Check we have all the target's callables</li>
+        Check we have all the target's callables
+        </li>
     </ul>
 
 
@@ -425,7 +554,7 @@ implements(<span class="string">"test"</span>,<span class="string">'string'</spa
 </div> <!-- id="content" -->
 </div> <!-- id="main" -->
 <div id="about">
-<i>generated by <a href="http://github.com/stevedonovan/LDoc">LDoc 1.3.11</a></i>
+<i>generated by <a href="http://github.com/stevedonovan/LDoc">LDoc 1.4.2</a></i>
 </div> <!-- id="about" -->
 </div> <!-- id="container" -->
 </body>

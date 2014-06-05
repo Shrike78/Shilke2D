@@ -38,7 +38,7 @@
 
 
 <h2>Modules</h2>
-<ul>
+<ul class="$(kind=='Topics' and '' or 'nowrap'">
   <li><strong>Core.Assets</strong></li>
   <li><a href="../modules/Core.Event.html">Core.Event</a></li>
   <li><a href="../modules/Core.EventDispatcher.html">Core.EventDispatcher</a></li>
@@ -61,6 +61,7 @@
   <li><a href="../modules/Display.Stage.html">Display.Stage</a></li>
   <li><a href="../modules/Display.TextField.html">Display.TextField</a></li>
   <li><a href="../modules/Display.TileMap.html">Display.TileMap</a></li>
+  <li><a href="../modules/include.html">include</a></li>
   <li><a href="../modules/Texture.ITextureAtlas.html">Texture.ITextureAtlas</a></li>
   <li><a href="../modules/Texture.SubTexture.html">Texture.SubTexture</a></li>
   <li><a href="../modules/Texture.Texture.html">Texture.Texture</a></li>
@@ -88,9 +89,9 @@
   <li><a href="../modules/Utils.CollisionKit.html">Utils.CollisionKit</a></li>
   <li><a href="../modules/Utils.Color.html">Utils.Color</a></li>
   <li><a href="../modules/Utils.Coroutines.html">Utils.Coroutines</a></li>
-  <li><a href="../modules/Utils.IO.html">Utils.IO</a></li>
   <li><a href="../modules/Utils.IniFile.html">Utils.IniFile</a></li>
   <li><a href="../modules/Utils.IniParser.html">Utils.IniParser</a></li>
+  <li><a href="../modules/Utils.IO.html">Utils.IO</a></li>
   <li><a href="../modules/Utils.Log.html">Utils.Log</a></li>
   <li><a href="../modules/Utils.Math.html">Utils.Math</a></li>
   <li><a href="../modules/Utils.PerformanceTimer.html">Utils.PerformanceTimer</a></li>
@@ -103,7 +104,6 @@
   <li><a href="../modules/Utils.Vector.html">Utils.Vector</a></li>
   <li><a href="../modules/Utils.XmlNode.html">Utils.XmlNode</a></li>
   <li><a href="../modules/Utils.XmlParser.html">Utils.XmlParser</a></li>
-  <li><a href="../modules/include.html">include</a></li>
 </ul>
 
 </div>
@@ -111,8 +111,8 @@
 <div id="content">
 
 <h1>Module <code>Core.Assets</code></h1>
-
 <p>Assets namespace provides facilities to load different
+
 type of resources.</p>
 <p></p>
 
@@ -120,23 +120,23 @@ type of resources.</p>
 <h2><a href="#Functions">Functions</a></h2>
 <table class="function_list">
 	<tr>
-	<td class="name" nowrap><a href="#getSound">getSound&nbsp;(fileName)</a></td>
+	<td class="name" nowrap><a href="#getSound">getSound (fileName)</a></td>
 	<td class="summary">Load a sound.</td>
 	</tr>
 	<tr>
-	<td class="name" nowrap><a href="#getXml">getXml&nbsp;(fileName)</a></td>
+	<td class="name" nowrap><a href="#getXml">getXml (fileName)</a></td>
 	<td class="summary">Load an Xml.</td>
 	</tr>
 	<tr>
-	<td class="name" nowrap><a href="#getRawImage">getRawImage&nbsp;(fileName)</a></td>
+	<td class="name" nowrap><a href="#getRawImage">getRawImage (fileName)</a></td>
 	<td class="summary">Load a raw image.</td>
 	</tr>
 	<tr>
-	<td class="name" nowrap><a href="#getTexture">getTexture&nbsp;(fileName, useCache)</a></td>
+	<td class="name" nowrap><a href="#getTexture">getTexture (fileName, useCache)</a></td>
 	<td class="summary">Load a Texture.</td>
 	</tr>
 	<tr>
-	<td class="name" nowrap><a href="#clearTextureCache">clearTextureCache&nbsp;(texture)</a></td>
+	<td class="name" nowrap><a href="#clearTextureCache">clearTextureCache (texture)</a></td>
 	<td class="summary">Clear the texture cache.</td>
 	</tr>
 </table>
@@ -156,15 +156,17 @@ type of resources.</p>
     <dl class="function">
     <dt>
     <a name = "getSound"></a>
-    <strong>getSound&nbsp;(fileName)</strong>
+    <strong>getSound (fileName)</strong>
     </dt>
     <dd>
     Load a sound.
 
+
     <h3>Parameters:</h3>
     <ul>
         <li><span class="parameter">fileName</span>
-         the name of the sound to load, relative to the working dir or absolute (starting with /)</li>
+         the name of the sound to load, relative to the working dir or absolute (starting with /)
+        </li>
     </ul>
 
     <h3>Returns:</h3>
@@ -181,15 +183,17 @@ type of resources.</p>
 </dd>
     <dt>
     <a name = "getXml"></a>
-    <strong>getXml&nbsp;(fileName)</strong>
+    <strong>getXml (fileName)</strong>
     </dt>
     <dd>
     Load an Xml.
 
+
     <h3>Parameters:</h3>
     <ul>
         <li><span class="parameter">fileName</span>
-         the name of the xml to load, relative to the working dir or absolute (starting with /)</li>
+         the name of the xml to load, relative to the working dir or absolute (starting with /)
+        </li>
     </ul>
 
     <h3>Returns:</h3>
@@ -206,15 +210,17 @@ type of resources.</p>
 </dd>
     <dt>
     <a name = "getRawImage"></a>
-    <strong>getRawImage&nbsp;(fileName)</strong>
+    <strong>getRawImage (fileName)</strong>
     </dt>
     <dd>
     Load a raw image.
 
+
     <h3>Parameters:</h3>
     <ul>
         <li><span class="parameter">fileName</span>
-         the name of the raw image to load, relative to the working dir or absolute (starting with /)</li>
+         the name of the raw image to load, relative to the working dir or absolute (starting with /)
+        </li>
     </ul>
 
     <h3>Returns:</h3>
@@ -231,17 +237,20 @@ type of resources.</p>
 </dd>
     <dt>
     <a name = "getTexture"></a>
-    <strong>getTexture&nbsp;(fileName, useCache)</strong>
+    <strong>getTexture (fileName, useCache)</strong>
     </dt>
     <dd>
     Load a Texture.
 
+
     <h3>Parameters:</h3>
     <ul>
         <li><span class="parameter">fileName</span>
-         the name of the texture to load, relative to the working dir or absolute (starting with /)</li>
+         the name of the texture to load, relative to the working dir or absolute (starting with /)
+        </li>
         <li><span class="parameter">useCache</span>
-         override the default beahviour for caching logic</li>
+         override the default beahviour for caching logic
+        </li>
     </ul>
 
     <h3>Returns:</h3>
@@ -258,16 +267,19 @@ type of resources.</p>
 </dd>
     <dt>
     <a name = "clearTextureCache"></a>
-    <strong>clearTextureCache&nbsp;(texture)</strong>
+    <strong>clearTextureCache (texture)</strong>
     </dt>
     <dd>
     Clear the texture cache.
-If no param is provided it clears the whole textureCache
+
 
     <h3>Parameters:</h3>
     <ul>
         <li><span class="parameter">texture</span>
-         can be a Texture or a string (the name of the asset on which the Texture was created).</li>
+         can be a Texture or a string (the name of the asset on which the Texture was created).
+
+If no param is provided it clears the whole textureCache
+        </li>
     </ul>
 
 
@@ -290,6 +302,8 @@ If no param is provided it clears the whole textureCache
 
 
 
+
+
 </dd>
 </dl>
 
@@ -297,7 +311,7 @@ If no param is provided it clears the whole textureCache
 </div> <!-- id="content" -->
 </div> <!-- id="main" -->
 <div id="about">
-<i>generated by <a href="http://github.com/stevedonovan/LDoc">LDoc 1.3.11</a></i>
+<i>generated by <a href="http://github.com/stevedonovan/LDoc">LDoc 1.4.2</a></i>
 </div> <!-- id="about" -->
 </div> <!-- id="container" -->
 </body>

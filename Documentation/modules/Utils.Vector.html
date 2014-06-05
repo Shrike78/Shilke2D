@@ -37,7 +37,7 @@
 
 
 <h2>Modules</h2>
-<ul>
+<ul class="$(kind=='Topics' and '' or 'nowrap'">
   <li><a href="../modules/Core.Assets.html">Core.Assets</a></li>
   <li><a href="../modules/Core.Event.html">Core.Event</a></li>
   <li><a href="../modules/Core.EventDispatcher.html">Core.EventDispatcher</a></li>
@@ -60,6 +60,7 @@
   <li><a href="../modules/Display.Stage.html">Display.Stage</a></li>
   <li><a href="../modules/Display.TextField.html">Display.TextField</a></li>
   <li><a href="../modules/Display.TileMap.html">Display.TileMap</a></li>
+  <li><a href="../modules/include.html">include</a></li>
   <li><a href="../modules/Texture.ITextureAtlas.html">Texture.ITextureAtlas</a></li>
   <li><a href="../modules/Texture.SubTexture.html">Texture.SubTexture</a></li>
   <li><a href="../modules/Texture.Texture.html">Texture.Texture</a></li>
@@ -87,9 +88,9 @@
   <li><a href="../modules/Utils.CollisionKit.html">Utils.CollisionKit</a></li>
   <li><a href="../modules/Utils.Color.html">Utils.Color</a></li>
   <li><a href="../modules/Utils.Coroutines.html">Utils.Coroutines</a></li>
-  <li><a href="../modules/Utils.IO.html">Utils.IO</a></li>
   <li><a href="../modules/Utils.IniFile.html">Utils.IniFile</a></li>
   <li><a href="../modules/Utils.IniParser.html">Utils.IniParser</a></li>
+  <li><a href="../modules/Utils.IO.html">Utils.IO</a></li>
   <li><a href="../modules/Utils.Log.html">Utils.Log</a></li>
   <li><a href="../modules/Utils.Math.html">Utils.Math</a></li>
   <li><a href="../modules/Utils.PerformanceTimer.html">Utils.PerformanceTimer</a></li>
@@ -102,7 +103,6 @@
   <li><strong>Utils.Vector</strong></li>
   <li><a href="../modules/Utils.XmlNode.html">Utils.XmlNode</a></li>
   <li><a href="../modules/Utils.XmlParser.html">Utils.XmlParser</a></li>
-  <li><a href="../modules/include.html">include</a></li>
 </ul>
 
 </div>
@@ -110,138 +110,167 @@
 <div id="content">
 
 <h1>Module <code>Utils.Vector</code></h1>
-
 <p>vec2 class.</p>
 <p>
-<p>Copyright (c) 2010 Matthias Richter
-<p>Permission is hereby granted, free of charge, to any person obtaining a copy
+
+
+
+Copyright (c) 2010 Matthias Richter
+
+
+
+Permission is hereby granted, free of charge, to any person obtaining a copy
+
 of this software and associated documentation files (the "Software"), to deal
+
 in the Software without restriction, including without limitation the rights
+
 to use, copy, modify, merge, publish, distribute, sublicense, and/or sell
+
 copies of the Software, and to permit persons to whom the Software is
+
 furnished to do so, subject to the following conditions:
-<p>The above copyright notice and this permission notice shall be included in
+
+
+
+The above copyright notice and this permission notice shall be included in
+
 all copies or substantial portions of the Software.
-<p>Except as contained in this notice, the name(s) of the above copyright holders
+
+
+
+Except as contained in this notice, the name(s) of the above copyright holders
+
 shall not be used in advertising or otherwise to promote the sale, use or
+
 other dealings in this Software without prior written authorization.
-<p>THE SOFTWARE IS PROVIDED "AS IS", WITHOUT WARRANTY OF ANY KIND, EXPRESS OR
+
+
+
+THE SOFTWARE IS PROVIDED "AS IS", WITHOUT WARRANTY OF ANY KIND, EXPRESS OR
+
 IMPLIED, INCLUDING BUT NOT LIMITED TO THE WARRANTIES OF MERCHANTABILITY,
+
 FITNESS FOR A PARTICULAR PURPOSE AND NONINFRINGEMENT. IN NO EVENT SHALL THE
+
 AUTHORS OR COPYRIGHT HOLDERS BE LIABLE FOR ANY CLAIM, DAMAGES OR OTHER
+
 LIABILITY, WHETHER IN AN ACTION OF CONTRACT, TORT OR OTHERWISE, ARISING FROM,
+
 OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN
-THE SOFTWARE.</p>
+
+THE SOFTWARE.
+</p>
 
 
 <h2><a href="#Functions">Functions</a></h2>
 <table class="function_list">
 	<tr>
-	<td class="name" nowrap><a href="#vec2:init">vec2:init&nbsp;(x, y)</a></td>
+	<td class="name" nowrap><a href="#vec2:init">vec2:init (x, y)</a></td>
 	<td class="summary">Constructor</td>
 	</tr>
 	<tr>
-	<td class="name" nowrap><a href="#vec2:copy">vec2:copy&nbsp;(c)</a></td>
+	<td class="name" nowrap><a href="#vec2:copy">vec2:copy (c)</a></td>
 	<td class="summary">sets x,y copying from c</td>
 	</tr>
 	<tr>
-	<td class="name" nowrap><a href="#vec2:clone">vec2:clone&nbsp;()</a></td>
+	<td class="name" nowrap><a href="#vec2:clone">vec2:clone ()</a></td>
 	<td class="summary">Returns a copy of self, with x,y also cloned from self</td>
 	</tr>
 	<tr>
-	<td class="name" nowrap><a href="#vec2:unpack">vec2:unpack&nbsp;()</a></td>
+	<td class="name" nowrap><a href="#vec2:unpack">vec2:unpack ()</a></td>
 	<td class="summary">Returns unpacked values</td>
 	</tr>
 	<tr>
-	<td class="name" nowrap><a href="#vec2:__tostring">vec2:__tostring&nbsp;()</a></td>
+	<td class="name" nowrap><a href="#vec2:__tostring">vec2:__tostring ()</a></td>
 	<td class="summary">Prints components value</td>
 	</tr>
 	<tr>
-	<td class="name" nowrap><a href="#vec2.__unm">vec2.__unm&nbsp;(a)</a></td>
+	<td class="name" nowrap><a href="#vec2.__unm">vec2.__unm (a)</a></td>
 	<td class="summary">the unary - operation.</td>
 	</tr>
 	<tr>
-	<td class="name" nowrap><a href="#vec2.__add">vec2.__add&nbsp;(a, b)</a></td>
+	<td class="name" nowrap><a href="#vec2.__add">vec2.__add (a, b)</a></td>
 	<td class="summary">Sum operator between vec2</td>
 	</tr>
 	<tr>
-	<td class="name" nowrap><a href="#vec2.__sub">vec2.__sub&nbsp;(a, b)</a></td>
+	<td class="name" nowrap><a href="#vec2.__sub">vec2.__sub (a, b)</a></td>
 	<td class="summary">Subtraction operator between vec2</td>
 	</tr>
 	<tr>
-	<td class="name" nowrap><a href="#vec2.__mul">vec2.__mul&nbsp;(a, b)</a></td>
+	<td class="name" nowrap><a href="#vec2.__mul">vec2.__mul (a, b)</a></td>
 	<td class="summary">Multiply a vec2 by a number or by another vec2</td>
 	</tr>
 	<tr>
-	<td class="name" nowrap><a href="#vec2.__div">vec2.__div&nbsp;(a, b)</a></td>
+	<td class="name" nowrap><a href="#vec2.__div">vec2.__div (a, b)</a></td>
 	<td class="summary">Divides a vec2 by a number</td>
 	</tr>
 	<tr>
-	<td class="name" nowrap><a href="#vec2.__eq">vec2.__eq&nbsp;(a, b)</a></td>
+	<td class="name" nowrap><a href="#vec2.__eq">vec2.__eq (a, b)</a></td>
 	<td class="summary">the == operation</td>
 	</tr>
 	<tr>
-	<td class="name" nowrap><a href="#vec2.__lt">vec2.__lt&nbsp;(a, b)</a></td>
+	<td class="name" nowrap><a href="#vec2.__lt">vec2.__lt (a, b)</a></td>
 	<td class="summary">the < operation</td>
 	</tr>
 	<tr>
-	<td class="name" nowrap><a href="#vec2.__le">vec2.__le&nbsp;(a, b)</a></td>
+	<td class="name" nowrap><a href="#vec2.__le">vec2.__le (a, b)</a></td>
 	<td class="summary">the <= operation</td>
 	</tr>
 	<tr>
-	<td class="name" nowrap><a href="#vec2.permul">vec2.permul&nbsp;(a, b)</a></td>
+	<td class="name" nowrap><a href="#vec2.permul">vec2.permul (a, b)</a></td>
 	<td class="summary">Multiplies vectors component per component</td>
 	</tr>
 	<tr>
-	<td class="name" nowrap><a href="#vec2:lenSqr">vec2:lenSqr&nbsp;()</a></td>
+	<td class="name" nowrap><a href="#vec2:lenSqr">vec2:lenSqr ()</a></td>
 	<td class="summary">Calculates len^2</td>
 	</tr>
 	<tr>
-	<td class="name" nowrap><a href="#vec2:len">vec2:len&nbsp;()</a></td>
+	<td class="name" nowrap><a href="#vec2:len">vec2:len ()</a></td>
 	<td class="summary">Calculates len</td>
 	</tr>
 	<tr>
-	<td class="name" nowrap><a href="#vec2.dist">vec2.dist&nbsp;(a, b)</a></td>
+	<td class="name" nowrap><a href="#vec2.dist">vec2.dist (a, b)</a></td>
 	<td class="summary">Calculates distance between 2 points</td>
 	</tr>
 	<tr>
-	<td class="name" nowrap><a href="#vec2:normalize_inplace">vec2:normalize_inplace&nbsp;()</a></td>
+	<td class="name" nowrap><a href="#vec2:normalize_inplace">vec2:normalize_inplace ()</a></td>
 	<td class="summary">Normalizes the vector</td>
 	</tr>
 	<tr>
-	<td class="name" nowrap><a href="#vec2:normalized">vec2:normalized&nbsp;()</a></td>
+	<td class="name" nowrap><a href="#vec2:normalized">vec2:normalized ()</a></td>
 	<td class="summary">Returns a normalized vector</td>
 	</tr>
 	<tr>
-	<td class="name" nowrap><a href="#vec2:normalize">vec2:normalize&nbsp;()</a></td>
+	<td class="name" nowrap><a href="#vec2:normalize">vec2:normalize ()</a></td>
 	<td class="summary">Returns a normalized vector</td>
 	</tr>
 	<tr>
-	<td class="name" nowrap><a href="#vec2:rotate_inplace">vec2:rotate_inplace&nbsp;(phi)</a></td>
+	<td class="name" nowrap><a href="#vec2:rotate_inplace">vec2:rotate_inplace (phi)</a></td>
 	<td class="summary">Rotates the vector of phi radians</td>
 	</tr>
 	<tr>
-	<td class="name" nowrap><a href="#vec2:rotated">vec2:rotated&nbsp;(phi)</a></td>
+	<td class="name" nowrap><a href="#vec2:rotated">vec2:rotated (phi)</a></td>
 	<td class="summary">Returns a rotated vector</td>
 	</tr>
 	<tr>
-	<td class="name" nowrap><a href="#vec2:rotate">vec2:rotate&nbsp;(phi)</a></td>
+	<td class="name" nowrap><a href="#vec2:rotate">vec2:rotate (phi)</a></td>
 	<td class="summary">Returns a rotated vector</td>
 	</tr>
 	<tr>
-	<td class="name" nowrap><a href="#vec2:projectOn">vec2:projectOn&nbsp;(v)</a></td>
+	<td class="name" nowrap><a href="#vec2:projectOn">vec2:projectOn (v)</a></td>
 	<td class="summary">Returns the projection of the vector on another vector</td>
 	</tr>
 	<tr>
-	<td class="name" nowrap><a href="#vec2:cross">vec2:cross&nbsp;(other)</a></td>
+	<td class="name" nowrap><a href="#vec2:cross">vec2:cross (other)</a></td>
 	<td class="summary">Cross product of two vectors</td>
 	</tr>
 	<tr>
-	<td class="name" nowrap><a href="#vec2:dot">vec2:dot&nbsp;(other)</a></td>
+	<td class="name" nowrap><a href="#vec2:dot">vec2:dot (other)</a></td>
 	<td class="summary">Dot product of two vectors</td>
 	</tr>
 	<tr>
-	<td class="name" nowrap><a href="#vec2:angleBetween">vec2:angleBetween&nbsp;(other)</a></td>
+	<td class="name" nowrap><a href="#vec2:angleBetween">vec2:angleBetween (other)</a></td>
 	<td class="summary">Returns the angle between two vectors</td>
 	</tr>
 </table>
@@ -254,17 +283,20 @@ THE SOFTWARE.</p>
     <dl class="function">
     <dt>
     <a name = "vec2:init"></a>
-    <strong>vec2:init&nbsp;(x, y)</strong>
+    <strong>vec2:init (x, y)</strong>
     </dt>
     <dd>
     Constructor
 
+
     <h3>Parameters:</h3>
     <ul>
         <li><span class="parameter">x</span>
-         default 0</li>
+         default 0
+        </li>
         <li><span class="parameter">y</span>
-         default 0</li>
+         default 0
+        </li>
     </ul>
 
 
@@ -274,15 +306,17 @@ THE SOFTWARE.</p>
 </dd>
     <dt>
     <a name = "vec2:copy"></a>
-    <strong>vec2:copy&nbsp;(c)</strong>
+    <strong>vec2:copy (c)</strong>
     </dt>
     <dd>
     sets x,y copying from c
 
+
     <h3>Parameters:</h3>
     <ul>
         <li><span class="parameter">c</span>
-         the vec2 to be copied</li>
+         the vec2 to be copied
+        </li>
     </ul>
 
 
@@ -292,7 +326,7 @@ THE SOFTWARE.</p>
 </dd>
     <dt>
     <a name = "vec2:clone"></a>
-    <strong>vec2:clone&nbsp;()</strong>
+    <strong>vec2:clone ()</strong>
     </dt>
     <dd>
     Returns a copy of self, with x,y also cloned from self
@@ -302,13 +336,15 @@ THE SOFTWARE.</p>
 
 
 
+
 </dd>
     <dt>
     <a name = "vec2:unpack"></a>
-    <strong>vec2:unpack&nbsp;()</strong>
+    <strong>vec2:unpack ()</strong>
     </dt>
     <dd>
     Returns unpacked values
+
 
 
     <h3>Returns:</h3>
@@ -325,7 +361,7 @@ THE SOFTWARE.</p>
 </dd>
     <dt>
     <a name = "vec2:__tostring"></a>
-    <strong>vec2:__tostring&nbsp;()</strong>
+    <strong>vec2:__tostring ()</strong>
     </dt>
     <dd>
     Prints components value
@@ -335,17 +371,20 @@ THE SOFTWARE.</p>
 
 
 
+
 </dd>
     <dt>
     <a name = "vec2.__unm"></a>
-    <strong>vec2.__unm&nbsp;(a)</strong>
+    <strong>vec2.__unm (a)</strong>
     </dt>
     <dd>
     the unary - operation.
 
+
     <h3>Parameters:</h3>
     <ul>
         <li><span class="parameter">a</span>
+
         </li>
     </ul>
 
@@ -356,16 +395,19 @@ THE SOFTWARE.</p>
 </dd>
     <dt>
     <a name = "vec2.__add"></a>
-    <strong>vec2.__add&nbsp;(a, b)</strong>
+    <strong>vec2.__add (a, b)</strong>
     </dt>
     <dd>
     Sum operator between vec2
 
+
     <h3>Parameters:</h3>
     <ul>
         <li><span class="parameter">a</span>
+
         </li>
         <li><span class="parameter">b</span>
+
         </li>
     </ul>
 
@@ -376,16 +418,19 @@ THE SOFTWARE.</p>
 </dd>
     <dt>
     <a name = "vec2.__sub"></a>
-    <strong>vec2.__sub&nbsp;(a, b)</strong>
+    <strong>vec2.__sub (a, b)</strong>
     </dt>
     <dd>
     Subtraction operator between vec2
 
+
     <h3>Parameters:</h3>
     <ul>
         <li><span class="parameter">a</span>
+
         </li>
         <li><span class="parameter">b</span>
+
         </li>
     </ul>
 
@@ -396,16 +441,19 @@ THE SOFTWARE.</p>
 </dd>
     <dt>
     <a name = "vec2.__mul"></a>
-    <strong>vec2.__mul&nbsp;(a, b)</strong>
+    <strong>vec2.__mul (a, b)</strong>
     </dt>
     <dd>
     Multiply a vec2 by a number or by another vec2
 
+
     <h3>Parameters:</h3>
     <ul>
         <li><span class="parameter">a</span>
+
         </li>
         <li><span class="parameter">b</span>
+
         </li>
     </ul>
 
@@ -416,16 +464,19 @@ THE SOFTWARE.</p>
 </dd>
     <dt>
     <a name = "vec2.__div"></a>
-    <strong>vec2.__div&nbsp;(a, b)</strong>
+    <strong>vec2.__div (a, b)</strong>
     </dt>
     <dd>
     Divides a vec2 by a number
 
+
     <h3>Parameters:</h3>
     <ul>
         <li><span class="parameter">a</span>
+
         </li>
         <li><span class="parameter">b</span>
+
         </li>
     </ul>
 
@@ -436,16 +487,19 @@ THE SOFTWARE.</p>
 </dd>
     <dt>
     <a name = "vec2.__eq"></a>
-    <strong>vec2.__eq&nbsp;(a, b)</strong>
+    <strong>vec2.__eq (a, b)</strong>
     </dt>
     <dd>
     the == operation
 
+
     <h3>Parameters:</h3>
     <ul>
         <li><span class="parameter">a</span>
+
         </li>
         <li><span class="parameter">b</span>
+
         </li>
     </ul>
 
@@ -456,16 +510,19 @@ THE SOFTWARE.</p>
 </dd>
     <dt>
     <a name = "vec2.__lt"></a>
-    <strong>vec2.__lt&nbsp;(a, b)</strong>
+    <strong>vec2.__lt (a, b)</strong>
     </dt>
     <dd>
     the < operation
 
+
     <h3>Parameters:</h3>
     <ul>
         <li><span class="parameter">a</span>
+
         </li>
         <li><span class="parameter">b</span>
+
         </li>
     </ul>
 
@@ -476,16 +533,19 @@ THE SOFTWARE.</p>
 </dd>
     <dt>
     <a name = "vec2.__le"></a>
-    <strong>vec2.__le&nbsp;(a, b)</strong>
+    <strong>vec2.__le (a, b)</strong>
     </dt>
     <dd>
     the <= operation
 
+
     <h3>Parameters:</h3>
     <ul>
         <li><span class="parameter">a</span>
+
         </li>
         <li><span class="parameter">b</span>
+
         </li>
     </ul>
 
@@ -496,16 +556,19 @@ THE SOFTWARE.</p>
 </dd>
     <dt>
     <a name = "vec2.permul"></a>
-    <strong>vec2.permul&nbsp;(a, b)</strong>
+    <strong>vec2.permul (a, b)</strong>
     </dt>
     <dd>
     Multiplies vectors component per component
 
+
     <h3>Parameters:</h3>
     <ul>
         <li><span class="parameter">a</span>
+
         </li>
         <li><span class="parameter">b</span>
+
         </li>
     </ul>
 
@@ -516,7 +579,7 @@ THE SOFTWARE.</p>
 </dd>
     <dt>
     <a name = "vec2:lenSqr"></a>
-    <strong>vec2:lenSqr&nbsp;()</strong>
+    <strong>vec2:lenSqr ()</strong>
     </dt>
     <dd>
     Calculates len^2
@@ -526,10 +589,11 @@ THE SOFTWARE.</p>
 
 
 
+
 </dd>
     <dt>
     <a name = "vec2:len"></a>
-    <strong>vec2:len&nbsp;()</strong>
+    <strong>vec2:len ()</strong>
     </dt>
     <dd>
     Calculates len
@@ -539,19 +603,23 @@ THE SOFTWARE.</p>
 
 
 
+
 </dd>
     <dt>
     <a name = "vec2.dist"></a>
-    <strong>vec2.dist&nbsp;(a, b)</strong>
+    <strong>vec2.dist (a, b)</strong>
     </dt>
     <dd>
     Calculates distance between 2 points
 
+
     <h3>Parameters:</h3>
     <ul>
         <li><span class="parameter">a</span>
+
         </li>
         <li><span class="parameter">b</span>
+
         </li>
     </ul>
 
@@ -562,10 +630,11 @@ THE SOFTWARE.</p>
 </dd>
     <dt>
     <a name = "vec2:normalize_inplace"></a>
-    <strong>vec2:normalize_inplace&nbsp;()</strong>
+    <strong>vec2:normalize_inplace ()</strong>
     </dt>
     <dd>
     Normalizes the vector
+
 
 
     <h3>Returns:</h3>
@@ -580,10 +649,11 @@ THE SOFTWARE.</p>
 </dd>
     <dt>
     <a name = "vec2:normalized"></a>
-    <strong>vec2:normalized&nbsp;()</strong>
+    <strong>vec2:normalized ()</strong>
     </dt>
     <dd>
     Returns a normalized vector
+
 
 
     <h3>Returns:</h3>
@@ -598,10 +668,11 @@ THE SOFTWARE.</p>
 </dd>
     <dt>
     <a name = "vec2:normalize"></a>
-    <strong>vec2:normalize&nbsp;()</strong>
+    <strong>vec2:normalize ()</strong>
     </dt>
     <dd>
     Returns a normalized vector
+
 
 
     <h3>Returns:</h3>
@@ -616,15 +687,17 @@ THE SOFTWARE.</p>
 </dd>
     <dt>
     <a name = "vec2:rotate_inplace"></a>
-    <strong>vec2:rotate_inplace&nbsp;(phi)</strong>
+    <strong>vec2:rotate_inplace (phi)</strong>
     </dt>
     <dd>
     Rotates the vector of phi radians
 
+
     <h3>Parameters:</h3>
     <ul>
         <li><span class="parameter">phi</span>
-         radians</li>
+         radians
+        </li>
     </ul>
 
     <h3>Returns:</h3>
@@ -639,15 +712,17 @@ THE SOFTWARE.</p>
 </dd>
     <dt>
     <a name = "vec2:rotated"></a>
-    <strong>vec2:rotated&nbsp;(phi)</strong>
+    <strong>vec2:rotated (phi)</strong>
     </dt>
     <dd>
     Returns a rotated vector
 
+
     <h3>Parameters:</h3>
     <ul>
         <li><span class="parameter">phi</span>
-         radians</li>
+         radians
+        </li>
     </ul>
 
     <h3>Returns:</h3>
@@ -662,15 +737,17 @@ THE SOFTWARE.</p>
 </dd>
     <dt>
     <a name = "vec2:rotate"></a>
-    <strong>vec2:rotate&nbsp;(phi)</strong>
+    <strong>vec2:rotate (phi)</strong>
     </dt>
     <dd>
     Returns a rotated vector
 
+
     <h3>Parameters:</h3>
     <ul>
         <li><span class="parameter">phi</span>
-         radians</li>
+         radians
+        </li>
     </ul>
 
     <h3>Returns:</h3>
@@ -685,15 +762,17 @@ THE SOFTWARE.</p>
 </dd>
     <dt>
     <a name = "vec2:projectOn"></a>
-    <strong>vec2:projectOn&nbsp;(v)</strong>
+    <strong>vec2:projectOn (v)</strong>
     </dt>
     <dd>
     Returns the projection of the vector on another vector
 
+
     <h3>Parameters:</h3>
     <ul>
         <li><span class="parameter">v</span>
-         vec2 on which to project the vector</li>
+         vec2 on which to project the vector
+        </li>
     </ul>
 
     <h3>Returns:</h3>
@@ -708,14 +787,16 @@ THE SOFTWARE.</p>
 </dd>
     <dt>
     <a name = "vec2:cross"></a>
-    <strong>vec2:cross&nbsp;(other)</strong>
+    <strong>vec2:cross (other)</strong>
     </dt>
     <dd>
     Cross product of two vectors
 
+
     <h3>Parameters:</h3>
     <ul>
         <li><span class="parameter">other</span>
+
         </li>
     </ul>
 
@@ -731,14 +812,16 @@ THE SOFTWARE.</p>
 </dd>
     <dt>
     <a name = "vec2:dot"></a>
-    <strong>vec2:dot&nbsp;(other)</strong>
+    <strong>vec2:dot (other)</strong>
     </dt>
     <dd>
     Dot product of two vectors
 
+
     <h3>Parameters:</h3>
     <ul>
         <li><span class="parameter">other</span>
+
         </li>
     </ul>
 
@@ -754,14 +837,16 @@ THE SOFTWARE.</p>
 </dd>
     <dt>
     <a name = "vec2:angleBetween"></a>
-    <strong>vec2:angleBetween&nbsp;(other)</strong>
+    <strong>vec2:angleBetween (other)</strong>
     </dt>
     <dd>
     Returns the angle between two vectors
 
+
     <h3>Parameters:</h3>
     <ul>
         <li><span class="parameter">other</span>
+
         </li>
     </ul>
 
@@ -781,7 +866,7 @@ THE SOFTWARE.</p>
 </div> <!-- id="content" -->
 </div> <!-- id="main" -->
 <div id="about">
-<i>generated by <a href="http://github.com/stevedonovan/LDoc">LDoc 1.3.11</a></i>
+<i>generated by <a href="http://github.com/stevedonovan/LDoc">LDoc 1.4.2</a></i>
 </div> <!-- id="about" -->
 </div> <!-- id="container" -->
 </body>

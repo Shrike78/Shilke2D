@@ -33,12 +33,11 @@
 <h2>Contents</h2>
 <ul>
 <li><a href="#Functions">Functions</a></li>
-<li><a href="#Fields">Fields</a></li>
 </ul>
 
 
 <h2>Modules</h2>
-<ul>
+<ul class="$(kind=='Topics' and '' or 'nowrap'">
   <li><a href="../modules/Core.Assets.html">Core.Assets</a></li>
   <li><a href="../modules/Core.Event.html">Core.Event</a></li>
   <li><a href="../modules/Core.EventDispatcher.html">Core.EventDispatcher</a></li>
@@ -61,6 +60,7 @@
   <li><a href="../modules/Display.Stage.html">Display.Stage</a></li>
   <li><a href="../modules/Display.TextField.html">Display.TextField</a></li>
   <li><a href="../modules/Display.TileMap.html">Display.TileMap</a></li>
+  <li><a href="../modules/include.html">include</a></li>
   <li><a href="../modules/Texture.ITextureAtlas.html">Texture.ITextureAtlas</a></li>
   <li><a href="../modules/Texture.SubTexture.html">Texture.SubTexture</a></li>
   <li><strong>Texture.Texture</strong></li>
@@ -88,9 +88,9 @@
   <li><a href="../modules/Utils.CollisionKit.html">Utils.CollisionKit</a></li>
   <li><a href="../modules/Utils.Color.html">Utils.Color</a></li>
   <li><a href="../modules/Utils.Coroutines.html">Utils.Coroutines</a></li>
-  <li><a href="../modules/Utils.IO.html">Utils.IO</a></li>
   <li><a href="../modules/Utils.IniFile.html">Utils.IniFile</a></li>
   <li><a href="../modules/Utils.IniParser.html">Utils.IniParser</a></li>
+  <li><a href="../modules/Utils.IO.html">Utils.IO</a></li>
   <li><a href="../modules/Utils.Log.html">Utils.Log</a></li>
   <li><a href="../modules/Utils.Math.html">Utils.Math</a></li>
   <li><a href="../modules/Utils.PerformanceTimer.html">Utils.PerformanceTimer</a></li>
@@ -103,7 +103,6 @@
   <li><a href="../modules/Utils.Vector.html">Utils.Vector</a></li>
   <li><a href="../modules/Utils.XmlNode.html">Utils.XmlNode</a></li>
   <li><a href="../modules/Utils.XmlParser.html">Utils.XmlParser</a></li>
-  <li><a href="../modules/include.html">include</a></li>
 </ul>
 
 </div>
@@ -111,116 +110,125 @@
 <div id="content">
 
 <h1>Module <code>Texture.Texture</code></h1>
-
 <p>A texture stores the information that represents an image.</p>
 <p> It cannot
+
 be added to the display list directly; instead it has to be mapped
+
 into a display object, that is the class "Image".
-<p>Textures are flash equivalent of BitmapData, as well as Images are equivalent of Bitmap.
-<p>It's possible to create a texture using a sub region of another texture. Resulting texture is
+
+
+
+Textures are flash equivalent of BitmapData, as well as Images are equivalent of Bitmap.
+
+
+
+It's possible to create a texture using a sub region of another texture. Resulting texture is
+
 a SubTexture.
-<p>There's no practical difference between a Texture and a SubTexture, they work as the same once added
-to a Image</p>
+
+
+
+There's no practical difference between a Texture and a SubTexture, they work as the same once added
+
+to a Image
+</p>
 
 
 <h2><a href="#Functions">Functions</a></h2>
 <table class="function_list">
 	<tr>
-	<td class="name" nowrap><a href="#empty">empty&nbsp;(width, height)</a></td>
+	<td class="name" nowrap><a href="#empty">empty (width, height)</a></td>
 	<td class="summary">Creates an empty, transparent texture of specific width and height</td>
 	</tr>
 	<tr>
-	<td class="name" nowrap><a href="#fromColor">fromColor&nbsp;(width, height, r, g, b, a)</a></td>
+	<td class="name" nowrap><a href="#fromColor">fromColor (width, height, r, g, b, a)</a></td>
 	<td class="summary">Creates a texture of specific width and height and color</td>
 	</tr>
 	<tr>
-	<td class="name" nowrap><a href="#fromTexture">fromTexture&nbsp;(texture, region, rotated, frame)</a></td>
+	<td class="name" nowrap><a href="#fromTexture">fromTexture (texture, region, rotated, frame)</a></td>
 	<td class="summary">Returns a subtexture of the given texture, based on region definition</td>
 	</tr>
 	<tr>
-	<td class="name" nowrap><a href="#fromData">fromData&nbsp;(srcData)</a></td>
+	<td class="name" nowrap><a href="#fromData">fromData (srcData)</a></td>
 	<td class="summary">Create a Texture starting from a MOAI object.</td>
 	</tr>
 	<tr>
-	<td class="name" nowrap><a href="#Texture:init">Texture:init&nbsp;(srcData)</a></td>
+	<td class="name" nowrap><a href="#init">init (srcData)</a></td>
 	<td class="summary">Constructor.</td>
 	</tr>
 	<tr>
-	<td class="name" nowrap><a href="#Texture:dispose">Texture:dispose&nbsp;()</a></td>
+	<td class="name" nowrap><a href="#dispose">dispose ()</a></td>
 	<td class="summary">When called textureData (MOAITexture) is released</td>
 	</tr>
 	<tr>
-	<td class="name" nowrap><a href="#Texture:image">Texture:image&nbsp;()</a></td>
+	<td class="name" nowrap><a href="#image">image ()</a></td>
 	<td class="summary">Returns the base raw image.</td>
 	</tr>
 	<tr>
-	<td class="name" nowrap><a href="#Texture:getColor32">Texture:getColor32&nbsp;(x, y)</a></td>
+	<td class="name" nowrap><a href="#getColor32">getColor32 (x, y)</a></td>
 	<td class="summary">Get value of the pixel at x,y coord as 32bit number
 The function extends and wraps the original MOAIImage:getColor32</td>
 	</tr>
 	<tr>
-	<td class="name" nowrap><a href="#Texture:getRGBA">Texture:getRGBA&nbsp;(x, y)</a></td>
+	<td class="name" nowrap><a href="#getRGBA">getRGBA (x, y)</a></td>
 	<td class="summary">Get rgba value of the pixel at x,y coord
+
 The function extends and wraps the original MOAIImage:getRGBA and use the same space, so
+
 returns values in the range [0,1]</td>
 	</tr>
 	<tr>
-	<td class="name" nowrap><a href="#Texture:getColor">Texture:getColor&nbsp;(x, y)</a></td>
+	<td class="name" nowrap><a href="#getColor">getColor (x, y)</a></td>
 	<td class="summary">Get Color value of the pixel at x,y coord
+
 Color values are in the range [0,255]</td>
 	</tr>
 	<tr>
-	<td class="name" nowrap><a href="#_region2rect">_region2rect&nbsp;(r)</a></td>
+	<td class="name" nowrap><a href="#_region2rect">_region2rect (r)</a></td>
 	<td class="summary">if the texture is not rotated a region is mapped as a rect, with
 	y coords varying based on Shilke2D coordinate space</td>
 	</tr>
 	<tr>
-	<td class="name" nowrap><a href="#_region2quad">_region2quad&nbsp;(r)</a></td>
+	<td class="name" nowrap><a href="#_region2quad">_region2quad (r)</a></td>
 	<td class="summary">if the texture is rotated a region is mapped as a quad, with
 	y coords varying based on Shilke2D coordinate space</td>
 	</tr>
 	<tr>
-	<td class="name" nowrap><a href="#Texture:_fillQuadUV">Texture:_fillQuadUV&nbsp;(quad)</a></td>
+	<td class="name" nowrap><a href="#_fillQuadUV">_fillQuadUV (quad)</a></td>
 	<td class="summary">Inner method.</td>
 	</tr>
 	<tr>
-	<td class="name" nowrap><a href="#Texture:_fillQuadDeckUV">Texture:_fillQuadDeckUV&nbsp;(quadDeck, index)</a></td>
+	<td class="name" nowrap><a href="#_fillQuadDeckUV">_fillQuadDeckUV (quadDeck, index)</a></td>
 	<td class="summary">Inner method.</td>
 	</tr>
 	<tr>
-	<td class="name" nowrap><a href="#Texture:_getQuad">Texture:_getQuad&nbsp;()</a></td>
+	<td class="name" nowrap><a href="#_getQuad">_getQuad ()</a></td>
 	<td class="summary">Inner method.</td>
 	</tr>
 	<tr>
-	<td class="name" nowrap><a href="#Texture:getRect">Texture:getRect&nbsp;(resultRect)</a></td>
+	<td class="name" nowrap><a href="#getRect">getRect (resultRect)</a></td>
 	<td class="summary">Returns the rect enclosing the image</td>
 	</tr>
 	<tr>
-	<td class="name" nowrap><a href="#Texture:getWidth">Texture:getWidth&nbsp;()</a></td>
+	<td class="name" nowrap><a href="#getWidth">getWidth ()</a></td>
 	<td class="summary">Returns the width of the texture in pixels</td>
 	</tr>
 	<tr>
-	<td class="name" nowrap><a href="#Texture:getHeight">Texture:getHeight&nbsp;()</a></td>
+	<td class="name" nowrap><a href="#getHeight">getHeight ()</a></td>
 	<td class="summary">Returns the height of the texture in pixels</td>
 	</tr>
 	<tr>
-	<td class="name" nowrap><a href="#Texture:getRegion">Texture:getRegion&nbsp;(resultRect)</a></td>
+	<td class="name" nowrap><a href="#getRegion">getRegion (resultRect)</a></td>
 	<td class="summary">Returns the region as pixel rect over srcdata.</td>
 	</tr>
 	<tr>
-	<td class="name" nowrap><a href="#Texture:getRegionUV">Texture:getRegionUV&nbsp;(resultRect)</a></td>
+	<td class="name" nowrap><a href="#getRegionUV">getRegionUV (resultRect)</a></td>
 	<td class="summary">Returns the region as uv rect over srcdata.</td>
 	</tr>
 	<tr>
-	<td class="name" nowrap><a href="#Texture:hitTest">Texture:hitTest&nbsp;(p1, a1, texture2, p2, a2)</a></td>
+	<td class="name" nowrap><a href="#hitTest">hitTest (p1, a1, texture2, p2, a2)</a></td>
 	<td class="summary">Pixel collision hitTest between 2 textures.</td>
-	</tr>
-</table>
-<h2><a href="#Fields">Fields</a></h2>
-<table class="function_list">
-	<tr>
-	<td class="name" nowrap><a href="#tmp">tmp</a></td>
-	<td class="summary">Returns a render to texture of a given displayObj.</td>
 	</tr>
 </table>
 
@@ -232,17 +240,20 @@ Color values are in the range [0,255]</td>
     <dl class="function">
     <dt>
     <a name = "empty"></a>
-    <strong>empty&nbsp;(width, height)</strong>
+    <strong>empty (width, height)</strong>
     </dt>
     <dd>
     Creates an empty, transparent texture of specific width and height
 
+
     <h3>Parameters:</h3>
     <ul>
         <li><span class="parameter">width</span>
-         texture width</li>
+         texture width
+        </li>
         <li><span class="parameter">height</span>
-         texture height</li>
+         texture height
+        </li>
     </ul>
 
     <h3>Returns:</h3>
@@ -257,25 +268,32 @@ Color values are in the range [0,255]</td>
 </dd>
     <dt>
     <a name = "fromColor"></a>
-    <strong>fromColor&nbsp;(width, height, r, g, b, a)</strong>
+    <strong>fromColor (width, height, r, g, b, a)</strong>
     </dt>
     <dd>
     Creates a texture of specific width and height and color
 
+
     <h3>Parameters:</h3>
     <ul>
         <li><span class="parameter">width</span>
-         texture width</li>
+         texture width
+        </li>
         <li><span class="parameter">height</span>
-         texture height</li>
+         texture height
+        </li>
         <li><span class="parameter">r</span>
-         red value [0,255] or a Color</li>
+         red value [0,255] or a Color
+        </li>
         <li><span class="parameter">g</span>
-         green value [0,255] or nil</li>
+         green value [0,255] or nil
+        </li>
         <li><span class="parameter">b</span>
-         blue value [0,255] or nil</li>
+         blue value [0,255] or nil
+        </li>
         <li><span class="parameter">a</span>
-         alpha value [0,255] or nil</li>
+         alpha value [0,255] or nil
+        </li>
     </ul>
 
     <h3>Returns:</h3>
@@ -290,22 +308,27 @@ Color values are in the range [0,255]</td>
 </dd>
     <dt>
     <a name = "fromTexture"></a>
-    <strong>fromTexture&nbsp;(texture, region, rotated, frame)</strong>
+    <strong>fromTexture (texture, region, rotated, frame)</strong>
     </dt>
     <dd>
     Returns a subtexture of the given texture, based on region definition
-indicates the offset of the mapping rect while w,h are real sprite width and height.
+
 
     <h3>Parameters:</h3>
     <ul>
         <li><span class="parameter">texture</span>
-         the texture from wich obtain a subtexture</li>
+         the texture from wich obtain a subtexture
+        </li>
         <li><span class="parameter">region</span>
-         a rect that defines the subtexture, coords are expressed in pixel</li>
+         a rect that defines the subtexture, coords are expressed in pixel
+        </li>
         <li><span class="parameter">rotated</span>
-         boolean (optional). if true the region is rotated of 90° clockwise</li>
+         boolean (optional). if true the region is rotated of 90° clockwise
+        </li>
         <li><span class="parameter">frame</span>
-         rect (optional). Defines a subtexture with a trimmed region. x,y </li>
+         rect (optional). Defines a subtexture with a trimmed region. x,y
+indicates the offset of the mapping rect while w,h are real sprite width and height.
+        </li>
     </ul>
 
     <h3>Returns:</h3>
@@ -320,15 +343,17 @@ indicates the offset of the mapping rect while w,h are real sprite width and hei
 </dd>
     <dt>
     <a name = "fromData"></a>
-    <strong>fromData&nbsp;(srcData)</strong>
+    <strong>fromData (srcData)</strong>
     </dt>
     <dd>
     Create a Texture starting from a MOAI object.
 
+
     <h3>Parameters:</h3>
     <ul>
         <li><span class="parameter">srcData</span>
-         can be a string (path), a MOAIImage, a MOAIImageTexture or a MOAIFrameBufferTexture</li>
+         can be a string (path), a MOAIImage, a MOAIImageTexture or a MOAIFrameBufferTexture
+        </li>
     </ul>
 
 
@@ -337,17 +362,21 @@ indicates the offset of the mapping rect while w,h are real sprite width and hei
 
 </dd>
     <dt>
-    <a name = "Texture:init"></a>
-    <strong>Texture:init&nbsp;(srcData)</strong>
+    <a name = "init"></a>
+    <strong>init (srcData)</strong>
     </dt>
     <dd>
     Constructor.
+
 Create a Texture starting from a MOAI object.
+
+
 
     <h3>Parameters:</h3>
     <ul>
         <li><span class="parameter">srcData</span>
-         can be a string (path) or a MOAIImageTexture or a MOAIImage or a MOAIFrameBufferTexture</li>
+         can be a string (path) or a MOAIImageTexture or a MOAIImage or a MOAIFrameBufferTexture
+        </li>
     </ul>
 
 
@@ -356,8 +385,8 @@ Create a Texture starting from a MOAI object.
 
 </dd>
     <dt>
-    <a name = "Texture:dispose"></a>
-    <strong>Texture:dispose&nbsp;()</strong>
+    <a name = "dispose"></a>
+    <strong>dispose ()</strong>
     </dt>
     <dd>
     When called textureData (MOAITexture) is released
@@ -367,13 +396,16 @@ Create a Texture starting from a MOAI object.
 
 
 
+
 </dd>
     <dt>
-    <a name = "Texture:image"></a>
-    <strong>Texture:image&nbsp;()</strong>
+    <a name = "image"></a>
+    <strong>image ()</strong>
     </dt>
     <dd>
     Returns the base raw image.
+
+
 
 
     <h3>Returns:</h3>
@@ -387,19 +419,22 @@ Create a Texture starting from a MOAI object.
 
 </dd>
     <dt>
-    <a name = "Texture:getColor32"></a>
-    <strong>Texture:getColor32&nbsp;(x, y)</strong>
+    <a name = "getColor32"></a>
+    <strong>getColor32 (x, y)</strong>
     </dt>
     <dd>
     Get value of the pixel at x,y coord as 32bit number
 The function extends and wraps the original MOAIImage:getColor32
 
+
     <h3>Parameters:</h3>
     <ul>
         <li><span class="parameter">x</span>
-         x coord of the pixel</li>
+         x coord of the pixel
+        </li>
         <li><span class="parameter">y</span>
-         y coord of the pixel</li>
+         y coord of the pixel
+        </li>
     </ul>
 
     <h3>Returns:</h3>
@@ -413,20 +448,25 @@ The function extends and wraps the original MOAIImage:getColor32
 
 </dd>
     <dt>
-    <a name = "Texture:getRGBA"></a>
-    <strong>Texture:getRGBA&nbsp;(x, y)</strong>
+    <a name = "getRGBA"></a>
+    <strong>getRGBA (x, y)</strong>
     </dt>
     <dd>
     Get rgba value of the pixel at x,y coord
+
 The function extends and wraps the original MOAIImage:getRGBA and use the same space, so
+
 returns values in the range [0,1]
+
 
     <h3>Parameters:</h3>
     <ul>
         <li><span class="parameter">x</span>
-         x coord of the pixel</li>
+         x coord of the pixel
+        </li>
         <li><span class="parameter">y</span>
-         y coord of the pixel</li>
+         y coord of the pixel
+        </li>
     </ul>
 
     <h3>Returns:</h3>
@@ -440,19 +480,23 @@ returns values in the range [0,1]
 
 </dd>
     <dt>
-    <a name = "Texture:getColor"></a>
-    <strong>Texture:getColor&nbsp;(x, y)</strong>
+    <a name = "getColor"></a>
+    <strong>getColor (x, y)</strong>
     </dt>
     <dd>
     Get Color value of the pixel at x,y coord
+
 Color values are in the range [0,255]
+
 
     <h3>Parameters:</h3>
     <ul>
         <li><span class="parameter">x</span>
-         x coord of the pixel</li>
+         x coord of the pixel
+        </li>
         <li><span class="parameter">y</span>
-         y coord of the pixel</li>
+         y coord of the pixel
+        </li>
     </ul>
 
     <h3>Returns:</h3>
@@ -467,16 +511,18 @@ Color values are in the range [0,255]
 </dd>
     <dt>
     <a name = "_region2rect"></a>
-    <strong>_region2rect&nbsp;(r)</strong>
+    <strong>_region2rect (r)</strong>
     </dt>
     <dd>
     if the texture is not rotated a region is mapped as a rect, with
 	y coords varying based on Shilke2D coordinate space
 
+
     <h3>Parameters:</h3>
     <ul>
         <li><span class="parameter">r</span>
-         the</li>
+         the
+        </li>
     </ul>
 
 
@@ -486,16 +532,18 @@ Color values are in the range [0,255]
 </dd>
     <dt>
     <a name = "_region2quad"></a>
-    <strong>_region2quad&nbsp;(r)</strong>
+    <strong>_region2quad (r)</strong>
     </dt>
     <dd>
     if the texture is rotated a region is mapped as a quad, with
 	y coords varying based on Shilke2D coordinate space
 
+
     <h3>Parameters:</h3>
     <ul>
         <li><span class="parameter">r</span>
-         the</li>
+         the
+        </li>
     </ul>
 
 
@@ -504,16 +552,18 @@ Color values are in the range [0,255]
 
 </dd>
     <dt>
-    <a name = "Texture:_fillQuadUV"></a>
-    <strong>Texture:_fillQuadUV&nbsp;(quad)</strong>
+    <a name = "_fillQuadUV"></a>
+    <strong>_fillQuadUV (quad)</strong>
     </dt>
     <dd>
     Inner method.  Called internally to correctly map texture uv
 
+
     <h3>Parameters:</h3>
     <ul>
         <li><span class="parameter">quad</span>
-         the external MOAIGfxQuad2D structure to be filled</li>
+         the external MOAIGfxQuad2D structure to be filled
+        </li>
     </ul>
 
 
@@ -522,19 +572,22 @@ Color values are in the range [0,255]
 
 </dd>
     <dt>
-    <a name = "Texture:_fillQuadDeckUV"></a>
-    <strong>Texture:_fillQuadDeckUV&nbsp;(quadDeck, index)</strong>
+    <a name = "_fillQuadDeckUV"></a>
+    <strong>_fillQuadDeckUV (quadDeck, index)</strong>
     </dt>
     <dd>
     Inner method.  Called by objects that maps quaddecklists over textures (like tilesets)
 to fill the quadDeck related to the current texture
 
+
     <h3>Parameters:</h3>
     <ul>
         <li><span class="parameter">quadDeck</span>
-         the external MOAIGfxQuadDeck2D structure to be filled</li>
+         the external MOAIGfxQuadDeck2D structure to be filled
+        </li>
         <li><span class="parameter">index</span>
-         the index of this texture inside the quadDeck</li>
+         the index of this texture inside the quadDeck
+        </li>
     </ul>
 
 
@@ -543,13 +596,17 @@ to fill the quadDeck related to the current texture
 
 </dd>
     <dt>
-    <a name = "Texture:_getQuad"></a>
-    <strong>Texture:_getQuad&nbsp;()</strong>
+    <a name = "_getQuad"></a>
+    <strong>_getQuad ()</strong>
     </dt>
     <dd>
     Inner method.
+
 Creates and caches a MOAIGfxQuad2D used and shared by Images to show the texture.
+
 If a texture is not binded to an Image the MOAIGfxQuad2D is never created
+
+
 
 
     <h3>Returns:</h3>
@@ -563,16 +620,18 @@ If a texture is not binded to an Image the MOAIGfxQuad2D is never created
 
 </dd>
     <dt>
-    <a name = "Texture:getRect"></a>
-    <strong>Texture:getRect&nbsp;(resultRect)</strong>
+    <a name = "getRect"></a>
+    <strong>getRect (resultRect)</strong>
     </dt>
     <dd>
     Returns the rect enclosing the image
 
+
     <h3>Parameters:</h3>
     <ul>
         <li><span class="parameter">resultRect</span>
-         if provided is filled and returned</li>
+         if provided is filled and returned
+        </li>
     </ul>
 
     <h3>Returns:</h3>
@@ -586,13 +645,14 @@ If a texture is not binded to an Image the MOAIGfxQuad2D is never created
 
 </dd>
     <dt>
-    <a name = "Texture:getWidth"></a>
-    <strong>Texture:getWidth&nbsp;()</strong>
+    <a name = "getWidth"></a>
+    <strong>getWidth ()</strong>
     </dt>
     <dd>
     Returns the width of the texture in pixels
 
 
+
     <h3>Returns:</h3>
     <ol>
 
@@ -604,13 +664,14 @@ If a texture is not binded to an Image the MOAIGfxQuad2D is never created
 
 </dd>
     <dt>
-    <a name = "Texture:getHeight"></a>
-    <strong>Texture:getHeight&nbsp;()</strong>
+    <a name = "getHeight"></a>
+    <strong>getHeight ()</strong>
     </dt>
     <dd>
     Returns the height of the texture in pixels
 
 
+
     <h3>Returns:</h3>
     <ol>
 
@@ -622,16 +683,19 @@ If a texture is not binded to an Image the MOAIGfxQuad2D is never created
 
 </dd>
     <dt>
-    <a name = "Texture:getRegion"></a>
-    <strong>Texture:getRegion&nbsp;(resultRect)</strong>
+    <a name = "getRegion"></a>
+    <strong>getRegion (resultRect)</strong>
     </dt>
     <dd>
     Returns the region as pixel rect over srcdata.  It doesn't take care of the rotated flag
 
+
+
     <h3>Parameters:</h3>
     <ul>
         <li><span class="parameter">resultRect</span>
-         if provided is filled and returned</li>
+         if provided is filled and returned
+        </li>
     </ul>
 
     <h3>Returns:</h3>
@@ -645,16 +709,19 @@ If a texture is not binded to an Image the MOAIGfxQuad2D is never created
 
 </dd>
     <dt>
-    <a name = "Texture:getRegionUV"></a>
-    <strong>Texture:getRegionUV&nbsp;(resultRect)</strong>
+    <a name = "getRegionUV"></a>
+    <strong>getRegionUV (resultRect)</strong>
     </dt>
     <dd>
     Returns the region as uv rect over srcdata.  It doesn't take care of the rotated flag
 
+
+
     <h3>Parameters:</h3>
     <ul>
         <li><span class="parameter">resultRect</span>
-         if provided is filled and returned</li>
+         if provided is filled and returned
+        </li>
     </ul>
 
     <h3>Returns:</h3>
@@ -668,50 +735,39 @@ If a texture is not binded to an Image the MOAIGfxQuad2D is never created
 
 </dd>
     <dt>
-    <a name = "Texture:hitTest"></a>
-    <strong>Texture:hitTest&nbsp;(p1, a1, texture2, p2, a2)</strong>
+    <a name = "hitTest"></a>
+    <strong>hitTest (p1, a1, texture2, p2, a2)</strong>
     </dt>
     <dd>
     Pixel collision hitTest between 2 textures.
+
 The two points considered are logical 0,0, that
+
 can be top left or bottom left point depending on
+
 __USE_SIMULATION_COORDS__ value
+
+
+
 
 
     <h3>Parameters:</h3>
     <ul>
         <li><span class="parameter">p1</span>
-         top/bottom left position (vec2) of the texture</li>
+         top/bottom left position (vec2) of the texture
+        </li>
         <li><span class="parameter">a1</span>
-         alpha treshold to consider texture1 pixel transparent</li>
+         alpha treshold to consider texture1 pixel transparent
+        </li>
         <li><span class="parameter">texture2</span>
-         texture to check collision with</li>
+         texture to check collision with
+        </li>
         <li><span class="parameter">p2</span>
-         top/bottom left position (vec2) of texture2</li>
+         top/bottom left position (vec2) of texture2
+        </li>
         <li><span class="parameter">a2</span>
-         alpha treshold to consider texture2 pixel transparent</li>
-    </ul>
-
-
-
-
-
-</dd>
-</dl>
-    <h2><a name="Fields"></a>Fields</h2>
-    <dl class="function">
-    <dt>
-    <a name = "tmp"></a>
-    <strong>tmp</strong>
-    </dt>
-    <dd>
-    Returns a render to texture of a given displayObj.  The method could be pretty slow
-if done using grabNextFrame so it should be used only on startup of a game or in setup of a new level
-
-    <h3>:</h3>
-    <ul>
-        <li><span class="parameter">displayObj</span>
-         the displayObj that must be rendered on the newly created texture</li>
+         alpha treshold to consider texture2 pixel transparent
+        </li>
     </ul>
 
 
@@ -725,7 +781,7 @@ if done using grabNextFrame so it should be used only on startup of a game or in
 </div> <!-- id="content" -->
 </div> <!-- id="main" -->
 <div id="about">
-<i>generated by <a href="http://github.com/stevedonovan/LDoc">LDoc 1.3.11</a></i>
+<i>generated by <a href="http://github.com/stevedonovan/LDoc">LDoc 1.4.2</a></i>
 </div> <!-- id="about" -->
 </div> <!-- id="container" -->
 </body>

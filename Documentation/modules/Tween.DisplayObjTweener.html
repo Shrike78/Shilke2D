@@ -37,7 +37,7 @@
 
 
 <h2>Modules</h2>
-<ul>
+<ul class="$(kind=='Topics' and '' or 'nowrap'">
   <li><a href="../modules/Core.Assets.html">Core.Assets</a></li>
   <li><a href="../modules/Core.Event.html">Core.Event</a></li>
   <li><a href="../modules/Core.EventDispatcher.html">Core.EventDispatcher</a></li>
@@ -60,6 +60,7 @@
   <li><a href="../modules/Display.Stage.html">Display.Stage</a></li>
   <li><a href="../modules/Display.TextField.html">Display.TextField</a></li>
   <li><a href="../modules/Display.TileMap.html">Display.TileMap</a></li>
+  <li><a href="../modules/include.html">include</a></li>
   <li><a href="../modules/Texture.ITextureAtlas.html">Texture.ITextureAtlas</a></li>
   <li><a href="../modules/Texture.SubTexture.html">Texture.SubTexture</a></li>
   <li><a href="../modules/Texture.Texture.html">Texture.Texture</a></li>
@@ -87,9 +88,9 @@
   <li><a href="../modules/Utils.CollisionKit.html">Utils.CollisionKit</a></li>
   <li><a href="../modules/Utils.Color.html">Utils.Color</a></li>
   <li><a href="../modules/Utils.Coroutines.html">Utils.Coroutines</a></li>
-  <li><a href="../modules/Utils.IO.html">Utils.IO</a></li>
   <li><a href="../modules/Utils.IniFile.html">Utils.IniFile</a></li>
   <li><a href="../modules/Utils.IniParser.html">Utils.IniParser</a></li>
+  <li><a href="../modules/Utils.IO.html">Utils.IO</a></li>
   <li><a href="../modules/Utils.Log.html">Utils.Log</a></li>
   <li><a href="../modules/Utils.Math.html">Utils.Math</a></li>
   <li><a href="../modules/Utils.PerformanceTimer.html">Utils.PerformanceTimer</a></li>
@@ -102,7 +103,6 @@
   <li><a href="../modules/Utils.Vector.html">Utils.Vector</a></li>
   <li><a href="../modules/Utils.XmlNode.html">Utils.XmlNode</a></li>
   <li><a href="../modules/Utils.XmlParser.html">Utils.XmlParser</a></li>
-  <li><a href="../modules/include.html">include</a></li>
 </ul>
 
 </div>
@@ -110,74 +110,79 @@
 <div id="content">
 
 <h1>Module <code>Tween.DisplayObjTweener</code></h1>
-
 <p>DisplayObjTweener is a tween helper to animate displayObjs.</p>
 <p>
+
 It's a set of wrapper function over Tween.ease() that allows to easily
+
 animate displayObjs properties (position, scale, rotation, color, alpha).
-<p>Default transition for each transiformation is Transition.LINEAR</p>
+
+
+
+Default transition for each transiformation is Transition.LINEAR
+</p>
 
 
 <h2><a href="#Functions">Functions</a></h2>
 <table class="function_list">
 	<tr>
-	<td class="name" nowrap><a href="#seekProp">seekProp&nbsp;(obj, setter, getter, endValue, time, transition)</a></td>
+	<td class="name" nowrap><a href="#seekProp">seekProp (obj, setter, getter, endValue, time, transition)</a></td>
 	<td class="summary">used to seek a properties to a specific value</td>
 	</tr>
 	<tr>
-	<td class="name" nowrap><a href="#moveProp">moveProp&nbsp;(obj, setter, getter, deltaValue, time, transition)</a></td>
+	<td class="name" nowrap><a href="#moveProp">moveProp (obj, setter, getter, deltaValue, time, transition)</a></td>
 	<td class="summary">used to move a properties of specific value</td>
 	</tr>
 	<tr>
-	<td class="name" nowrap><a href="#seekAlpha">seekAlpha&nbsp;(obj, a, time, transition)</a></td>
+	<td class="name" nowrap><a href="#seekAlpha">seekAlpha (obj, a, time, transition)</a></td>
 	<td class="summary">seek animation of alpha value</td>
 	</tr>
 	<tr>
-	<td class="name" nowrap><a href="#moveAlpha">moveAlpha&nbsp;(obj, a, time, transition)</a></td>
+	<td class="name" nowrap><a href="#moveAlpha">moveAlpha (obj, a, time, transition)</a></td>
 	<td class="summary">move animation of alpha value</td>
 	</tr>
 	<tr>
-	<td class="name" nowrap><a href="#seekColor">seekColor&nbsp;(obj, c, time, transition)</a></td>
+	<td class="name" nowrap><a href="#seekColor">seekColor (obj, c, time, transition)</a></td>
 	<td class="summary">seek animation of color value.</td>
 	</tr>
 	<tr>
-	<td class="name" nowrap><a href="#moveColor">moveColor&nbsp;(obj, c, time, transition)</a></td>
+	<td class="name" nowrap><a href="#moveColor">moveColor (obj, c, time, transition)</a></td>
 	<td class="summary">move animation of color value.</td>
 	</tr>
 	<tr>
-	<td class="name" nowrap><a href="#seekPosition">seekPosition&nbsp;(obj, x, y, time, transition)</a></td>
+	<td class="name" nowrap><a href="#seekPosition">seekPosition (obj, x, y, time, transition)</a></td>
 	<td class="summary">seek animation of position</td>
 	</tr>
 	<tr>
-	<td class="name" nowrap><a href="#movePosition">movePosition&nbsp;(obj, x, y, time, transition)</a></td>
+	<td class="name" nowrap><a href="#movePosition">movePosition (obj, x, y, time, transition)</a></td>
 	<td class="summary">move animation of position</td>
 	</tr>
 	<tr>
-	<td class="name" nowrap><a href="#seekRotation">seekRotation&nbsp;(obj, r, time, transition)</a></td>
+	<td class="name" nowrap><a href="#seekRotation">seekRotation (obj, r, time, transition)</a></td>
 	<td class="summary">seek animation of rotation</td>
 	</tr>
 	<tr>
-	<td class="name" nowrap><a href="#moveRotation">moveRotation&nbsp;(obj, r, time, transition)</a></td>
+	<td class="name" nowrap><a href="#moveRotation">moveRotation (obj, r, time, transition)</a></td>
 	<td class="summary">move animation of rotation</td>
 	</tr>
 	<tr>
-	<td class="name" nowrap><a href="#seekScale">seekScale&nbsp;(obj, sx, sy, time, transition)</a></td>
+	<td class="name" nowrap><a href="#seekScale">seekScale (obj, sx, sy, time, transition)</a></td>
 	<td class="summary">seek animation of scale values</td>
 	</tr>
 	<tr>
-	<td class="name" nowrap><a href="#moveScale">moveScale&nbsp;(obj, sx, sy, time, transition)</a></td>
+	<td class="name" nowrap><a href="#moveScale">moveScale (obj, sx, sy, time, transition)</a></td>
 	<td class="summary">move animation of scale values</td>
 	</tr>
 	<tr>
-	<td class="name" nowrap><a href="#seekObjTransform">seekObjTransform&nbsp;(obj, transform, time, transition)</a></td>
+	<td class="name" nowrap><a href="#seekObjTransform">seekObjTransform (obj, transform, time, transition)</a></td>
 	<td class="summary">seek animation of scale values</td>
 	</tr>
 	<tr>
-	<td class="name" nowrap><a href="#moveObjTransform">moveObjTransform&nbsp;(obj, transform, time, transition)</a></td>
+	<td class="name" nowrap><a href="#moveObjTransform">moveObjTransform (obj, transform, time, transition)</a></td>
 	<td class="summary">move animation of scale values</td>
 	</tr>
 	<tr>
-	<td class="name" nowrap><a href="#seekTargetPosition">seekTargetPosition&nbsp;(obj, target, time, transition)</a></td>
+	<td class="name" nowrap><a href="#seekTargetPosition">seekTargetPosition (obj, target, time, transition)</a></td>
 	<td class="summary">used to follow another displayobj position</td>
 	</tr>
 </table>
@@ -190,25 +195,32 @@ animate displayObjs properties (position, scale, rotation, color, alpha).
     <dl class="function">
     <dt>
     <a name = "seekProp"></a>
-    <strong>seekProp&nbsp;(obj, setter, getter, endValue, time, transition)</strong>
+    <strong>seekProp (obj, setter, getter, endValue, time, transition)</strong>
     </dt>
     <dd>
     used to seek a properties to a specific value
 
+
     <h3>Parameters:</h3>
     <ul>
         <li><span class="parameter">obj</span>
-         the displayObj to animate</li>
+         the displayObj to animate
+        </li>
         <li><span class="parameter">setter</span>
-         the setter method to handle</li>
+         the setter method to handle
+        </li>
         <li><span class="parameter">getter</span>
-         the getter method to handle</li>
+         the getter method to handle
+        </li>
         <li><span class="parameter">endValue</span>
-         endValue of the animation</li>
+         endValue of the animation
+        </li>
         <li><span class="parameter">time</span>
-         duration of the animation</li>
+         duration of the animation
+        </li>
         <li><span class="parameter">transition</span>
-         type of transition to apply. Default is LINEAR</li>
+         type of transition to apply. Default is LINEAR
+        </li>
     </ul>
 
 
@@ -218,25 +230,32 @@ animate displayObjs properties (position, scale, rotation, color, alpha).
 </dd>
     <dt>
     <a name = "moveProp"></a>
-    <strong>moveProp&nbsp;(obj, setter, getter, deltaValue, time, transition)</strong>
+    <strong>moveProp (obj, setter, getter, deltaValue, time, transition)</strong>
     </dt>
     <dd>
     used to move a properties of specific value
 
+
     <h3>Parameters:</h3>
     <ul>
         <li><span class="parameter">obj</span>
-         the displayObj to animate</li>
+         the displayObj to animate
+        </li>
         <li><span class="parameter">setter</span>
-         the setter method to handle</li>
+         the setter method to handle
+        </li>
         <li><span class="parameter">getter</span>
-         the getter method to handle</li>
+         the getter method to handle
+        </li>
         <li><span class="parameter">deltaValue</span>
-         offset of the animation</li>
+         offset of the animation
+        </li>
         <li><span class="parameter">time</span>
-         duration of the animation</li>
+         duration of the animation
+        </li>
         <li><span class="parameter">transition</span>
-         type of transition to apply. Default is LINEAR</li>
+         type of transition to apply. Default is LINEAR
+        </li>
     </ul>
 
 
@@ -246,20 +265,25 @@ animate displayObjs properties (position, scale, rotation, color, alpha).
 </dd>
     <dt>
     <a name = "seekAlpha"></a>
-    <strong>seekAlpha&nbsp;(obj, a, time, transition)</strong>
+    <strong>seekAlpha (obj, a, time, transition)</strong>
     </dt>
     <dd>
     seek animation of alpha value
 
+
     <h3>Parameters:</h3>
     <ul>
         <li><span class="parameter">obj</span>
+
         </li>
         <li><span class="parameter">a</span>
+
         </li>
         <li><span class="parameter">time</span>
+
         </li>
         <li><span class="parameter">transition</span>
+
         </li>
     </ul>
 
@@ -270,20 +294,25 @@ animate displayObjs properties (position, scale, rotation, color, alpha).
 </dd>
     <dt>
     <a name = "moveAlpha"></a>
-    <strong>moveAlpha&nbsp;(obj, a, time, transition)</strong>
+    <strong>moveAlpha (obj, a, time, transition)</strong>
     </dt>
     <dd>
     move animation of alpha value
 
+
     <h3>Parameters:</h3>
     <ul>
         <li><span class="parameter">obj</span>
+
         </li>
         <li><span class="parameter">a</span>
+
         </li>
         <li><span class="parameter">time</span>
+
         </li>
         <li><span class="parameter">transition</span>
+
         </li>
     </ul>
 
@@ -294,20 +323,26 @@ animate displayObjs properties (position, scale, rotation, color, alpha).
 </dd>
     <dt>
     <a name = "seekColor"></a>
-    <strong>seekColor&nbsp;(obj, c, time, transition)</strong>
+    <strong>seekColor (obj, c, time, transition)</strong>
     </dt>
     <dd>
     seek animation of color value.  it accepts only Color, not rgb
 
+
+
     <h3>Parameters:</h3>
     <ul>
         <li><span class="parameter">obj</span>
+
         </li>
         <li><span class="parameter">c</span>
+
         </li>
         <li><span class="parameter">time</span>
+
         </li>
         <li><span class="parameter">transition</span>
+
         </li>
     </ul>
 
@@ -318,21 +353,27 @@ animate displayObjs properties (position, scale, rotation, color, alpha).
 </dd>
     <dt>
     <a name = "moveColor"></a>
-    <strong>moveColor&nbsp;(obj, c, time, transition)</strong>
+    <strong>moveColor (obj, c, time, transition)</strong>
     </dt>
     <dd>
     move animation of color value.  it accepts only Color, not rgb
 
+
+
     <h3>Parameters:</h3>
     <ul>
         <li><span class="parameter">obj</span>
-         the displayObj to animate</li>
+         the displayObj to animate
+        </li>
         <li><span class="parameter">c</span>
-         can be composed also by negative values but the end animation color must be a valid Color</li>
+         can be composed also by negative values but the end animation color must be a valid Color
+        </li>
         <li><span class="parameter">time</span>
-         duration of the animation</li>
+         duration of the animation
+        </li>
         <li><span class="parameter">transition</span>
-         type of transition. default is LINEAR</li>
+         type of transition. default is LINEAR
+        </li>
     </ul>
 
 
@@ -342,22 +383,28 @@ animate displayObjs properties (position, scale, rotation, color, alpha).
 </dd>
     <dt>
     <a name = "seekPosition"></a>
-    <strong>seekPosition&nbsp;(obj, x, y, time, transition)</strong>
+    <strong>seekPosition (obj, x, y, time, transition)</strong>
     </dt>
     <dd>
     seek animation of position
 
+
     <h3>Parameters:</h3>
     <ul>
         <li><span class="parameter">obj</span>
+
         </li>
         <li><span class="parameter">x</span>
+
         </li>
         <li><span class="parameter">y</span>
+
         </li>
         <li><span class="parameter">time</span>
+
         </li>
         <li><span class="parameter">transition</span>
+
         </li>
     </ul>
 
@@ -368,22 +415,28 @@ animate displayObjs properties (position, scale, rotation, color, alpha).
 </dd>
     <dt>
     <a name = "movePosition"></a>
-    <strong>movePosition&nbsp;(obj, x, y, time, transition)</strong>
+    <strong>movePosition (obj, x, y, time, transition)</strong>
     </dt>
     <dd>
     move animation of position
 
+
     <h3>Parameters:</h3>
     <ul>
         <li><span class="parameter">obj</span>
+
         </li>
         <li><span class="parameter">x</span>
+
         </li>
         <li><span class="parameter">y</span>
+
         </li>
         <li><span class="parameter">time</span>
+
         </li>
         <li><span class="parameter">transition</span>
+
         </li>
     </ul>
 
@@ -394,20 +447,25 @@ animate displayObjs properties (position, scale, rotation, color, alpha).
 </dd>
     <dt>
     <a name = "seekRotation"></a>
-    <strong>seekRotation&nbsp;(obj, r, time, transition)</strong>
+    <strong>seekRotation (obj, r, time, transition)</strong>
     </dt>
     <dd>
     seek animation of rotation
 
+
     <h3>Parameters:</h3>
     <ul>
         <li><span class="parameter">obj</span>
+
         </li>
         <li><span class="parameter">r</span>
+
         </li>
         <li><span class="parameter">time</span>
+
         </li>
         <li><span class="parameter">transition</span>
+
         </li>
     </ul>
 
@@ -418,20 +476,25 @@ animate displayObjs properties (position, scale, rotation, color, alpha).
 </dd>
     <dt>
     <a name = "moveRotation"></a>
-    <strong>moveRotation&nbsp;(obj, r, time, transition)</strong>
+    <strong>moveRotation (obj, r, time, transition)</strong>
     </dt>
     <dd>
     move animation of rotation
 
+
     <h3>Parameters:</h3>
     <ul>
         <li><span class="parameter">obj</span>
+
         </li>
         <li><span class="parameter">r</span>
+
         </li>
         <li><span class="parameter">time</span>
+
         </li>
         <li><span class="parameter">transition</span>
+
         </li>
     </ul>
 
@@ -442,22 +505,28 @@ animate displayObjs properties (position, scale, rotation, color, alpha).
 </dd>
     <dt>
     <a name = "seekScale"></a>
-    <strong>seekScale&nbsp;(obj, sx, sy, time, transition)</strong>
+    <strong>seekScale (obj, sx, sy, time, transition)</strong>
     </dt>
     <dd>
     seek animation of scale values
 
+
     <h3>Parameters:</h3>
     <ul>
         <li><span class="parameter">obj</span>
+
         </li>
         <li><span class="parameter">sx</span>
+
         </li>
         <li><span class="parameter">sy</span>
+
         </li>
         <li><span class="parameter">time</span>
+
         </li>
         <li><span class="parameter">transition</span>
+
         </li>
     </ul>
 
@@ -468,22 +537,28 @@ animate displayObjs properties (position, scale, rotation, color, alpha).
 </dd>
     <dt>
     <a name = "moveScale"></a>
-    <strong>moveScale&nbsp;(obj, sx, sy, time, transition)</strong>
+    <strong>moveScale (obj, sx, sy, time, transition)</strong>
     </dt>
     <dd>
     move animation of scale values
 
+
     <h3>Parameters:</h3>
     <ul>
         <li><span class="parameter">obj</span>
+
         </li>
         <li><span class="parameter">sx</span>
+
         </li>
         <li><span class="parameter">sy</span>
+
         </li>
         <li><span class="parameter">time</span>
+
         </li>
         <li><span class="parameter">transition</span>
+
         </li>
     </ul>
 
@@ -494,20 +569,25 @@ animate displayObjs properties (position, scale, rotation, color, alpha).
 </dd>
     <dt>
     <a name = "seekObjTransform"></a>
-    <strong>seekObjTransform&nbsp;(obj, transform, time, transition)</strong>
+    <strong>seekObjTransform (obj, transform, time, transition)</strong>
     </dt>
     <dd>
     seek animation of scale values
 
+
     <h3>Parameters:</h3>
     <ul>
         <li><span class="parameter">obj</span>
+
         </li>
         <li><span class="parameter">transform</span>
+
         </li>
         <li><span class="parameter">time</span>
+
         </li>
         <li><span class="parameter">transition</span>
+
         </li>
     </ul>
 
@@ -518,20 +598,25 @@ animate displayObjs properties (position, scale, rotation, color, alpha).
 </dd>
     <dt>
     <a name = "moveObjTransform"></a>
-    <strong>moveObjTransform&nbsp;(obj, transform, time, transition)</strong>
+    <strong>moveObjTransform (obj, transform, time, transition)</strong>
     </dt>
     <dd>
     move animation of scale values
 
+
     <h3>Parameters:</h3>
     <ul>
         <li><span class="parameter">obj</span>
+
         </li>
         <li><span class="parameter">transform</span>
+
         </li>
         <li><span class="parameter">time</span>
+
         </li>
         <li><span class="parameter">transition</span>
+
         </li>
     </ul>
 
@@ -542,21 +627,26 @@ animate displayObjs properties (position, scale, rotation, color, alpha).
 </dd>
     <dt>
     <a name = "seekTargetPosition"></a>
-    <strong>seekTargetPosition&nbsp;(obj, target, time, transition)</strong>
+    <strong>seekTargetPosition (obj, target, time, transition)</strong>
     </dt>
     <dd>
     used to follow another displayobj position
 
+
     <h3>Parameters:</h3>
     <ul>
         <li><span class="parameter">obj</span>
-         the displayObj to animate</li>
+         the displayObj to animate
+        </li>
         <li><span class="parameter">target</span>
-         the displayObj to follow</li>
+         the displayObj to follow
+        </li>
         <li><span class="parameter">time</span>
-         time into which reach the target</li>
+         time into which reach the target
+        </li>
         <li><span class="parameter">transition</span>
-         type of transition. default is LINEAR</li>
+         type of transition. default is LINEAR
+        </li>
     </ul>
 
 
@@ -570,7 +660,7 @@ animate displayObjs properties (position, scale, rotation, color, alpha).
 </div> <!-- id="content" -->
 </div> <!-- id="main" -->
 <div id="about">
-<i>generated by <a href="http://github.com/stevedonovan/LDoc">LDoc 1.3.11</a></i>
+<i>generated by <a href="http://github.com/stevedonovan/LDoc">LDoc 1.4.2</a></i>
 </div> <!-- id="about" -->
 </div> <!-- id="container" -->
 </body>

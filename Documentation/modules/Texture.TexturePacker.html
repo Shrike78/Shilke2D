@@ -37,7 +37,7 @@
 
 
 <h2>Modules</h2>
-<ul>
+<ul class="$(kind=='Topics' and '' or 'nowrap'">
   <li><a href="../modules/Core.Assets.html">Core.Assets</a></li>
   <li><a href="../modules/Core.Event.html">Core.Event</a></li>
   <li><a href="../modules/Core.EventDispatcher.html">Core.EventDispatcher</a></li>
@@ -60,6 +60,7 @@
   <li><a href="../modules/Display.Stage.html">Display.Stage</a></li>
   <li><a href="../modules/Display.TextField.html">Display.TextField</a></li>
   <li><a href="../modules/Display.TileMap.html">Display.TileMap</a></li>
+  <li><a href="../modules/include.html">include</a></li>
   <li><a href="../modules/Texture.ITextureAtlas.html">Texture.ITextureAtlas</a></li>
   <li><a href="../modules/Texture.SubTexture.html">Texture.SubTexture</a></li>
   <li><a href="../modules/Texture.Texture.html">Texture.Texture</a></li>
@@ -87,9 +88,9 @@
   <li><a href="../modules/Utils.CollisionKit.html">Utils.CollisionKit</a></li>
   <li><a href="../modules/Utils.Color.html">Utils.Color</a></li>
   <li><a href="../modules/Utils.Coroutines.html">Utils.Coroutines</a></li>
-  <li><a href="../modules/Utils.IO.html">Utils.IO</a></li>
   <li><a href="../modules/Utils.IniFile.html">Utils.IniFile</a></li>
   <li><a href="../modules/Utils.IniParser.html">Utils.IniParser</a></li>
+  <li><a href="../modules/Utils.IO.html">Utils.IO</a></li>
   <li><a href="../modules/Utils.Log.html">Utils.Log</a></li>
   <li><a href="../modules/Utils.Math.html">Utils.Math</a></li>
   <li><a href="../modules/Utils.PerformanceTimer.html">Utils.PerformanceTimer</a></li>
@@ -102,7 +103,6 @@
   <li><a href="../modules/Utils.Vector.html">Utils.Vector</a></li>
   <li><a href="../modules/Utils.XmlNode.html">Utils.XmlNode</a></li>
   <li><a href="../modules/Utils.XmlParser.html">Utils.XmlParser</a></li>
-  <li><a href="../modules/include.html">include</a></li>
 </ul>
 
 </div>
@@ -110,48 +110,71 @@
 <div id="content">
 
 <h1>Module <code>Texture.TexturePacker</code></h1>
-
 <p>There are several ways to create a texture atlas.</p>
 <p>
-<p>One solution is the commercial software Texture Packer, that can
+
+
+
+One solution is the commercial software Texture Packer, that can
+
 export atlas descriptor for different framework.
-<p>Texture Packer namespace provides parsing functions for some
-of this descriptors.</p>
+
+
+
+Texture Packer namespace provides parsing functions for some
+
+of this descriptors.
+</p>
 
 
 <h2><a href="#Functions">Functions</a></h2>
 <table class="function_list">
 	<tr>
-	<td class="name" nowrap><a href="#loadSparrowFormat">loadSparrowFormat&nbsp;(xmlFileName)</a></td>
+	<td class="name" nowrap><a href="#loadSparrowFormat">loadSparrowFormat (xmlFileName)</a></td>
 	<td class="summary">Load an xml file and automatically calls parseSparrowFormat and returns a texture atlas</td>
 	</tr>
 	<tr>
-	<td class="name" nowrap><a href="#parseSparrowFormat">parseSparrowFormat&nbsp;(atlasXml, dir, texture)</a></td>
+	<td class="name" nowrap><a href="#parseSparrowFormat">parseSparrowFormat (atlasXml, dir, texture)</a></td>
 	<td class="summary">Parser for the Sparrow/Starling xml descriptor
+
 The descriptor must be an XmlNode and the xml should be in the form:
-<p><TextureAtlas imagePath='atlas.png'>
+
+
+
+<TextureAtlas imagePath='atlas.png'>
+
     <SubTexture name='texture_1' x='0'  y='0' width='50' height='50'/>
+
     <SubTexture name='texture_2' x='50' y='0' width='20' height='30'/>
+
 </TextureAtlas>
-<p>It doesn't support trimming
-<p>NB: in Starling format subtexture's names are without original image extension.</td>
+
+
+
+It doesn't support trimming
+
+
+
+NB: in Starling format subtexture's names are without original image extension.</td>
 	</tr>
 	<tr>
-	<td class="name" nowrap><a href="#loadMoaiFormat">loadMoaiFormat&nbsp;(luaFileName)</a></td>
+	<td class="name" nowrap><a href="#loadMoaiFormat">loadMoaiFormat (luaFileName)</a></td>
 	<td class="summary">Load a lua file and automatically calls parseMoaiFormat and returns a texture atlas</td>
 	</tr>
 	<tr>
-	<td class="name" nowrap><a href="#parseMoaiFormat">parseMoaiFormat&nbsp;(descriptor, dir, texture)</a></td>
+	<td class="name" nowrap><a href="#parseMoaiFormat">parseMoaiFormat (descriptor, dir, texture)</a></td>
 	<td class="summary">Parser for the MOAI lua descriptor
+
 The descriptor must be a lua table with MOAI texture packer export info</td>
 	</tr>
 	<tr>
-	<td class="name" nowrap><a href="#loadCoronaFormat">loadCoronaFormat&nbsp;(luaFileName)</a></td>
+	<td class="name" nowrap><a href="#loadCoronaFormat">loadCoronaFormat (luaFileName)</a></td>
 	<td class="summary">Load a lua file and automatically calls parseCoronaFormat and returns a texture atlas</td>
 	</tr>
 	<tr>
-	<td class="name" nowrap><a href="#parseCoronaFormat">parseCoronaFormat&nbsp;(descriptor, texture)</a></td>
+	<td class="name" nowrap><a href="#parseCoronaFormat">parseCoronaFormat (descriptor, texture)</a></td>
 	<td class="summary">Parser for the Corona lua descriptor
+
 The descriptor must be a lua table with Corona texture packer export info</td>
 	</tr>
 </table>
@@ -164,15 +187,17 @@ The descriptor must be a lua table with Corona texture packer export info</td>
     <dl class="function">
     <dt>
     <a name = "loadSparrowFormat"></a>
-    <strong>loadSparrowFormat&nbsp;(xmlFileName)</strong>
+    <strong>loadSparrowFormat (xmlFileName)</strong>
     </dt>
     <dd>
     Load an xml file and automatically calls parseSparrowFormat and returns a texture atlas
 
+
     <h3>Parameters:</h3>
     <ul>
         <li><span class="parameter">xmlFileName</span>
-         the path of the Sparrow/Starling xml descriptor</li>
+         the path of the Sparrow/Starling xml descriptor
+        </li>
     </ul>
 
     <h3>Returns:</h3>
@@ -187,30 +212,54 @@ The descriptor must be a lua table with Corona texture packer export info</td>
 </dd>
     <dt>
     <a name = "parseSparrowFormat"></a>
-    <strong>parseSparrowFormat&nbsp;(atlasXml, dir, texture)</strong>
+    <strong>parseSparrowFormat (atlasXml, dir, texture)</strong>
     </dt>
     <dd>
     Parser for the Sparrow/Starling xml descriptor
+
 The descriptor must be an XmlNode and the xml should be in the form:
-<p><TextureAtlas imagePath='atlas.png'>
+
+
+
+<TextureAtlas imagePath='atlas.png'>
+
     <SubTexture name='texture_1' x='0'  y='0' width='50' height='50'/>
+
     <SubTexture name='texture_2' x='50' y='0' width='20' height='30'/>
+
 </TextureAtlas>
-<p>It doesn't support trimming
-<p>NB: in Starling format subtexture's names are without original image extension.
+
+
+
+It doesn't support trimming
+
+
+
+NB: in Starling format subtexture's names are without original image extension.
+
 By design choice, the name of each subtexture once loaded append as extension the
+
 extension of the atlas resource.
-<p>avoiding the load (or even for using an alternative image)
+
+
+
+
 
     <h3>Parameters:</h3>
     <ul>
         <li><span class="parameter">atlasXml</span>
-         the xml with the atlas descriptor in Sparrow/Starling format</li>
+         the xml with the atlas descriptor in Sparrow/Starling format
+        </li>
         <li><span class="parameter">dir</span>
          by default texture resources are loaded from working directory.
-If dir is provided it load the image referred by atlasXml from dir</li>
+
+If dir is provided it load the image referred by atlasXml from dir
+        </li>
         <li><span class="parameter">texture</span>
-         it's possible to provide an already created texture to the method,</li>
+         it's possible to provide an already created texture to the method,
+
+avoiding the load (or even for using an alternative image)
+        </li>
     </ul>
 
 
@@ -220,15 +269,17 @@ If dir is provided it load the image referred by atlasXml from dir</li>
 </dd>
     <dt>
     <a name = "loadMoaiFormat"></a>
-    <strong>loadMoaiFormat&nbsp;(luaFileName)</strong>
+    <strong>loadMoaiFormat (luaFileName)</strong>
     </dt>
     <dd>
     Load a lua file and automatically calls parseMoaiFormat and returns a texture atlas
 
+
     <h3>Parameters:</h3>
     <ul>
         <li><span class="parameter">luaFileName</span>
-         the path of the MOAI lua descriptor</li>
+         the path of the MOAI lua descriptor
+        </li>
     </ul>
 
     <h3>Returns:</h3>
@@ -243,22 +294,29 @@ If dir is provided it load the image referred by atlasXml from dir</li>
 </dd>
     <dt>
     <a name = "parseMoaiFormat"></a>
-    <strong>parseMoaiFormat&nbsp;(descriptor, dir, texture)</strong>
+    <strong>parseMoaiFormat (descriptor, dir, texture)</strong>
     </dt>
     <dd>
     Parser for the MOAI lua descriptor
+
 The descriptor must be a lua table with MOAI texture packer export info
-avoiding the load (or even for using an alternative image)
+
 
     <h3>Parameters:</h3>
     <ul>
         <li><span class="parameter">descriptor</span>
-         the lua table with the atlas descriptor in MOAI format</li>
+         the lua table with the atlas descriptor in MOAI format
+        </li>
         <li><span class="parameter">dir</span>
          by default texture resources are loaded from working directory.
-If dir is provided it load the image referred by atlasXml from dir</li>
+
+If dir is provided it load the image referred by atlasXml from dir
+        </li>
         <li><span class="parameter">texture</span>
-         it's possible to provide an already created texture to the method,</li>
+         it's possible to provide an already created texture to the method,
+
+avoiding the load (or even for using an alternative image)
+        </li>
     </ul>
 
 
@@ -268,15 +326,17 @@ If dir is provided it load the image referred by atlasXml from dir</li>
 </dd>
     <dt>
     <a name = "loadCoronaFormat"></a>
-    <strong>loadCoronaFormat&nbsp;(luaFileName)</strong>
+    <strong>loadCoronaFormat (luaFileName)</strong>
     </dt>
     <dd>
     Load a lua file and automatically calls parseCoronaFormat and returns a texture atlas
 
+
     <h3>Parameters:</h3>
     <ul>
         <li><span class="parameter">luaFileName</span>
-         the path of the Corona lua descriptor</li>
+         the path of the Corona lua descriptor
+        </li>
     </ul>
 
     <h3>Returns:</h3>
@@ -291,18 +351,22 @@ If dir is provided it load the image referred by atlasXml from dir</li>
 </dd>
     <dt>
     <a name = "parseCoronaFormat"></a>
-    <strong>parseCoronaFormat&nbsp;(descriptor, texture)</strong>
+    <strong>parseCoronaFormat (descriptor, texture)</strong>
     </dt>
     <dd>
     Parser for the Corona lua descriptor
+
 The descriptor must be a lua table with Corona texture packer export info
+
 
     <h3>Parameters:</h3>
     <ul>
         <li><span class="parameter">descriptor</span>
-         the lua table with the atlas descriptor in Corona format</li>
+         the lua table with the atlas descriptor in Corona format
+        </li>
         <li><span class="parameter">texture</span>
-         it's necessary to provide an already created texture to the method</li>
+         it's necessary to provide an already created texture to the method
+        </li>
     </ul>
 
 
@@ -316,7 +380,7 @@ The descriptor must be a lua table with Corona texture packer export info
 </div> <!-- id="content" -->
 </div> <!-- id="main" -->
 <div id="about">
-<i>generated by <a href="http://github.com/stevedonovan/LDoc">LDoc 1.3.11</a></i>
+<i>generated by <a href="http://github.com/stevedonovan/LDoc">LDoc 1.4.2</a></i>
 </div> <!-- id="about" -->
 </div> <!-- id="container" -->
 </body>

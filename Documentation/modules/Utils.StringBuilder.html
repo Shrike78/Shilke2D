@@ -37,7 +37,7 @@
 
 
 <h2>Modules</h2>
-<ul>
+<ul class="$(kind=='Topics' and '' or 'nowrap'">
   <li><a href="../modules/Core.Assets.html">Core.Assets</a></li>
   <li><a href="../modules/Core.Event.html">Core.Event</a></li>
   <li><a href="../modules/Core.EventDispatcher.html">Core.EventDispatcher</a></li>
@@ -60,6 +60,7 @@
   <li><a href="../modules/Display.Stage.html">Display.Stage</a></li>
   <li><a href="../modules/Display.TextField.html">Display.TextField</a></li>
   <li><a href="../modules/Display.TileMap.html">Display.TileMap</a></li>
+  <li><a href="../modules/include.html">include</a></li>
   <li><a href="../modules/Texture.ITextureAtlas.html">Texture.ITextureAtlas</a></li>
   <li><a href="../modules/Texture.SubTexture.html">Texture.SubTexture</a></li>
   <li><a href="../modules/Texture.Texture.html">Texture.Texture</a></li>
@@ -87,9 +88,9 @@
   <li><a href="../modules/Utils.CollisionKit.html">Utils.CollisionKit</a></li>
   <li><a href="../modules/Utils.Color.html">Utils.Color</a></li>
   <li><a href="../modules/Utils.Coroutines.html">Utils.Coroutines</a></li>
-  <li><a href="../modules/Utils.IO.html">Utils.IO</a></li>
   <li><a href="../modules/Utils.IniFile.html">Utils.IniFile</a></li>
   <li><a href="../modules/Utils.IniParser.html">Utils.IniParser</a></li>
+  <li><a href="../modules/Utils.IO.html">Utils.IO</a></li>
   <li><a href="../modules/Utils.Log.html">Utils.Log</a></li>
   <li><a href="../modules/Utils.Math.html">Utils.Math</a></li>
   <li><a href="../modules/Utils.PerformanceTimer.html">Utils.PerformanceTimer</a></li>
@@ -102,7 +103,6 @@
   <li><a href="../modules/Utils.Vector.html">Utils.Vector</a></li>
   <li><a href="../modules/Utils.XmlNode.html">Utils.XmlNode</a></li>
   <li><a href="../modules/Utils.XmlParser.html">Utils.XmlParser</a></li>
-  <li><a href="../modules/include.html">include</a></li>
 </ul>
 
 </div>
@@ -110,7 +110,6 @@
 <div id="content">
 
 <h1>Module <code>Utils.StringBuilder</code></h1>
-
 <p>StringBuilder class to enable faster string composition</p>
 <p></p>
 
@@ -118,28 +117,29 @@
 <h2><a href="#Functions">Functions</a></h2>
 <table class="function_list">
 	<tr>
-	<td class="name" nowrap><a href="#StringBuilder:reset">StringBuilder:reset&nbsp;()</a></td>
+	<td class="name" nowrap><a href="#reset">reset ()</a></td>
 	<td class="summary">Resets the builder data</td>
 	</tr>
 	<tr>
-	<td class="name" nowrap><a href="#StringBuilder:write">StringBuilder:write&nbsp;(...)</a></td>
+	<td class="name" nowrap><a href="#write">write (...)</a></td>
 	<td class="summary">Appends a set of stringified items</td>
 	</tr>
 	<tr>
-	<td class="name" nowrap><a href="#StringBuilder:writeln">StringBuilder:writeln&nbsp;(...)</a></td>
+	<td class="name" nowrap><a href="#writeln">writeln (...)</a></td>
 	<td class="summary">Calls write(...) and append a 'newline' at the end</td>
 	</tr>
 	<tr>
-	<td class="name" nowrap><a href="#StringBuilder:lenght">StringBuilder:lenght&nbsp;()</a></td>
+	<td class="name" nowrap><a href="#lenght">lenght ()</a></td>
 	<td class="summary">Returns the length of the final string.</td>
 	</tr>
 	<tr>
-	<td class="name" nowrap><a href="#StringBuilder:toString">StringBuilder:toString&nbsp;(bFlush)</a></td>
+	<td class="name" nowrap><a href="#toString">toString (bFlush)</a></td>
 	<td class="summary">Returns the resulting string and, if bFlush is true,
+
 resets the builder</td>
 	</tr>
 	<tr>
-	<td class="name" nowrap><a href="#__tostring">__tostring&nbsp;(o)</a></td>
+	<td class="name" nowrap><a href="#__tostring">__tostring (o)</a></td>
 	<td class="summary">returns the current string value without flushing the builder</td>
 	</tr>
 </table>
@@ -151,8 +151,8 @@ resets the builder</td>
     <h2><a name="Functions"></a>Functions</h2>
     <dl class="function">
     <dt>
-    <a name = "StringBuilder:reset"></a>
-    <strong>StringBuilder:reset&nbsp;()</strong>
+    <a name = "reset"></a>
+    <strong>reset ()</strong>
     </dt>
     <dd>
     Resets the builder data
@@ -162,36 +162,22 @@ resets the builder</td>
 
 
 
+
 </dd>
     <dt>
-    <a name = "StringBuilder:write"></a>
-    <strong>StringBuilder:write&nbsp;(...)</strong>
+    <a name = "write"></a>
+    <strong>write (...)</strong>
     </dt>
     <dd>
     Appends a set of stringified items
+
+
+    <h3>Parameters:</h3>
+    <ul>
+        <li><span class="parameter">...</span>
+         each param is converted calling tostring() and is
+
 appended to the inner string list
-
-    <h3>Parameters:</h3>
-    <ul>
-        <li><span class="parameter">...</span>
-         each param is converted calling tostring() and is </li>
-    </ul>
-
-
-
-
-
-</dd>
-    <dt>
-    <a name = "StringBuilder:writeln"></a>
-    <strong>StringBuilder:writeln&nbsp;(...)</strong>
-    </dt>
-    <dd>
-    Calls write(...) and append a 'newline' at the end
-
-    <h3>Parameters:</h3>
-    <ul>
-        <li><span class="parameter">...</span>
         </li>
     </ul>
 
@@ -201,13 +187,37 @@ appended to the inner string list
 
 </dd>
     <dt>
-    <a name = "StringBuilder:lenght"></a>
-    <strong>StringBuilder:lenght&nbsp;()</strong>
+    <a name = "writeln"></a>
+    <strong>writeln (...)</strong>
+    </dt>
+    <dd>
+    Calls write(...) and append a 'newline' at the end
+
+
+    <h3>Parameters:</h3>
+    <ul>
+        <li><span class="parameter">...</span>
+
+        </li>
+    </ul>
+
+
+
+
+
+</dd>
+    <dt>
+    <a name = "lenght"></a>
+    <strong>lenght ()</strong>
     </dt>
     <dd>
     Returns the length of the final string.
+
 The value is updated each time a new
+
 string is added to the builder
+
+
 
 
     <h3>Returns:</h3>
@@ -221,17 +231,20 @@ string is added to the builder
 
 </dd>
     <dt>
-    <a name = "StringBuilder:toString"></a>
-    <strong>StringBuilder:toString&nbsp;(bFlush)</strong>
+    <a name = "toString"></a>
+    <strong>toString (bFlush)</strong>
     </dt>
     <dd>
     Returns the resulting string and, if bFlush is true,
+
 resets the builder
+
 
     <h3>Parameters:</h3>
     <ul>
         <li><span class="parameter">bFlush</span>
-         bool, if true clear the builder</li>
+         bool, if true clear the builder
+        </li>
     </ul>
 
     <h3>Returns:</h3>
@@ -246,14 +259,16 @@ resets the builder
 </dd>
     <dt>
     <a name = "__tostring"></a>
-    <strong>__tostring&nbsp;(o)</strong>
+    <strong>__tostring (o)</strong>
     </dt>
     <dd>
     returns the current string value without flushing the builder
 
+
     <h3>Parameters:</h3>
     <ul>
         <li><span class="parameter">o</span>
+
         </li>
     </ul>
 
@@ -268,7 +283,7 @@ resets the builder
 </div> <!-- id="content" -->
 </div> <!-- id="main" -->
 <div id="about">
-<i>generated by <a href="http://github.com/stevedonovan/LDoc">LDoc 1.3.11</a></i>
+<i>generated by <a href="http://github.com/stevedonovan/LDoc">LDoc 1.4.2</a></i>
 </div> <!-- id="about" -->
 </div> <!-- id="container" -->
 </body>

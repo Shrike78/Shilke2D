@@ -38,7 +38,7 @@
 
 
 <h2>Modules</h2>
-<ul>
+<ul class="$(kind=='Topics' and '' or 'nowrap'">
   <li><a href="../modules/Core.Assets.html">Core.Assets</a></li>
   <li><a href="../modules/Core.Event.html">Core.Event</a></li>
   <li><a href="../modules/Core.EventDispatcher.html">Core.EventDispatcher</a></li>
@@ -61,6 +61,7 @@
   <li><a href="../modules/Display.Stage.html">Display.Stage</a></li>
   <li><a href="../modules/Display.TextField.html">Display.TextField</a></li>
   <li><a href="../modules/Display.TileMap.html">Display.TileMap</a></li>
+  <li><a href="../modules/include.html">include</a></li>
   <li><a href="../modules/Texture.ITextureAtlas.html">Texture.ITextureAtlas</a></li>
   <li><a href="../modules/Texture.SubTexture.html">Texture.SubTexture</a></li>
   <li><a href="../modules/Texture.Texture.html">Texture.Texture</a></li>
@@ -88,9 +89,9 @@
   <li><a href="../modules/Utils.CollisionKit.html">Utils.CollisionKit</a></li>
   <li><a href="../modules/Utils.Color.html">Utils.Color</a></li>
   <li><a href="../modules/Utils.Coroutines.html">Utils.Coroutines</a></li>
-  <li><a href="../modules/Utils.IO.html">Utils.IO</a></li>
   <li><a href="../modules/Utils.IniFile.html">Utils.IniFile</a></li>
   <li><a href="../modules/Utils.IniParser.html">Utils.IniParser</a></li>
+  <li><a href="../modules/Utils.IO.html">Utils.IO</a></li>
   <li><a href="../modules/Utils.Log.html">Utils.Log</a></li>
   <li><a href="../modules/Utils.Math.html">Utils.Math</a></li>
   <li><a href="../modules/Utils.PerformanceTimer.html">Utils.PerformanceTimer</a></li>
@@ -103,7 +104,6 @@
   <li><a href="../modules/Utils.Vector.html">Utils.Vector</a></li>
   <li><a href="../modules/Utils.XmlNode.html">Utils.XmlNode</a></li>
   <li><a href="../modules/Utils.XmlParser.html">Utils.XmlParser</a></li>
-  <li><a href="../modules/include.html">include</a></li>
 </ul>
 
 </div>
@@ -111,173 +111,199 @@
 <div id="content">
 
 <h1>Module <code>Display.DisplayObjContainer</code></h1>
-
 <p>A DisplayObjectContainer represents a collection of display objects.</p>
 <p>
+
 It is the base class of all display objects that act as a container
+
 for other objects. By maintaining an ordered list of children, it
+
 defines the back-to-front positioning of the children within the
+
 display tree.
-<p>A container does not a have size in itself. The width and height
+
+
+
+A container does not a have size in itself. The width and height
+
 properties represent the extents of its children.
-<p>- Adding and removing children
-<p>The class defines methods that allow you to add or remove children.
-<p>When you add a child, it will be added at the frontmost position,
-possibly occluding a child that was added before.</p>
+
+
+
+- Adding and removing children
+
+
+
+The class defines methods that allow you to add or remove children.
+
+
+
+When you add a child, it will be added at the frontmost position,
+
+possibly occluding a child that was added before.
+</p>
 
 
 <h2><a href="#Functions">Functions</a></h2>
 <table class="function_list">
 	<tr>
-	<td class="name" nowrap><a href="#children">children&nbsp;(displayObjContainer, typeFilter)</a></td>
+	<td class="name" nowrap><a href="#children">children (displayObjContainer, typeFilter)</a></td>
 	<td class="summary">iterator for DisplayObjContainer children.</td>
 	</tr>
 	<tr>
-	<td class="name" nowrap><a href="#reverse_children">reverse_children&nbsp;(displayObjContainer, typeFilter)</a></td>
+	<td class="name" nowrap><a href="#reverse_children">reverse_children (displayObjContainer, typeFilter)</a></td>
 	<td class="summary">Reverse iterator for DisplayObjContainer children.</td>
 	</tr>
 	<tr>
-	<td class="name" nowrap><a href="#DisplayObjContainer:init">DisplayObjContainer:init&nbsp;()</a></td>
+	<td class="name" nowrap><a href="#init">init ()</a></td>
 	<td class="summary">Initialization method.</td>
 	</tr>
 	<tr>
-	<td class="name" nowrap><a href="#DisplayObjContainer:dispose">DisplayObjContainer:dispose&nbsp;()</a></td>
+	<td class="name" nowrap><a href="#dispose">dispose ()</a></td>
 	<td class="summary">When an objectContainer is disposed it realease all his children.</td>
 	</tr>
 	<tr>
-	<td class="name" nowrap><a href="#DisplayObjContainer:dbgInfo">DisplayObjContainer:dbgInfo&nbsp;(recursive)</a></td>
+	<td class="name" nowrap><a href="#dbgInfo">dbgInfo (recursive)</a></td>
 	<td class="summary">Debug Infos</td>
 	</tr>
 	<tr>
-	<td class="name" nowrap><a href="#DisplayObjContainer:drawOrientedBounds">DisplayObjContainer:drawOrientedBounds&nbsp;()</a></td>
+	<td class="name" nowrap><a href="#drawOrientedBounds">drawOrientedBounds ()</a></td>
 	<td class="summary">Draws oriented bounds for all his children</td>
 	</tr>
 	<tr>
-	<td class="name" nowrap><a href="#DisplayObjContainer:drawAABounds">DisplayObjContainer:drawAABounds&nbsp;(drawContainer)</a></td>
+	<td class="name" nowrap><a href="#drawAABounds">drawAABounds (drawContainer)</a></td>
 	<td class="summary">Draws axis aligned bounds for all his children.</td>
 	</tr>
 	<tr>
-	<td class="name" nowrap><a href="#DisplayObjContainer:getChildByName">DisplayObjContainer:getChildByName&nbsp;(name)</a></td>
+	<td class="name" nowrap><a href="#getChildByName">getChildByName (name)</a></td>
 	<td class="summary">Returns the first child with a given name, if it exists, or nil</td>
 	</tr>
 	<tr>
-	<td class="name" nowrap><a href="#DisplayObjContainer:_innerRemoveChild">DisplayObjContainer:_innerRemoveChild&nbsp;(obj)</a></td>
+	<td class="name" nowrap><a href="#_innerRemoveChild">_innerRemoveChild (obj)</a></td>
 	<td class="summary">Inner method.</td>
 	</tr>
 	<tr>
-	<td class="name" nowrap><a href="#DisplayObjContainer:addChild">DisplayObjContainer:addChild&nbsp;(obj)</a></td>
+	<td class="name" nowrap><a href="#addChild">addChild (obj)</a></td>
 	<td class="summary">Add a displayObj to the children list.</td>
 	</tr>
 	<tr>
-	<td class="name" nowrap><a href="#DisplayObjContainer:removeChild">DisplayObjContainer:removeChild&nbsp;(obj, dispose)</a></td>
+	<td class="name" nowrap><a href="#removeChild">removeChild (obj, dispose)</a></td>
 	<td class="summary">Remove an obj from children list.</td>
 	</tr>
 	<tr>
-	<td class="name" nowrap><a href="#DisplayObjContainer:getNumChildren">DisplayObjContainer:getNumChildren&nbsp;()</a></td>
+	<td class="name" nowrap><a href="#getNumChildren">getNumChildren ()</a></td>
 	<td class="summary">Return the number of children</td>
 	</tr>
 	<tr>
-	<td class="name" nowrap><a href="#DisplayObjContainer:addChildAt">DisplayObjContainer:addChildAt&nbsp;(obj, index)</a></td>
+	<td class="name" nowrap><a href="#addChildAt">addChildAt (obj, index)</a></td>
 	<td class="summary">Add a child at given position</td>
 	</tr>
 	<tr>
-	<td class="name" nowrap><a href="#DisplayObjContainer:removeChildAt">DisplayObjContainer:removeChildAt&nbsp;(index, dispose)</a></td>
+	<td class="name" nowrap><a href="#removeChildAt">removeChildAt (index, dispose)</a></td>
 	<td class="summary">Remove a child at a given position</td>
 	</tr>
 	<tr>
-	<td class="name" nowrap><a href="#DisplayObjContainer:removeChildren">DisplayObjContainer:removeChildren&nbsp;(beginIndex, endIndex, dispose)</a></td>
+	<td class="name" nowrap><a href="#removeChildren">removeChildren (beginIndex, endIndex, dispose)</a></td>
 	<td class="summary">Remove all the children between two indices</td>
 	</tr>
 	<tr>
-	<td class="name" nowrap><a href="#DisplayObjContainer:getChildIndex">DisplayObjContainer:getChildIndex&nbsp;(obj)</a></td>
+	<td class="name" nowrap><a href="#getChildIndex">getChildIndex (obj)</a></td>
 	<td class="summary">Returns the index of a given displayObj, if contained, or 0 if not.</td>
 	</tr>
 	<tr>
-	<td class="name" nowrap><a href="#DisplayObjContainer:getChildAt">DisplayObjContainer:getChildAt&nbsp;(index)</a></td>
+	<td class="name" nowrap><a href="#getChildAt">getChildAt (index)</a></td>
 	<td class="summary">Returns the displayObj at the given index.</td>
 	</tr>
 	<tr>
-	<td class="name" nowrap><a href="#DisplayObjContainer:swapChildren">DisplayObjContainer:swapChildren&nbsp;(obj1, obj2)</a></td>
+	<td class="name" nowrap><a href="#swapChildren">swapChildren (obj1, obj2)</a></td>
 	<td class="summary">Swap two given children in the displayList.</td>
 	</tr>
 	<tr>
-	<td class="name" nowrap><a href="#DisplayObjContainer:swapChildrenAt">DisplayObjContainer:swapChildrenAt&nbsp;(index1, index2)</a></td>
+	<td class="name" nowrap><a href="#swapChildrenAt">swapChildrenAt (index1, index2)</a></td>
 	<td class="summary">Swap two children at given positions in the displayList
+
 If both the indices are valid, swap the relative objects</td>
 	</tr>
 	<tr>
-	<td class="name" nowrap><a href="#DisplayObjContainer:setAlpha">DisplayObjContainer:setAlpha&nbsp;(a)</a></td>
+	<td class="name" nowrap><a href="#setAlpha">setAlpha (a)</a></td>
 	<td class="summary">Set container alpha value</td>
 	</tr>
 	<tr>
-	<td class="name" nowrap><a href="#DisplayObjContainer:_setMultiplyColor">DisplayObjContainer:_setMultiplyColor&nbsp;(r, g, b, a)</a></td>
+	<td class="name" nowrap><a href="#_setMultiplyColor">_setMultiplyColor (r, g, b, a)</a></td>
 	<td class="summary">Inner method.</td>
 	</tr>
 	<tr>
-	<td class="name" nowrap><a href="#DisplayObjContainer:_updateChildrenColor">DisplayObjContainer:_updateChildrenColor&nbsp;()</a></td>
+	<td class="name" nowrap><a href="#_updateChildrenColor">_updateChildrenColor ()</a></td>
 	<td class="summary">Inner method.</td>
 	</tr>
 	<tr>
-	<td class="name" nowrap><a href="#DisplayObjContainer:setHittable">DisplayObjContainer:setHittable&nbsp;(hittable)</a></td>
+	<td class="name" nowrap><a href="#setHittable">setHittable (hittable)</a></td>
 	<td class="summary">By default the hitTet over a DisplayObjContainer is an hitTest over
+
 all its children.</td>
 	</tr>
 	<tr>
-	<td class="name" nowrap><a href="#DisplayObjContainer:isHittable">DisplayObjContainer:isHittable&nbsp;()</a></td>
+	<td class="name" nowrap><a href="#isHittable">isHittable ()</a></td>
 	<td class="summary">Returns if a DisplayObjContainer can be direct target of a touch event</td>
 	</tr>
 	<tr>
-	<td class="name" nowrap><a href="#DisplayObjContainer:setVisible">DisplayObjContainer:setVisible&nbsp;(visible)</a></td>
+	<td class="name" nowrap><a href="#setVisible">setVisible (visible)</a></td>
 	<td class="summary">Change visibility status of the container</td>
 	</tr>
 	<tr>
-	<td class="name" nowrap><a href="#DisplayObjContainer:getRect">DisplayObjContainer:getRect&nbsp;(resultRect)</a></td>
+	<td class="name" nowrap><a href="#getRect">getRect (resultRect)</a></td>
 	<td class="summary">Return a rect obtained by children rect
+
 Iterates over all the children and calculates a rectangle that enclose them all.</td>
 	</tr>
 	<tr>
-	<td class="name" nowrap><a href="#DisplayObjContainer:hitTest">DisplayObjContainer:hitTest&nbsp;(x, y, targetSpace, forTouch)</a></td>
+	<td class="name" nowrap><a href="#hitTest">hitTest (x, y, targetSpace, forTouch)</a></td>
 	<td class="summary">Given a x,y point in targetSpace coordinates it check if it falls inside local bounds.</td>
 	</tr>
 	<tr>
-	<td class="name" nowrap><a href="#DisplayObjContainer:createFrameBufferImage">DisplayObjContainer:createFrameBufferImage&nbsp;(bUpdate, width, height)</a></td>
+	<td class="name" nowrap><a href="#createFrameBufferImage">createFrameBufferImage (bUpdate, width, height)</a></td>
 	<td class="summary">The method led to create an image that will be rendered in place of the whole
+
 displaylist owned by the container.</td>
 	</tr>
 	<tr>
-	<td class="name" nowrap><a href="#DisplayObjContainer:destroyFrameBufferImage">DisplayObjContainer:destroyFrameBufferImage&nbsp;()</a></td>
+	<td class="name" nowrap><a href="#destroyFrameBufferImage">destroyFrameBufferImage ()</a></td>
 	<td class="summary">Removes the frameBufferImage previously created with a createFrameBufferImage call and restores
+
 normal draw of the container.</td>
 	</tr>
 	<tr>
-	<td class="name" nowrap><a href="#DisplayObjContainer:getFrameBufferImage">DisplayObjContainer:getFrameBufferImage&nbsp;()</a></td>
+	<td class="name" nowrap><a href="#getFrameBufferImage">getFrameBufferImage ()</a></td>
 	<td class="summary">Returns the frameBufferImage previously created with a createFrameBufferImage call</td>
 	</tr>
 	<tr>
-	<td class="name" nowrap><a href="#DisplayObjContainer:flatten">DisplayObjContainer:flatten&nbsp;(w, h)</a></td>
+	<td class="name" nowrap><a href="#flatten">flatten (w, h)</a></td>
 	<td class="summary">alias for createFrameBufferImage call with bUpdate = false
+
 Takes the name from original Starling sprite:flatten logic</td>
 	</tr>
 	<tr>
-	<td class="name" nowrap><a href="#DisplayObjContainer:unflatten">DisplayObjContainer:unflatten&nbsp;()</a></td>
+	<td class="name" nowrap><a href="#unflatten">unflatten ()</a></td>
 	<td class="summary">alias for destroyFrameBufferImage call
+
 Takes the name from original Starling sprite:unflatten logic</td>
 	</tr>
 	<tr>
-	<td class="name" nowrap><a href="#DisplayObjContainer:isFlattened">DisplayObjContainer:isFlattened&nbsp;()</a></td>
+	<td class="name" nowrap><a href="#isFlattened">isFlattened ()</a></td>
 	<td class="summary">Check if a frameBufferData is present with isFlattened = true</td>
 	</tr>
 	<tr>
-	<td class="name" nowrap><a href="#DisplayObjContainer:setClipArea">DisplayObjContainer:setClipArea&nbsp;(w, h)</a></td>
+	<td class="name" nowrap><a href="#setClipArea">setClipArea (w, h)</a></td>
 	<td class="summary">alias for createFrameBufferImage call with dynamic update set to true</td>
 	</tr>
 	<tr>
-	<td class="name" nowrap><a href="#DisplayObjContainer:destroyClipArea">DisplayObjContainer:destroyClipArea&nbsp;()</a></td>
+	<td class="name" nowrap><a href="#destroyClipArea">destroyClipArea ()</a></td>
 	<td class="summary">alias for destroyFrameBufferImage call
+
 Takes the name from original Starling sprite:unflatten logic</td>
 	</tr>
 	<tr>
-	<td class="name" nowrap><a href="#DisplayObjContainer:hasClipArea">DisplayObjContainer:hasClipArea&nbsp;()</a></td>
+	<td class="name" nowrap><a href="#hasClipArea">hasClipArea ()</a></td>
 	<td class="summary">Check if a frameBufferData is present with isFlattened = false (so dynamic)</td>
 	</tr>
 </table>
@@ -286,6 +312,7 @@ Takes the name from original Starling sprite:unflatten logic</td>
 	<tr>
 	<td class="name" nowrap><a href="#__defaultUseMultiplyColor">__defaultUseMultiplyColor</a></td>
 	<td class="summary">DisplayObjContainers must notify all interested children into color changes so to be able
+
 to correctly react to the events.</td>
 	</tr>
 </table>
@@ -298,18 +325,23 @@ to correctly react to the events.</td>
     <dl class="function">
     <dt>
     <a name = "children"></a>
-    <strong>children&nbsp;(displayObjContainer, typeFilter)</strong>
+    <strong>children (displayObjContainer, typeFilter)</strong>
     </dt>
     <dd>
     iterator for DisplayObjContainer children.
+
 It's possible to retrieve only children of a given 'typeFilter' type
+
+
 
     <h3>Parameters:</h3>
     <ul>
         <li><span class="parameter">displayObjContainer</span>
-         the container of which children must be iterated</li>
+         the container of which children must be iterated
+        </li>
         <li><span class="parameter">typeFilter</span>
-         filter on the type of the children</li>
+         filter on the type of the children
+        </li>
     </ul>
 
     <h3>Returns:</h3>
@@ -324,18 +356,23 @@ It's possible to retrieve only children of a given 'typeFilter' type
 </dd>
     <dt>
     <a name = "reverse_children"></a>
-    <strong>reverse_children&nbsp;(displayObjContainer, typeFilter)</strong>
+    <strong>reverse_children (displayObjContainer, typeFilter)</strong>
     </dt>
     <dd>
     Reverse iterator for DisplayObjContainer children.
+
 It's possible to retrieve only children of a given 'typeFilter' type
+
+
 
     <h3>Parameters:</h3>
     <ul>
         <li><span class="parameter">displayObjContainer</span>
-         the container of which children must be iterated</li>
+         the container of which children must be iterated
+        </li>
         <li><span class="parameter">typeFilter</span>
-         filter on the type of the children</li>
+         filter on the type of the children
+        </li>
     </ul>
 
     <h3>Returns:</h3>
@@ -349,11 +386,12 @@ It's possible to retrieve only children of a given 'typeFilter' type
 
 </dd>
     <dt>
-    <a name = "DisplayObjContainer:init"></a>
-    <strong>DisplayObjContainer:init&nbsp;()</strong>
+    <a name = "init"></a>
+    <strong>init ()</strong>
     </dt>
     <dd>
     Initialization method.
+
 Children displayObj list is built as well as objRenderTalbe list.
 
 
@@ -361,13 +399,16 @@ Children displayObj list is built as well as objRenderTalbe list.
 
 
 
+
+
 </dd>
     <dt>
-    <a name = "DisplayObjContainer:dispose"></a>
-    <strong>DisplayObjContainer:dispose&nbsp;()</strong>
+    <a name = "dispose"></a>
+    <strong>dispose ()</strong>
     </dt>
     <dd>
     When an objectContainer is disposed it realease all his children.
+
 All the children are themself disposed
 
 
@@ -375,18 +416,22 @@ All the children are themself disposed
 
 
 
+
+
 </dd>
     <dt>
-    <a name = "DisplayObjContainer:dbgInfo"></a>
-    <strong>DisplayObjContainer:dbgInfo&nbsp;(recursive)</strong>
+    <a name = "dbgInfo"></a>
+    <strong>dbgInfo (recursive)</strong>
     </dt>
     <dd>
     Debug Infos
 
+
     <h3>Parameters:</h3>
     <ul>
         <li><span class="parameter">recursive</span>
-         boolean, if true dbgInfo will be called also for all the children</li>
+         boolean, if true dbgInfo will be called also for all the children
+        </li>
     </ul>
 
     <h3>Returns:</h3>
@@ -400,8 +445,8 @@ All the children are themself disposed
 
 </dd>
     <dt>
-    <a name = "DisplayObjContainer:drawOrientedBounds"></a>
-    <strong>DisplayObjContainer:drawOrientedBounds&nbsp;()</strong>
+    <a name = "drawOrientedBounds"></a>
+    <strong>drawOrientedBounds ()</strong>
     </dt>
     <dd>
     Draws oriented bounds for all his children
@@ -411,18 +456,21 @@ All the children are themself disposed
 
 
 
+
 </dd>
     <dt>
-    <a name = "DisplayObjContainer:drawAABounds"></a>
-    <strong>DisplayObjContainer:drawAABounds&nbsp;(drawContainer)</strong>
+    <a name = "drawAABounds"></a>
+    <strong>drawAABounds (drawContainer)</strong>
     </dt>
     <dd>
     Draws axis aligned bounds for all his children.
 
+
     <h3>Parameters:</h3>
     <ul>
         <li><span class="parameter">drawContainer</span>
-         boolean, if true also container bounds will be drawn</li>
+         boolean, if true also container bounds will be drawn
+        </li>
     </ul>
 
 
@@ -431,16 +479,18 @@ All the children are themself disposed
 
 </dd>
     <dt>
-    <a name = "DisplayObjContainer:getChildByName"></a>
-    <strong>DisplayObjContainer:getChildByName&nbsp;(name)</strong>
+    <a name = "getChildByName"></a>
+    <strong>getChildByName (name)</strong>
     </dt>
     <dd>
     Returns the first child with a given name, if it exists, or nil
 
+
     <h3>Parameters:</h3>
     <ul>
         <li><span class="parameter">name</span>
-         of the child to be searched</li>
+         of the child to be searched
+        </li>
     </ul>
 
     <h3>Returns:</h3>
@@ -454,19 +504,25 @@ All the children are themself disposed
 
 </dd>
     <dt>
-    <a name = "DisplayObjContainer:_innerRemoveChild"></a>
-    <strong>DisplayObjContainer:_innerRemoveChild&nbsp;(obj)</strong>
+    <a name = "_innerRemoveChild"></a>
+    <strong>_innerRemoveChild (obj)</strong>
     </dt>
     <dd>
     Inner method.
+
 Used to remove a children by the container without setting the new father.
+
 It's used either from removeChild than from addChild for object already added
+
 to another container
+
+
 
     <h3>Parameters:</h3>
     <ul>
         <li><span class="parameter">obj</span>
-         the obj to remove</li>
+         the obj to remove
+        </li>
     </ul>
 
     <h3>Returns:</h3>
@@ -480,19 +536,25 @@ to another container
 
 </dd>
     <dt>
-    <a name = "DisplayObjContainer:addChild"></a>
-    <strong>DisplayObjContainer:addChild&nbsp;(obj)</strong>
+    <a name = "addChild"></a>
+    <strong>addChild (obj)</strong>
     </dt>
     <dd>
     Add a displayObj to the children list.
+
 The child is add at the end of the children list so it's the top most of the drawn children.
+
 If the obj already has a parent, first is removed from the parent and then added to the new
+
 parent container.
+
+
 
     <h3>Parameters:</h3>
     <ul>
         <li><span class="parameter">obj</span>
-         the obj to be added as child</li>
+         the obj to be added as child
+        </li>
     </ul>
 
 
@@ -501,19 +563,24 @@ parent container.
 
 </dd>
     <dt>
-    <a name = "DisplayObjContainer:removeChild"></a>
-    <strong>DisplayObjContainer:removeChild&nbsp;(obj, dispose)</strong>
+    <a name = "removeChild"></a>
+    <strong>removeChild (obj, dispose)</strong>
     </dt>
     <dd>
     Remove an obj from children list.
+
 if the object is not a child do nothing
+
+
 
     <h3>Parameters:</h3>
     <ul>
         <li><span class="parameter">obj</span>
-         the obj to be removed</li>
+         the obj to be removed
+        </li>
         <li><span class="parameter">dispose</span>
-         if to dispose after removal</li>
+         if to dispose after removal
+        </li>
     </ul>
 
     <h3>Returns:</h3>
@@ -527,11 +594,12 @@ if the object is not a child do nothing
 
 </dd>
     <dt>
-    <a name = "DisplayObjContainer:getNumChildren"></a>
-    <strong>DisplayObjContainer:getNumChildren&nbsp;()</strong>
+    <a name = "getNumChildren"></a>
+    <strong>getNumChildren ()</strong>
     </dt>
     <dd>
     Return the number of children
+
 
 
     <h3>Returns:</h3>
@@ -545,18 +613,21 @@ if the object is not a child do nothing
 
 </dd>
     <dt>
-    <a name = "DisplayObjContainer:addChildAt"></a>
-    <strong>DisplayObjContainer:addChildAt&nbsp;(obj, index)</strong>
+    <a name = "addChildAt"></a>
+    <strong>addChildAt (obj, index)</strong>
     </dt>
     <dd>
     Add a child at given position
 
+
     <h3>Parameters:</h3>
     <ul>
         <li><span class="parameter">obj</span>
-         the obj o be added</li>
+         the obj o be added
+        </li>
         <li><span class="parameter">index</span>
-         the desired position</li>
+         the desired position
+        </li>
     </ul>
 
 
@@ -565,18 +636,21 @@ if the object is not a child do nothing
 
 </dd>
     <dt>
-    <a name = "DisplayObjContainer:removeChildAt"></a>
-    <strong>DisplayObjContainer:removeChildAt&nbsp;(index, dispose)</strong>
+    <a name = "removeChildAt"></a>
+    <strong>removeChildAt (index, dispose)</strong>
     </dt>
     <dd>
     Remove a child at a given position
 
+
     <h3>Parameters:</h3>
     <ul>
         <li><span class="parameter">index</span>
-         the position of the obj to be removed</li>
+         the position of the obj to be removed
+        </li>
         <li><span class="parameter">dispose</span>
-         boolean, if to dispose the obj after removal</li>
+         boolean, if to dispose the obj after removal
+        </li>
     </ul>
 
     <h3>Returns:</h3>
@@ -590,20 +664,24 @@ if the object is not a child do nothing
 
 </dd>
     <dt>
-    <a name = "DisplayObjContainer:removeChildren"></a>
-    <strong>DisplayObjContainer:removeChildren&nbsp;(beginIndex, endIndex, dispose)</strong>
+    <a name = "removeChildren"></a>
+    <strong>removeChildren (beginIndex, endIndex, dispose)</strong>
     </dt>
     <dd>
     Remove all the children between two indices
 
+
     <h3>Parameters:</h3>
     <ul>
         <li><span class="parameter">beginIndex</span>
-         index of the first object to be removed</li>
+         index of the first object to be removed
+        </li>
         <li><span class="parameter">endIndex</span>
-         index of the last object to be removed</li>
+         index of the last object to be removed
+        </li>
         <li><span class="parameter">dispose</span>
-         if to dispose the objects after removal</li>
+         if to dispose the objects after removal
+        </li>
     </ul>
 
 
@@ -612,16 +690,19 @@ if the object is not a child do nothing
 
 </dd>
     <dt>
-    <a name = "DisplayObjContainer:getChildIndex"></a>
-    <strong>DisplayObjContainer:getChildIndex&nbsp;(obj)</strong>
+    <a name = "getChildIndex"></a>
+    <strong>getChildIndex (obj)</strong>
     </dt>
     <dd>
     Returns the index of a given displayObj, if contained, or 0 if not.
 
+
+
     <h3>Parameters:</h3>
     <ul>
         <li><span class="parameter">obj</span>
-         the obj to be searched</li>
+         the obj to be searched
+        </li>
     </ul>
 
     <h3>Returns:</h3>
@@ -635,16 +716,19 @@ if the object is not a child do nothing
 
 </dd>
     <dt>
-    <a name = "DisplayObjContainer:getChildAt"></a>
-    <strong>DisplayObjContainer:getChildAt&nbsp;(index)</strong>
+    <a name = "getChildAt"></a>
+    <strong>getChildAt (index)</strong>
     </dt>
     <dd>
     Returns the displayObj at the given index.
 
+
+
     <h3>Parameters:</h3>
     <ul>
         <li><span class="parameter">index</span>
-         the index of the obj to be returned</li>
+         the index of the obj to be returned
+        </li>
     </ul>
 
     <h3>Returns:</h3>
@@ -658,117 +742,23 @@ if the object is not a child do nothing
 
 </dd>
     <dt>
-    <a name = "DisplayObjContainer:swapChildren"></a>
-    <strong>DisplayObjContainer:swapChildren&nbsp;(obj1, obj2)</strong>
+    <a name = "swapChildren"></a>
+    <strong>swapChildren (obj1, obj2)</strong>
     </dt>
     <dd>
     Swap two given children in the displayList.
+
 If both the object are children, swap the positions
+
+
 
     <h3>Parameters:</h3>
     <ul>
         <li><span class="parameter">obj1</span>
-         first object to be moved</li>
+         first object to be moved
+        </li>
         <li><span class="parameter">obj2</span>
-         second object to be moved</li>
-    </ul>
-
-
-
-
-
-</dd>
-    <dt>
-    <a name = "DisplayObjContainer:swapChildrenAt"></a>
-    <strong>DisplayObjContainer:swapChildrenAt&nbsp;(index1, index2)</strong>
-    </dt>
-    <dd>
-    Swap two children at given positions in the displayList
-If both the indices are valid, swap the relative objects
-
-    <h3>Parameters:</h3>
-    <ul>
-        <li><span class="parameter">index1</span>
-         index of the first object to be moved</li>
-        <li><span class="parameter">index2</span>
-         index of the second object to be moved</li>
-    </ul>
-
-
-
-
-
-</dd>
-    <dt>
-    <a name = "DisplayObjContainer:setAlpha"></a>
-    <strong>DisplayObjContainer:setAlpha&nbsp;(a)</strong>
-    </dt>
-    <dd>
-    Set container alpha value
-
-    <h3>Parameters:</h3>
-    <ul>
-        <li><span class="parameter">a</span>
-         [0,255]</li>
-    </ul>
-
-
-
-
-
-</dd>
-    <dt>
-    <a name = "DisplayObjContainer:_setMultiplyColor"></a>
-    <strong>DisplayObjContainer:_setMultiplyColor&nbsp;(r, g, b, a)</strong>
-    </dt>
-    <dd>
-    Inner method.  Called by parent container, setMultiplyAlpha set the alpha value of the parent container (already
-modified by his current multiplyalpha value)
-
-    <h3>Parameters:</h3>
-    <ul>
-        <li><span class="parameter">r</span>
-         [0,1]</li>
-        <li><span class="parameter">g</span>
-         [0,1]</li>
-        <li><span class="parameter">b</span>
-         [0,1]</li>
-        <li><span class="parameter">a</span>
-         [0,1]</li>
-    </ul>
-
-
-
-
-
-</dd>
-    <dt>
-    <a name = "DisplayObjContainer:_updateChildrenColor"></a>
-    <strong>DisplayObjContainer:_updateChildrenColor&nbsp;()</strong>
-    </dt>
-    <dd>
-    Inner method.  Propagate color value to all children, setting "multiplied color" value
-used by object that need it for correct displaying using pixel shaders
-
-
-
-
-
-
-</dd>
-    <dt>
-    <a name = "DisplayObjContainer:setHittable"></a>
-    <strong>DisplayObjContainer:setHittable&nbsp;(hittable)</strong>
-    </dt>
-    <dd>
-    By default the hitTet over a DisplayObjContainer is an hitTest over
-all its children.  It's possible anyway to set itself as target of
-an hitTest, without going deep in the displayList
---@param hittable boolean
-
-    <h3>Parameters:</h3>
-    <ul>
-        <li><span class="parameter">hittable</span>
+         second object to be moved
         </li>
     </ul>
 
@@ -778,11 +768,133 @@ an hitTest, without going deep in the displayList
 
 </dd>
     <dt>
-    <a name = "DisplayObjContainer:isHittable"></a>
-    <strong>DisplayObjContainer:isHittable&nbsp;()</strong>
+    <a name = "swapChildrenAt"></a>
+    <strong>swapChildrenAt (index1, index2)</strong>
+    </dt>
+    <dd>
+    Swap two children at given positions in the displayList
+
+If both the indices are valid, swap the relative objects
+
+
+    <h3>Parameters:</h3>
+    <ul>
+        <li><span class="parameter">index1</span>
+         index of the first object to be moved
+        </li>
+        <li><span class="parameter">index2</span>
+         index of the second object to be moved
+        </li>
+    </ul>
+
+
+
+
+
+</dd>
+    <dt>
+    <a name = "setAlpha"></a>
+    <strong>setAlpha (a)</strong>
+    </dt>
+    <dd>
+    Set container alpha value
+
+
+    <h3>Parameters:</h3>
+    <ul>
+        <li><span class="parameter">a</span>
+         [0,255]
+        </li>
+    </ul>
+
+
+
+
+
+</dd>
+    <dt>
+    <a name = "_setMultiplyColor"></a>
+    <strong>_setMultiplyColor (r, g, b, a)</strong>
+    </dt>
+    <dd>
+    Inner method.  Called by parent container, setMultiplyAlpha set the alpha value of the parent container (already
+
+modified by his current multiplyalpha value)
+
+
+
+    <h3>Parameters:</h3>
+    <ul>
+        <li><span class="parameter">r</span>
+         [0,1]
+        </li>
+        <li><span class="parameter">g</span>
+         [0,1]
+        </li>
+        <li><span class="parameter">b</span>
+         [0,1]
+        </li>
+        <li><span class="parameter">a</span>
+         [0,1]
+        </li>
+    </ul>
+
+
+
+
+
+</dd>
+    <dt>
+    <a name = "_updateChildrenColor"></a>
+    <strong>_updateChildrenColor ()</strong>
+    </dt>
+    <dd>
+    Inner method.  Propagate color value to all children, setting "multiplied color" value
+
+used by object that need it for correct displaying using pixel shaders
+
+
+
+
+
+
+
+
+</dd>
+    <dt>
+    <a name = "setHittable"></a>
+    <strong>setHittable (hittable)</strong>
+    </dt>
+    <dd>
+    By default the hitTet over a DisplayObjContainer is an hitTest over
+
+all its children.  It's possible anyway to set itself as target of
+
+an hitTest, without going deep in the displayList
+
+--@param hittable boolean
+
+
+
+    <h3>Parameters:</h3>
+    <ul>
+        <li><span class="parameter">hittable</span>
+
+        </li>
+    </ul>
+
+
+
+
+
+</dd>
+    <dt>
+    <a name = "isHittable"></a>
+    <strong>isHittable ()</strong>
     </dt>
     <dd>
     Returns if a DisplayObjContainer can be direct target of a touch event
+
 
 
     <h3>Returns:</h3>
@@ -796,16 +908,18 @@ an hitTest, without going deep in the displayList
 
 </dd>
     <dt>
-    <a name = "DisplayObjContainer:setVisible"></a>
-    <strong>DisplayObjContainer:setVisible&nbsp;(visible)</strong>
+    <a name = "setVisible"></a>
+    <strong>setVisible (visible)</strong>
     </dt>
     <dd>
     Change visibility status of the container
 
+
     <h3>Parameters:</h3>
     <ul>
         <li><span class="parameter">visible</span>
-         boolean</li>
+         boolean
+        </li>
     </ul>
 
 
@@ -814,17 +928,20 @@ an hitTest, without going deep in the displayList
 
 </dd>
     <dt>
-    <a name = "DisplayObjContainer:getRect"></a>
-    <strong>DisplayObjContainer:getRect&nbsp;(resultRect)</strong>
+    <a name = "getRect"></a>
+    <strong>getRect (resultRect)</strong>
     </dt>
     <dd>
     Return a rect obtained by children rect
+
 Iterates over all the children and calculates a rectangle that enclose them all.
+
 
     <h3>Parameters:</h3>
     <ul>
         <li><span class="parameter">resultRect</span>
-         it's possibile to pass a Rect helper to store results</li>
+         it's possibile to pass a Rect helper to store results
+        </li>
     </ul>
 
     <h3>Returns:</h3>
@@ -838,27 +955,38 @@ Iterates over all the children and calculates a rectangle that enclose them all.
 
 </dd>
     <dt>
-    <a name = "DisplayObjContainer:hitTest"></a>
-    <strong>DisplayObjContainer:hitTest&nbsp;(x, y, targetSpace, forTouch)</strong>
+    <a name = "hitTest"></a>
+    <strong>hitTest (x, y, targetSpace, forTouch)</strong>
     </dt>
     <dd>
     Given a x,y point in targetSpace coordinates it check if it falls inside local bounds.
+
 If the container is set as hittable, the hitTest will be done only on its own boundary
+
 without testing all the children, and the resulting target will be itself. If not
+
 hittable instead, the hitTest will be done on children, starting from then topmost
+
 displayObjContainer.
+
+
+
 
 
     <h3>Parameters:</h3>
     <ul>
         <li><span class="parameter">x</span>
-         coordinate in targetSpace system</li>
+         coordinate in targetSpace system
+        </li>
         <li><span class="parameter">y</span>
-         coordinate in targetSpace system</li>
+         coordinate in targetSpace system
+        </li>
         <li><span class="parameter">targetSpace</span>
-         the referred coorindate system. if nil the top most container / stage</li>
+         the referred coorindate system. if nil the top most container / stage
+        </li>
         <li><span class="parameter">forTouch</span>
-         boolean. If true the check is done only for visible and touchable object</li>
+         boolean. If true the check is done only for visible and touchable object
+        </li>
     </ul>
 
     <h3>Returns:</h3>
@@ -872,48 +1000,95 @@ displayObjContainer.
 
 </dd>
     <dt>
-    <a name = "DisplayObjContainer:createFrameBufferImage"></a>
-    <strong>DisplayObjContainer:createFrameBufferImage&nbsp;(bUpdate, width, height)</strong>
+    <a name = "createFrameBufferImage"></a>
+    <strong>createFrameBufferImage (bUpdate, width, height)</strong>
     </dt>
     <dd>
     The method led to create an image that will be rendered in place of the whole
+
 displaylist owned by the container.
-<p>That can be used for different purposes:
-<p>1) to optimize the rendering of a displayList composed of only static objects.
+
+
+
+That can be used for different purposes:
+
+
+
+1) to optimize the rendering of a displayList composed of only static objects.
+
 If bUpdate is false or nil in fact, all the children attached to the container are
+
 rendered once to an image then used as unique displayObj. That can lead
+
 to a performance increase when the container is made of several static objects.
+
 The draw back is that the rendering is never updated since a new call to createFrameBufferImage
+
 or since a call to destroyFrameBufferImage. That means that even if a child is removed,
+
 set invisible or transofrmed the rendering will shows the state of the container at the moment of the
+
 image creation. It's possible to specify the size of the area that will be draw (things outside
+
 will be clipped out). If no width/height are provided then container width / height are used
+
 (with a maximum of 2048x2048)
-<p>Very important: the draw of the image will happen next frame, so every change done during the same
+
+
+
+Very important: the draw of the image will happen next frame, so every change done during the same
+
 frame of the call will be applied even if done after the call.
-<p>The logic is similar to Starling flatten / unflatten logic and for that a couple of method with
+
+
+
+The logic is similar to Starling flatten / unflatten logic and for that a couple of method with
+
 this name are provided as alias.
-<p>2) To create a clip area of given width / height.
+
+
+
+2) To create a clip area of given width / height.
+
 If bUpdate is true, an image is created but the rendering is updated each frame.
+
 That lead to a decrease in performance because the normal rendering has to be done and moreover
+
 a new texture has to be rendered. The good news is that now we're able to clip a container
+
 like when using scissor but without the limitation of the scissor of being axis aligned.
-<p>
+
+
+
+
+
 An important thing about having a container transformed into an image is that it allows to apply shaders
+
 transformation to the resulting image, and so to a whole display scene.
-<p>NB: the frameBufferImage is always built on a rect that has point (0,0) coincindent with the point (0,0)
+
+
+
+NB: the frameBufferImage is always built on a rect that has point (0,0) coincindent with the point (0,0)
+
 of the container.
+
+
+
 
 
     <h3>Parameters:</h3>
     <ul>
         <li><span class="parameter">bUpdate</span>
          defines if the frameBufferImage will be dynamically updated each frame or created once
-and no more update (flatten)</li>
+
+and no more update (flatten)
+        </li>
         <li><span class="parameter">width</span>
-         width of the frameBufferImage. Default value is the width of the container. Max = 2048</li>
+         width of the frameBufferImage. Default value is the width of the container. Max = 2048
+        </li>
         <li><span class="parameter">height</span>
-         height of the frameBufferImage. Default value is the height of the container. Max = 2048</li>
+         height of the frameBufferImage. Default value is the height of the container. Max = 2048
+        </li>
     </ul>
 
 
@@ -922,12 +1097,14 @@ and no more update (flatten)</li>
 
 </dd>
     <dt>
-    <a name = "DisplayObjContainer:destroyFrameBufferImage"></a>
-    <strong>DisplayObjContainer:destroyFrameBufferImage&nbsp;()</strong>
+    <a name = "destroyFrameBufferImage"></a>
+    <strong>destroyFrameBufferImage ()</strong>
     </dt>
     <dd>
     Removes the frameBufferImage previously created with a createFrameBufferImage call and restores
+
 normal draw of the container.
+
 
 
 
@@ -936,11 +1113,12 @@ normal draw of the container.
 
 </dd>
     <dt>
-    <a name = "DisplayObjContainer:getFrameBufferImage"></a>
-    <strong>DisplayObjContainer:getFrameBufferImage&nbsp;()</strong>
+    <a name = "getFrameBufferImage"></a>
+    <strong>getFrameBufferImage ()</strong>
     </dt>
     <dd>
     Returns the frameBufferImage previously created with a createFrameBufferImage call
+
 
 
     <h3>Returns:</h3>
@@ -954,19 +1132,23 @@ normal draw of the container.
 
 </dd>
     <dt>
-    <a name = "DisplayObjContainer:flatten"></a>
-    <strong>DisplayObjContainer:flatten&nbsp;(w, h)</strong>
+    <a name = "flatten"></a>
+    <strong>flatten (w, h)</strong>
     </dt>
     <dd>
     alias for createFrameBufferImage call with bUpdate = false
+
 Takes the name from original Starling sprite:flatten logic
+
 
     <h3>Parameters:</h3>
     <ul>
         <li><span class="parameter">w</span>
-         width of the flattened area (that always begin in 0,0)</li>
+         width of the flattened area (that always begin in 0,0)
+        </li>
         <li><span class="parameter">h</span>
-         height of the flattened area (that always begin in 0,0)</li>
+         height of the flattened area (that always begin in 0,0)
+        </li>
     </ul>
 
 
@@ -975,12 +1157,14 @@ Takes the name from original Starling sprite:flatten logic
 
 </dd>
     <dt>
-    <a name = "DisplayObjContainer:unflatten"></a>
-    <strong>DisplayObjContainer:unflatten&nbsp;()</strong>
+    <a name = "unflatten"></a>
+    <strong>unflatten ()</strong>
     </dt>
     <dd>
     alias for destroyFrameBufferImage call
+
 Takes the name from original Starling sprite:unflatten logic
+
 
 
 
@@ -989,11 +1173,12 @@ Takes the name from original Starling sprite:unflatten logic
 
 </dd>
     <dt>
-    <a name = "DisplayObjContainer:isFlattened"></a>
-    <strong>DisplayObjContainer:isFlattened&nbsp;()</strong>
+    <a name = "isFlattened"></a>
+    <strong>isFlattened ()</strong>
     </dt>
     <dd>
     Check if a frameBufferData is present with isFlattened = true
+
 
 
     <h3>Returns:</h3>
@@ -1007,18 +1192,21 @@ Takes the name from original Starling sprite:unflatten logic
 
 </dd>
     <dt>
-    <a name = "DisplayObjContainer:setClipArea"></a>
-    <strong>DisplayObjContainer:setClipArea&nbsp;(w, h)</strong>
+    <a name = "setClipArea"></a>
+    <strong>setClipArea (w, h)</strong>
     </dt>
     <dd>
     alias for createFrameBufferImage call with dynamic update set to true
 
+
     <h3>Parameters:</h3>
     <ul>
         <li><span class="parameter">w</span>
-         width of the clip area (that always begin in 0,0)</li>
+         width of the clip area (that always begin in 0,0)
+        </li>
         <li><span class="parameter">h</span>
-         height of the clip area (that always begin in 0,0)</li>
+         height of the clip area (that always begin in 0,0)
+        </li>
     </ul>
 
 
@@ -1027,12 +1215,14 @@ Takes the name from original Starling sprite:unflatten logic
 
 </dd>
     <dt>
-    <a name = "DisplayObjContainer:destroyClipArea"></a>
-    <strong>DisplayObjContainer:destroyClipArea&nbsp;()</strong>
+    <a name = "destroyClipArea"></a>
+    <strong>destroyClipArea ()</strong>
     </dt>
     <dd>
     alias for destroyFrameBufferImage call
+
 Takes the name from original Starling sprite:unflatten logic
+
 
 
 
@@ -1041,11 +1231,12 @@ Takes the name from original Starling sprite:unflatten logic
 
 </dd>
     <dt>
-    <a name = "DisplayObjContainer:hasClipArea"></a>
-    <strong>DisplayObjContainer:hasClipArea&nbsp;()</strong>
+    <a name = "hasClipArea"></a>
+    <strong>hasClipArea ()</strong>
     </dt>
     <dd>
     Check if a frameBufferData is present with isFlattened = false (so dynamic)
+
 
 
     <h3>Returns:</h3>
@@ -1067,10 +1258,16 @@ Takes the name from original Starling sprite:unflatten logic
     </dt>
     <dd>
     DisplayObjContainers must notify all interested children into color changes so to be able
+
 to correctly react to the events.  Used mainly by children objects drawn using pixel shader
+
 (like quads)
+
 Disabling multiplyColor calling useMultiplyColor() makes possible to optimize DisplayObjContainer
+
 color / alpha management, but only if sure that no children are using multiplyColor feature
+
+
 
 
 
@@ -1084,7 +1281,7 @@ color / alpha management, but only if sure that no children are using multiplyCo
 </div> <!-- id="content" -->
 </div> <!-- id="main" -->
 <div id="about">
-<i>generated by <a href="http://github.com/stevedonovan/LDoc">LDoc 1.3.11</a></i>
+<i>generated by <a href="http://github.com/stevedonovan/LDoc">LDoc 1.4.2</a></i>
 </div> <!-- id="about" -->
 </div> <!-- id="container" -->
 </body>

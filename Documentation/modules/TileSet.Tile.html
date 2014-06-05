@@ -37,7 +37,7 @@
 
 
 <h2>Modules</h2>
-<ul>
+<ul class="$(kind=='Topics' and '' or 'nowrap'">
   <li><a href="../modules/Core.Assets.html">Core.Assets</a></li>
   <li><a href="../modules/Core.Event.html">Core.Event</a></li>
   <li><a href="../modules/Core.EventDispatcher.html">Core.EventDispatcher</a></li>
@@ -60,6 +60,7 @@
   <li><a href="../modules/Display.Stage.html">Display.Stage</a></li>
   <li><a href="../modules/Display.TextField.html">Display.TextField</a></li>
   <li><a href="../modules/Display.TileMap.html">Display.TileMap</a></li>
+  <li><a href="../modules/include.html">include</a></li>
   <li><a href="../modules/Texture.ITextureAtlas.html">Texture.ITextureAtlas</a></li>
   <li><a href="../modules/Texture.SubTexture.html">Texture.SubTexture</a></li>
   <li><a href="../modules/Texture.Texture.html">Texture.Texture</a></li>
@@ -87,9 +88,9 @@
   <li><a href="../modules/Utils.CollisionKit.html">Utils.CollisionKit</a></li>
   <li><a href="../modules/Utils.Color.html">Utils.Color</a></li>
   <li><a href="../modules/Utils.Coroutines.html">Utils.Coroutines</a></li>
-  <li><a href="../modules/Utils.IO.html">Utils.IO</a></li>
   <li><a href="../modules/Utils.IniFile.html">Utils.IniFile</a></li>
   <li><a href="../modules/Utils.IniParser.html">Utils.IniParser</a></li>
+  <li><a href="../modules/Utils.IO.html">Utils.IO</a></li>
   <li><a href="../modules/Utils.Log.html">Utils.Log</a></li>
   <li><a href="../modules/Utils.Math.html">Utils.Math</a></li>
   <li><a href="../modules/Utils.PerformanceTimer.html">Utils.PerformanceTimer</a></li>
@@ -102,7 +103,6 @@
   <li><a href="../modules/Utils.Vector.html">Utils.Vector</a></li>
   <li><a href="../modules/Utils.XmlNode.html">Utils.XmlNode</a></li>
   <li><a href="../modules/Utils.XmlParser.html">Utils.XmlParser</a></li>
-  <li><a href="../modules/include.html">include</a></li>
 </ul>
 
 </div>
@@ -110,44 +110,51 @@
 <div id="content">
 
 <h1>Module <code>TileSet.Tile</code></h1>
-
 <p>Tile is the base object for tilemap management.</p>
 <p>
+
 A tile is always part of a tileset, a collection of tiles, and
+
 it's nothing more than a wrapper of a texture with some more
+
 properties.
-<p>It's possible to create custom tiles extending Tile class and registering
-new classes using TileManager. </p>
+
+
+
+It's possible to create custom tiles extending Tile class and registering
+
+new classes using TileManager.
+</p>
 
 
 <h2><a href="#Functions">Functions</a></h2>
 <table class="function_list">
 	<tr>
-	<td class="name" nowrap><a href="#Tile:init">Tile:init&nbsp;(tileset, id, texture, properties)</a></td>
+	<td class="name" nowrap><a href="#init">init (tileset, id, texture, properties)</a></td>
 	<td class="summary">Constructor</td>
 	</tr>
 	<tr>
-	<td class="name" nowrap><a href="#Tile:_replaceTexture">Tile:_replaceTexture&nbsp;(texture)</a></td>
+	<td class="name" nowrap><a href="#_replaceTexture">_replaceTexture (texture)</a></td>
 	<td class="summary">Internal function.</td>
 	</tr>
 	<tr>
-	<td class="name" nowrap><a href="#Tile:getRect">Tile:getRect&nbsp;()</a></td>
+	<td class="name" nowrap><a href="#getRect">getRect ()</a></td>
 	<td class="summary">Returns the rect of the tile.</td>
 	</tr>
 	<tr>
-	<td class="name" nowrap><a href="#Tile:getWidth">Tile:getWidth&nbsp;()</a></td>
+	<td class="name" nowrap><a href="#getWidth">getWidth ()</a></td>
 	<td class="summary">Returns the width of the tile.</td>
 	</tr>
 	<tr>
-	<td class="name" nowrap><a href="#Tile:getHeight">Tile:getHeight&nbsp;()</a></td>
+	<td class="name" nowrap><a href="#getHeight">getHeight ()</a></td>
 	<td class="summary">Returns the height of the tile.</td>
 	</tr>
 	<tr>
-	<td class="name" nowrap><a href="#Tile:setProperty">Tile:setProperty&nbsp;(name, value)</a></td>
+	<td class="name" nowrap><a href="#setProperty">setProperty (name, value)</a></td>
 	<td class="summary">Sets a property of the tile.</td>
 	</tr>
 	<tr>
-	<td class="name" nowrap><a href="#Tile:getProperty">Tile:getProperty&nbsp;(name)</a></td>
+	<td class="name" nowrap><a href="#getProperty">getProperty (name)</a></td>
 	<td class="summary">Gets a property of the tile.</td>
 	</tr>
 </table>
@@ -159,22 +166,27 @@ new classes using TileManager. </p>
     <h2><a name="Functions"></a>Functions</h2>
     <dl class="function">
     <dt>
-    <a name = "Tile:init"></a>
-    <strong>Tile:init&nbsp;(tileset, id, texture, properties)</strong>
+    <a name = "init"></a>
+    <strong>init (tileset, id, texture, properties)</strong>
     </dt>
     <dd>
     Constructor
 
+
     <h3>Parameters:</h3>
     <ul>
         <li><span class="parameter">tileset</span>
-         the tileset to which the tile belongs to</li>
+         the tileset to which the tile belongs to
+        </li>
         <li><span class="parameter">id</span>
-         the id of the tile in the tileset</li>
+         the id of the tile in the tileset
+        </li>
         <li><span class="parameter">texture</span>
-         the texture wrapped by the tile</li>
+         the texture wrapped by the tile
+        </li>
         <li><span class="parameter">properties</span>
-         an (optional) collection of properties of the tile</li>
+         an (optional) collection of properties of the tile
+        </li>
     </ul>
 
 
@@ -183,18 +195,23 @@ new classes using TileManager. </p>
 
 </dd>
     <dt>
-    <a name = "Tile:_replaceTexture"></a>
-    <strong>Tile:_replaceTexture&nbsp;(texture)</strong>
+    <a name = "_replaceTexture"></a>
+    <strong>_replaceTexture (texture)</strong>
     </dt>
     <dd>
     Internal function.
+
 Replaces inner texture.
+
 Called from TileSet for atlas replacement
+
+
 
     <h3>Parameters:</h3>
     <ul>
         <li><span class="parameter">texture</span>
-         new texture for replacement</li>
+         new texture for replacement
+        </li>
     </ul>
 
 
@@ -203,12 +220,15 @@ Called from TileSet for atlas replacement
 
 </dd>
     <dt>
-    <a name = "Tile:getRect"></a>
-    <strong>Tile:getRect&nbsp;()</strong>
+    <a name = "getRect"></a>
+    <strong>getRect ()</strong>
     </dt>
     <dd>
     Returns the rect of the tile.
+
 It wraps the texture getRect()
+
+
 
 
     <h3>Returns:</h3>
@@ -222,14 +242,17 @@ It wraps the texture getRect()
 
 </dd>
     <dt>
-    <a name = "Tile:getWidth"></a>
-    <strong>Tile:getWidth&nbsp;()</strong>
+    <a name = "getWidth"></a>
+    <strong>getWidth ()</strong>
     </dt>
     <dd>
     Returns the width of the tile.
+
 It wraps the texture.width
 
 
+
+
     <h3>Returns:</h3>
     <ol>
 
@@ -241,12 +264,15 @@ It wraps the texture.width
 
 </dd>
     <dt>
-    <a name = "Tile:getHeight"></a>
-    <strong>Tile:getHeight&nbsp;()</strong>
+    <a name = "getHeight"></a>
+    <strong>getHeight ()</strong>
     </dt>
     <dd>
     Returns the height of the tile.
+
 It wraps the texture.height
+
+
 
 
     <h3>Returns:</h3>
@@ -260,18 +286,21 @@ It wraps the texture.height
 
 </dd>
     <dt>
-    <a name = "Tile:setProperty"></a>
-    <strong>Tile:setProperty&nbsp;(name, value)</strong>
+    <a name = "setProperty"></a>
+    <strong>setProperty (name, value)</strong>
     </dt>
     <dd>
     Sets a property of the tile.
 
+
     <h3>Parameters:</h3>
     <ul>
         <li><span class="parameter">name</span>
-         the name of the property</li>
+         the name of the property
+        </li>
         <li><span class="parameter">value</span>
-         the value of the property</li>
+         the value of the property
+        </li>
     </ul>
 
 
@@ -280,16 +309,18 @@ It wraps the texture.height
 
 </dd>
     <dt>
-    <a name = "Tile:getProperty"></a>
-    <strong>Tile:getProperty&nbsp;(name)</strong>
+    <a name = "getProperty"></a>
+    <strong>getProperty (name)</strong>
     </dt>
     <dd>
     Gets a property of the tile.
 
+
     <h3>Parameters:</h3>
     <ul>
         <li><span class="parameter">name</span>
-         the name of the property</li>
+         the name of the property
+        </li>
     </ul>
 
     <h3>Returns:</h3>
@@ -308,7 +339,7 @@ It wraps the texture.height
 </div> <!-- id="content" -->
 </div> <!-- id="main" -->
 <div id="about">
-<i>generated by <a href="http://github.com/stevedonovan/LDoc">LDoc 1.3.11</a></i>
+<i>generated by <a href="http://github.com/stevedonovan/LDoc">LDoc 1.4.2</a></i>
 </div> <!-- id="about" -->
 </div> <!-- id="container" -->
 </body>

@@ -39,7 +39,7 @@
 
 
 <h2>Modules</h2>
-<ul>
+<ul class="$(kind=='Topics' and '' or 'nowrap'">
   <li><a href="../modules/Core.Assets.html">Core.Assets</a></li>
   <li><a href="../modules/Core.Event.html">Core.Event</a></li>
   <li><a href="../modules/Core.EventDispatcher.html">Core.EventDispatcher</a></li>
@@ -62,6 +62,7 @@
   <li><a href="../modules/Display.Stage.html">Display.Stage</a></li>
   <li><a href="../modules/Display.TextField.html">Display.TextField</a></li>
   <li><a href="../modules/Display.TileMap.html">Display.TileMap</a></li>
+  <li><a href="../modules/include.html">include</a></li>
   <li><a href="../modules/Texture.ITextureAtlas.html">Texture.ITextureAtlas</a></li>
   <li><a href="../modules/Texture.SubTexture.html">Texture.SubTexture</a></li>
   <li><a href="../modules/Texture.Texture.html">Texture.Texture</a></li>
@@ -89,9 +90,9 @@
   <li><a href="../modules/Utils.CollisionKit.html">Utils.CollisionKit</a></li>
   <li><a href="../modules/Utils.Color.html">Utils.Color</a></li>
   <li><a href="../modules/Utils.Coroutines.html">Utils.Coroutines</a></li>
-  <li><a href="../modules/Utils.IO.html">Utils.IO</a></li>
   <li><a href="../modules/Utils.IniFile.html">Utils.IniFile</a></li>
   <li><a href="../modules/Utils.IniParser.html">Utils.IniParser</a></li>
+  <li><a href="../modules/Utils.IO.html">Utils.IO</a></li>
   <li><a href="../modules/Utils.Log.html">Utils.Log</a></li>
   <li><a href="../modules/Utils.Math.html">Utils.Math</a></li>
   <li><a href="../modules/Utils.PerformanceTimer.html">Utils.PerformanceTimer</a></li>
@@ -104,7 +105,6 @@
   <li><a href="../modules/Utils.Vector.html">Utils.Vector</a></li>
   <li><a href="../modules/Utils.XmlNode.html">Utils.XmlNode</a></li>
   <li><a href="../modules/Utils.XmlParser.html">Utils.XmlParser</a></li>
-  <li><a href="../modules/include.html">include</a></li>
 </ul>
 
 </div>
@@ -112,78 +112,93 @@
 <div id="content">
 
 <h1>Module <code>Core.Shilke2D</code></h1>
-
 <p>Shilke2D Moai version
+
 Shilke2D is the main class of Shilke2D lib.</p>
 <p> It initializes MOAI environment:
+
 rendering, audioaand input system.
-It initializes also main juggler, log system and Stage</p>
+
+It initializes also main juggler, log system and Stage
+</p>
 
 
 <h2><a href="#Functions">Functions</a></h2>
 <table class="function_list">
 	<tr>
-	<td class="name" nowrap><a href="#setup">setup&nbsp;()</a></td>
+	<td class="name" nowrap><a href="#setup">setup ()</a></td>
 	<td class="summary">Called at the beginning of the application.</td>
 	</tr>
 	<tr>
-	<td class="name" nowrap><a href="#update">update&nbsp;(elapsedTime)</a></td>
+	<td class="name" nowrap><a href="#update">update (elapsedTime)</a></td>
 	<td class="summary">Called each frame.</td>
 	</tr>
 	<tr>
-	<td class="name" nowrap><a href="#onDirectDraw">onDirectDraw&nbsp;()</a></td>
+	<td class="name" nowrap><a href="#onDirectDraw">onDirectDraw ()</a></td>
 	<td class="summary">Called after draw to allow overlay drawing with graphics vetorial functions.</td>
 	</tr>
 	<tr>
-	<td class="name" nowrap><a href="#onKeyboardEvent">onKeyboardEvent&nbsp;(key, down)</a></td>
+	<td class="name" nowrap><a href="#onKeyboardEvent">onKeyboardEvent (key, down)</a></td>
 	<td class="summary">Handle keyboard events.</td>
 	</tr>
 	<tr>
-	<td class="name" nowrap><a href="#isKeyPressed">isKeyPressed&nbsp;(key)</a></td>
+	<td class="name" nowrap><a href="#isKeyPressed">isKeyPressed (key)</a></td>
 	<td class="summary">Check the key status of a given key code</td>
 	</tr>
 	<tr>
-	<td class="name" nowrap><a href="#isMobile">isMobile&nbsp;()</a></td>
-	<td class="summary">Check the platform on which the application is running and return true if the platform is mobile</td>
+	<td class="name" nowrap><a href="#isMobile">isMobile ()</a></td>
+	<td class="summary">Check the platform on which the application is running and return true if the platform is mobile
+
+
+
+It cheks the osBrand string with some predefined string, that are:
+
+
+
+OSX, Windows, iOS, Android</td>
 	</tr>
 	<tr>
-	<td class="name" nowrap><a href="#isDesktop">isDesktop&nbsp;()</a></td>
+	<td class="name" nowrap><a href="#isDesktop">isDesktop ()</a></td>
 	<td class="summary">-- Check if the application is running on desktop.</td>
 	</tr>
 	<tr>
-	<td class="name" nowrap><a href="#Shilke2D:init">Shilke2D:init&nbsp;(w, h, fps, scaleX, scaleY, soundSampleRate, soundFrames)</a></td>
+	<td class="name" nowrap><a href="#init">init (w, h, fps, scaleX, scaleY, soundSampleRate, soundFrames)</a></td>
 	<td class="summary">Shilke2D must be created at the beginning of the application.</td>
 	</tr>
 	<tr>
-	<td class="name" nowrap><a href="#Shilke2D:start">Shilke2D:start&nbsp;()</a></td>
+	<td class="name" nowrap><a href="#start">start ()</a></td>
 	<td class="summary">Start Shilke2D application execution.</td>
 	</tr>
 	<tr>
-	<td class="name" nowrap><a href="#Shilke2D:getStage">Shilke2D:getStage&nbsp;()</a></td>
+	<td class="name" nowrap><a href="#getStage">getStage ()</a></td>
 	<td class="summary">Return the stage</td>
 	</tr>
 	<tr>
-	<td class="name" nowrap><a href="#Shilke2D:getJuggler">Shilke2D:getJuggler&nbsp;()</a></td>
+	<td class="name" nowrap><a href="#getJuggler">getJuggler ()</a></td>
 	<td class="summary">Return the main juggler
+
  other juggler can be created and added to the main juggler for automatic updates,
+
  or can be updated manually</td>
 	</tr>
 	<tr>
-	<td class="name" nowrap><a href="#Shilke2D:showStats">Shilke2D:showStats&nbsp;(show, forceGarbageOnTouch)</a></td>
+	<td class="name" nowrap><a href="#showStats">showStats (show, forceGarbageOnTouch)</a></td>
 	<td class="summary">Debug function that allows to show on screen average fps and memory consumption</td>
 	</tr>
 	<tr>
-	<td class="name" nowrap><a href="#Shilke2D:startDrag">Shilke2D:startDrag&nbsp;(touch, obj)</a></td>
+	<td class="name" nowrap><a href="#startDrag">startDrag (touch, obj)</a></td>
 	<td class="summary">Any DisplayObj can register itself as owner (unique listener) for a specific
+
 touch (id) event.</td>
 	</tr>
 	<tr>
-	<td class="name" nowrap><a href="#Shilke2D:stopDrag">Shilke2D:stopDrag&nbsp;(touch, obj)</a></td>
+	<td class="name" nowrap><a href="#stopDrag">stopDrag (touch, obj)</a></td>
 	<td class="summary">An object can deregister itself as unique listener for a specific
+
 touch (id) event.</td>
 	</tr>
 	<tr>
-	<td class="name" nowrap><a href="#Shilke2D:getDraggedObj">Shilke2D:getDraggedObj&nbsp;(touch)</a></td>
+	<td class="name" nowrap><a href="#getDraggedObj">getDraggedObj (touch)</a></td>
 	<td class="summary">Returns the object that owns a specific touch (id)</td>
 	</tr>
 </table>
@@ -214,11 +229,14 @@ touch (id) event.</td>
     <dl class="function">
     <dt>
     <a name = "setup"></a>
-    <strong>setup&nbsp;()</strong>
+    <strong>setup ()</strong>
     </dt>
     <dd>
     Called at the beginning of the application.
+
  Can be considered as the entry point of the application, where to initialize everything
+
+
 
 
 
@@ -228,16 +246,20 @@ touch (id) event.</td>
 </dd>
     <dt>
     <a name = "update"></a>
-    <strong>update&nbsp;(elapsedTime)</strong>
+    <strong>update (elapsedTime)</strong>
     </dt>
     <dd>
     Called each frame.
+
  Is where logic of the application is updated each frame, just before rendering.
+
+
 
     <h3>Parameters:</h3>
     <ul>
         <li><span class="parameter">elapsedTime</span>
-         the time elapsed since last call of the function</li>
+         the time elapsed since last call of the function
+        </li>
     </ul>
 
 
@@ -247,7 +269,7 @@ touch (id) event.</td>
 </dd>
     <dt>
     <a name = "onDirectDraw"></a>
-    <strong>onDirectDraw&nbsp;()</strong>
+    <strong>onDirectDraw ()</strong>
     </dt>
     <dd>
     Called after draw to allow overlay drawing with graphics vetorial functions.
@@ -257,21 +279,27 @@ touch (id) event.</td>
 
 
 
+
 </dd>
     <dt>
     <a name = "onKeyboardEvent"></a>
-    <strong>onKeyboardEvent&nbsp;(key, down)</strong>
+    <strong>onKeyboardEvent (key, down)</strong>
     </dt>
     <dd>
     Handle keyboard events.
+
 Called only on desktop hosts.
+
+
 
     <h3>Parameters:</h3>
     <ul>
         <li><span class="parameter">key</span>
-         the key that has been pressed or released</li>
+         the key that has been pressed or released
+        </li>
         <li><span class="parameter">down</span>
-         key status</li>
+         key status
+        </li>
     </ul>
 
 
@@ -281,14 +309,16 @@ Called only on desktop hosts.
 </dd>
     <dt>
     <a name = "isKeyPressed"></a>
-    <strong>isKeyPressed&nbsp;(key)</strong>
+    <strong>isKeyPressed (key)</strong>
     </dt>
     <dd>
     Check the key status of a given key code
 
+
     <h3>Parameters:</h3>
     <ul>
         <li><span class="parameter">key</span>
+
         </li>
     </ul>
 
@@ -299,11 +329,19 @@ Called only on desktop hosts.
 </dd>
     <dt>
     <a name = "isMobile"></a>
-    <strong>isMobile&nbsp;()</strong>
+    <strong>isMobile ()</strong>
     </dt>
     <dd>
-    Check the platform on which the application is running and return true if the platform is mobile It cheks the osBrand string with some predefined string, that are:
-<p>OSX, Windows, iOS, Android
+    Check the platform on which the application is running and return true if the platform is mobile
+
+
+
+It cheks the osBrand string with some predefined string, that are:
+
+
+
+OSX, Windows, iOS, Android
+
 
 
     <h3>Returns:</h3>
@@ -318,11 +356,14 @@ Called only on desktop hosts.
 </dd>
     <dt>
     <a name = "isDesktop"></a>
-    <strong>isDesktop&nbsp;()</strong>
+    <strong>isDesktop ()</strong>
     </dt>
     <dd>
     -- Check if the application is running on desktop.
+
 -- @return True in the case of desktop.
+
+
 
 
 
@@ -331,30 +372,41 @@ Called only on desktop hosts.
 
 </dd>
     <dt>
-    <a name = "Shilke2D:init"></a>
-    <strong>Shilke2D:init&nbsp;(w, h, fps, scaleX, scaleY, soundSampleRate, soundFrames)</strong>
+    <a name = "init"></a>
+    <strong>init (w, h, fps, scaleX, scaleY, soundSampleRate, soundFrames)</strong>
     </dt>
     <dd>
     Shilke2D must be created at the beginning of the application.
+
 The initialization of Shilke2D setup MOAI rendering system and untz audio system
+
 Stage, Juggler and log system are initialized here too.
+
+
 
     <h3>Parameters:</h3>
     <ul>
         <li><span class="parameter">w</span>
-         logical width of the viewport</li>
+         logical width of the viewport
+        </li>
         <li><span class="parameter">h</span>
-         logical height of the viewport</li>
+         logical height of the viewport
+        </li>
         <li><span class="parameter">fps</span>
-         desired frame rate</li>
+         desired frame rate
+        </li>
         <li><span class="parameter">scaleX</span>
-         on screen viewport scale on x axe</li>
+         on screen viewport scale on x axe
+        </li>
         <li><span class="parameter">scaleY</span>
-         on screen viewport scale on y axe</li>
+         on screen viewport scale on y axe
+        </li>
         <li><span class="parameter">soundSampleRate</span>
-         audio system sample rate</li>
+         audio system sample rate
+        </li>
         <li><span class="parameter">soundFrames</span>
-         audio system number of frames</li>
+         audio system number of frames
+        </li>
     </ul>
 
 
@@ -363,15 +415,21 @@ Stage, Juggler and log system are initialized here too.
 
 </dd>
     <dt>
-    <a name = "Shilke2D:start"></a>
-    <strong>Shilke2D:start&nbsp;()</strong>
+    <a name = "start"></a>
+    <strong>start ()</strong>
     </dt>
     <dd>
     Start Shilke2D application execution.
+
 At first it calls the setup() function.
+
 Then touch / mouse system is initialized.
+
 If the application is running on a desktop environment also the keyboard system is initialized.
+
 Juggler and update coroutines are finally created and executed, and the application can run.
+
+
 
 
 
@@ -380,8 +438,8 @@ Juggler and update coroutines are finally created and executed, and the applicat
 
 </dd>
     <dt>
-    <a name = "Shilke2D:getStage"></a>
-    <strong>Shilke2D:getStage&nbsp;()</strong>
+    <a name = "getStage"></a>
+    <strong>getStage ()</strong>
     </dt>
     <dd>
     Return the stage
@@ -391,14 +449,17 @@ Juggler and update coroutines are finally created and executed, and the applicat
 
 
 
+
 </dd>
     <dt>
-    <a name = "Shilke2D:getJuggler"></a>
-    <strong>Shilke2D:getJuggler&nbsp;()</strong>
+    <a name = "getJuggler"></a>
+    <strong>getJuggler ()</strong>
     </dt>
     <dd>
     Return the main juggler
+
  other juggler can be created and added to the main juggler for automatic updates,
+
  or can be updated manually
 
 
@@ -406,20 +467,24 @@ Juggler and update coroutines are finally created and executed, and the applicat
 
 
 
+
 </dd>
     <dt>
-    <a name = "Shilke2D:showStats"></a>
-    <strong>Shilke2D:showStats&nbsp;(show, forceGarbageOnTouch)</strong>
+    <a name = "showStats"></a>
+    <strong>showStats (show, forceGarbageOnTouch)</strong>
     </dt>
     <dd>
     Debug function that allows to show on screen average fps and memory consumption
 
+
     <h3>Parameters:</h3>
     <ul>
         <li><span class="parameter">show</span>
-         bool, show or hide the stats on screen. default is true</li>
+         bool, show or hide the stats on screen. default is true
+        </li>
         <li><span class="parameter">forceGarbageOnTouch</span>
-         bool. If stats are shown, if true force garbage collector on touch. default is false</li>
+         bool. If stats are shown, if true force garbage collector on touch. default is false
+        </li>
     </ul>
 
 
@@ -428,21 +493,29 @@ Juggler and update coroutines are finally created and executed, and the applicat
 
 </dd>
     <dt>
-    <a name = "Shilke2D:startDrag"></a>
-    <strong>Shilke2D:startDrag&nbsp;(touch, obj)</strong>
+    <a name = "startDrag"></a>
+    <strong>startDrag (touch, obj)</strong>
     </dt>
     <dd>
     Any DisplayObj can register itself as owner (unique listener) for a specific
+
 touch (id) event.
+
 That's used to manage drag and drop logic. When the touch ends the object is automatically removed
+
 as listener. The object can release itself event if the touch is not still ended by calling stopDrag
+
 method.
+
+
 
     <h3>Parameters:</h3>
     <ul>
         <li><span class="parameter">touch</span>
+
         </li>
         <li><span class="parameter">obj</span>
+
         </li>
     </ul>
 
@@ -452,19 +525,25 @@ method.
 
 </dd>
     <dt>
-    <a name = "Shilke2D:stopDrag"></a>
-    <strong>Shilke2D:stopDrag&nbsp;(touch, obj)</strong>
+    <a name = "stopDrag"></a>
+    <strong>stopDrag (touch, obj)</strong>
     </dt>
     <dd>
     An object can deregister itself as unique listener for a specific
+
 touch (id) event.
+
 If the object was not registered as listener an error raises.
+
+
 
     <h3>Parameters:</h3>
     <ul>
         <li><span class="parameter">touch</span>
+
         </li>
         <li><span class="parameter">obj</span>
+
         </li>
     </ul>
 
@@ -474,16 +553,18 @@ If the object was not registered as listener an error raises.
 
 </dd>
     <dt>
-    <a name = "Shilke2D:getDraggedObj"></a>
-    <strong>Shilke2D:getDraggedObj&nbsp;(touch)</strong>
+    <a name = "getDraggedObj"></a>
+    <strong>getDraggedObj (touch)</strong>
     </dt>
     <dd>
     Returns the object that owns a specific touch (id)
 
+
     <h3>Parameters:</h3>
     <ul>
         <li><span class="parameter">touch</span>
-         the touch for which we want to get the owner</li>
+         the touch for which we want to get the owner
+        </li>
     </ul>
 
     <h3>Returns:</h3>
@@ -511,6 +592,8 @@ If the object was not registered as listener an error raises.
 
 
 
+
+
 </dd>
 </dl>
     <h2><a name="Fields"></a>Fields</h2>
@@ -527,6 +610,8 @@ If the object was not registered as listener an error raises.
 
 
 
+
+
 </dd>
     <dt>
     <a name = "__JUGGLER_ON_SEPARATE_COROUTINE__"></a>
@@ -534,9 +619,14 @@ If the object was not registered as listener an error raises.
     </dt>
     <dd>
     Make the main juggler running within the main loop or in a separated thread.
+
 	If false (default value) the juggler is updated in the mainLoop coroutine, before the update function call.
+
 	If true the juggler is updated on a separate coroutine executed before the mainLoop coroutine.
+
 	To override define it before including Shilke2D files
+
+
 
 
 
@@ -550,7 +640,7 @@ If the object was not registered as listener an error raises.
 </div> <!-- id="content" -->
 </div> <!-- id="main" -->
 <div id="about">
-<i>generated by <a href="http://github.com/stevedonovan/LDoc">LDoc 1.3.11</a></i>
+<i>generated by <a href="http://github.com/stevedonovan/LDoc">LDoc 1.4.2</a></i>
 </div> <!-- id="about" -->
 </div> <!-- id="container" -->
 </body>

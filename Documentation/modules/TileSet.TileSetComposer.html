@@ -37,7 +37,7 @@
 
 
 <h2>Modules</h2>
-<ul>
+<ul class="$(kind=='Topics' and '' or 'nowrap'">
   <li><a href="../modules/Core.Assets.html">Core.Assets</a></li>
   <li><a href="../modules/Core.Event.html">Core.Event</a></li>
   <li><a href="../modules/Core.EventDispatcher.html">Core.EventDispatcher</a></li>
@@ -60,6 +60,7 @@
   <li><a href="../modules/Display.Stage.html">Display.Stage</a></li>
   <li><a href="../modules/Display.TextField.html">Display.TextField</a></li>
   <li><a href="../modules/Display.TileMap.html">Display.TileMap</a></li>
+  <li><a href="../modules/include.html">include</a></li>
   <li><a href="../modules/Texture.ITextureAtlas.html">Texture.ITextureAtlas</a></li>
   <li><a href="../modules/Texture.SubTexture.html">Texture.SubTexture</a></li>
   <li><a href="../modules/Texture.Texture.html">Texture.Texture</a></li>
@@ -87,9 +88,9 @@
   <li><a href="../modules/Utils.CollisionKit.html">Utils.CollisionKit</a></li>
   <li><a href="../modules/Utils.Color.html">Utils.Color</a></li>
   <li><a href="../modules/Utils.Coroutines.html">Utils.Coroutines</a></li>
-  <li><a href="../modules/Utils.IO.html">Utils.IO</a></li>
   <li><a href="../modules/Utils.IniFile.html">Utils.IniFile</a></li>
   <li><a href="../modules/Utils.IniParser.html">Utils.IniParser</a></li>
+  <li><a href="../modules/Utils.IO.html">Utils.IO</a></li>
   <li><a href="../modules/Utils.Log.html">Utils.Log</a></li>
   <li><a href="../modules/Utils.Math.html">Utils.Math</a></li>
   <li><a href="../modules/Utils.PerformanceTimer.html">Utils.PerformanceTimer</a></li>
@@ -102,7 +103,6 @@
   <li><a href="../modules/Utils.Vector.html">Utils.Vector</a></li>
   <li><a href="../modules/Utils.XmlNode.html">Utils.XmlNode</a></li>
   <li><a href="../modules/Utils.XmlParser.html">Utils.XmlParser</a></li>
-  <li><a href="../modules/include.html">include</a></li>
 </ul>
 
 </div>
@@ -110,59 +110,73 @@
 <div id="content">
 
 <h1>Module <code>TileSet.TileSetComposer</code></h1>
-
 <p>TileSetComposer is used when multiple atlas are required.</p>
 <p>
-<p>Following the composite pattern, a TileSetComposer implements ITileSet itself
+
+
+
+Following the composite pattern, a TileSetComposer implements ITileSet itself
+
 and is composed by multiple ITileSet component.
-<p>The resulting tileset is the union of all the tiles of the single tilesets, with
+
+
+
+The resulting tileset is the union of all the tiles of the single tilesets, with
+
 tile ids remapped based on add order.
-<p>Each new ITileSet tile indexing has an offset equals to the number of the tiles
-handled at adding time.</p>
+
+
+
+Each new ITileSet tile indexing has an offset equals to the number of the tiles
+
+handled at adding time.
+</p>
 
 
 <h2><a href="#Functions">Functions</a></h2>
 <table class="function_list">
 	<tr>
-	<td class="name" nowrap><a href="#TileSetComposer:init">TileSetComposer:init&nbsp;(name, properties)</a></td>
+	<td class="name" nowrap><a href="#init">init (name, properties)</a></td>
 	<td class="summary">Constructor</td>
 	</tr>
 	<tr>
-	<td class="name" nowrap><a href="#TileSetComposer:addTileSet">TileSetComposer:addTileSet&nbsp;(tileset)</a></td>
+	<td class="name" nowrap><a href="#addTileSet">addTileSet (tileset)</a></td>
 	<td class="summary">Extends the logical tileset virtually adding all the tiles of the given tileset to the current
+
 tile set</td>
 	</tr>
 	<tr>
-	<td class="name" nowrap><a href="#TileSetComposer:getTileWidth">TileSetComposer:getTileWidth&nbsp;()</a></td>
+	<td class="name" nowrap><a href="#getTileWidth">getTileWidth ()</a></td>
 	<td class="summary">Returns the width of the tiles of the tileset</td>
 	</tr>
 	<tr>
-	<td class="name" nowrap><a href="#TileSetComposer:getTileHeight">TileSetComposer:getTileHeight&nbsp;()</a></td>
+	<td class="name" nowrap><a href="#getTileHeight">getTileHeight ()</a></td>
 	<td class="summary">Returns the height of the tiles of the tileset</td>
 	</tr>
 	<tr>
-	<td class="name" nowrap><a href="#TileSetComposer:getTileSetByGid">TileSetComposer:getTileSetByGid&nbsp;(gid)</a></td>
+	<td class="name" nowrap><a href="#getTileSetByGid">getTileSetByGid (gid)</a></td>
 	<td class="summary">Returns the proper inner tileset given a gid</td>
 	</tr>
 	<tr>
-	<td class="name" nowrap><a href="#TileSetComposer:_getDeckInfoByGid">TileSetComposer:_getDeckInfoByGid&nbsp;(gid)</a></td>
+	<td class="name" nowrap><a href="#_getDeckInfoByGid">_getDeckInfoByGid (gid)</a></td>
 	<td class="summary">returns the deck/deck id of the component tileset</td>
 	</tr>
 	<tr>
-	<td class="name" nowrap><a href="#TileSetComposer:_getGidByDeckInfo">TileSetComposer:_getGidByDeckInfo&nbsp;(deck, id)</a></td>
+	<td class="name" nowrap><a href="#_getGidByDeckInfo">_getGidByDeckInfo (deck, id)</a></td>
 	<td class="summary">Search for the component tileset to which the provided deck belongs and
+
 then make it returns the gid based on the provided id</td>
 	</tr>
 	<tr>
-	<td class="name" nowrap><a href="#TileSetComposer:_hasDeck">TileSetComposer:_hasDeck&nbsp;(deck)</a></td>
+	<td class="name" nowrap><a href="#_hasDeck">_hasDeck (deck)</a></td>
 	<td class="summary">used to check if a deck is valid for a given tileset</td>
 	</tr>
 	<tr>
-	<td class="name" nowrap><a href="#TileSetComposer:getNumOfTiles">TileSetComposer:getNumOfTiles&nbsp;()</a></td>
+	<td class="name" nowrap><a href="#getNumOfTiles">getNumOfTiles ()</a></td>
 	<td class="summary">Returns the number of tiles of the tileset</td>
 	</tr>
 	<tr>
-	<td class="name" nowrap><a href="#TileSetComposer:getTile">TileSetComposer:getTile&nbsp;(gid)</a></td>
+	<td class="name" nowrap><a href="#getTile">getTile (gid)</a></td>
 	<td class="summary">Returns a tile given the global id</td>
 	</tr>
 </table>
@@ -174,18 +188,21 @@ then make it returns the gid based on the provided id</td>
     <h2><a name="Functions"></a>Functions</h2>
     <dl class="function">
     <dt>
-    <a name = "TileSetComposer:init"></a>
-    <strong>TileSetComposer:init&nbsp;(name, properties)</strong>
+    <a name = "init"></a>
+    <strong>init (name, properties)</strong>
     </dt>
     <dd>
     Constructor
 
+
     <h3>Parameters:</h3>
     <ul>
         <li><span class="parameter">name</span>
-         the name of the tileset (optional)</li>
+         the name of the tileset (optional)
+        </li>
         <li><span class="parameter">properties</span>
-         a collection of properties of the tileset (optional)</li>
+         a collection of properties of the tileset (optional)
+        </li>
     </ul>
 
 
@@ -194,24 +211,28 @@ then make it returns the gid based on the provided id</td>
 
 </dd>
     <dt>
-    <a name = "TileSetComposer:addTileSet"></a>
-    <strong>TileSetComposer:addTileSet&nbsp;(tileset)</strong>
+    <a name = "addTileSet"></a>
+    <strong>addTileSet (tileset)</strong>
     </dt>
     <dd>
     Extends the logical tileset virtually adding all the tiles of the given tileset to the current
+
 tile set
-address the tiles of the given tileset in the logical extended tileset.
+
 
     <h3>Parameters:</h3>
     <ul>
         <li><span class="parameter">tileset</span>
-         the new tileset to add</li>
+         the new tileset to add
+        </li>
     </ul>
 
     <h3>Returns:</h3>
     <ol>
 
         gid the base gid of the newly added tileset. It represents the offset that will be used to
+
+address the tiles of the given tileset in the logical extended tileset.
     </ol>
 
 
@@ -219,11 +240,12 @@ address the tiles of the given tileset in the logical extended tileset.
 
 </dd>
     <dt>
-    <a name = "TileSetComposer:getTileWidth"></a>
-    <strong>TileSetComposer:getTileWidth&nbsp;()</strong>
+    <a name = "getTileWidth"></a>
+    <strong>getTileWidth ()</strong>
     </dt>
     <dd>
     Returns the width of the tiles of the tileset
+
 
 
     <h3>Returns:</h3>
@@ -237,11 +259,12 @@ address the tiles of the given tileset in the logical extended tileset.
 
 </dd>
     <dt>
-    <a name = "TileSetComposer:getTileHeight"></a>
-    <strong>TileSetComposer:getTileHeight&nbsp;()</strong>
+    <a name = "getTileHeight"></a>
+    <strong>getTileHeight ()</strong>
     </dt>
     <dd>
     Returns the height of the tiles of the tileset
+
 
 
     <h3>Returns:</h3>
@@ -255,16 +278,18 @@ address the tiles of the given tileset in the logical extended tileset.
 
 </dd>
     <dt>
-    <a name = "TileSetComposer:getTileSetByGid"></a>
-    <strong>TileSetComposer:getTileSetByGid&nbsp;(gid)</strong>
+    <a name = "getTileSetByGid"></a>
+    <strong>getTileSetByGid (gid)</strong>
     </dt>
     <dd>
     Returns the proper inner tileset given a gid
 
+
     <h3>Parameters:</h3>
     <ul>
         <li><span class="parameter">gid</span>
-         the gid to which the searched tileset belong</li>
+         the gid to which the searched tileset belong
+        </li>
     </ul>
 
     <h3>Returns:</h3>
@@ -280,16 +305,18 @@ address the tiles of the given tileset in the logical extended tileset.
 
 </dd>
     <dt>
-    <a name = "TileSetComposer:_getDeckInfoByGid"></a>
-    <strong>TileSetComposer:_getDeckInfoByGid&nbsp;(gid)</strong>
+    <a name = "_getDeckInfoByGid"></a>
+    <strong>_getDeckInfoByGid (gid)</strong>
     </dt>
     <dd>
     returns the deck/deck id of the component tileset
 
+
     <h3>Parameters:</h3>
     <ul>
         <li><span class="parameter">gid</span>
-         the global tileset id</li>
+         the global tileset id
+        </li>
     </ul>
 
     <h3>Returns:</h3>
@@ -305,19 +332,23 @@ address the tiles of the given tileset in the logical extended tileset.
 
 </dd>
     <dt>
-    <a name = "TileSetComposer:_getGidByDeckInfo"></a>
-    <strong>TileSetComposer:_getGidByDeckInfo&nbsp;(deck, id)</strong>
+    <a name = "_getGidByDeckInfo"></a>
+    <strong>_getGidByDeckInfo (deck, id)</strong>
     </dt>
     <dd>
     Search for the component tileset to which the provided deck belongs and
+
 then make it returns the gid based on the provided id
+
 
     <h3>Parameters:</h3>
     <ul>
         <li><span class="parameter">deck</span>
-         the deck</li>
+         the deck
+        </li>
         <li><span class="parameter">id</span>
-         the id of the tile in the provided deck</li>
+         the id of the tile in the provided deck
+        </li>
     </ul>
 
     <h3>Returns:</h3>
@@ -331,16 +362,18 @@ then make it returns the gid based on the provided id
 
 </dd>
     <dt>
-    <a name = "TileSetComposer:_hasDeck"></a>
-    <strong>TileSetComposer:_hasDeck&nbsp;(deck)</strong>
+    <a name = "_hasDeck"></a>
+    <strong>_hasDeck (deck)</strong>
     </dt>
     <dd>
     used to check if a deck is valid for a given tileset
 
+
     <h3>Parameters:</h3>
     <ul>
         <li><span class="parameter">deck</span>
-         the deck to be checked</li>
+         the deck to be checked
+        </li>
     </ul>
 
     <h3>Returns:</h3>
@@ -354,11 +387,12 @@ then make it returns the gid based on the provided id
 
 </dd>
     <dt>
-    <a name = "TileSetComposer:getNumOfTiles"></a>
-    <strong>TileSetComposer:getNumOfTiles&nbsp;()</strong>
+    <a name = "getNumOfTiles"></a>
+    <strong>getNumOfTiles ()</strong>
     </dt>
     <dd>
     Returns the number of tiles of the tileset
+
 
 
     <h3>Returns:</h3>
@@ -372,16 +406,18 @@ then make it returns the gid based on the provided id
 
 </dd>
     <dt>
-    <a name = "TileSetComposer:getTile"></a>
-    <strong>TileSetComposer:getTile&nbsp;(gid)</strong>
+    <a name = "getTile"></a>
+    <strong>getTile (gid)</strong>
     </dt>
     <dd>
     Returns a tile given the global id
 
+
     <h3>Parameters:</h3>
     <ul>
         <li><span class="parameter">gid</span>
-         the global id of the tile</li>
+         the global id of the tile
+        </li>
     </ul>
 
     <h3>Returns:</h3>
@@ -400,7 +436,7 @@ then make it returns the gid based on the provided id
 </div> <!-- id="content" -->
 </div> <!-- id="main" -->
 <div id="about">
-<i>generated by <a href="http://github.com/stevedonovan/LDoc">LDoc 1.3.11</a></i>
+<i>generated by <a href="http://github.com/stevedonovan/LDoc">LDoc 1.4.2</a></i>
 </div> <!-- id="about" -->
 </div> <!-- id="container" -->
 </body>

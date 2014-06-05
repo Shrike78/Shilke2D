@@ -38,7 +38,7 @@
 
 
 <h2>Modules</h2>
-<ul>
+<ul class="$(kind=='Topics' and '' or 'nowrap'">
   <li><a href="../modules/Core.Assets.html">Core.Assets</a></li>
   <li><a href="../modules/Core.Event.html">Core.Event</a></li>
   <li><a href="../modules/Core.EventDispatcher.html">Core.EventDispatcher</a></li>
@@ -61,6 +61,7 @@
   <li><a href="../modules/Display.Stage.html">Display.Stage</a></li>
   <li><a href="../modules/Display.TextField.html">Display.TextField</a></li>
   <li><a href="../modules/Display.TileMap.html">Display.TileMap</a></li>
+  <li><a href="../modules/include.html">include</a></li>
   <li><a href="../modules/Texture.ITextureAtlas.html">Texture.ITextureAtlas</a></li>
   <li><a href="../modules/Texture.SubTexture.html">Texture.SubTexture</a></li>
   <li><a href="../modules/Texture.Texture.html">Texture.Texture</a></li>
@@ -88,9 +89,9 @@
   <li><a href="../modules/Utils.CollisionKit.html">Utils.CollisionKit</a></li>
   <li><strong>Utils.Color</strong></li>
   <li><a href="../modules/Utils.Coroutines.html">Utils.Coroutines</a></li>
-  <li><a href="../modules/Utils.IO.html">Utils.IO</a></li>
   <li><a href="../modules/Utils.IniFile.html">Utils.IniFile</a></li>
   <li><a href="../modules/Utils.IniParser.html">Utils.IniParser</a></li>
+  <li><a href="../modules/Utils.IO.html">Utils.IO</a></li>
   <li><a href="../modules/Utils.Log.html">Utils.Log</a></li>
   <li><a href="../modules/Utils.Math.html">Utils.Math</a></li>
   <li><a href="../modules/Utils.PerformanceTimer.html">Utils.PerformanceTimer</a></li>
@@ -103,7 +104,6 @@
   <li><a href="../modules/Utils.Vector.html">Utils.Vector</a></li>
   <li><a href="../modules/Utils.XmlNode.html">Utils.XmlNode</a></li>
   <li><a href="../modules/Utils.XmlParser.html">Utils.XmlParser</a></li>
-  <li><a href="../modules/include.html">include</a></li>
 </ul>
 
 </div>
@@ -111,7 +111,6 @@
 <div id="content">
 
 <h1>Module <code>Utils.Color</code></h1>
-
 <p>Color class.</p>
 <p>
 <p>Shilke2D uses colors in a [0..255] space, while MOAI in a [0..1]. It's assumed everywhere that a
@@ -121,72 +120,80 @@ to MOAI interface. The call returns each color component divided by 255
 also negative. Algebrical operators between colors are defined and can produced meaningless colors,
 with component values outside the [0..255] range. Algebrical operator are meant to support color animations
 by tweening and should never be used explicitely.
-<p>A set of predefined named colors is also provided. All the color are fully opaque(alpha is 255).
+
+
+A set of predefined named colors is also provided. All the color are fully opaque(alpha is 255).
+
 The color definition is taken from:
-<p><a href="http://www.w3.org/TR/SVG/types.html#ColorKeywords">http://www.w3.org/TR/SVG/types.html#ColorKeywords</a>
+
+
+
+<a href="http://www.w3.org/TR/SVG/types.html#ColorKeywords">http://www.w3.org/TR/SVG/types.html#ColorKeywords</a>
+
+
 </p>
 
 
 <h2><a href="#Functions">Functions</a></h2>
 <table class="function_list">
 	<tr>
-	<td class="name" nowrap><a href="#fromNormalizedValues">fromNormalizedValues&nbsp;(r, g, b, a)</a></td>
+	<td class="name" nowrap><a href="#fromNormalizedValues">fromNormalizedValues (r, g, b, a)</a></td>
 	<td class="summary">create a Color given r,g,b,a as float 0..1 values</td>
 	</tr>
 	<tr>
-	<td class="name" nowrap><a href="#Color:init">Color:init&nbsp;(r, g, b, a)</a></td>
+	<td class="name" nowrap><a href="#init">init (r, g, b, a)</a></td>
 	<td class="summary">Constructor.</td>
 	</tr>
 	<tr>
-	<td class="name" nowrap><a href="#Color:unpack">Color:unpack&nbsp;(clamp)</a></td>
+	<td class="name" nowrap><a href="#unpack">unpack (clamp)</a></td>
 	<td class="summary">Returns the 4 components</td>
 	</tr>
 	<tr>
-	<td class="name" nowrap><a href="#Color:unpack_normalized">Color:unpack_normalized&nbsp;(clamp)</a></td>
+	<td class="name" nowrap><a href="#unpack_normalized">unpack_normalized (clamp)</a></td>
 	<td class="summary">Returns the 4 components normalized</td>
 	</tr>
 	<tr>
-	<td class="name" nowrap><a href="#Color:clamp">Color:clamp&nbsp;()</a></td>
+	<td class="name" nowrap><a href="#clamp">clamp ()</a></td>
 	<td class="summary">Force the components values to be clamped between [0..255].</td>
 	</tr>
 	<tr>
-	<td class="name" nowrap><a href="#__add">__add&nbsp;(c1, c2)</a></td>
+	<td class="name" nowrap><a href="#__add">__add (c1, c2)</a></td>
 	<td class="summary">sum r,g,b,a channels of two colors</td>
 	</tr>
 	<tr>
-	<td class="name" nowrap><a href="#__sub">__sub&nbsp;(c1, c2)</a></td>
+	<td class="name" nowrap><a href="#__sub">__sub (c1, c2)</a></td>
 	<td class="summary">subtract r,g,b,a channels of two colors</td>
 	</tr>
 	<tr>
-	<td class="name" nowrap><a href="#__mul">__mul&nbsp;(c1, c2)</a></td>
+	<td class="name" nowrap><a href="#__mul">__mul (c1, c2)</a></td>
 	<td class="summary">multiply r,g,b,a channels of a color by a number</td>
 	</tr>
 	<tr>
-	<td class="name" nowrap><a href="#__div">__div&nbsp;(c, d)</a></td>
+	<td class="name" nowrap><a href="#__div">__div (c, d)</a></td>
 	<td class="summary">divide r,g,b,a components of a color by a number</td>
 	</tr>
 	<tr>
-	<td class="name" nowrap><a href="#__eq">__eq&nbsp;(c1, c2)</a></td>
+	<td class="name" nowrap><a href="#__eq">__eq (c1, c2)</a></td>
 	<td class="summary">the == operation</td>
 	</tr>
 	<tr>
-	<td class="name" nowrap><a href="#Color:__tostring">Color:__tostring&nbsp;()</a></td>
+	<td class="name" nowrap><a href="#__tostring">__tostring ()</a></td>
 	<td class="summary">print color components value</td>
 	</tr>
 	<tr>
-	<td class="name" nowrap><a href="#blend">blend&nbsp;(c1, c2, a)</a></td>
+	<td class="name" nowrap><a href="#blend">blend (c1, c2, a)</a></td>
 	<td class="summary">blend 2 colors</td>
 	</tr>
 	<tr>
-	<td class="name" nowrap><a href="#hsv2rgb">hsv2rgb&nbsp;(h, s, v)</a></td>
+	<td class="name" nowrap><a href="#hsv2rgb">hsv2rgb (h, s, v)</a></td>
 	<td class="summary">color space conversion</td>
 	</tr>
 	<tr>
-	<td class="name" nowrap><a href="#rgba2int">rgba2int&nbsp;(r, g, b, a)</a></td>
+	<td class="name" nowrap><a href="#rgba2int">rgba2int (r, g, b, a)</a></td>
 	<td class="summary">Pack an r,g,b,a set of values to a single int value</td>
 	</tr>
 	<tr>
-	<td class="name" nowrap><a href="#int2rgba">int2rgba&nbsp;(c)</a></td>
+	<td class="name" nowrap><a href="#int2rgba">int2rgba (c)</a></td>
 	<td class="summary">Unpack an int value to a set of r,g,b,a values</td>
 	</tr>
 </table>
@@ -786,21 +793,26 @@ The color definition is taken from:
     <dl class="function">
     <dt>
     <a name = "fromNormalizedValues"></a>
-    <strong>fromNormalizedValues&nbsp;(r, g, b, a)</strong>
+    <strong>fromNormalizedValues (r, g, b, a)</strong>
     </dt>
     <dd>
     create a Color given r,g,b,a as float 0..1 values
 
+
     <h3>Parameters:</h3>
     <ul>
         <li><span class="parameter">r</span>
-         [0..1]</li>
+         [0..1]
+        </li>
         <li><span class="parameter">g</span>
-         [0..1]</li>
+         [0..1]
+        </li>
         <li><span class="parameter">b</span>
-         [0..1]</li>
+         [0..1]
+        </li>
         <li><span class="parameter">a</span>
-         [0..1]</li>
+         [0..1]
+        </li>
     </ul>
 
     <h3>Returns:</h3>
@@ -814,22 +826,27 @@ The color definition is taken from:
 
 </dd>
     <dt>
-    <a name = "Color:init"></a>
-    <strong>Color:init&nbsp;(r, g, b, a)</strong>
+    <a name = "init"></a>
+    <strong>init (r, g, b, a)</strong>
     </dt>
     <dd>
     Constructor.
 
+
     <h3>Parameters:</h3>
     <ul>
         <li><span class="parameter">r</span>
-         number or nil. default value is 255</li>
+         number or nil. default value is 255
+        </li>
         <li><span class="parameter">g</span>
-         number or nil. default value is 255</li>
+         number or nil. default value is 255
+        </li>
         <li><span class="parameter">b</span>
-         number or nil. default value is 255</li>
+         number or nil. default value is 255
+        </li>
         <li><span class="parameter">a</span>
-         number or nil. default value is 255</li>
+         number or nil. default value is 255
+        </li>
     </ul>
 
 
@@ -838,16 +855,18 @@ The color definition is taken from:
 
 </dd>
     <dt>
-    <a name = "Color:unpack"></a>
-    <strong>Color:unpack&nbsp;(clamp)</strong>
+    <a name = "unpack"></a>
+    <strong>unpack (clamp)</strong>
     </dt>
     <dd>
     Returns the 4 components
 
+
     <h3>Parameters:</h3>
     <ul>
         <li><span class="parameter">clamp</span>
-         if values need to be clamped in [0..255]. Optional, default is false</li>
+         if values need to be clamped in [0..255]. Optional, default is false
+        </li>
     </ul>
 
     <h3>Returns:</h3>
@@ -867,16 +886,18 @@ The color definition is taken from:
 
 </dd>
     <dt>
-    <a name = "Color:unpack_normalized"></a>
-    <strong>Color:unpack_normalized&nbsp;(clamp)</strong>
+    <a name = "unpack_normalized"></a>
+    <strong>unpack_normalized (clamp)</strong>
     </dt>
     <dd>
     Returns the 4 components normalized
 
+
     <h3>Parameters:</h3>
     <ul>
         <li><span class="parameter">clamp</span>
-         if values need to be clamped in [0..1]. Optional, default is false</li>
+         if values need to be clamped in [0..1]. Optional, default is false
+        </li>
     </ul>
 
     <h3>Returns:</h3>
@@ -896,8 +917,8 @@ The color definition is taken from:
 
 </dd>
     <dt>
-    <a name = "Color:clamp"></a>
-    <strong>Color:clamp&nbsp;()</strong>
+    <a name = "clamp"></a>
+    <strong>clamp ()</strong>
     </dt>
     <dd>
     Force the components values to be clamped between [0..255].  They could be out of range
@@ -908,20 +929,24 @@ after algebrical operations
 
 
 
+
 </dd>
     <dt>
     <a name = "__add"></a>
-    <strong>__add&nbsp;(c1, c2)</strong>
+    <strong>__add (c1, c2)</strong>
     </dt>
     <dd>
     sum r,g,b,a channels of two colors
 
+
     <h3>Parameters:</h3>
     <ul>
         <li><span class="parameter">c1</span>
-         Color</li>
+         Color
+        </li>
         <li><span class="parameter">c2</span>
-         Color</li>
+         Color
+        </li>
     </ul>
 
     <h3>Returns:</h3>
@@ -936,16 +961,19 @@ after algebrical operations
 </dd>
     <dt>
     <a name = "__sub"></a>
-    <strong>__sub&nbsp;(c1, c2)</strong>
+    <strong>__sub (c1, c2)</strong>
     </dt>
     <dd>
     subtract r,g,b,a channels of two colors
 
+
     <h3>Parameters:</h3>
     <ul>
         <li><span class="parameter">c1</span>
+
         </li>
         <li><span class="parameter">c2</span>
+
         </li>
     </ul>
 
@@ -956,16 +984,19 @@ after algebrical operations
 </dd>
     <dt>
     <a name = "__mul"></a>
-    <strong>__mul&nbsp;(c1, c2)</strong>
+    <strong>__mul (c1, c2)</strong>
     </dt>
     <dd>
     multiply r,g,b,a channels of a color by a number
 
+
     <h3>Parameters:</h3>
     <ul>
         <li><span class="parameter">c1</span>
+
         </li>
         <li><span class="parameter">c2</span>
+
         </li>
     </ul>
 
@@ -976,16 +1007,19 @@ after algebrical operations
 </dd>
     <dt>
     <a name = "__div"></a>
-    <strong>__div&nbsp;(c, d)</strong>
+    <strong>__div (c, d)</strong>
     </dt>
     <dd>
     divide r,g,b,a components of a color by a number
 
+
     <h3>Parameters:</h3>
     <ul>
         <li><span class="parameter">c</span>
+
         </li>
         <li><span class="parameter">d</span>
+
         </li>
     </ul>
 
@@ -996,16 +1030,19 @@ after algebrical operations
 </dd>
     <dt>
     <a name = "__eq"></a>
-    <strong>__eq&nbsp;(c1, c2)</strong>
+    <strong>__eq (c1, c2)</strong>
     </dt>
     <dd>
     the == operation
 
+
     <h3>Parameters:</h3>
     <ul>
         <li><span class="parameter">c1</span>
+
         </li>
         <li><span class="parameter">c2</span>
+
         </li>
     </ul>
 
@@ -1015,8 +1052,8 @@ after algebrical operations
 
 </dd>
     <dt>
-    <a name = "Color:__tostring"></a>
-    <strong>Color:__tostring&nbsp;()</strong>
+    <a name = "__tostring"></a>
+    <strong>__tostring ()</strong>
     </dt>
     <dd>
     print color components value
@@ -1026,22 +1063,27 @@ after algebrical operations
 
 
 
+
 </dd>
     <dt>
     <a name = "blend"></a>
-    <strong>blend&nbsp;(c1, c2, a)</strong>
+    <strong>blend (c1, c2, a)</strong>
     </dt>
     <dd>
     blend 2 colors
 
+
     <h3>Parameters:</h3>
     <ul>
         <li><span class="parameter">c1</span>
-         first Color</li>
+         first Color
+        </li>
         <li><span class="parameter">c2</span>
-         second Color</li>
+         second Color
+        </li>
         <li><span class="parameter">a</span>
-         blend factor</li>
+         blend factor
+        </li>
     </ul>
 
     <h3>Returns:</h3>
@@ -1056,19 +1098,23 @@ after algebrical operations
 </dd>
     <dt>
     <a name = "hsv2rgb"></a>
-    <strong>hsv2rgb&nbsp;(h, s, v)</strong>
+    <strong>hsv2rgb (h, s, v)</strong>
     </dt>
     <dd>
     color space conversion
 
+
     <h3>Parameters:</h3>
     <ul>
         <li><span class="parameter">h</span>
+
         </li>
         <li><span class="parameter">s</span>
+
         </li>
         <li><span class="parameter">v</span>
-        h, s, v is allowed having values between [0 ... 1].</li>
+        h, s, v is allowed having values between [0 ... 1].
+        </li>
     </ul>
 
 
@@ -1078,21 +1124,26 @@ after algebrical operations
 </dd>
     <dt>
     <a name = "rgba2int"></a>
-    <strong>rgba2int&nbsp;(r, g, b, a)</strong>
+    <strong>rgba2int (r, g, b, a)</strong>
     </dt>
     <dd>
     Pack an r,g,b,a set of values to a single int value
 
+
     <h3>Parameters:</h3>
     <ul>
         <li><span class="parameter">r</span>
-         [0,255]</li>
+         [0,255]
+        </li>
         <li><span class="parameter">g</span>
-         [0,255]</li>
+         [0,255]
+        </li>
         <li><span class="parameter">b</span>
-         [0,255]</li>
+         [0,255]
+        </li>
         <li><span class="parameter">a</span>
-         [0,255]</li>
+         [0,255]
+        </li>
     </ul>
 
     <h3>Returns:</h3>
@@ -1107,15 +1158,17 @@ after algebrical operations
 </dd>
     <dt>
     <a name = "int2rgba"></a>
-    <strong>int2rgba&nbsp;(c)</strong>
+    <strong>int2rgba (c)</strong>
     </dt>
     <dd>
     Unpack an int value to a set of r,g,b,a values
 
+
     <h3>Parameters:</h3>
     <ul>
         <li><span class="parameter">c</span>
-         value to be unpack</li>
+         value to be unpack
+        </li>
     </ul>
 
     <h3>Returns:</h3>
@@ -1149,6 +1202,7 @@ after algebrical operations
 
 
 
+
 </dd>
     <dt>
     <a name = "AQUA"></a>
@@ -1156,6 +1210,7 @@ after algebrical operations
     </dt>
     <dd>
     (250,235,215)
+
 
 
 
@@ -1175,6 +1230,7 @@ after algebrical operations
 
 
 
+
 </dd>
     <dt>
     <a name = "AZURE"></a>
@@ -1182,6 +1238,7 @@ after algebrical operations
     </dt>
     <dd>
     (127,255,212)
+
 
 
 
@@ -1201,6 +1258,7 @@ after algebrical operations
 
 
 
+
 </dd>
     <dt>
     <a name = "BISQUE"></a>
@@ -1208,6 +1266,7 @@ after algebrical operations
     </dt>
     <dd>
     (245,245,220)
+
 
 
 
@@ -1227,6 +1286,7 @@ after algebrical operations
 
 
 
+
 </dd>
     <dt>
     <a name = "BLANCHEDALMOND"></a>
@@ -1234,6 +1294,7 @@ after algebrical operations
     </dt>
     <dd>
     (0,0,0)
+
 
 
 
@@ -1253,6 +1314,7 @@ after algebrical operations
 
 
 
+
 </dd>
     <dt>
     <a name = "BLUEVIOLET"></a>
@@ -1260,6 +1322,7 @@ after algebrical operations
     </dt>
     <dd>
     (0,0,255)
+
 
 
 
@@ -1279,6 +1342,7 @@ after algebrical operations
 
 
 
+
 </dd>
     <dt>
     <a name = "BURLYWOOD"></a>
@@ -1286,6 +1350,7 @@ after algebrical operations
     </dt>
     <dd>
     (165,42,42)
+
 
 
 
@@ -1305,6 +1370,7 @@ after algebrical operations
 
 
 
+
 </dd>
     <dt>
     <a name = "CHARTREUSE"></a>
@@ -1312,6 +1378,7 @@ after algebrical operations
     </dt>
     <dd>
     (95,158,160)
+
 
 
 
@@ -1331,6 +1398,7 @@ after algebrical operations
 
 
 
+
 </dd>
     <dt>
     <a name = "CORAL"></a>
@@ -1338,6 +1406,7 @@ after algebrical operations
     </dt>
     <dd>
     (210,105,30)
+
 
 
 
@@ -1357,6 +1426,7 @@ after algebrical operations
 
 
 
+
 </dd>
     <dt>
     <a name = "CORNSILK"></a>
@@ -1364,6 +1434,7 @@ after algebrical operations
     </dt>
     <dd>
     (100,149,237)
+
 
 
 
@@ -1383,6 +1454,7 @@ after algebrical operations
 
 
 
+
 </dd>
     <dt>
     <a name = "CYAN"></a>
@@ -1390,6 +1462,7 @@ after algebrical operations
     </dt>
     <dd>
     (220,20,60)
+
 
 
 
@@ -1409,6 +1482,7 @@ after algebrical operations
 
 
 
+
 </dd>
     <dt>
     <a name = "DARKCYAN"></a>
@@ -1416,6 +1490,7 @@ after algebrical operations
     </dt>
     <dd>
     (0,0,139)
+
 
 
 
@@ -1435,6 +1510,7 @@ after algebrical operations
 
 
 
+
 </dd>
     <dt>
     <a name = "DARKGRAY"></a>
@@ -1442,6 +1518,7 @@ after algebrical operations
     </dt>
     <dd>
     (184,134,11)
+
 
 
 
@@ -1461,6 +1538,7 @@ after algebrical operations
 
 
 
+
 </dd>
     <dt>
     <a name = "DARKGREY"></a>
@@ -1468,6 +1546,7 @@ after algebrical operations
     </dt>
     <dd>
     (0,100,0)
+
 
 
 
@@ -1487,6 +1566,7 @@ after algebrical operations
 
 
 
+
 </dd>
     <dt>
     <a name = "DARKMAGENTA"></a>
@@ -1494,6 +1574,7 @@ after algebrical operations
     </dt>
     <dd>
     (189,183,107)
+
 
 
 
@@ -1513,6 +1594,7 @@ after algebrical operations
 
 
 
+
 </dd>
     <dt>
     <a name = "DARKORANGE"></a>
@@ -1520,6 +1602,7 @@ after algebrical operations
     </dt>
     <dd>
     (85,107,47)
+
 
 
 
@@ -1539,6 +1622,7 @@ after algebrical operations
 
 
 
+
 </dd>
     <dt>
     <a name = "DARKRED"></a>
@@ -1546,6 +1630,7 @@ after algebrical operations
     </dt>
     <dd>
     (153,50,204)
+
 
 
 
@@ -1565,6 +1650,7 @@ after algebrical operations
 
 
 
+
 </dd>
     <dt>
     <a name = "DARKSEAGREEN"></a>
@@ -1572,6 +1658,7 @@ after algebrical operations
     </dt>
     <dd>
     (233,150,122)
+
 
 
 
@@ -1591,6 +1678,7 @@ after algebrical operations
 
 
 
+
 </dd>
     <dt>
     <a name = "DARKSLATEGRAY"></a>
@@ -1598,6 +1686,7 @@ after algebrical operations
     </dt>
     <dd>
     (72,61,139)
+
 
 
 
@@ -1617,6 +1706,7 @@ after algebrical operations
 
 
 
+
 </dd>
     <dt>
     <a name = "DARKTURQUOISE"></a>
@@ -1624,6 +1714,7 @@ after algebrical operations
     </dt>
     <dd>
     (47,79,79)
+
 
 
 
@@ -1643,6 +1734,7 @@ after algebrical operations
 
 
 
+
 </dd>
     <dt>
     <a name = "DEEPPINK"></a>
@@ -1650,6 +1742,7 @@ after algebrical operations
     </dt>
     <dd>
     (148,0,211)
+
 
 
 
@@ -1669,6 +1762,7 @@ after algebrical operations
 
 
 
+
 </dd>
     <dt>
     <a name = "DIMGRAY"></a>
@@ -1676,6 +1770,7 @@ after algebrical operations
     </dt>
     <dd>
     (0,191,255)
+
 
 
 
@@ -1695,6 +1790,7 @@ after algebrical operations
 
 
 
+
 </dd>
     <dt>
     <a name = "DODGERBLUE"></a>
@@ -1702,6 +1798,7 @@ after algebrical operations
     </dt>
     <dd>
     (105,105,105)
+
 
 
 
@@ -1721,6 +1818,7 @@ after algebrical operations
 
 
 
+
 </dd>
     <dt>
     <a name = "FLORALWHITE"></a>
@@ -1728,6 +1826,7 @@ after algebrical operations
     </dt>
     <dd>
     (178,34,34)
+
 
 
 
@@ -1747,6 +1846,7 @@ after algebrical operations
 
 
 
+
 </dd>
     <dt>
     <a name = "FUCHSIA"></a>
@@ -1754,6 +1854,7 @@ after algebrical operations
     </dt>
     <dd>
     (34,139,34)
+
 
 
 
@@ -1773,6 +1874,7 @@ after algebrical operations
 
 
 
+
 </dd>
     <dt>
     <a name = "GHOSTWHITE"></a>
@@ -1780,6 +1882,7 @@ after algebrical operations
     </dt>
     <dd>
     (220,220,220)
+
 
 
 
@@ -1799,6 +1902,7 @@ after algebrical operations
 
 
 
+
 </dd>
     <dt>
     <a name = "GOLDENROD"></a>
@@ -1806,6 +1910,7 @@ after algebrical operations
     </dt>
     <dd>
     (255,215,0)
+
 
 
 
@@ -1825,6 +1930,7 @@ after algebrical operations
 
 
 
+
 </dd>
     <dt>
     <a name = "GREY"></a>
@@ -1832,6 +1938,7 @@ after algebrical operations
     </dt>
     <dd>
     (128,128,128)
+
 
 
 
@@ -1851,6 +1958,7 @@ after algebrical operations
 
 
 
+
 </dd>
     <dt>
     <a name = "GREENYELLOW"></a>
@@ -1858,6 +1966,7 @@ after algebrical operations
     </dt>
     <dd>
     (0,128,0)
+
 
 
 
@@ -1877,6 +1986,7 @@ after algebrical operations
 
 
 
+
 </dd>
     <dt>
     <a name = "HOTPINK"></a>
@@ -1884,6 +1994,7 @@ after algebrical operations
     </dt>
     <dd>
     (240,255,240)
+
 
 
 
@@ -1903,6 +2014,7 @@ after algebrical operations
 
 
 
+
 </dd>
     <dt>
     <a name = "INDIGO"></a>
@@ -1910,6 +2022,7 @@ after algebrical operations
     </dt>
     <dd>
     (205,92,92)
+
 
 
 
@@ -1929,6 +2042,7 @@ after algebrical operations
 
 
 
+
 </dd>
     <dt>
     <a name = "KHAKI"></a>
@@ -1936,6 +2050,7 @@ after algebrical operations
     </dt>
     <dd>
     (255,255,240)
+
 
 
 
@@ -1955,6 +2070,7 @@ after algebrical operations
 
 
 
+
 </dd>
     <dt>
     <a name = "LAVENDERBLUSH"></a>
@@ -1962,6 +2078,7 @@ after algebrical operations
     </dt>
     <dd>
     (230,230,250)
+
 
 
 
@@ -1981,6 +2098,7 @@ after algebrical operations
 
 
 
+
 </dd>
     <dt>
     <a name = "LEMONCHIFFON"></a>
@@ -1988,6 +2106,7 @@ after algebrical operations
     </dt>
     <dd>
     (124,252,0)
+
 
 
 
@@ -2007,6 +2126,7 @@ after algebrical operations
 
 
 
+
 </dd>
     <dt>
     <a name = "LIGHTCORAL"></a>
@@ -2014,6 +2134,7 @@ after algebrical operations
     </dt>
     <dd>
     (173,216,230)
+
 
 
 
@@ -2033,6 +2154,7 @@ after algebrical operations
 
 
 
+
 </dd>
     <dt>
     <a name = "LIGHTGOLDENRODYELLOW"></a>
@@ -2040,6 +2162,7 @@ after algebrical operations
     </dt>
     <dd>
     (224,255,255)
+
 
 
 
@@ -2059,6 +2182,7 @@ after algebrical operations
 
 
 
+
 </dd>
     <dt>
     <a name = "LIGHTGREEN"></a>
@@ -2066,6 +2190,7 @@ after algebrical operations
     </dt>
     <dd>
     (211,211,211)
+
 
 
 
@@ -2085,6 +2210,7 @@ after algebrical operations
 
 
 
+
 </dd>
     <dt>
     <a name = "LIGHTPINK"></a>
@@ -2092,6 +2218,7 @@ after algebrical operations
     </dt>
     <dd>
     (211,211,211)
+
 
 
 
@@ -2111,6 +2238,7 @@ after algebrical operations
 
 
 
+
 </dd>
     <dt>
     <a name = "LIGHTSEAGREEN"></a>
@@ -2118,6 +2246,7 @@ after algebrical operations
     </dt>
     <dd>
     (255,160,122)
+
 
 
 
@@ -2137,6 +2266,7 @@ after algebrical operations
 
 
 
+
 </dd>
     <dt>
     <a name = "LIGHTSLATEGRAY"></a>
@@ -2144,6 +2274,7 @@ after algebrical operations
     </dt>
     <dd>
     (135,206,250)
+
 
 
 
@@ -2163,6 +2294,7 @@ after algebrical operations
 
 
 
+
 </dd>
     <dt>
     <a name = "LIGHTSTEELBLUE"></a>
@@ -2170,6 +2302,7 @@ after algebrical operations
     </dt>
     <dd>
     (119,136,153)
+
 
 
 
@@ -2189,6 +2322,7 @@ after algebrical operations
 
 
 
+
 </dd>
     <dt>
     <a name = "LIME"></a>
@@ -2196,6 +2330,7 @@ after algebrical operations
     </dt>
     <dd>
     (255,255,224)
+
 
 
 
@@ -2215,6 +2350,7 @@ after algebrical operations
 
 
 
+
 </dd>
     <dt>
     <a name = "LINEN"></a>
@@ -2222,6 +2358,7 @@ after algebrical operations
     </dt>
     <dd>
     (50,205,50)
+
 
 
 
@@ -2241,6 +2378,7 @@ after algebrical operations
 
 
 
+
 </dd>
     <dt>
     <a name = "MAROON"></a>
@@ -2248,6 +2386,7 @@ after algebrical operations
     </dt>
     <dd>
     (255,0,255)
+
 
 
 
@@ -2267,6 +2406,7 @@ after algebrical operations
 
 
 
+
 </dd>
     <dt>
     <a name = "MEDIUMBLUE"></a>
@@ -2274,6 +2414,7 @@ after algebrical operations
     </dt>
     <dd>
     (102,205,170)
+
 
 
 
@@ -2293,6 +2434,7 @@ after algebrical operations
 
 
 
+
 </dd>
     <dt>
     <a name = "MEDIUMPURPLE"></a>
@@ -2300,6 +2442,7 @@ after algebrical operations
     </dt>
     <dd>
     (186,85,211)
+
 
 
 
@@ -2319,6 +2462,7 @@ after algebrical operations
 
 
 
+
 </dd>
     <dt>
     <a name = "MEDIUMSLATEBLUE"></a>
@@ -2326,6 +2470,7 @@ after algebrical operations
     </dt>
     <dd>
     (60,179,113)
+
 
 
 
@@ -2345,6 +2490,7 @@ after algebrical operations
 
 
 
+
 </dd>
     <dt>
     <a name = "MEDIUMTURQUOISE"></a>
@@ -2352,6 +2498,7 @@ after algebrical operations
     </dt>
     <dd>
     (0,250,154)
+
 
 
 
@@ -2371,6 +2518,7 @@ after algebrical operations
 
 
 
+
 </dd>
     <dt>
     <a name = "MIDNIGHTBLUE"></a>
@@ -2378,6 +2526,7 @@ after algebrical operations
     </dt>
     <dd>
     (199,21,133)
+
 
 
 
@@ -2397,6 +2546,7 @@ after algebrical operations
 
 
 
+
 </dd>
     <dt>
     <a name = "MISTYROSE"></a>
@@ -2404,6 +2554,7 @@ after algebrical operations
     </dt>
     <dd>
     (245,255,250)
+
 
 
 
@@ -2423,6 +2574,7 @@ after algebrical operations
 
 
 
+
 </dd>
     <dt>
     <a name = "NAVAJOWHITE"></a>
@@ -2430,6 +2582,7 @@ after algebrical operations
     </dt>
     <dd>
     (255,228,181)
+
 
 
 
@@ -2449,6 +2602,7 @@ after algebrical operations
 
 
 
+
 </dd>
     <dt>
     <a name = "OLDLACE"></a>
@@ -2456,6 +2610,7 @@ after algebrical operations
     </dt>
     <dd>
     (0,0,128)
+
 
 
 
@@ -2475,6 +2630,7 @@ after algebrical operations
 
 
 
+
 </dd>
     <dt>
     <a name = "OLIVEDRAB"></a>
@@ -2482,6 +2638,7 @@ after algebrical operations
     </dt>
     <dd>
     (128,128,0)
+
 
 
 
@@ -2501,6 +2658,7 @@ after algebrical operations
 
 
 
+
 </dd>
     <dt>
     <a name = "ORANGERED"></a>
@@ -2508,6 +2666,7 @@ after algebrical operations
     </dt>
     <dd>
     (255,165,0)
+
 
 
 
@@ -2527,6 +2686,7 @@ after algebrical operations
 
 
 
+
 </dd>
     <dt>
     <a name = "PALEGOLDENROD"></a>
@@ -2534,6 +2694,7 @@ after algebrical operations
     </dt>
     <dd>
     (218,112,214)
+
 
 
 
@@ -2553,6 +2714,7 @@ after algebrical operations
 
 
 
+
 </dd>
     <dt>
     <a name = "PALETURQUOISE"></a>
@@ -2560,6 +2722,7 @@ after algebrical operations
     </dt>
     <dd>
     (152,251,152)
+
 
 
 
@@ -2579,6 +2742,7 @@ after algebrical operations
 
 
 
+
 </dd>
     <dt>
     <a name = "PAPAYAWHIP"></a>
@@ -2586,6 +2750,7 @@ after algebrical operations
     </dt>
     <dd>
     (219,112,147)
+
 
 
 
@@ -2605,6 +2770,7 @@ after algebrical operations
 
 
 
+
 </dd>
     <dt>
     <a name = "PERU"></a>
@@ -2612,6 +2778,7 @@ after algebrical operations
     </dt>
     <dd>
     (255,218,185)
+
 
 
 
@@ -2631,6 +2798,7 @@ after algebrical operations
 
 
 
+
 </dd>
     <dt>
     <a name = "PLUM"></a>
@@ -2638,6 +2806,7 @@ after algebrical operations
     </dt>
     <dd>
     (255,192,203)
+
 
 
 
@@ -2657,6 +2826,7 @@ after algebrical operations
 
 
 
+
 </dd>
     <dt>
     <a name = "PURPLE"></a>
@@ -2664,6 +2834,7 @@ after algebrical operations
     </dt>
     <dd>
     (176,224,230)
+
 
 
 
@@ -2683,6 +2854,7 @@ after algebrical operations
 
 
 
+
 </dd>
     <dt>
     <a name = "ROSYBROWN"></a>
@@ -2690,6 +2862,7 @@ after algebrical operations
     </dt>
     <dd>
     (255,0,0)
+
 
 
 
@@ -2709,6 +2882,7 @@ after algebrical operations
 
 
 
+
 </dd>
     <dt>
     <a name = "SADDLEBROWN"></a>
@@ -2716,6 +2890,7 @@ after algebrical operations
     </dt>
     <dd>
     (65,105,225)
+
 
 
 
@@ -2735,6 +2910,7 @@ after algebrical operations
 
 
 
+
 </dd>
     <dt>
     <a name = "SANDYBROWN"></a>
@@ -2742,6 +2918,7 @@ after algebrical operations
     </dt>
     <dd>
     (250,128,114)
+
 
 
 
@@ -2761,6 +2938,7 @@ after algebrical operations
 
 
 
+
 </dd>
     <dt>
     <a name = "SEASHELL"></a>
@@ -2768,6 +2946,7 @@ after algebrical operations
     </dt>
     <dd>
     (46,139,87)
+
 
 
 
@@ -2787,6 +2966,7 @@ after algebrical operations
 
 
 
+
 </dd>
     <dt>
     <a name = "SILVER"></a>
@@ -2794,6 +2974,7 @@ after algebrical operations
     </dt>
     <dd>
     (160,82,45)
+
 
 
 
@@ -2813,6 +2994,7 @@ after algebrical operations
 
 
 
+
 </dd>
     <dt>
     <a name = "SLATEBLUE"></a>
@@ -2820,6 +3002,7 @@ after algebrical operations
     </dt>
     <dd>
     (135,206,235)
+
 
 
 
@@ -2839,6 +3022,7 @@ after algebrical operations
 
 
 
+
 </dd>
     <dt>
     <a name = "SLATEGREY"></a>
@@ -2846,6 +3030,7 @@ after algebrical operations
     </dt>
     <dd>
     (112,128,144)
+
 
 
 
@@ -2865,6 +3050,7 @@ after algebrical operations
 
 
 
+
 </dd>
     <dt>
     <a name = "SPRINGGREEN"></a>
@@ -2872,6 +3058,7 @@ after algebrical operations
     </dt>
     <dd>
     (255,250,250)
+
 
 
 
@@ -2891,6 +3078,7 @@ after algebrical operations
 
 
 
+
 </dd>
     <dt>
     <a name = "TAN"></a>
@@ -2898,6 +3086,7 @@ after algebrical operations
     </dt>
     <dd>
     (70,130,180)
+
 
 
 
@@ -2917,6 +3106,7 @@ after algebrical operations
 
 
 
+
 </dd>
     <dt>
     <a name = "THISTLE"></a>
@@ -2924,6 +3114,7 @@ after algebrical operations
     </dt>
     <dd>
     (0,128,128)
+
 
 
 
@@ -2943,6 +3134,7 @@ after algebrical operations
 
 
 
+
 </dd>
     <dt>
     <a name = "TURQUOISE"></a>
@@ -2950,6 +3142,7 @@ after algebrical operations
     </dt>
     <dd>
     (255,99,71)
+
 
 
 
@@ -2969,6 +3162,7 @@ after algebrical operations
 
 
 
+
 </dd>
     <dt>
     <a name = "WHEAT"></a>
@@ -2976,6 +3170,7 @@ after algebrical operations
     </dt>
     <dd>
     (238,130,238)
+
 
 
 
@@ -2995,6 +3190,7 @@ after algebrical operations
 
 
 
+
 </dd>
     <dt>
     <a name = "WHITESMOKE"></a>
@@ -3002,6 +3198,7 @@ after algebrical operations
     </dt>
     <dd>
     (255,255,255)
+
 
 
 
@@ -3021,6 +3218,7 @@ after algebrical operations
 
 
 
+
 </dd>
     <dt>
     <a name = "YELLOWGREEN"></a>
@@ -3034,6 +3232,7 @@ after algebrical operations
 
 
 
+
 </dd>
 </dl>
 
@@ -3041,7 +3240,7 @@ after algebrical operations
 </div> <!-- id="content" -->
 </div> <!-- id="main" -->
 <div id="about">
-<i>generated by <a href="http://github.com/stevedonovan/LDoc">LDoc 1.3.11</a></i>
+<i>generated by <a href="http://github.com/stevedonovan/LDoc">LDoc 1.4.2</a></i>
 </div> <!-- id="about" -->
 </div> <!-- id="container" -->
 </body>

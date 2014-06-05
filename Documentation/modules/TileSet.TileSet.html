@@ -37,7 +37,7 @@
 
 
 <h2>Modules</h2>
-<ul>
+<ul class="$(kind=='Topics' and '' or 'nowrap'">
   <li><a href="../modules/Core.Assets.html">Core.Assets</a></li>
   <li><a href="../modules/Core.Event.html">Core.Event</a></li>
   <li><a href="../modules/Core.EventDispatcher.html">Core.EventDispatcher</a></li>
@@ -60,6 +60,7 @@
   <li><a href="../modules/Display.Stage.html">Display.Stage</a></li>
   <li><a href="../modules/Display.TextField.html">Display.TextField</a></li>
   <li><a href="../modules/Display.TileMap.html">Display.TileMap</a></li>
+  <li><a href="../modules/include.html">include</a></li>
   <li><a href="../modules/Texture.ITextureAtlas.html">Texture.ITextureAtlas</a></li>
   <li><a href="../modules/Texture.SubTexture.html">Texture.SubTexture</a></li>
   <li><a href="../modules/Texture.Texture.html">Texture.Texture</a></li>
@@ -87,9 +88,9 @@
   <li><a href="../modules/Utils.CollisionKit.html">Utils.CollisionKit</a></li>
   <li><a href="../modules/Utils.Color.html">Utils.Color</a></li>
   <li><a href="../modules/Utils.Coroutines.html">Utils.Coroutines</a></li>
-  <li><a href="../modules/Utils.IO.html">Utils.IO</a></li>
   <li><a href="../modules/Utils.IniFile.html">Utils.IniFile</a></li>
   <li><a href="../modules/Utils.IniParser.html">Utils.IniParser</a></li>
+  <li><a href="../modules/Utils.IO.html">Utils.IO</a></li>
   <li><a href="../modules/Utils.Log.html">Utils.Log</a></li>
   <li><a href="../modules/Utils.Math.html">Utils.Math</a></li>
   <li><a href="../modules/Utils.PerformanceTimer.html">Utils.PerformanceTimer</a></li>
@@ -102,7 +103,6 @@
   <li><a href="../modules/Utils.Vector.html">Utils.Vector</a></li>
   <li><a href="../modules/Utils.XmlNode.html">Utils.XmlNode</a></li>
   <li><a href="../modules/Utils.XmlParser.html">Utils.XmlParser</a></li>
-  <li><a href="../modules/include.html">include</a></li>
 </ul>
 
 </div>
@@ -110,51 +110,57 @@
 <div id="content">
 
 <h1>Module <code>TileSet.TileSet</code></h1>
-
 <p>TileSet is the most common type of tileset that can be used in Shilke2D.</p>
 <p>
-<p>- It wraps exactly one single texture atlas made on a single texture.
+
+
+
+- It wraps exactly one single texture atlas made on a single texture.
+
 - It allows to replace the texture atlas if the size and the number of the textures
+
 is the same
+
+
 </p>
 
 
 <h2><a href="#Functions">Functions</a></h2>
 <table class="function_list">
 	<tr>
-	<td class="name" nowrap><a href="#TileSet:init">TileSet:init&nbsp;(atlas, name, properties, tilesProperties)</a></td>
+	<td class="name" nowrap><a href="#init">init (atlas, name, properties, tilesProperties)</a></td>
 	<td class="summary">Constructor</td>
 	</tr>
 	<tr>
-	<td class="name" nowrap><a href="#TileSet:replaceAtlas">TileSet:replaceAtlas&nbsp;(atlas)</a></td>
+	<td class="name" nowrap><a href="#replaceAtlas">replaceAtlas (atlas)</a></td>
 	<td class="summary">Replace the tileset texture set with a new texture set defined by the atlas</td>
 	</tr>
 	<tr>
-	<td class="name" nowrap><a href="#TileSet:_getDeckInfoByGid">TileSet:_getDeckInfoByGid&nbsp;(id)</a></td>
+	<td class="name" nowrap><a href="#_getDeckInfoByGid">_getDeckInfoByGid (id)</a></td>
 	<td class="summary">convert a global tileset id to a deck + deck id</td>
 	</tr>
 	<tr>
-	<td class="name" nowrap><a href="#TileSet:_getGidByDeckInfo">TileSet:_getGidByDeckInfo&nbsp;(deck, deckId)</a></td>
+	<td class="name" nowrap><a href="#_getGidByDeckInfo">_getGidByDeckInfo (deck, deckId)</a></td>
 	<td class="summary">convert a deck + deck id to a global tileset id</td>
 	</tr>
 	<tr>
-	<td class="name" nowrap><a href="#TileSet:_hasDeck">TileSet:_hasDeck&nbsp;(deck)</a></td>
+	<td class="name" nowrap><a href="#_hasDeck">_hasDeck (deck)</a></td>
 	<td class="summary">used to check if a deck is valid for a given tileset</td>
 	</tr>
 	<tr>
-	<td class="name" nowrap><a href="#TileSet:getTileWidth">TileSet:getTileWidth&nbsp;()</a></td>
+	<td class="name" nowrap><a href="#getTileWidth">getTileWidth ()</a></td>
 	<td class="summary">Returns the width of the tiles of the tileset</td>
 	</tr>
 	<tr>
-	<td class="name" nowrap><a href="#TileSet:getTileHeight">TileSet:getTileHeight&nbsp;()</a></td>
+	<td class="name" nowrap><a href="#getTileHeight">getTileHeight ()</a></td>
 	<td class="summary">Returns the height of the tiles of the tileset</td>
 	</tr>
 	<tr>
-	<td class="name" nowrap><a href="#TileSet:getNumOfTiles">TileSet:getNumOfTiles&nbsp;()</a></td>
+	<td class="name" nowrap><a href="#getNumOfTiles">getNumOfTiles ()</a></td>
 	<td class="summary">Returns the number of tiles of the tileset</td>
 	</tr>
 	<tr>
-	<td class="name" nowrap><a href="#TileSet:getTile">TileSet:getTile&nbsp;(id)</a></td>
+	<td class="name" nowrap><a href="#getTile">getTile (id)</a></td>
 	<td class="summary">Returns a tile given the global id</td>
 	</tr>
 </table>
@@ -166,22 +172,27 @@ is the same
     <h2><a name="Functions"></a>Functions</h2>
     <dl class="function">
     <dt>
-    <a name = "TileSet:init"></a>
-    <strong>TileSet:init&nbsp;(atlas, name, properties, tilesProperties)</strong>
+    <a name = "init"></a>
+    <strong>init (atlas, name, properties, tilesProperties)</strong>
     </dt>
     <dd>
     Constructor
 
+
     <h3>Parameters:</h3>
     <ul>
         <li><span class="parameter">atlas</span>
-         the texture atlas containing the textures on which the tileset is built.</li>
+         the texture atlas containing the textures on which the tileset is built.
+        </li>
         <li><span class="parameter">name</span>
-         the name of the tileset (optional)</li>
+         the name of the tileset (optional)
+        </li>
         <li><span class="parameter">properties</span>
-         a collection of properties of the tileset (optional)</li>
+         a collection of properties of the tileset (optional)
+        </li>
         <li><span class="parameter">tilesProperties</span>
-         a collection of collection of properties of the tiles (optional)</li>
+         a collection of collection of properties of the tiles (optional)
+        </li>
     </ul>
 
 
@@ -190,16 +201,18 @@ is the same
 
 </dd>
     <dt>
-    <a name = "TileSet:replaceAtlas"></a>
-    <strong>TileSet:replaceAtlas&nbsp;(atlas)</strong>
+    <a name = "replaceAtlas"></a>
+    <strong>replaceAtlas (atlas)</strong>
     </dt>
     <dd>
     Replace the tileset texture set with a new texture set defined by the atlas
 
+
     <h3>Parameters:</h3>
     <ul>
         <li><span class="parameter">atlas</span>
-         the atlas with the new texture set</li>
+         the atlas with the new texture set
+        </li>
     </ul>
 
 
@@ -208,16 +221,18 @@ is the same
 
 </dd>
     <dt>
-    <a name = "TileSet:_getDeckInfoByGid"></a>
-    <strong>TileSet:_getDeckInfoByGid&nbsp;(id)</strong>
+    <a name = "_getDeckInfoByGid"></a>
+    <strong>_getDeckInfoByGid (id)</strong>
     </dt>
     <dd>
     convert a global tileset id to a deck + deck id
 
+
     <h3>Parameters:</h3>
     <ul>
         <li><span class="parameter">id</span>
-         the global tileset id</li>
+         the global tileset id
+        </li>
     </ul>
 
     <h3>Returns:</h3>
@@ -233,18 +248,21 @@ is the same
 
 </dd>
     <dt>
-    <a name = "TileSet:_getGidByDeckInfo"></a>
-    <strong>TileSet:_getGidByDeckInfo&nbsp;(deck, deckId)</strong>
+    <a name = "_getGidByDeckInfo"></a>
+    <strong>_getGidByDeckInfo (deck, deckId)</strong>
     </dt>
     <dd>
     convert a deck + deck id to a global tileset id
 
+
     <h3>Parameters:</h3>
     <ul>
         <li><span class="parameter">deck</span>
-         the deck</li>
+         the deck
+        </li>
         <li><span class="parameter">deckId</span>
-         the id of the tile in the provided deck</li>
+         the id of the tile in the provided deck
+        </li>
     </ul>
 
     <h3>Returns:</h3>
@@ -258,16 +276,18 @@ is the same
 
 </dd>
     <dt>
-    <a name = "TileSet:_hasDeck"></a>
-    <strong>TileSet:_hasDeck&nbsp;(deck)</strong>
+    <a name = "_hasDeck"></a>
+    <strong>_hasDeck (deck)</strong>
     </dt>
     <dd>
     used to check if a deck is valid for a given tileset
 
+
     <h3>Parameters:</h3>
     <ul>
         <li><span class="parameter">deck</span>
-         the deck to be checked</li>
+         the deck to be checked
+        </li>
     </ul>
 
     <h3>Returns:</h3>
@@ -281,11 +301,12 @@ is the same
 
 </dd>
     <dt>
-    <a name = "TileSet:getTileWidth"></a>
-    <strong>TileSet:getTileWidth&nbsp;()</strong>
+    <a name = "getTileWidth"></a>
+    <strong>getTileWidth ()</strong>
     </dt>
     <dd>
     Returns the width of the tiles of the tileset
+
 
 
     <h3>Returns:</h3>
@@ -299,11 +320,12 @@ is the same
 
 </dd>
     <dt>
-    <a name = "TileSet:getTileHeight"></a>
-    <strong>TileSet:getTileHeight&nbsp;()</strong>
+    <a name = "getTileHeight"></a>
+    <strong>getTileHeight ()</strong>
     </dt>
     <dd>
     Returns the height of the tiles of the tileset
+
 
 
     <h3>Returns:</h3>
@@ -317,11 +339,12 @@ is the same
 
 </dd>
     <dt>
-    <a name = "TileSet:getNumOfTiles"></a>
-    <strong>TileSet:getNumOfTiles&nbsp;()</strong>
+    <a name = "getNumOfTiles"></a>
+    <strong>getNumOfTiles ()</strong>
     </dt>
     <dd>
     Returns the number of tiles of the tileset
+
 
 
     <h3>Returns:</h3>
@@ -335,16 +358,18 @@ is the same
 
 </dd>
     <dt>
-    <a name = "TileSet:getTile"></a>
-    <strong>TileSet:getTile&nbsp;(id)</strong>
+    <a name = "getTile"></a>
+    <strong>getTile (id)</strong>
     </dt>
     <dd>
     Returns a tile given the global id
 
+
     <h3>Parameters:</h3>
     <ul>
         <li><span class="parameter">id</span>
-         tile id</li>
+         tile id
+        </li>
     </ul>
 
     <h3>Returns:</h3>
@@ -363,7 +388,7 @@ is the same
 </div> <!-- id="content" -->
 </div> <!-- id="main" -->
 <div id="about">
-<i>generated by <a href="http://github.com/stevedonovan/LDoc">LDoc 1.3.11</a></i>
+<i>generated by <a href="http://github.com/stevedonovan/LDoc">LDoc 1.4.2</a></i>
 </div> <!-- id="about" -->
 </div> <!-- id="container" -->
 </body>

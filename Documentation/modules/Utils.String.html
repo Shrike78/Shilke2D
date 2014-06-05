@@ -37,7 +37,7 @@
 
 
 <h2>Modules</h2>
-<ul>
+<ul class="$(kind=='Topics' and '' or 'nowrap'">
   <li><a href="../modules/Core.Assets.html">Core.Assets</a></li>
   <li><a href="../modules/Core.Event.html">Core.Event</a></li>
   <li><a href="../modules/Core.EventDispatcher.html">Core.EventDispatcher</a></li>
@@ -60,6 +60,7 @@
   <li><a href="../modules/Display.Stage.html">Display.Stage</a></li>
   <li><a href="../modules/Display.TextField.html">Display.TextField</a></li>
   <li><a href="../modules/Display.TileMap.html">Display.TileMap</a></li>
+  <li><a href="../modules/include.html">include</a></li>
   <li><a href="../modules/Texture.ITextureAtlas.html">Texture.ITextureAtlas</a></li>
   <li><a href="../modules/Texture.SubTexture.html">Texture.SubTexture</a></li>
   <li><a href="../modules/Texture.Texture.html">Texture.Texture</a></li>
@@ -87,9 +88,9 @@
   <li><a href="../modules/Utils.CollisionKit.html">Utils.CollisionKit</a></li>
   <li><a href="../modules/Utils.Color.html">Utils.Color</a></li>
   <li><a href="../modules/Utils.Coroutines.html">Utils.Coroutines</a></li>
-  <li><a href="../modules/Utils.IO.html">Utils.IO</a></li>
   <li><a href="../modules/Utils.IniFile.html">Utils.IniFile</a></li>
   <li><a href="../modules/Utils.IniParser.html">Utils.IniParser</a></li>
+  <li><a href="../modules/Utils.IO.html">Utils.IO</a></li>
   <li><a href="../modules/Utils.Log.html">Utils.Log</a></li>
   <li><a href="../modules/Utils.Math.html">Utils.Math</a></li>
   <li><a href="../modules/Utils.PerformanceTimer.html">Utils.PerformanceTimer</a></li>
@@ -102,7 +103,6 @@
   <li><a href="../modules/Utils.Vector.html">Utils.Vector</a></li>
   <li><a href="../modules/Utils.XmlNode.html">Utils.XmlNode</a></li>
   <li><a href="../modules/Utils.XmlParser.html">Utils.XmlParser</a></li>
-  <li><a href="../modules/include.html">include</a></li>
 </ul>
 
 </div>
@@ -110,7 +110,6 @@
 <div id="content">
 
 <h1>Module <code>Utils.String</code></h1>
-
 <p>Extends string namespace</p>
 <p></p>
 
@@ -118,43 +117,43 @@
 <h2><a href="#Functions">Functions</a></h2>
 <table class="function_list">
 	<tr>
-	<td class="name" nowrap><a href="#string.trim">string.trim&nbsp;(s)</a></td>
+	<td class="name" nowrap><a href="#string.trim">string.trim (s)</a></td>
 	<td class="summary">Removes blank spaces at begin or end of the string</td>
 	</tr>
 	<tr>
-	<td class="name" nowrap><a href="#string.starts">string.starts&nbsp;(s, startString)</a></td>
+	<td class="name" nowrap><a href="#string.starts">string.starts (s, startString)</a></td>
 	<td class="summary">Checks if a string starts with a given substring</td>
 	</tr>
 	<tr>
-	<td class="name" nowrap><a href="#string.ends">string.ends&nbsp;(s, endString)</a></td>
+	<td class="name" nowrap><a href="#string.ends">string.ends (s, endString)</a></td>
 	<td class="summary">Checks if a string ends with a given substring</td>
 	</tr>
 	<tr>
-	<td class="name" nowrap><a href="#string.removePrefix">string.removePrefix&nbsp;(s, prefix)</a></td>
+	<td class="name" nowrap><a href="#string.removePrefix">string.removePrefix (s, prefix)</a></td>
 	<td class="summary">Remove a prefix from a string</td>
 	</tr>
 	<tr>
-	<td class="name" nowrap><a href="#string.removeSuffix">string.removeSuffix&nbsp;(s, suffix)</a></td>
+	<td class="name" nowrap><a href="#string.removeSuffix">string.removeSuffix (s, suffix)</a></td>
 	<td class="summary">Remove a suffix from a string</td>
 	</tr>
 	<tr>
-	<td class="name" nowrap><a href="#string.split">string.split&nbsp;(s, re)</a></td>
+	<td class="name" nowrap><a href="#string.split">string.split (s, re)</a></td>
 	<td class="summary">Splits a string into multiple string based on a specific separator</td>
 	</tr>
 	<tr>
-	<td class="name" nowrap><a href="#string.splitPath">string.splitPath&nbsp;(path)</a></td>
+	<td class="name" nowrap><a href="#string.splitPath">string.splitPath (path)</a></td>
 	<td class="summary">given an absolute file path it returns path, filename and extension</td>
 	</tr>
 	<tr>
-	<td class="name" nowrap><a href="#string.getFileExtension">string.getFileExtension&nbsp;(path)</a></td>
+	<td class="name" nowrap><a href="#string.getFileExtension">string.getFileExtension (path)</a></td>
 	<td class="summary">Returns the extension given a filename</td>
 	</tr>
 	<tr>
-	<td class="name" nowrap><a href="#string.getFileDir">string.getFileDir&nbsp;(path)</a></td>
+	<td class="name" nowrap><a href="#string.getFileDir">string.getFileDir (path)</a></td>
 	<td class="summary">Returns the dir of a given filename</td>
 	</tr>
 	<tr>
-	<td class="name" nowrap><a href="#string.getFileName">string.getFileName&nbsp;(path, withExtension)</a></td>
+	<td class="name" nowrap><a href="#string.getFileName">string.getFileName (path, withExtension)</a></td>
 	<td class="summary">Returns the filename given an absolute path</td>
 	</tr>
 </table>
@@ -167,15 +166,17 @@
     <dl class="function">
     <dt>
     <a name = "string.trim"></a>
-    <strong>string.trim&nbsp;(s)</strong>
+    <strong>string.trim (s)</strong>
     </dt>
     <dd>
     Removes blank spaces at begin or end of the string
 
+
     <h3>Parameters:</h3>
     <ul>
         <li><span class="parameter">s</span>
-         source string</li>
+         source string
+        </li>
     </ul>
 
     <h3>Returns:</h3>
@@ -190,17 +191,20 @@
 </dd>
     <dt>
     <a name = "string.starts"></a>
-    <strong>string.starts&nbsp;(s, startString)</strong>
+    <strong>string.starts (s, startString)</strong>
     </dt>
     <dd>
     Checks if a string starts with a given substring
 
+
     <h3>Parameters:</h3>
     <ul>
         <li><span class="parameter">s</span>
-         the string to check</li>
+         the string to check
+        </li>
         <li><span class="parameter">startString</span>
-         the prefix to check</li>
+         the prefix to check
+        </li>
     </ul>
 
     <h3>Returns:</h3>
@@ -215,17 +219,20 @@
 </dd>
     <dt>
     <a name = "string.ends"></a>
-    <strong>string.ends&nbsp;(s, endString)</strong>
+    <strong>string.ends (s, endString)</strong>
     </dt>
     <dd>
     Checks if a string ends with a given substring
 
+
     <h3>Parameters:</h3>
     <ul>
         <li><span class="parameter">s</span>
-         the string to check</li>
+         the string to check
+        </li>
         <li><span class="parameter">endString</span>
-         the suffix to check</li>
+         the suffix to check
+        </li>
     </ul>
 
     <h3>Returns:</h3>
@@ -240,17 +247,20 @@
 </dd>
     <dt>
     <a name = "string.removePrefix"></a>
-    <strong>string.removePrefix&nbsp;(s, prefix)</strong>
+    <strong>string.removePrefix (s, prefix)</strong>
     </dt>
     <dd>
     Remove a prefix from a string
 
+
     <h3>Parameters:</h3>
     <ul>
         <li><span class="parameter">s</span>
-         source string</li>
+         source string
+        </li>
         <li><span class="parameter">prefix</span>
-         the prefix to remove</li>
+         the prefix to remove
+        </li>
     </ul>
 
     <h3>Returns:</h3>
@@ -265,17 +275,20 @@
 </dd>
     <dt>
     <a name = "string.removeSuffix"></a>
-    <strong>string.removeSuffix&nbsp;(s, suffix)</strong>
+    <strong>string.removeSuffix (s, suffix)</strong>
     </dt>
     <dd>
     Remove a suffix from a string
 
+
     <h3>Parameters:</h3>
     <ul>
         <li><span class="parameter">s</span>
-         source string</li>
+         source string
+        </li>
         <li><span class="parameter">suffix</span>
-         the suffix to remove</li>
+         the suffix to remove
+        </li>
     </ul>
 
     <h3>Returns:</h3>
@@ -290,18 +303,22 @@
 </dd>
     <dt>
     <a name = "string.split"></a>
-    <strong>string.split&nbsp;(s, re)</strong>
+    <strong>string.split (s, re)</strong>
     </dt>
     <dd>
     Splits a string into multiple string based on a specific separator
-default is blank char
+
 
     <h3>Parameters:</h3>
     <ul>
         <li><span class="parameter">s</span>
-         the string to split</li>
+         the string to split
+        </li>
         <li><span class="parameter">re</span>
-         the separator char or pattern (as regular expression). </li>
+         the separator char or pattern (as regular expression).
+
+default is blank char
+        </li>
     </ul>
 
     <h3>Returns:</h3>
@@ -316,15 +333,17 @@ default is blank char
 </dd>
     <dt>
     <a name = "string.splitPath"></a>
-    <strong>string.splitPath&nbsp;(path)</strong>
+    <strong>string.splitPath (path)</strong>
     </dt>
     <dd>
     given an absolute file path it returns path, filename and extension
 
+
     <h3>Parameters:</h3>
     <ul>
         <li><span class="parameter">path</span>
-         absolute file path</li>
+         absolute file path
+        </li>
     </ul>
 
     <h3>Returns:</h3>
@@ -343,15 +362,17 @@ default is blank char
 </dd>
     <dt>
     <a name = "string.getFileExtension"></a>
-    <strong>string.getFileExtension&nbsp;(path)</strong>
+    <strong>string.getFileExtension (path)</strong>
     </dt>
     <dd>
     Returns the extension given a filename
 
+
     <h3>Parameters:</h3>
     <ul>
         <li><span class="parameter">path</span>
-         the absolute path of a file, or just the fileName</li>
+         the absolute path of a file, or just the fileName
+        </li>
     </ul>
 
     <h3>Returns:</h3>
@@ -366,15 +387,17 @@ default is blank char
 </dd>
     <dt>
     <a name = "string.getFileDir"></a>
-    <strong>string.getFileDir&nbsp;(path)</strong>
+    <strong>string.getFileDir (path)</strong>
     </dt>
     <dd>
     Returns the dir of a given filename
 
+
     <h3>Parameters:</h3>
     <ul>
         <li><span class="parameter">path</span>
-         the absolute path of a file</li>
+         the absolute path of a file
+        </li>
     </ul>
 
     <h3>Returns:</h3>
@@ -389,17 +412,20 @@ default is blank char
 </dd>
     <dt>
     <a name = "string.getFileName"></a>
-    <strong>string.getFileName&nbsp;(path, withExtension)</strong>
+    <strong>string.getFileName (path, withExtension)</strong>
     </dt>
     <dd>
     Returns the filename given an absolute path
 
+
     <h3>Parameters:</h3>
     <ul>
         <li><span class="parameter">path</span>
-         the absolute path of a file</li>
+         the absolute path of a file
+        </li>
         <li><span class="parameter">withExtension</span>
-         boolean, if false or nil returns fileName without extension</li>
+         boolean, if false or nil returns fileName without extension
+        </li>
     </ul>
 
     <h3>Returns:</h3>
@@ -418,7 +444,7 @@ default is blank char
 </div> <!-- id="content" -->
 </div> <!-- id="main" -->
 <div id="about">
-<i>generated by <a href="http://github.com/stevedonovan/LDoc">LDoc 1.3.11</a></i>
+<i>generated by <a href="http://github.com/stevedonovan/LDoc">LDoc 1.4.2</a></i>
 </div> <!-- id="about" -->
 </div> <!-- id="container" -->
 </body>

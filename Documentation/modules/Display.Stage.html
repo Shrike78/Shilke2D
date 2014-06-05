@@ -33,11 +33,12 @@
 <h2>Contents</h2>
 <ul>
 <li><a href="#Functions">Functions</a></li>
+<li><a href="#Local_Functions">Local Functions</a></li>
 </ul>
 
 
 <h2>Modules</h2>
-<ul>
+<ul class="$(kind=='Topics' and '' or 'nowrap'">
   <li><a href="../modules/Core.Assets.html">Core.Assets</a></li>
   <li><a href="../modules/Core.Event.html">Core.Event</a></li>
   <li><a href="../modules/Core.EventDispatcher.html">Core.EventDispatcher</a></li>
@@ -60,6 +61,7 @@
   <li><strong>Display.Stage</strong></li>
   <li><a href="../modules/Display.TextField.html">Display.TextField</a></li>
   <li><a href="../modules/Display.TileMap.html">Display.TileMap</a></li>
+  <li><a href="../modules/include.html">include</a></li>
   <li><a href="../modules/Texture.ITextureAtlas.html">Texture.ITextureAtlas</a></li>
   <li><a href="../modules/Texture.SubTexture.html">Texture.SubTexture</a></li>
   <li><a href="../modules/Texture.Texture.html">Texture.Texture</a></li>
@@ -87,9 +89,9 @@
   <li><a href="../modules/Utils.CollisionKit.html">Utils.CollisionKit</a></li>
   <li><a href="../modules/Utils.Color.html">Utils.Color</a></li>
   <li><a href="../modules/Utils.Coroutines.html">Utils.Coroutines</a></li>
-  <li><a href="../modules/Utils.IO.html">Utils.IO</a></li>
   <li><a href="../modules/Utils.IniFile.html">Utils.IniFile</a></li>
   <li><a href="../modules/Utils.IniParser.html">Utils.IniParser</a></li>
+  <li><a href="../modules/Utils.IO.html">Utils.IO</a></li>
   <li><a href="../modules/Utils.Log.html">Utils.Log</a></li>
   <li><a href="../modules/Utils.Math.html">Utils.Math</a></li>
   <li><a href="../modules/Utils.PerformanceTimer.html">Utils.PerformanceTimer</a></li>
@@ -102,7 +104,6 @@
   <li><a href="../modules/Utils.Vector.html">Utils.Vector</a></li>
   <li><a href="../modules/Utils.XmlNode.html">Utils.XmlNode</a></li>
   <li><a href="../modules/Utils.XmlParser.html">Utils.XmlParser</a></li>
-  <li><a href="../modules/include.html">include</a></li>
 </ul>
 
 </div>
@@ -110,105 +111,113 @@
 <div id="content">
 
 <h1>Module <code>Display.Stage</code></h1>
-
 <p>Stage is a particular DisplayObjContainer, root node of the displayList tree.</p>
 <p>
+
 It's initialized by Shilke2D and only object connected to it are rendered.
+
 A stage cannot be geometrically transformed or moved, so all the related method
-are override and raise errors if called.</p>
+
+are override and raise errors if called.
+</p>
 
 
 <h2><a href="#Functions">Functions</a></h2>
 <table class="function_list">
 	<tr>
-	<td class="name" nowrap><a href="#Stage:init">Stage:init&nbsp;(viewport)</a></td>
+	<td class="name" nowrap><a href="#init">init (viewport)</a></td>
 	<td class="summary">Called from Shilke2D, it sets the viewport for the scene, the renderTable and
+
 initializes the 'debug' drawCallback used to show bounding boxes of objects in
+
 the displayList</td>
 	</tr>
 	<tr>
-	<td class="name" nowrap><a href="#Stage:_createProp">Stage:_createProp&nbsp;()</a></td>
+	<td class="name" nowrap><a href="#_createProp">_createProp ()</a></td>
 	<td class="summary">Stage prop is a MOAILayer, not a generic MOAIProp like all the others displayObjs</td>
 	</tr>
 	<tr>
-	<td class="name" nowrap><a href="#Stage:showDebugLines">Stage:showDebugLines&nbsp;(showOrientedBounds, showAABounds)</a></td>
+	<td class="name" nowrap><a href="#showDebugLines">showDebugLines (showOrientedBounds, showAABounds)</a></td>
 	<td class="summary">Debug function.</td>
 	</tr>
 	<tr>
-	<td class="name" nowrap><a href="#__setClearColor">__setClearColor&nbsp;(r, g, b, a)</a></td>
-	<td class="summary">Inner method.</td>
-	</tr>
-	<tr>
-	<td class="name" nowrap><a href="#Stage:setBackground">Stage:setBackground&nbsp;(r, g, b)</a></td>
+	<td class="name" nowrap><a href="#setBackground">setBackground (r, g, b)</a></td>
 	<td class="summary">Set background color.</td>
 	</tr>
 	<tr>
-	<td class="name" nowrap><a href="#Stage:getBackground">Stage:getBackground&nbsp;(r, g, b)</a></td>
+	<td class="name" nowrap><a href="#getBackground">getBackground (r, g, b)</a></td>
 	<td class="summary">Set background color.</td>
 	</tr>
 	<tr>
-	<td class="name" nowrap><a href="#Stage:_setParent">Stage:_setParent&nbsp;(parent)</a></td>
+	<td class="name" nowrap><a href="#_setParent">_setParent (parent)</a></td>
 	<td class="summary">Raise error if called because stage cannot be added as child to other containers</td>
 	</tr>
 	<tr>
-	<td class="name" nowrap><a href="#Stage:setPivot">Stage:setPivot&nbsp;(x, y)</a></td>
+	<td class="name" nowrap><a href="#setPivot">setPivot (x, y)</a></td>
 	<td class="summary">Raise error if called because stage cannot be geometrically trasnformed</td>
 	</tr>
 	<tr>
-	<td class="name" nowrap><a href="#Stage:setPivotX">Stage:setPivotX&nbsp;(x)</a></td>
+	<td class="name" nowrap><a href="#setPivotX">setPivotX (x)</a></td>
 	<td class="summary">Raise error if called because stage cannot be geometrically trasnformed</td>
 	</tr>
 	<tr>
-	<td class="name" nowrap><a href="#Stage:setPivotY">Stage:setPivotY&nbsp;(y)</a></td>
+	<td class="name" nowrap><a href="#setPivotY">setPivotY (y)</a></td>
 	<td class="summary">Raise error if called because stage cannot be geometrically trasnformed</td>
 	</tr>
 	<tr>
-	<td class="name" nowrap><a href="#Stage:setPosition">Stage:setPosition&nbsp;(x, y)</a></td>
+	<td class="name" nowrap><a href="#setPosition">setPosition (x, y)</a></td>
 	<td class="summary">Raise error if called because stage cannot be geometrically trasnformed</td>
 	</tr>
 	<tr>
-	<td class="name" nowrap><a href="#Stage:setPosition_v2">Stage:setPosition_v2&nbsp;(v)</a></td>
+	<td class="name" nowrap><a href="#setPosition_v2">setPosition_v2 (v)</a></td>
 	<td class="summary">Raise error if called because stage cannot be geometrically trasnformed</td>
 	</tr>
 	<tr>
-	<td class="name" nowrap><a href="#Stage:setPositionX">Stage:setPositionX&nbsp;(x)</a></td>
+	<td class="name" nowrap><a href="#setPositionX">setPositionX (x)</a></td>
 	<td class="summary">Raise error if called because stage cannot be geometrically trasnformed</td>
 	</tr>
 	<tr>
-	<td class="name" nowrap><a href="#Stage:setPositionY">Stage:setPositionY&nbsp;(y)</a></td>
+	<td class="name" nowrap><a href="#setPositionY">setPositionY (y)</a></td>
 	<td class="summary">Raise error if called because stage cannot be geometrically trasnformed</td>
 	</tr>
 	<tr>
-	<td class="name" nowrap><a href="#Stage:translate">Stage:translate&nbsp;(x, y)</a></td>
+	<td class="name" nowrap><a href="#translate">translate (x, y)</a></td>
 	<td class="summary">Raise error if called because stage cannot be geometrically trasnformed</td>
 	</tr>
 	<tr>
-	<td class="name" nowrap><a href="#Stage:setRotation">Stage:setRotation&nbsp;(r)</a></td>
+	<td class="name" nowrap><a href="#setRotation">setRotation (r)</a></td>
 	<td class="summary">Raise error if called because stage cannot be geometrically trasnformed</td>
 	</tr>
 	<tr>
-	<td class="name" nowrap><a href="#Stage:setScale">Stage:setScale&nbsp;(x, y)</a></td>
+	<td class="name" nowrap><a href="#setScale">setScale (x, y)</a></td>
 	<td class="summary">Raise error if called because stage cannot be geometrically trasnformed</td>
 	</tr>
 	<tr>
-	<td class="name" nowrap><a href="#Stage:setScale_v2">Stage:setScale_v2&nbsp;(v)</a></td>
+	<td class="name" nowrap><a href="#setScale_v2">setScale_v2 (v)</a></td>
 	<td class="summary">Raise error if called because stage cannot be geometrically trasnformed</td>
 	</tr>
 	<tr>
-	<td class="name" nowrap><a href="#Stage:setScaleX">Stage:setScaleX&nbsp;(s)</a></td>
+	<td class="name" nowrap><a href="#setScaleX">setScaleX (s)</a></td>
 	<td class="summary">Raise error if called because stage cannot be geometrically trasnformed</td>
 	</tr>
 	<tr>
-	<td class="name" nowrap><a href="#Stage:setScaleY">Stage:setScaleY&nbsp;(s)</a></td>
+	<td class="name" nowrap><a href="#setScaleY">setScaleY (s)</a></td>
 	<td class="summary">Raise error if called because stage cannot be geometrically trasnformed</td>
 	</tr>
 	<tr>
-	<td class="name" nowrap><a href="#Stage:setGlobalPosition">Stage:setGlobalPosition&nbsp;(x, y, targetSpace)</a></td>
+	<td class="name" nowrap><a href="#setGlobalPosition">setGlobalPosition (x, y, targetSpace)</a></td>
 	<td class="summary">Raise error if called because stage cannot be geometrically trasnformed</td>
 	</tr>
 	<tr>
-	<td class="name" nowrap><a href="#Stage:globalTranslate">Stage:globalTranslate&nbsp;(dx, dy, targetSpace)</a></td>
+	<td class="name" nowrap><a href="#globalTranslate">globalTranslate (dx, dy, targetSpace)</a></td>
 	<td class="summary">Raise error if called because stage cannot be geometrically trasnformed</td>
+	</tr>
+</table>
+<h2><a href="#Local_Functions">Local Functions</a></h2>
+<table class="function_list">
+	<tr>
+	<td class="name" nowrap><a href="#__setClearColor">__setClearColor (r, g, b, a)</a></td>
+	<td class="summary">Inner method.</td>
 	</tr>
 </table>
 
@@ -219,18 +228,22 @@ the displayList</td>
     <h2><a name="Functions"></a>Functions</h2>
     <dl class="function">
     <dt>
-    <a name = "Stage:init"></a>
-    <strong>Stage:init&nbsp;(viewport)</strong>
+    <a name = "init"></a>
+    <strong>init (viewport)</strong>
     </dt>
     <dd>
     Called from Shilke2D, it sets the viewport for the scene, the renderTable and
+
 initializes the 'debug' drawCallback used to show bounding boxes of objects in
+
 the displayList
+
 
     <h3>Parameters:</h3>
     <ul>
         <li><span class="parameter">viewport</span>
-         the viewport of the scene</li>
+         the viewport of the scene
+        </li>
     </ul>
 
 
@@ -239,8 +252,8 @@ the displayList
 
 </dd>
     <dt>
-    <a name = "Stage:_createProp"></a>
-    <strong>Stage:_createProp&nbsp;()</strong>
+    <a name = "_createProp"></a>
+    <strong>_createProp ()</strong>
     </dt>
     <dd>
     Stage prop is a MOAILayer, not a generic MOAIProp like all the others displayObjs
@@ -250,20 +263,25 @@ the displayList
 
 
 
+
 </dd>
     <dt>
-    <a name = "Stage:showDebugLines"></a>
-    <strong>Stage:showDebugLines&nbsp;(showOrientedBounds, showAABounds)</strong>
+    <a name = "showDebugLines"></a>
+    <strong>showDebugLines (showOrientedBounds, showAABounds)</strong>
     </dt>
     <dd>
     Debug function.  Used to show bounding box while rendering.
 
+
+
     <h3>Parameters:</h3>
     <ul>
         <li><span class="parameter">showOrientedBounds</span>
-         boolean. if nil is set to true</li>
+         boolean. if nil is set to true
+        </li>
         <li><span class="parameter">showAABounds</span>
-         boolean. if nil is set to false</li>
+         boolean. if nil is set to false
+        </li>
     </ul>
 
 
@@ -272,46 +290,24 @@ the displayList
 
 </dd>
     <dt>
-    <a name = "__setClearColor"></a>
-    <strong>__setClearColor&nbsp;(r, g, b, a)</strong>
-    </dt>
-    <dd>
-    Inner method.
-With moai 1.4 clearColor function has been moved to frameBuffer and removed from GfxDevice.
-The call checks which method is available and make the proper moai call.
-
-    <h3>Parameters:</h3>
-    <ul>
-        <li><span class="parameter">r</span>
-         red component [0..1]</li>
-        <li><span class="parameter">g</span>
-         green component [0..1]</li>
-        <li><span class="parameter">b</span>
-         blue component [0..1]</li>
-        <li><span class="parameter">a</span>
-         alpha component [0..1]</li>
-    </ul>
-
-
-
-
-
-</dd>
-    <dt>
-    <a name = "Stage:setBackground"></a>
-    <strong>Stage:setBackground&nbsp;(r, g, b)</strong>
+    <a name = "setBackground"></a>
+    <strong>setBackground (r, g, b)</strong>
     </dt>
     <dd>
     Set background color.
 
+
     <h3>Parameters:</h3>
     <ul>
         <li><span class="parameter">r</span>
-         red component [0..255] or Color</li>
+         red component [0..255] or Color
+        </li>
         <li><span class="parameter">g</span>
-         green component [0..255] or nil</li>
+         green component [0..255] or nil
+        </li>
         <li><span class="parameter">b</span>
-         blue component [0..255] or nil</li>
+         blue component [0..255] or nil
+        </li>
     </ul>
 
 
@@ -320,20 +316,24 @@ The call checks which method is available and make the proper moai call.
 
 </dd>
     <dt>
-    <a name = "Stage:getBackground"></a>
-    <strong>Stage:getBackground&nbsp;(r, g, b)</strong>
+    <a name = "getBackground"></a>
+    <strong>getBackground (r, g, b)</strong>
     </dt>
     <dd>
     Set background color.
 
+
     <h3>Parameters:</h3>
     <ul>
         <li><span class="parameter">r</span>
-         red component [0..255] or Color</li>
+         red component [0..255] or Color
+        </li>
         <li><span class="parameter">g</span>
-         green component [0..255] or nil</li>
+         green component [0..255] or nil
+        </li>
         <li><span class="parameter">b</span>
-         blue component [0..255] or nil</li>
+         blue component [0..255] or nil
+        </li>
     </ul>
 
 
@@ -342,15 +342,17 @@ The call checks which method is available and make the proper moai call.
 
 </dd>
     <dt>
-    <a name = "Stage:_setParent"></a>
-    <strong>Stage:_setParent&nbsp;(parent)</strong>
+    <a name = "_setParent"></a>
+    <strong>_setParent (parent)</strong>
     </dt>
     <dd>
     Raise error if called because stage cannot be added as child to other containers
 
+
     <h3>Parameters:</h3>
     <ul>
         <li><span class="parameter">parent</span>
+
         </li>
     </ul>
 
@@ -360,17 +362,20 @@ The call checks which method is available and make the proper moai call.
 
 </dd>
     <dt>
-    <a name = "Stage:setPivot"></a>
-    <strong>Stage:setPivot&nbsp;(x, y)</strong>
+    <a name = "setPivot"></a>
+    <strong>setPivot (x, y)</strong>
     </dt>
     <dd>
     Raise error if called because stage cannot be geometrically trasnformed
+
 
     <h3>Parameters:</h3>
     <ul>
         <li><span class="parameter">x</span>
+
         </li>
         <li><span class="parameter">y</span>
+
         </li>
     </ul>
 
@@ -380,15 +385,17 @@ The call checks which method is available and make the proper moai call.
 
 </dd>
     <dt>
-    <a name = "Stage:setPivotX"></a>
-    <strong>Stage:setPivotX&nbsp;(x)</strong>
+    <a name = "setPivotX"></a>
+    <strong>setPivotX (x)</strong>
     </dt>
     <dd>
     Raise error if called because stage cannot be geometrically trasnformed
+
 
     <h3>Parameters:</h3>
     <ul>
         <li><span class="parameter">x</span>
+
         </li>
     </ul>
 
@@ -398,15 +405,17 @@ The call checks which method is available and make the proper moai call.
 
 </dd>
     <dt>
-    <a name = "Stage:setPivotY"></a>
-    <strong>Stage:setPivotY&nbsp;(y)</strong>
+    <a name = "setPivotY"></a>
+    <strong>setPivotY (y)</strong>
     </dt>
     <dd>
     Raise error if called because stage cannot be geometrically trasnformed
+
 
     <h3>Parameters:</h3>
     <ul>
         <li><span class="parameter">y</span>
+
         </li>
     </ul>
 
@@ -416,17 +425,20 @@ The call checks which method is available and make the proper moai call.
 
 </dd>
     <dt>
-    <a name = "Stage:setPosition"></a>
-    <strong>Stage:setPosition&nbsp;(x, y)</strong>
+    <a name = "setPosition"></a>
+    <strong>setPosition (x, y)</strong>
     </dt>
     <dd>
     Raise error if called because stage cannot be geometrically trasnformed
+
 
     <h3>Parameters:</h3>
     <ul>
         <li><span class="parameter">x</span>
+
         </li>
         <li><span class="parameter">y</span>
+
         </li>
     </ul>
 
@@ -436,15 +448,17 @@ The call checks which method is available and make the proper moai call.
 
 </dd>
     <dt>
-    <a name = "Stage:setPosition_v2"></a>
-    <strong>Stage:setPosition_v2&nbsp;(v)</strong>
+    <a name = "setPosition_v2"></a>
+    <strong>setPosition_v2 (v)</strong>
     </dt>
     <dd>
     Raise error if called because stage cannot be geometrically trasnformed
+
 
     <h3>Parameters:</h3>
     <ul>
         <li><span class="parameter">v</span>
+
         </li>
     </ul>
 
@@ -454,15 +468,17 @@ The call checks which method is available and make the proper moai call.
 
 </dd>
     <dt>
-    <a name = "Stage:setPositionX"></a>
-    <strong>Stage:setPositionX&nbsp;(x)</strong>
+    <a name = "setPositionX"></a>
+    <strong>setPositionX (x)</strong>
     </dt>
     <dd>
     Raise error if called because stage cannot be geometrically trasnformed
+
 
     <h3>Parameters:</h3>
     <ul>
         <li><span class="parameter">x</span>
+
         </li>
     </ul>
 
@@ -472,15 +488,17 @@ The call checks which method is available and make the proper moai call.
 
 </dd>
     <dt>
-    <a name = "Stage:setPositionY"></a>
-    <strong>Stage:setPositionY&nbsp;(y)</strong>
+    <a name = "setPositionY"></a>
+    <strong>setPositionY (y)</strong>
     </dt>
     <dd>
     Raise error if called because stage cannot be geometrically trasnformed
+
 
     <h3>Parameters:</h3>
     <ul>
         <li><span class="parameter">y</span>
+
         </li>
     </ul>
 
@@ -490,17 +508,20 @@ The call checks which method is available and make the proper moai call.
 
 </dd>
     <dt>
-    <a name = "Stage:translate"></a>
-    <strong>Stage:translate&nbsp;(x, y)</strong>
+    <a name = "translate"></a>
+    <strong>translate (x, y)</strong>
     </dt>
     <dd>
     Raise error if called because stage cannot be geometrically trasnformed
+
 
     <h3>Parameters:</h3>
     <ul>
         <li><span class="parameter">x</span>
+
         </li>
         <li><span class="parameter">y</span>
+
         </li>
     </ul>
 
@@ -510,15 +531,17 @@ The call checks which method is available and make the proper moai call.
 
 </dd>
     <dt>
-    <a name = "Stage:setRotation"></a>
-    <strong>Stage:setRotation&nbsp;(r)</strong>
+    <a name = "setRotation"></a>
+    <strong>setRotation (r)</strong>
     </dt>
     <dd>
     Raise error if called because stage cannot be geometrically trasnformed
+
 
     <h3>Parameters:</h3>
     <ul>
         <li><span class="parameter">r</span>
+
         </li>
     </ul>
 
@@ -528,17 +551,20 @@ The call checks which method is available and make the proper moai call.
 
 </dd>
     <dt>
-    <a name = "Stage:setScale"></a>
-    <strong>Stage:setScale&nbsp;(x, y)</strong>
+    <a name = "setScale"></a>
+    <strong>setScale (x, y)</strong>
     </dt>
     <dd>
     Raise error if called because stage cannot be geometrically trasnformed
+
 
     <h3>Parameters:</h3>
     <ul>
         <li><span class="parameter">x</span>
+
         </li>
         <li><span class="parameter">y</span>
+
         </li>
     </ul>
 
@@ -548,15 +574,17 @@ The call checks which method is available and make the proper moai call.
 
 </dd>
     <dt>
-    <a name = "Stage:setScale_v2"></a>
-    <strong>Stage:setScale_v2&nbsp;(v)</strong>
+    <a name = "setScale_v2"></a>
+    <strong>setScale_v2 (v)</strong>
     </dt>
     <dd>
     Raise error if called because stage cannot be geometrically trasnformed
+
 
     <h3>Parameters:</h3>
     <ul>
         <li><span class="parameter">v</span>
+
         </li>
     </ul>
 
@@ -566,15 +594,17 @@ The call checks which method is available and make the proper moai call.
 
 </dd>
     <dt>
-    <a name = "Stage:setScaleX"></a>
-    <strong>Stage:setScaleX&nbsp;(s)</strong>
+    <a name = "setScaleX"></a>
+    <strong>setScaleX (s)</strong>
     </dt>
     <dd>
     Raise error if called because stage cannot be geometrically trasnformed
+
 
     <h3>Parameters:</h3>
     <ul>
         <li><span class="parameter">s</span>
+
         </li>
     </ul>
 
@@ -584,15 +614,17 @@ The call checks which method is available and make the proper moai call.
 
 </dd>
     <dt>
-    <a name = "Stage:setScaleY"></a>
-    <strong>Stage:setScaleY&nbsp;(s)</strong>
+    <a name = "setScaleY"></a>
+    <strong>setScaleY (s)</strong>
     </dt>
     <dd>
     Raise error if called because stage cannot be geometrically trasnformed
+
 
     <h3>Parameters:</h3>
     <ul>
         <li><span class="parameter">s</span>
+
         </li>
     </ul>
 
@@ -602,19 +634,23 @@ The call checks which method is available and make the proper moai call.
 
 </dd>
     <dt>
-    <a name = "Stage:setGlobalPosition"></a>
-    <strong>Stage:setGlobalPosition&nbsp;(x, y, targetSpace)</strong>
+    <a name = "setGlobalPosition"></a>
+    <strong>setGlobalPosition (x, y, targetSpace)</strong>
     </dt>
     <dd>
     Raise error if called because stage cannot be geometrically trasnformed
+
 
     <h3>Parameters:</h3>
     <ul>
         <li><span class="parameter">x</span>
+
         </li>
         <li><span class="parameter">y</span>
+
         </li>
         <li><span class="parameter">targetSpace</span>
+
         </li>
     </ul>
 
@@ -624,19 +660,60 @@ The call checks which method is available and make the proper moai call.
 
 </dd>
     <dt>
-    <a name = "Stage:globalTranslate"></a>
-    <strong>Stage:globalTranslate&nbsp;(dx, dy, targetSpace)</strong>
+    <a name = "globalTranslate"></a>
+    <strong>globalTranslate (dx, dy, targetSpace)</strong>
     </dt>
     <dd>
     Raise error if called because stage cannot be geometrically trasnformed
 
+
     <h3>Parameters:</h3>
     <ul>
         <li><span class="parameter">dx</span>
+
         </li>
         <li><span class="parameter">dy</span>
+
         </li>
         <li><span class="parameter">targetSpace</span>
+
+        </li>
+    </ul>
+
+
+
+
+
+</dd>
+</dl>
+    <h2><a name="Local_Functions"></a>Local Functions</h2>
+    <dl class="function">
+    <dt>
+    <a name = "__setClearColor"></a>
+    <strong>__setClearColor (r, g, b, a)</strong>
+    </dt>
+    <dd>
+    Inner method.
+
+With moai 1.4 clearColor function has been moved to frameBuffer and removed from GfxDevice.
+
+The call checks which method is available and make the proper moai call.
+
+
+
+    <h3>Parameters:</h3>
+    <ul>
+        <li><span class="parameter">r</span>
+         red component [0..1]
+        </li>
+        <li><span class="parameter">g</span>
+         green component [0..1]
+        </li>
+        <li><span class="parameter">b</span>
+         blue component [0..1]
+        </li>
+        <li><span class="parameter">a</span>
+         alpha component [0..1]
         </li>
     </ul>
 
@@ -651,7 +728,7 @@ The call checks which method is available and make the proper moai call.
 </div> <!-- id="content" -->
 </div> <!-- id="main" -->
 <div id="about">
-<i>generated by <a href="http://github.com/stevedonovan/LDoc">LDoc 1.3.11</a></i>
+<i>generated by <a href="http://github.com/stevedonovan/LDoc">LDoc 1.4.2</a></i>
 </div> <!-- id="about" -->
 </div> <!-- id="container" -->
 </body>

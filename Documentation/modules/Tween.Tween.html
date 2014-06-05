@@ -37,7 +37,7 @@
 
 
 <h2>Modules</h2>
-<ul>
+<ul class="$(kind=='Topics' and '' or 'nowrap'">
   <li><a href="../modules/Core.Assets.html">Core.Assets</a></li>
   <li><a href="../modules/Core.Event.html">Core.Event</a></li>
   <li><a href="../modules/Core.EventDispatcher.html">Core.EventDispatcher</a></li>
@@ -60,6 +60,7 @@
   <li><a href="../modules/Display.Stage.html">Display.Stage</a></li>
   <li><a href="../modules/Display.TextField.html">Display.TextField</a></li>
   <li><a href="../modules/Display.TileMap.html">Display.TileMap</a></li>
+  <li><a href="../modules/include.html">include</a></li>
   <li><a href="../modules/Texture.ITextureAtlas.html">Texture.ITextureAtlas</a></li>
   <li><a href="../modules/Texture.SubTexture.html">Texture.SubTexture</a></li>
   <li><a href="../modules/Texture.Texture.html">Texture.Texture</a></li>
@@ -87,9 +88,9 @@
   <li><a href="../modules/Utils.CollisionKit.html">Utils.CollisionKit</a></li>
   <li><a href="../modules/Utils.Color.html">Utils.Color</a></li>
   <li><a href="../modules/Utils.Coroutines.html">Utils.Coroutines</a></li>
-  <li><a href="../modules/Utils.IO.html">Utils.IO</a></li>
   <li><a href="../modules/Utils.IniFile.html">Utils.IniFile</a></li>
   <li><a href="../modules/Utils.IniParser.html">Utils.IniParser</a></li>
+  <li><a href="../modules/Utils.IO.html">Utils.IO</a></li>
   <li><a href="../modules/Utils.Log.html">Utils.Log</a></li>
   <li><a href="../modules/Utils.Math.html">Utils.Math</a></li>
   <li><a href="../modules/Utils.PerformanceTimer.html">Utils.PerformanceTimer</a></li>
@@ -102,7 +103,6 @@
   <li><a href="../modules/Utils.Vector.html">Utils.Vector</a></li>
   <li><a href="../modules/Utils.XmlNode.html">Utils.XmlNode</a></li>
   <li><a href="../modules/Utils.XmlParser.html">Utils.XmlParser</a></li>
-  <li><a href="../modules/include.html">include</a></li>
 </ul>
 
 </div>
@@ -110,67 +110,89 @@
 <div id="content">
 
 <h1>Module <code>Tween.Tween</code></h1>
-
 <p>A Tween is an IAnimatable object used to animate another object properties.</p>
 <p>
+
 Tween is a base abstract class. It exposes also static functions in order to
+
 create comcrete tweens. Each specific tween class must implement onStart, onUpdate,
+
 onComplete and isComplete methods in order to define start, update, complete
+
 (that means reset) logic and to define finish condition.
-<p>Specific tweens are Ease and Bezier. Tweens can also be delayed, looped
+
+
+
+Specific tweens are Ease and Bezier. Tweens can also be delayed, looped
+
 or grouped in parallel or in sequence. A combination of more tweens
+
 is a tween itself.
-<p>Tween extends EventDispatcher and use Event.REMOVE_FROM_JUGGLER to
+
+
+
+Tween extends EventDispatcher and use Event.REMOVE_FROM_JUGGLER to
+
 communicate that the tween is completed to his container, that can
+
 be a composite tween or a juggler
-<p>A tween will only be executed if its "advanceTime" method is executed,
+
+
+
+A tween will only be executed if its "advanceTime" method is executed,
+
 so the best way is to add the tween object to a juggler that
-will do that for you, and will remove the tween when it is finished.</p>
+
+will do that for you, and will remove the tween when it is finished.
+</p>
 
 
 <h2><a href="#Functions">Functions</a></h2>
 <table class="function_list">
 	<tr>
-	<td class="name" nowrap><a href="#waitTween">waitTween&nbsp;(t)</a></td>
+	<td class="name" nowrap><a href="#waitTween">waitTween (t)</a></td>
 	<td class="summary">Used to wait for a tween execution ending.</td>
 	</tr>
 	<tr>
-	<td class="name" nowrap><a href="#Tween:getElapsedTime">Tween:getElapsedTime&nbsp;()</a></td>
+	<td class="name" nowrap><a href="#getElapsedTime">getElapsedTime ()</a></td>
 	<td class="summary">Returns the time that has passed since the tween is started.</td>
 	</tr>
 	<tr>
-	<td class="name" nowrap><a href="#Tween:reset">Tween:reset&nbsp;()</a></td>
+	<td class="name" nowrap><a href="#reset">reset ()</a></td>
 	<td class="summary">Resets tween status.</td>
 	</tr>
 	<tr>
-	<td class="name" nowrap><a href="#Tween:callOnStart">Tween:callOnStart&nbsp;(func, ...)</a></td>
+	<td class="name" nowrap><a href="#callOnStart">callOnStart (func, ...)</a></td>
 	<td class="summary">Sets a callback function with arguments that will be called
+
 when the tween starts.</td>
 	</tr>
 	<tr>
-	<td class="name" nowrap><a href="#Tween:callOnComplete">Tween:callOnComplete&nbsp;(func, ...)</a></td>
+	<td class="name" nowrap><a href="#callOnComplete">callOnComplete (func, ...)</a></td>
 	<td class="summary">Sets a callback function with arguments that will be called
+
 when the tween is completed.</td>
 	</tr>
 	<tr>
-	<td class="name" nowrap><a href="#Tween:_start">Tween:_start&nbsp;()</a></td>
+	<td class="name" nowrap><a href="#_start">_start ()</a></td>
 	<td class="summary">when override add initialization logic if needed</td>
 	</tr>
 	<tr>
-	<td class="name" nowrap><a href="#Tween:_update">Tween:_update&nbsp;(deltaTime)</a></td>
+	<td class="name" nowrap><a href="#_update">_update (deltaTime)</a></td>
 	<td class="summary">when override add update logic if needed</td>
 	</tr>
 	<tr>
-	<td class="name" nowrap><a href="#Tween:_complete">Tween:_complete&nbsp;()</a></td>
+	<td class="name" nowrap><a href="#_complete">_complete ()</a></td>
 	<td class="summary">when override add complete logic if needed</td>
 	</tr>
 	<tr>
-	<td class="name" nowrap><a href="#Tween:_isCompleted">Tween:_isCompleted&nbsp;()</a></td>
+	<td class="name" nowrap><a href="#_isCompleted">_isCompleted ()</a></td>
 	<td class="summary">This function must be implemented by any class that implements Tween
+
 because each Tween has specific ending clause</td>
 	</tr>
 	<tr>
-	<td class="name" nowrap><a href="#Tween:advanceTime">Tween:advanceTime&nbsp;(deltaTime)</a></td>
+	<td class="name" nowrap><a href="#advanceTime">advanceTime (deltaTime)</a></td>
 	<td class="summary">Tween IAnimatable interface implementation.</td>
 	</tr>
 </table>
@@ -183,16 +205,21 @@ because each Tween has specific ending clause</td>
     <dl class="function">
     <dt>
     <a name = "waitTween"></a>
-    <strong>waitTween&nbsp;(t)</strong>
+    <strong>waitTween (t)</strong>
     </dt>
     <dd>
     Used to wait for a tween execution ending.
+
 can be used only from coroutines, not in setup and not in update if juggler and update are
+
 on the same thread
+
+
 
     <h3>Parameters:</h3>
     <ul>
         <li><span class="parameter">t</span>
+
         </li>
     </ul>
 
@@ -202,8 +229,8 @@ on the same thread
 
 </dd>
     <dt>
-    <a name = "Tween:getElapsedTime"></a>
-    <strong>Tween:getElapsedTime&nbsp;()</strong>
+    <a name = "getElapsedTime"></a>
+    <strong>getElapsedTime ()</strong>
     </dt>
     <dd>
     Returns the time that has passed since the tween is started.
@@ -213,10 +240,11 @@ on the same thread
 
 
 
+
 </dd>
     <dt>
-    <a name = "Tween:reset"></a>
-    <strong>Tween:reset&nbsp;()</strong>
+    <a name = "reset"></a>
+    <strong>reset ()</strong>
     </dt>
     <dd>
     Resets tween status.  Start can be called again safely after.
@@ -226,20 +254,27 @@ on the same thread
 
 
 
+
+
 </dd>
     <dt>
-    <a name = "Tween:callOnStart"></a>
-    <strong>Tween:callOnStart&nbsp;(func, ...)</strong>
+    <a name = "callOnStart"></a>
+    <strong>callOnStart (func, ...)</strong>
     </dt>
     <dd>
     Sets a callback function with arguments that will be called
+
 when the tween starts.
 
+
+
     <h3>Parameters:</h3>
     <ul>
         <li><span class="parameter">func</span>
+
         </li>
         <li><span class="parameter">...</span>
+
         </li>
     </ul>
 
@@ -249,18 +284,23 @@ when the tween starts.
 
 </dd>
     <dt>
-    <a name = "Tween:callOnComplete"></a>
-    <strong>Tween:callOnComplete&nbsp;(func, ...)</strong>
+    <a name = "callOnComplete"></a>
+    <strong>callOnComplete (func, ...)</strong>
     </dt>
     <dd>
     Sets a callback function with arguments that will be called
+
 when the tween is completed.
+
+
 
     <h3>Parameters:</h3>
     <ul>
         <li><span class="parameter">func</span>
+
         </li>
         <li><span class="parameter">...</span>
+
         </li>
     </ul>
 
@@ -270,8 +310,8 @@ when the tween is completed.
 
 </dd>
     <dt>
-    <a name = "Tween:_start"></a>
-    <strong>Tween:_start&nbsp;()</strong>
+    <a name = "_start"></a>
+    <strong>_start ()</strong>
     </dt>
     <dd>
     when override add initialization logic if needed
@@ -281,17 +321,20 @@ when the tween is completed.
 
 
 
+
 </dd>
     <dt>
-    <a name = "Tween:_update"></a>
-    <strong>Tween:_update&nbsp;(deltaTime)</strong>
+    <a name = "_update"></a>
+    <strong>_update (deltaTime)</strong>
     </dt>
     <dd>
     when override add update logic if needed
 
+
     <h3>Parameters:</h3>
     <ul>
         <li><span class="parameter">deltaTime</span>
+
         </li>
     </ul>
 
@@ -301,8 +344,8 @@ when the tween is completed.
 
 </dd>
     <dt>
-    <a name = "Tween:_complete"></a>
-    <strong>Tween:_complete&nbsp;()</strong>
+    <a name = "_complete"></a>
+    <strong>_complete ()</strong>
     </dt>
     <dd>
     when override add complete logic if needed
@@ -312,13 +355,15 @@ when the tween is completed.
 
 
 
+
 </dd>
     <dt>
-    <a name = "Tween:_isCompleted"></a>
-    <strong>Tween:_isCompleted&nbsp;()</strong>
+    <a name = "_isCompleted"></a>
+    <strong>_isCompleted ()</strong>
     </dt>
     <dd>
     This function must be implemented by any class that implements Tween
+
 because each Tween has specific ending clause
 
 
@@ -326,17 +371,21 @@ because each Tween has specific ending clause
 
 
 
+
 </dd>
     <dt>
-    <a name = "Tween:advanceTime"></a>
-    <strong>Tween:advanceTime&nbsp;(deltaTime)</strong>
+    <a name = "advanceTime"></a>
+    <strong>advanceTime (deltaTime)</strong>
     </dt>
     <dd>
     Tween IAnimatable interface implementation.
 
+
+
     <h3>Parameters:</h3>
     <ul>
         <li><span class="parameter">deltaTime</span>
+
         </li>
     </ul>
 
@@ -351,7 +400,7 @@ because each Tween has specific ending clause
 </div> <!-- id="content" -->
 </div> <!-- id="main" -->
 <div id="about">
-<i>generated by <a href="http://github.com/stevedonovan/LDoc">LDoc 1.3.11</a></i>
+<i>generated by <a href="http://github.com/stevedonovan/LDoc">LDoc 1.4.2</a></i>
 </div> <!-- id="about" -->
 </div> <!-- id="container" -->
 </body>

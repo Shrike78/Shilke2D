@@ -38,7 +38,7 @@
 
 
 <h2>Modules</h2>
-<ul>
+<ul class="$(kind=='Topics' and '' or 'nowrap'">
   <li><a href="../modules/Core.Assets.html">Core.Assets</a></li>
   <li><a href="../modules/Core.Event.html">Core.Event</a></li>
   <li><a href="../modules/Core.EventDispatcher.html">Core.EventDispatcher</a></li>
@@ -61,6 +61,7 @@
   <li><a href="../modules/Display.Stage.html">Display.Stage</a></li>
   <li><a href="../modules/Display.TextField.html">Display.TextField</a></li>
   <li><strong>Display.TileMap</strong></li>
+  <li><a href="../modules/include.html">include</a></li>
   <li><a href="../modules/Texture.ITextureAtlas.html">Texture.ITextureAtlas</a></li>
   <li><a href="../modules/Texture.SubTexture.html">Texture.SubTexture</a></li>
   <li><a href="../modules/Texture.Texture.html">Texture.Texture</a></li>
@@ -88,9 +89,9 @@
   <li><a href="../modules/Utils.CollisionKit.html">Utils.CollisionKit</a></li>
   <li><a href="../modules/Utils.Color.html">Utils.Color</a></li>
   <li><a href="../modules/Utils.Coroutines.html">Utils.Coroutines</a></li>
-  <li><a href="../modules/Utils.IO.html">Utils.IO</a></li>
   <li><a href="../modules/Utils.IniFile.html">Utils.IniFile</a></li>
   <li><a href="../modules/Utils.IniParser.html">Utils.IniParser</a></li>
+  <li><a href="../modules/Utils.IO.html">Utils.IO</a></li>
   <li><a href="../modules/Utils.Log.html">Utils.Log</a></li>
   <li><a href="../modules/Utils.Math.html">Utils.Math</a></li>
   <li><a href="../modules/Utils.PerformanceTimer.html">Utils.PerformanceTimer</a></li>
@@ -103,7 +104,6 @@
   <li><a href="../modules/Utils.Vector.html">Utils.Vector</a></li>
   <li><a href="../modules/Utils.XmlNode.html">Utils.XmlNode</a></li>
   <li><a href="../modules/Utils.XmlParser.html">Utils.XmlParser</a></li>
-  <li><a href="../modules/include.html">include</a></li>
 </ul>
 
 </div>
@@ -111,136 +111,147 @@
 <div id="content">
 
 <h1>Module <code>Display.TileMap</code></h1>
-
 <p>A TileMap is a displayObject that displays a map built on a set of indices referring to the tiles
+
 of a given TileSet.</p>
 <p>
+
 For each tile is possible to specify an x,y flip flag and an hide flag. No rotation flag is allowed.
-<p>Current implementation force empty tiles to reset the flags to 0 for optimization purposes but that
+
+
+
+Current implementation force empty tiles to reset the flags to 0 for optimization purposes but that
+
 could be a limitation in some situation, so it could be changed in a future. That would anyway require
+
 a custom logic because MOAI doesn't support tiles with id = 0 and flags != 0, it generates strange
-results</p>
+
+results
+</p>
 
 
 <h2><a href="#Functions">Functions</a></h2>
 <table class="function_list">
 	<tr>
-	<td class="name" nowrap><a href="#TileMap:init">TileMap:init&nbsp;(mapData, mapWidth, mapHeight, tileset, pivotMode)</a></td>
+	<td class="name" nowrap><a href="#init">init (mapData, mapWidth, mapHeight, tileset, pivotMode)</a></td>
 	<td class="summary">Constructor</td>
 	</tr>
 	<tr>
-	<td class="name" nowrap><a href="#TileMap:clone">TileMap:clone&nbsp;()</a></td>
+	<td class="name" nowrap><a href="#clone">clone ()</a></td>
 	<td class="summary">clone the tilemap creating a new one with the same mapdata and tileset</td>
 	</tr>
 	<tr>
-	<td class="name" nowrap><a href="#TileMap:copy">TileMap:copy&nbsp;(src)</a></td>
+	<td class="name" nowrap><a href="#copy">copy (src)</a></td>
 	<td class="summary">copy is currently not allowed for TileMap class</td>
 	</tr>
 	<tr>
-	<td class="name" nowrap><a href="#TileMap:_getGridByDeck">TileMap:_getGridByDeck&nbsp;(deck)</a></td>
+	<td class="name" nowrap><a href="#_getGridByDeck">_getGridByDeck (deck)</a></td>
 	<td class="summary">returns the grid given a deck.</td>
 	</tr>
 	<tr>
-	<td class="name" nowrap><a href="#TileMap:_getCell">TileMap:_getCell&nbsp;(x, y)</a></td>
+	<td class="name" nowrap><a href="#_getCell">_getCell (x, y)</a></td>
 	<td class="summary">Inner method.</td>
 	</tr>
 	<tr>
-	<td class="name" nowrap><a href="#TileMap:_setCell">TileMap:_setCell&nbsp;(x, y, grid)</a></td>
+	<td class="name" nowrap><a href="#_setCell">_setCell (x, y, grid)</a></td>
 	<td class="summary">Inner method.</td>
 	</tr>
 	<tr>
-	<td class="name" nowrap><a href="#TileMap:clearMapData">TileMap:clearMapData&nbsp;()</a></td>
+	<td class="name" nowrap><a href="#clearMapData">clearMapData ()</a></td>
 	<td class="summary">Fill the tilemap with empty tiles</td>
 	</tr>
 	<tr>
-	<td class="name" nowrap><a href="#TileMap:_setMapData">TileMap:_setMapData&nbsp;(mapData)</a></td>
+	<td class="name" nowrap><a href="#_setMapData">_setMapData (mapData)</a></td>
 	<td class="summary">Private function.</td>
 	</tr>
 	<tr>
-	<td class="name" nowrap><a href="#TileMap:getMapData">TileMap:getMapData&nbsp;()</a></td>
+	<td class="name" nowrap><a href="#getMapData">getMapData ()</a></td>
 	<td class="summary">Returns current mapdata (id and flags)
+
 Recreates mapdata starting from inner grid infos</td>
 	</tr>
 	<tr>
-	<td class="name" nowrap><a href="#TileMap:replaceMapData">TileMap:replaceMapData&nbsp;(mapData, mapWidth, mapHeight)</a></td>
+	<td class="name" nowrap><a href="#replaceMapData">replaceMapData (mapData, mapWidth, mapHeight)</a></td>
 	<td class="summary">Used to replace the current mapData.</td>
 	</tr>
 	<tr>
-	<td class="name" nowrap><a href="#TileMap:replaceTileSet">TileMap:replaceTileSet&nbsp;(tileset)</a></td>
+	<td class="name" nowrap><a href="#replaceTileSet">replaceTileSet (tileset)</a></td>
 	<td class="summary">Replace the current tileset leaving mapdata unchanged.</td>
 	</tr>
 	<tr>
-	<td class="name" nowrap><a href="#TileMap:getTileSet">TileMap:getTileSet&nbsp;()</a></td>
+	<td class="name" nowrap><a href="#getTileSet">getTileSet ()</a></td>
 	<td class="summary">Returns the used tileset</td>
 	</tr>
 	<tr>
-	<td class="name" nowrap><a href="#TileMap:getMapSize">TileMap:getMapSize&nbsp;()</a></td>
+	<td class="name" nowrap><a href="#getMapSize">getMapSize ()</a></td>
 	<td class="summary">Returns the size of the map</td>
 	</tr>
 	<tr>
-	<td class="name" nowrap><a href="#TileMap:getMapWidth">TileMap:getMapWidth&nbsp;()</a></td>
+	<td class="name" nowrap><a href="#getMapWidth">getMapWidth ()</a></td>
 	<td class="summary">Returns the width of the map</td>
 	</tr>
 	<tr>
-	<td class="name" nowrap><a href="#TileMap:getMapHeight">TileMap:getMapHeight&nbsp;()</a></td>
+	<td class="name" nowrap><a href="#getMapHeight">getMapHeight ()</a></td>
 	<td class="summary">Returns the height of the map</td>
 	</tr>
 	<tr>
-	<td class="name" nowrap><a href="#TileMap:getTileId">TileMap:getTileId&nbsp;(x, y)</a></td>
+	<td class="name" nowrap><a href="#getTileId">getTileId (x, y)</a></td>
 	<td class="summary">Returns tile id and flags given map logical coordinates</td>
 	</tr>
 	<tr>
-	<td class="name" nowrap><a href="#TileMap:getTile">TileMap:getTile&nbsp;(x, y)</a></td>
+	<td class="name" nowrap><a href="#getTile">getTile (x, y)</a></td>
 	<td class="summary">Returns tile given map logical coordinates</td>
 	</tr>
 	<tr>
-	<td class="name" nowrap><a href="#TileMap:getTileFlags">TileMap:getTileFlags&nbsp;(x, y)</a></td>
+	<td class="name" nowrap><a href="#getTileFlags">getTileFlags (x, y)</a></td>
 	<td class="summary">Returns flags given map logical coordinates</td>
 	</tr>
 	<tr>
-	<td class="name" nowrap><a href="#TileMap:setTile">TileMap:setTile&nbsp;(x, y, id, flags)</a></td>
+	<td class="name" nowrap><a href="#setTile">setTile (x, y, id, flags)</a></td>
 	<td class="summary">Sets a tile data (id and flags) at a given logical position in grid space</td>
 	</tr>
 	<tr>
-	<td class="name" nowrap><a href="#TileMap:setTileFlags">TileMap:setTileFlags&nbsp;(x, y, flags)</a></td>
+	<td class="name" nowrap><a href="#setTileFlags">setTileFlags (x, y, flags)</a></td>
 	<td class="summary">Sets tile flags for a specific tile</td>
 	</tr>
 	<tr>
-	<td class="name" nowrap><a href="#TileMap:clearTileFlags">TileMap:clearTileFlags&nbsp;(x, y, flags)</a></td>
+	<td class="name" nowrap><a href="#clearTileFlags">clearTileFlags (x, y, flags)</a></td>
 	<td class="summary">Clears tile flags for a specific tile</td>
 	</tr>
 	<tr>
-	<td class="name" nowrap><a href="#TileMap:toggleTileFlags">TileMap:toggleTileFlags&nbsp;(x, y, flags)</a></td>
+	<td class="name" nowrap><a href="#toggleTileFlags">toggleTileFlags (x, y, flags)</a></td>
 	<td class="summary">Toggles tile flags for a specific tile</td>
 	</tr>
 	<tr>
-	<td class="name" nowrap><a href="#TileMap:hasTileFlag">TileMap:hasTileFlag&nbsp;(x, y, flag)</a></td>
+	<td class="name" nowrap><a href="#hasTileFlag">hasTileFlag (x, y, flag)</a></td>
 	<td class="summary">Tests a tile flag for a specific tile</td>
 	</tr>
 	<tr>
-	<td class="name" nowrap><a href="#TileMap:positionToGrid">TileMap:positionToGrid&nbsp;(x, y, targetSpace)</a></td>
+	<td class="name" nowrap><a href="#positionToGrid">positionToGrid (x, y, targetSpace)</a></td>
 	<td class="summary">Transform a position in targetSpace into a logical position in grid space</td>
 	</tr>
 	<tr>
-	<td class="name" nowrap><a href="#TileMap:gridToPosition">TileMap:gridToPosition&nbsp;(x, y, targetSpace)</a></td>
+	<td class="name" nowrap><a href="#gridToPosition">gridToPosition (x, y, targetSpace)</a></td>
 	<td class="summary">Transform a logical position in grid space into a position in targetSpace
+
 The position returned is the centre of the tile</td>
 	</tr>
 	<tr>
-	<td class="name" nowrap><a href="#TileMap:getTilePosition">TileMap:getTilePosition&nbsp;(x, y, targetSpace)</a></td>
+	<td class="name" nowrap><a href="#getTilePosition">getTilePosition (x, y, targetSpace)</a></td>
 	<td class="summary">Alias for gridToPosition
+
 Returns the position of the centre of a tile in targetSpace given logical map coordinates</td>
 	</tr>
 	<tr>
-	<td class="name" nowrap><a href="#TileMap:getTileIdByPosition">TileMap:getTileIdByPosition&nbsp;(x, y, targetSpace)</a></td>
+	<td class="name" nowrap><a href="#getTileIdByPosition">getTileIdByPosition (x, y, targetSpace)</a></td>
 	<td class="summary">Returns tile id and flags given a position in targetSpace</td>
 	</tr>
 	<tr>
-	<td class="name" nowrap><a href="#TileMap:getTileByPosition">TileMap:getTileByPosition&nbsp;(x, y, targetSpace)</a></td>
+	<td class="name" nowrap><a href="#getTileByPosition">getTileByPosition (x, y, targetSpace)</a></td>
 	<td class="summary">Returns tile and flags given a position in targetSpace</td>
 	</tr>
 	<tr>
-	<td class="name" nowrap><a href="#TileMap:getTileFlagsByPosition">TileMap:getTileFlagsByPosition&nbsp;(x, y, targetSpace)</a></td>
+	<td class="name" nowrap><a href="#getTileFlagsByPosition">getTileFlagsByPosition (x, y, targetSpace)</a></td>
 	<td class="summary">Returns flags given a position in targetSpace</td>
 	</tr>
 </table>
@@ -271,25 +282,32 @@ Returns the position of the centre of a tile in targetSpace given logical map co
     <h2><a name="Functions"></a>Functions</h2>
     <dl class="function">
     <dt>
-    <a name = "TileMap:init"></a>
-    <strong>TileMap:init&nbsp;(mapData, mapWidth, mapHeight, tileset, pivotMode)</strong>
+    <a name = "init"></a>
+    <strong>init (mapData, mapWidth, mapHeight, tileset, pivotMode)</strong>
     </dt>
     <dd>
     Constructor
-in use
+
 
     <h3>Parameters:</h3>
     <ul>
         <li><span class="parameter">mapData</span>
-         the descriptor of the tilemap</li>
+         the descriptor of the tilemap
+        </li>
         <li><span class="parameter">mapWidth</span>
-         the width of the map in tiles</li>
+         the width of the map in tiles
+        </li>
         <li><span class="parameter">mapHeight</span>
-         the height of the map in tiles</li>
+         the height of the map in tiles
+        </li>
         <li><span class="parameter">tileset</span>
-         the tileset</li>
+         the tileset
+        </li>
         <li><span class="parameter">pivotMode</span>
-         default value is TOP_LEFT or BOTTOM_LEFT according to the coordinate system</li>
+         default value is TOP_LEFT or BOTTOM_LEFT according to the coordinate system
+
+in use
+        </li>
     </ul>
 
 
@@ -298,11 +316,12 @@ in use
 
 </dd>
     <dt>
-    <a name = "TileMap:clone"></a>
-    <strong>TileMap:clone&nbsp;()</strong>
+    <a name = "clone"></a>
+    <strong>clone ()</strong>
     </dt>
     <dd>
     clone the tilemap creating a new one with the same mapdata and tileset
+
 
 
     <h3>Returns:</h3>
@@ -316,16 +335,18 @@ in use
 
 </dd>
     <dt>
-    <a name = "TileMap:copy"></a>
-    <strong>TileMap:copy&nbsp;(src)</strong>
+    <a name = "copy"></a>
+    <strong>copy (src)</strong>
     </dt>
     <dd>
     copy is currently not allowed for TileMap class
 
+
     <h3>Parameters:</h3>
     <ul>
         <li><span class="parameter">src</span>
-        [[</li>
+        [[
+        </li>
     </ul>
 
 
@@ -334,15 +355,18 @@ in use
 
 </dd>
     <dt>
-    <a name = "TileMap:_getGridByDeck"></a>
-    <strong>TileMap:_getGridByDeck&nbsp;(deck)</strong>
+    <a name = "_getGridByDeck"></a>
+    <strong>_getGridByDeck (deck)</strong>
     </dt>
     <dd>
     returns the grid given a deck.  If the grid doesnt' exist it creates it.
 
+
+
     <h3>Parameters:</h3>
     <ul>
         <li><span class="parameter">deck</span>
+
         </li>
     </ul>
 
@@ -357,20 +381,26 @@ in use
 
 </dd>
     <dt>
-    <a name = "TileMap:_getCell"></a>
-    <strong>TileMap:_getCell&nbsp;(x, y)</strong>
+    <a name = "_getCell"></a>
+    <strong>_getCell (x, y)</strong>
     </dt>
     <dd>
     Inner method.
+
 Used to get the correct grid based on grid coordinates.
+
 It returns a grid if a tile is set at x,y, else nil.
 
+
+
     <h3>Parameters:</h3>
     <ul>
         <li><span class="parameter">x</span>
-         the x grid coordinate</li>
+         the x grid coordinate
+        </li>
         <li><span class="parameter">y</span>
-         the y grid coordinate</li>
+         the y grid coordinate
+        </li>
     </ul>
 
 
@@ -379,21 +409,27 @@ It returns a grid if a tile is set at x,y, else nil.
 
 </dd>
     <dt>
-    <a name = "TileMap:_setCell"></a>
-    <strong>TileMap:_setCell&nbsp;(x, y, grid)</strong>
+    <a name = "_setCell"></a>
+    <strong>_setCell (x, y, grid)</strong>
     </dt>
     <dd>
     Inner method.
+
 Used to set the correct grid based on grid coordinates.
+
+
 
     <h3>Parameters:</h3>
     <ul>
         <li><span class="parameter">x</span>
-         the x grid coordinate</li>
+         the x grid coordinate
+        </li>
         <li><span class="parameter">y</span>
-         the y grid coordinate</li>
+         the y grid coordinate
+        </li>
         <li><span class="parameter">grid</span>
-         the grid to set. can be nil (to reset value)</li>
+         the grid to set. can be nil (to reset value)
+        </li>
     </ul>
 
 
@@ -402,8 +438,8 @@ Used to set the correct grid based on grid coordinates.
 
 </dd>
     <dt>
-    <a name = "TileMap:clearMapData"></a>
-    <strong>TileMap:clearMapData&nbsp;()</strong>
+    <a name = "clearMapData"></a>
+    <strong>clearMapData ()</strong>
     </dt>
     <dd>
     Fill the tilemap with empty tiles
@@ -413,19 +449,24 @@ Used to set the correct grid based on grid coordinates.
 
 
 
+
 </dd>
     <dt>
-    <a name = "TileMap:_setMapData"></a>
-    <strong>TileMap:_setMapData&nbsp;(mapData)</strong>
+    <a name = "_setMapData"></a>
+    <strong>_setMapData (mapData)</strong>
     </dt>
     <dd>
     Private function.
+
 Used to set / replace mapData
+
+
 
     <h3>Parameters:</h3>
     <ul>
         <li><span class="parameter">mapData</span>
-         the mapData to set in the grid</li>
+         the mapData to set in the grid
+        </li>
     </ul>
 
 
@@ -434,12 +475,14 @@ Used to set / replace mapData
 
 </dd>
     <dt>
-    <a name = "TileMap:getMapData"></a>
-    <strong>TileMap:getMapData&nbsp;()</strong>
+    <a name = "getMapData"></a>
+    <strong>getMapData ()</strong>
     </dt>
     <dd>
     Returns current mapdata (id and flags)
+
 Recreates mapdata starting from inner grid infos
+
 
 
     <h3>Returns:</h3>
@@ -453,20 +496,24 @@ Recreates mapdata starting from inner grid infos
 
 </dd>
     <dt>
-    <a name = "TileMap:replaceMapData"></a>
-    <strong>TileMap:replaceMapData&nbsp;(mapData, mapWidth, mapHeight)</strong>
+    <a name = "replaceMapData"></a>
+    <strong>replaceMapData (mapData, mapWidth, mapHeight)</strong>
     </dt>
     <dd>
     Used to replace the current mapData.
 
+
     <h3>Parameters:</h3>
     <ul>
         <li><span class="parameter">mapData</span>
-         the new mapData used to display the tilemap</li>
+         the new mapData used to display the tilemap
+        </li>
         <li><span class="parameter">mapWidth</span>
-         the width of the new tilemap</li>
+         the width of the new tilemap
+        </li>
         <li><span class="parameter">mapHeight</span>
-         the height of the new tilemap</li>
+         the height of the new tilemap
+        </li>
     </ul>
 
 
@@ -475,16 +522,19 @@ Recreates mapdata starting from inner grid infos
 
 </dd>
     <dt>
-    <a name = "TileMap:replaceTileSet"></a>
-    <strong>TileMap:replaceTileSet&nbsp;(tileset)</strong>
+    <a name = "replaceTileSet"></a>
+    <strong>replaceTileSet (tileset)</strong>
     </dt>
     <dd>
     Replace the current tileset leaving mapdata unchanged.
 
+
+
     <h3>Parameters:</h3>
     <ul>
         <li><span class="parameter">tileset</span>
-         the new tileset</li>
+         the new tileset
+        </li>
     </ul>
 
 
@@ -493,11 +543,12 @@ Recreates mapdata starting from inner grid infos
 
 </dd>
     <dt>
-    <a name = "TileMap:getTileSet"></a>
-    <strong>TileMap:getTileSet&nbsp;()</strong>
+    <a name = "getTileSet"></a>
+    <strong>getTileSet ()</strong>
     </dt>
     <dd>
     Returns the used tileset
+
 
 
     <h3>Returns:</h3>
@@ -511,11 +562,12 @@ Recreates mapdata starting from inner grid infos
 
 </dd>
     <dt>
-    <a name = "TileMap:getMapSize"></a>
-    <strong>TileMap:getMapSize&nbsp;()</strong>
+    <a name = "getMapSize"></a>
+    <strong>getMapSize ()</strong>
     </dt>
     <dd>
     Returns the size of the map
+
 
 
     <h3>Returns:</h3>
@@ -531,11 +583,12 @@ Recreates mapdata starting from inner grid infos
 
 </dd>
     <dt>
-    <a name = "TileMap:getMapWidth"></a>
-    <strong>TileMap:getMapWidth&nbsp;()</strong>
+    <a name = "getMapWidth"></a>
+    <strong>getMapWidth ()</strong>
     </dt>
     <dd>
     Returns the width of the map
+
 
 
     <h3>Returns:</h3>
@@ -549,11 +602,12 @@ Recreates mapdata starting from inner grid infos
 
 </dd>
     <dt>
-    <a name = "TileMap:getMapHeight"></a>
-    <strong>TileMap:getMapHeight&nbsp;()</strong>
+    <a name = "getMapHeight"></a>
+    <strong>getMapHeight ()</strong>
     </dt>
     <dd>
     Returns the height of the map
+
 
 
     <h3>Returns:</h3>
@@ -567,18 +621,21 @@ Recreates mapdata starting from inner grid infos
 
 </dd>
     <dt>
-    <a name = "TileMap:getTileId"></a>
-    <strong>TileMap:getTileId&nbsp;(x, y)</strong>
+    <a name = "getTileId"></a>
+    <strong>getTileId (x, y)</strong>
     </dt>
     <dd>
     Returns tile id and flags given map logical coordinates
 
+
     <h3>Parameters:</h3>
     <ul>
         <li><span class="parameter">x</span>
-         horizontal logical grid coordinate</li>
+         horizontal logical grid coordinate
+        </li>
         <li><span class="parameter">y</span>
-         vertical logical grid coordinate</li>
+         vertical logical grid coordinate
+        </li>
     </ul>
 
     <h3>Returns:</h3>
@@ -594,18 +651,21 @@ Recreates mapdata starting from inner grid infos
 
 </dd>
     <dt>
-    <a name = "TileMap:getTile"></a>
-    <strong>TileMap:getTile&nbsp;(x, y)</strong>
+    <a name = "getTile"></a>
+    <strong>getTile (x, y)</strong>
     </dt>
     <dd>
     Returns tile given map logical coordinates
 
+
     <h3>Parameters:</h3>
     <ul>
         <li><span class="parameter">x</span>
-         horizontal logical grid coordinate</li>
+         horizontal logical grid coordinate
+        </li>
         <li><span class="parameter">y</span>
-         vertical logical grid coordinate</li>
+         vertical logical grid coordinate
+        </li>
     </ul>
 
     <h3>Returns:</h3>
@@ -621,18 +681,21 @@ Recreates mapdata starting from inner grid infos
 
 </dd>
     <dt>
-    <a name = "TileMap:getTileFlags"></a>
-    <strong>TileMap:getTileFlags&nbsp;(x, y)</strong>
+    <a name = "getTileFlags"></a>
+    <strong>getTileFlags (x, y)</strong>
     </dt>
     <dd>
     Returns flags given map logical coordinates
 
+
     <h3>Parameters:</h3>
     <ul>
         <li><span class="parameter">x</span>
-         horizontal logical grid coordinate</li>
+         horizontal logical grid coordinate
+        </li>
         <li><span class="parameter">y</span>
-         vertical logical grid coordinate</li>
+         vertical logical grid coordinate
+        </li>
     </ul>
 
     <h3>Returns:</h3>
@@ -646,25 +709,34 @@ Recreates mapdata starting from inner grid infos
 
 </dd>
     <dt>
-    <a name = "TileMap:setTile"></a>
-    <strong>TileMap:setTile&nbsp;(x, y, id, flags)</strong>
+    <a name = "setTile"></a>
+    <strong>setTile (x, y, id, flags)</strong>
     </dt>
     <dd>
     Sets a tile data (id and flags) at a given logical position in grid space
-If provided it replace the current tile flags.
-If not provided it doesn't change current flags value.
+
 
     <h3>Parameters:</h3>
     <ul>
         <li><span class="parameter">x</span>
-         horizontal logical grid coordinate</li>
+         horizontal logical grid coordinate
+        </li>
         <li><span class="parameter">y</span>
-         vertical logical grid coordinate</li>
+         vertical logical grid coordinate
+        </li>
         <li><span class="parameter">id</span>
          id of the tile at the given position. It can also contains a flag component (but requires
-	the flags params to be nil)</li>
+
+	the flags params to be nil)
+        </li>
         <li><span class="parameter">flags</span>
-         [optional] tile flags to set. </li>
+         [optional] tile flags to set.
+
+If provided it replace the current tile flags.
+
+If not provided it doesn't change current flags value.
+
+        </li>
     </ul>
 
 
@@ -673,20 +745,24 @@ If not provided it doesn't change current flags value.
 
 </dd>
     <dt>
-    <a name = "TileMap:setTileFlags"></a>
-    <strong>TileMap:setTileFlags&nbsp;(x, y, flags)</strong>
+    <a name = "setTileFlags"></a>
+    <strong>setTileFlags (x, y, flags)</strong>
     </dt>
     <dd>
     Sets tile flags for a specific tile
 
+
     <h3>Parameters:</h3>
     <ul>
         <li><span class="parameter">x</span>
-         horizontal logical grid coordinate</li>
+         horizontal logical grid coordinate
+        </li>
         <li><span class="parameter">y</span>
-         vertical logical grid coordinate</li>
+         vertical logical grid coordinate
+        </li>
         <li><span class="parameter">flags</span>
-         tile flags to set.</li>
+         tile flags to set.
+        </li>
     </ul>
 
 
@@ -695,20 +771,24 @@ If not provided it doesn't change current flags value.
 
 </dd>
     <dt>
-    <a name = "TileMap:clearTileFlags"></a>
-    <strong>TileMap:clearTileFlags&nbsp;(x, y, flags)</strong>
+    <a name = "clearTileFlags"></a>
+    <strong>clearTileFlags (x, y, flags)</strong>
     </dt>
     <dd>
     Clears tile flags for a specific tile
 
+
     <h3>Parameters:</h3>
     <ul>
         <li><span class="parameter">x</span>
-         horizontal logical grid coordinate</li>
+         horizontal logical grid coordinate
+        </li>
         <li><span class="parameter">y</span>
-         vertical logical grid coordinate</li>
+         vertical logical grid coordinate
+        </li>
         <li><span class="parameter">flags</span>
-         tile flags to clear.</li>
+         tile flags to clear.
+        </li>
     </ul>
 
 
@@ -717,20 +797,24 @@ If not provided it doesn't change current flags value.
 
 </dd>
     <dt>
-    <a name = "TileMap:toggleTileFlags"></a>
-    <strong>TileMap:toggleTileFlags&nbsp;(x, y, flags)</strong>
+    <a name = "toggleTileFlags"></a>
+    <strong>toggleTileFlags (x, y, flags)</strong>
     </dt>
     <dd>
     Toggles tile flags for a specific tile
 
+
     <h3>Parameters:</h3>
     <ul>
         <li><span class="parameter">x</span>
-         horizontal logical grid coordinate</li>
+         horizontal logical grid coordinate
+        </li>
         <li><span class="parameter">y</span>
-         vertical logical grid coordinate</li>
+         vertical logical grid coordinate
+        </li>
         <li><span class="parameter">flags</span>
-         tile flags to toggle.</li>
+         tile flags to toggle.
+        </li>
     </ul>
 
 
@@ -739,20 +823,24 @@ If not provided it doesn't change current flags value.
 
 </dd>
     <dt>
-    <a name = "TileMap:hasTileFlag"></a>
-    <strong>TileMap:hasTileFlag&nbsp;(x, y, flag)</strong>
+    <a name = "hasTileFlag"></a>
+    <strong>hasTileFlag (x, y, flag)</strong>
     </dt>
     <dd>
     Tests a tile flag for a specific tile
 
+
     <h3>Parameters:</h3>
     <ul>
         <li><span class="parameter">x</span>
-         horizontal logical grid coordinate</li>
+         horizontal logical grid coordinate
+        </li>
         <li><span class="parameter">y</span>
-         vertical logical grid coordinate</li>
+         vertical logical grid coordinate
+        </li>
         <li><span class="parameter">flag</span>
-         tile flag to test.</li>
+         tile flag to test.
+        </li>
     </ul>
 
 
@@ -761,20 +849,24 @@ If not provided it doesn't change current flags value.
 
 </dd>
     <dt>
-    <a name = "TileMap:positionToGrid"></a>
-    <strong>TileMap:positionToGrid&nbsp;(x, y, targetSpace)</strong>
+    <a name = "positionToGrid"></a>
+    <strong>positionToGrid (x, y, targetSpace)</strong>
     </dt>
     <dd>
     Transform a position in targetSpace into a logical position in grid space
 
+
     <h3>Parameters:</h3>
     <ul>
         <li><span class="parameter">x</span>
-         x position in targetSpace</li>
+         x position in targetSpace
+        </li>
         <li><span class="parameter">y</span>
-         y position in targetSpace</li>
+         y position in targetSpace
+        </li>
         <li><span class="parameter">targetSpace</span>
-         space of the transformation</li>
+         space of the transformation
+        </li>
     </ul>
 
     <h3>Returns:</h3>
@@ -790,21 +882,26 @@ If not provided it doesn't change current flags value.
 
 </dd>
     <dt>
-    <a name = "TileMap:gridToPosition"></a>
-    <strong>TileMap:gridToPosition&nbsp;(x, y, targetSpace)</strong>
+    <a name = "gridToPosition"></a>
+    <strong>gridToPosition (x, y, targetSpace)</strong>
     </dt>
     <dd>
     Transform a logical position in grid space into a position in targetSpace
+
 The position returned is the centre of the tile
+
 
     <h3>Parameters:</h3>
     <ul>
         <li><span class="parameter">x</span>
-         logical x position in grid space</li>
+         logical x position in grid space
+        </li>
         <li><span class="parameter">y</span>
-         logical y position in grid space</li>
+         logical y position in grid space
+        </li>
         <li><span class="parameter">targetSpace</span>
-         space of the transformation</li>
+         space of the transformation
+        </li>
     </ul>
 
     <h3>Returns:</h3>
@@ -820,21 +917,26 @@ The position returned is the centre of the tile
 
 </dd>
     <dt>
-    <a name = "TileMap:getTilePosition"></a>
-    <strong>TileMap:getTilePosition&nbsp;(x, y, targetSpace)</strong>
+    <a name = "getTilePosition"></a>
+    <strong>getTilePosition (x, y, targetSpace)</strong>
     </dt>
     <dd>
     Alias for gridToPosition
+
 Returns the position of the centre of a tile in targetSpace given logical map coordinates
+
 
     <h3>Parameters:</h3>
     <ul>
         <li><span class="parameter">x</span>
-         horizontal logical grid coordinate</li>
+         horizontal logical grid coordinate
+        </li>
         <li><span class="parameter">y</span>
-         vertical logical grid coordinate</li>
+         vertical logical grid coordinate
+        </li>
         <li><span class="parameter">targetSpace</span>
-         space of the transformation</li>
+         space of the transformation
+        </li>
     </ul>
 
     <h3>Returns:</h3>
@@ -850,20 +952,24 @@ Returns the position of the centre of a tile in targetSpace given logical map co
 
 </dd>
     <dt>
-    <a name = "TileMap:getTileIdByPosition"></a>
-    <strong>TileMap:getTileIdByPosition&nbsp;(x, y, targetSpace)</strong>
+    <a name = "getTileIdByPosition"></a>
+    <strong>getTileIdByPosition (x, y, targetSpace)</strong>
     </dt>
     <dd>
     Returns tile id and flags given a position in targetSpace
 
+
     <h3>Parameters:</h3>
     <ul>
         <li><span class="parameter">x</span>
-         x position in targetSpace</li>
+         x position in targetSpace
+        </li>
         <li><span class="parameter">y</span>
-         y position in targetSpace</li>
+         y position in targetSpace
+        </li>
         <li><span class="parameter">targetSpace</span>
-         space of the transformation</li>
+         space of the transformation
+        </li>
     </ul>
 
     <h3>Returns:</h3>
@@ -877,20 +983,24 @@ Returns the position of the centre of a tile in targetSpace given logical map co
 
 </dd>
     <dt>
-    <a name = "TileMap:getTileByPosition"></a>
-    <strong>TileMap:getTileByPosition&nbsp;(x, y, targetSpace)</strong>
+    <a name = "getTileByPosition"></a>
+    <strong>getTileByPosition (x, y, targetSpace)</strong>
     </dt>
     <dd>
     Returns tile and flags given a position in targetSpace
 
+
     <h3>Parameters:</h3>
     <ul>
         <li><span class="parameter">x</span>
-         x position in targetSpace</li>
+         x position in targetSpace
+        </li>
         <li><span class="parameter">y</span>
-         y position in targetSpace</li>
+         y position in targetSpace
+        </li>
         <li><span class="parameter">targetSpace</span>
-         space of the transformation</li>
+         space of the transformation
+        </li>
     </ul>
 
     <h3>Returns:</h3>
@@ -906,20 +1016,24 @@ Returns the position of the centre of a tile in targetSpace given logical map co
 
 </dd>
     <dt>
-    <a name = "TileMap:getTileFlagsByPosition"></a>
-    <strong>TileMap:getTileFlagsByPosition&nbsp;(x, y, targetSpace)</strong>
+    <a name = "getTileFlagsByPosition"></a>
+    <strong>getTileFlagsByPosition (x, y, targetSpace)</strong>
     </dt>
     <dd>
     Returns flags given a position in targetSpace
 
+
     <h3>Parameters:</h3>
     <ul>
         <li><span class="parameter">x</span>
-         x position in targetSpace</li>
+         x position in targetSpace
+        </li>
         <li><span class="parameter">y</span>
-         y position in targetSpace</li>
+         y position in targetSpace
+        </li>
         <li><span class="parameter">targetSpace</span>
-         space of the transformation</li>
+         space of the transformation
+        </li>
     </ul>
 
     <h3>Returns:</h3>
@@ -947,6 +1061,7 @@ Returns the position of the centre of a tile in targetSpace given logical map co
 
 
 
+
 </dd>
     <dt>
     <a name = "TILE_Y_FLIP"></a>
@@ -954,6 +1069,7 @@ Returns the position of the centre of a tile in targetSpace given logical map co
     </dt>
     <dd>
     y flip tile flag
+
 
 
 
@@ -973,6 +1089,7 @@ Returns the position of the centre of a tile in targetSpace given logical map co
 
 
 
+
 </dd>
     <dt>
     <a name = "FLAGS_MASK"></a>
@@ -986,6 +1103,7 @@ Returns the position of the centre of a tile in targetSpace given logical map co
 
 
 
+
 </dd>
 </dl>
 
@@ -993,7 +1111,7 @@ Returns the position of the centre of a tile in targetSpace given logical map co
 </div> <!-- id="content" -->
 </div> <!-- id="main" -->
 <div id="about">
-<i>generated by <a href="http://github.com/stevedonovan/LDoc">LDoc 1.3.11</a></i>
+<i>generated by <a href="http://github.com/stevedonovan/LDoc">LDoc 1.4.2</a></i>
 </div> <!-- id="about" -->
 </div> <!-- id="container" -->
 </body>

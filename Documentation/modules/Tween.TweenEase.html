@@ -37,7 +37,7 @@
 
 
 <h2>Modules</h2>
-<ul>
+<ul class="$(kind=='Topics' and '' or 'nowrap'">
   <li><a href="../modules/Core.Assets.html">Core.Assets</a></li>
   <li><a href="../modules/Core.Event.html">Core.Event</a></li>
   <li><a href="../modules/Core.EventDispatcher.html">Core.EventDispatcher</a></li>
@@ -60,6 +60,7 @@
   <li><a href="../modules/Display.Stage.html">Display.Stage</a></li>
   <li><a href="../modules/Display.TextField.html">Display.TextField</a></li>
   <li><a href="../modules/Display.TileMap.html">Display.TileMap</a></li>
+  <li><a href="../modules/include.html">include</a></li>
   <li><a href="../modules/Texture.ITextureAtlas.html">Texture.ITextureAtlas</a></li>
   <li><a href="../modules/Texture.SubTexture.html">Texture.SubTexture</a></li>
   <li><a href="../modules/Texture.Texture.html">Texture.Texture</a></li>
@@ -87,9 +88,9 @@
   <li><a href="../modules/Utils.CollisionKit.html">Utils.CollisionKit</a></li>
   <li><a href="../modules/Utils.Color.html">Utils.Color</a></li>
   <li><a href="../modules/Utils.Coroutines.html">Utils.Coroutines</a></li>
-  <li><a href="../modules/Utils.IO.html">Utils.IO</a></li>
   <li><a href="../modules/Utils.IniFile.html">Utils.IniFile</a></li>
   <li><a href="../modules/Utils.IniParser.html">Utils.IniParser</a></li>
+  <li><a href="../modules/Utils.IO.html">Utils.IO</a></li>
   <li><a href="../modules/Utils.Log.html">Utils.Log</a></li>
   <li><a href="../modules/Utils.Math.html">Utils.Math</a></li>
   <li><a href="../modules/Utils.PerformanceTimer.html">Utils.PerformanceTimer</a></li>
@@ -102,7 +103,6 @@
   <li><a href="../modules/Utils.Vector.html">Utils.Vector</a></li>
   <li><a href="../modules/Utils.XmlNode.html">Utils.XmlNode</a></li>
   <li><a href="../modules/Utils.XmlParser.html">Utils.XmlParser</a></li>
-  <li><a href="../modules/include.html">include</a></li>
 </ul>
 
 </div>
@@ -110,57 +110,76 @@
 <div id="content">
 
 <h1>Module <code>Tween.TweenEase</code></h1>
-
 <p>A TweenEase animates numeric properties of objects.</p>
 <p> It uses different
+
 transition functions to give the animations various styles.
-<p>The primary use of this class is to do standard animations like
+
+
+
+The primary use of this class is to do standard animations like
+
 movement, fading, rotation, etc. But there are no limits on what to
+
 animate. As long as the property you want to animate is numeric, the
+
 tween can handle it. For a list of available Transition types, look
+
 at the "Transitions" class.
-<p>The property can be directly a numeric key of a table/class, or a
+
+
+
+The property can be directly a numeric key of a table/class, or a
+
 couple of setter and getter function/method of a table/class
-    </p>
+
+
+</p>
     <h3>Usage:</h3>
     <ul>
         <pre class="example">
 
+
+
 e = Tween.ease(obj,tweenTime,Transition.LINEAR)
+
 e:seek(&quot;x&quot;,endValue)
-e:seekEx(obj.setter,obj.getter,endValue)</pre>
+
+e:seekEx(obj.setter,obj.getter,endValue)
+</pre>
     </ul>
 
 
 <h2><a href="#Functions">Functions</a></h2>
 <table class="function_list">
 	<tr>
-	<td class="name" nowrap><a href="#TweenEase:init">TweenEase:init&nbsp;(target, time, transitionName)</a></td>
+	<td class="name" nowrap><a href="#init">init (target, time, transitionName)</a></td>
 	<td class="summary">Constructor.</td>
 	</tr>
 	<tr>
-	<td class="name" nowrap><a href="#TweenEase:seek">TweenEase:seek&nbsp;(property, endValue, roundToInt)</a></td>
+	<td class="name" nowrap><a href="#seek">seek (property, endValue, roundToInt)</a></td>
 	<td class="summary">seeks the property of an object to a target value.</td>
 	</tr>
 	<tr>
-	<td class="name" nowrap><a href="#TweenEase:seekEx">TweenEase:seekEx&nbsp;(setter, getter, endValue, roundToInt)</a></td>
+	<td class="name" nowrap><a href="#seekEx">seekEx (setter, getter, endValue, roundToInt)</a></td>
 	<td class="summary">Similar to seek but instead of a property it receives a pair of setter and getter methods.</td>
 	</tr>
 	<tr>
-	<td class="name" nowrap><a href="#TweenEase:move">TweenEase:move&nbsp;(property, deltaValue, roundToInt)</a></td>
+	<td class="name" nowrap><a href="#move">move (property, deltaValue, roundToInt)</a></td>
 	<td class="summary">move the property of an object of a delta value.</td>
 	</tr>
 	<tr>
-	<td class="name" nowrap><a href="#TweenEase:moveEx">TweenEase:moveEx&nbsp;(setter, getter, deltaValue, roundToInt)</a></td>
+	<td class="name" nowrap><a href="#moveEx">moveEx (setter, getter, deltaValue, roundToInt)</a></td>
 	<td class="summary">Similar to move but instead of a property it receives a pair of setter and getter methods.</td>
 	</tr>
 	<tr>
-	<td class="name" nowrap><a href="#TweenEase:follow">TweenEase:follow&nbsp;(property, target, targetProp, roundToInt)</a></td>
+	<td class="name" nowrap><a href="#follow">follow (property, target, targetProp, roundToInt)</a></td>
 	<td class="summary">Instead of receiving a target value it receive a target object with property,
+
 that is a dynamic variable that could change during time.</td>
 	</tr>
 	<tr>
-	<td class="name" nowrap><a href="#TweenEase:followEx">TweenEase:followEx&nbsp;(setter, getter, target, targetProp, roundToInt)</a></td>
+	<td class="name" nowrap><a href="#followEx">followEx (setter, getter, target, targetProp, roundToInt)</a></td>
 	<td class="summary">Similar to follow but instead of a property it receives a pair of setter and getter methods.</td>
 	</tr>
 </table>
@@ -172,20 +191,24 @@ that is a dynamic variable that could change during time.</td>
     <h2><a name="Functions"></a>Functions</h2>
     <dl class="function">
     <dt>
-    <a name = "TweenEase:init"></a>
-    <strong>TweenEase:init&nbsp;(target, time, transitionName)</strong>
+    <a name = "init"></a>
+    <strong>init (target, time, transitionName)</strong>
     </dt>
     <dd>
     Constructor.
 
+
     <h3>Parameters:</h3>
     <ul>
         <li><span class="parameter">target</span>
-         the object that will be animated</li>
+         the object that will be animated
+        </li>
         <li><span class="parameter">time</span>
-         duration of the animation</li>
+         duration of the animation
+        </li>
         <li><span class="parameter">transitionName</span>
-         type of transition that will be applied</li>
+         type of transition that will be applied
+        </li>
     </ul>
 
 
@@ -194,24 +217,35 @@ that is a dynamic variable that could change during time.</td>
 
 </dd>
     <dt>
-    <a name = "TweenEase:seek"></a>
-    <strong>TweenEase:seek&nbsp;(property, endValue, roundToInt)</strong>
+    <a name = "seek"></a>
+    <strong>seek (property, endValue, roundToInt)</strong>
     </dt>
     <dd>
     seeks the property of an object to a target value.
+
 Is it possible to call this method multiple times on one tween,
+
 to animate different properties.
-<p>to be rounded to int values. default is false
+
+
+
+
 
     <h3>Parameters:</h3>
     <ul>
         <li><span class="parameter">property</span>
-         the property that will be animated</li>
+         the property that will be animated
+        </li>
         <li><span class="parameter">endValue</span>
          the value to which the property will tweened with
-a curve and in a time configured when the tween was created.</li>
+
+a curve and in a time configured when the tween was created.
+        </li>
         <li><span class="parameter">roundToInt</span>
-         if true force updated propery values</li>
+         if true force updated propery values
+
+to be rounded to int values. default is false
+        </li>
     </ul>
 
     <h3>Returns:</h3>
@@ -225,24 +259,34 @@ a curve and in a time configured when the tween was created.</li>
 
 </dd>
     <dt>
-    <a name = "TweenEase:seekEx"></a>
-    <strong>TweenEase:seekEx&nbsp;(setter, getter, endValue, roundToInt)</strong>
+    <a name = "seekEx"></a>
+    <strong>seekEx (setter, getter, endValue, roundToInt)</strong>
     </dt>
     <dd>
     Similar to seek but instead of a property it receives a pair of setter and getter methods.
-to be rounded to int values. default is false
+
+
+
+
 
     <h3>Parameters:</h3>
     <ul>
         <li><span class="parameter">setter</span>
-         the setter of the property that will be animated</li>
+         the setter of the property that will be animated
+        </li>
         <li><span class="parameter">getter</span>
-         the getter of the the property that will be animated</li>
+         the getter of the the property that will be animated
+        </li>
         <li><span class="parameter">endValue</span>
          the value to which the property will tweened with
-a curve and in a time configured when the tween was created.</li>
+
+a curve and in a time configured when the tween was created.
+        </li>
         <li><span class="parameter">roundToInt</span>
-         if true force updated propery values</li>
+         if true force updated propery values
+
+to be rounded to int values. default is false
+        </li>
     </ul>
 
     <h3>Returns:</h3>
@@ -256,24 +300,35 @@ a curve and in a time configured when the tween was created.</li>
 
 </dd>
     <dt>
-    <a name = "TweenEase:move"></a>
-    <strong>TweenEase:move&nbsp;(property, deltaValue, roundToInt)</strong>
+    <a name = "move"></a>
+    <strong>move (property, deltaValue, roundToInt)</strong>
     </dt>
     <dd>
     move the property of an object of a delta value.
+
 Is it possible to call this method multiple times on one tween,
+
 to animate different properties.
-<p>to be rounded to int values. default is false
+
+
+
+
 
     <h3>Parameters:</h3>
     <ul>
         <li><span class="parameter">property</span>
-         the property that will be animated</li>
+         the property that will be animated
+        </li>
         <li><span class="parameter">deltaValue</span>
          the value of which the property will tweened with
-a curve and in a time configured when the tween was created.</li>
+
+a curve and in a time configured when the tween was created.
+        </li>
         <li><span class="parameter">roundToInt</span>
-         if true force updated propery values</li>
+         if true force updated propery values
+
+to be rounded to int values. default is false
+        </li>
     </ul>
 
     <h3>Returns:</h3>
@@ -287,24 +342,34 @@ a curve and in a time configured when the tween was created.</li>
 
 </dd>
     <dt>
-    <a name = "TweenEase:moveEx"></a>
-    <strong>TweenEase:moveEx&nbsp;(setter, getter, deltaValue, roundToInt)</strong>
+    <a name = "moveEx"></a>
+    <strong>moveEx (setter, getter, deltaValue, roundToInt)</strong>
     </dt>
     <dd>
     Similar to move but instead of a property it receives a pair of setter and getter methods.
-to be rounded to int values. default is false
+
+
+
+
 
     <h3>Parameters:</h3>
     <ul>
         <li><span class="parameter">setter</span>
-         the setter of the property that will be animated</li>
+         the setter of the property that will be animated
+        </li>
         <li><span class="parameter">getter</span>
-         the getter of the the property that will be animated</li>
+         the getter of the the property that will be animated
+        </li>
         <li><span class="parameter">deltaValue</span>
          the value of which the property will tweened with
-a curve and in a time configured when the tween was created.</li>
+
+a curve and in a time configured when the tween was created.
+        </li>
         <li><span class="parameter">roundToInt</span>
-         if true force updated propery values</li>
+         if true force updated propery values
+
+to be rounded to int values. default is false
+        </li>
     </ul>
 
     <h3>Returns:</h3>
@@ -318,27 +383,42 @@ a curve and in a time configured when the tween was created.</li>
 
 </dd>
     <dt>
-    <a name = "TweenEase:follow"></a>
-    <strong>TweenEase:follow&nbsp;(property, target, targetProp, roundToInt)</strong>
+    <a name = "follow"></a>
+    <strong>follow (property, target, targetProp, roundToInt)</strong>
     </dt>
     <dd>
     Instead of receiving a target value it receive a target object with property,
+
 that is a dynamic variable that could change during time.
-<p>Is it possible to call this method multiple times on one tween,
+
+
+
+Is it possible to call this method multiple times on one tween,
+
 to animate different properties.
-<p>to be rounded to int values. default is false
+
+
+
+
 
     <h3>Parameters:</h3>
     <ul>
         <li><span class="parameter">property</span>
-         the property that will be animated</li>
+         the property that will be animated
+        </li>
         <li><span class="parameter">target</span>
-         the object that has to be followed</li>
+         the object that has to be followed
+        </li>
         <li><span class="parameter">targetProp</span>
          the property of the target object that we want to reach.
-Can be also a getter method</li>
+
+Can be also a getter method
+        </li>
         <li><span class="parameter">roundToInt</span>
-         if true force updated propery values</li>
+         if true force updated propery values
+
+to be rounded to int values. default is false
+        </li>
     </ul>
 
     <h3>Returns:</h3>
@@ -352,26 +432,37 @@ Can be also a getter method</li>
 
 </dd>
     <dt>
-    <a name = "TweenEase:followEx"></a>
-    <strong>TweenEase:followEx&nbsp;(setter, getter, target, targetProp, roundToInt)</strong>
+    <a name = "followEx"></a>
+    <strong>followEx (setter, getter, target, targetProp, roundToInt)</strong>
     </dt>
     <dd>
     Similar to follow but instead of a property it receives a pair of setter and getter methods.
-to be rounded to int values. default is false
+
+
+
+
 
     <h3>Parameters:</h3>
     <ul>
         <li><span class="parameter">setter</span>
-         the setter of the property that will be animated</li>
+         the setter of the property that will be animated
+        </li>
         <li><span class="parameter">getter</span>
-         the getter of the the property that will be animated</li>
+         the getter of the the property that will be animated
+        </li>
         <li><span class="parameter">target</span>
-         the object that has to be followed</li>
+         the object that has to be followed
+        </li>
         <li><span class="parameter">targetProp</span>
          the property of the target object that we want to reach.
-Can be also a getter method</li>
+
+Can be also a getter method
+        </li>
         <li><span class="parameter">roundToInt</span>
-         if true force updated propery values</li>
+         if true force updated propery values
+
+to be rounded to int values. default is false
+        </li>
     </ul>
 
     <h3>Returns:</h3>
@@ -390,7 +481,7 @@ Can be also a getter method</li>
 </div> <!-- id="content" -->
 </div> <!-- id="main" -->
 <div id="about">
-<i>generated by <a href="http://github.com/stevedonovan/LDoc">LDoc 1.3.11</a></i>
+<i>generated by <a href="http://github.com/stevedonovan/LDoc">LDoc 1.4.2</a></i>
 </div> <!-- id="about" -->
 </div> <!-- id="container" -->
 </body>

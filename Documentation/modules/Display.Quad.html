@@ -38,7 +38,7 @@
 
 
 <h2>Modules</h2>
-<ul>
+<ul class="$(kind=='Topics' and '' or 'nowrap'">
   <li><a href="../modules/Core.Assets.html">Core.Assets</a></li>
   <li><a href="../modules/Core.Event.html">Core.Event</a></li>
   <li><a href="../modules/Core.EventDispatcher.html">Core.EventDispatcher</a></li>
@@ -61,6 +61,7 @@
   <li><a href="../modules/Display.Stage.html">Display.Stage</a></li>
   <li><a href="../modules/Display.TextField.html">Display.TextField</a></li>
   <li><a href="../modules/Display.TileMap.html">Display.TileMap</a></li>
+  <li><a href="../modules/include.html">include</a></li>
   <li><a href="../modules/Texture.ITextureAtlas.html">Texture.ITextureAtlas</a></li>
   <li><a href="../modules/Texture.SubTexture.html">Texture.SubTexture</a></li>
   <li><a href="../modules/Texture.Texture.html">Texture.Texture</a></li>
@@ -88,9 +89,9 @@
   <li><a href="../modules/Utils.CollisionKit.html">Utils.CollisionKit</a></li>
   <li><a href="../modules/Utils.Color.html">Utils.Color</a></li>
   <li><a href="../modules/Utils.Coroutines.html">Utils.Coroutines</a></li>
-  <li><a href="../modules/Utils.IO.html">Utils.IO</a></li>
   <li><a href="../modules/Utils.IniFile.html">Utils.IniFile</a></li>
   <li><a href="../modules/Utils.IniParser.html">Utils.IniParser</a></li>
+  <li><a href="../modules/Utils.IO.html">Utils.IO</a></li>
   <li><a href="../modules/Utils.Log.html">Utils.Log</a></li>
   <li><a href="../modules/Utils.Math.html">Utils.Math</a></li>
   <li><a href="../modules/Utils.PerformanceTimer.html">Utils.PerformanceTimer</a></li>
@@ -103,7 +104,6 @@
   <li><a href="../modules/Utils.Vector.html">Utils.Vector</a></li>
   <li><a href="../modules/Utils.XmlNode.html">Utils.XmlNode</a></li>
   <li><a href="../modules/Utils.XmlParser.html">Utils.XmlParser</a></li>
-  <li><a href="../modules/include.html">include</a></li>
 </ul>
 
 </div>
@@ -111,92 +111,109 @@
 <div id="content">
 
 <h1>Module <code>Display.Quad</code></h1>
-
 <p>A Quad represents a rectangle with a uniform color or a color gradient.</p>
 <p>
+
 It's possible to set one color per vertex. The colors will smoothly
+
 fade into each other over the area of the quad. To display a simple
+
 linear color gradient, assign one color to vertices 1 and 2 and
+
 another color to vertices 3 and 4.
-<p>if __USE_SIMULATION_COORDS__ is nil or false then vertex 1 is the top left one,
+
+
+
+if __USE_SIMULATION_COORDS__ is nil or false then vertex 1 is the top left one,
+
 and the vertices follow clockwise order.
-<p>if __USE_SIMULATION_COORDS__ is true then vertex 1 is the bottom left one,
-and the vertices follow counter clockwise order.</p>
+
+
+
+if __USE_SIMULATION_COORDS__ is true then vertex 1 is the bottom left one,
+
+and the vertices follow counter clockwise order.
+</p>
 
 
 <h2><a href="#Functions">Functions</a></h2>
 <table class="function_list">
 	<tr>
-	<td class="name" nowrap><a href="#Quad:init">Quad:init&nbsp;(width, height, pivotMode)</a></td>
+	<td class="name" nowrap><a href="#init">init (width, height, pivotMode)</a></td>
 	<td class="summary">Constructor.</td>
 	</tr>
 	<tr>
-	<td class="name" nowrap><a href="#Quad:_createMesh">Quad:_createMesh&nbsp;()</a></td>
+	<td class="name" nowrap><a href="#_createMesh">_createMesh ()</a></td>
 	<td class="summary">Inner method.</td>
 	</tr>
 	<tr>
-	<td class="name" nowrap><a href="#Quad:_updateVertexBuffer">Quad:_updateVertexBuffer&nbsp;()</a></td>
+	<td class="name" nowrap><a href="#_updateVertexBuffer">_updateVertexBuffer ()</a></td>
 	<td class="summary">Inner methods.</td>
 	</tr>
 	<tr>
-	<td class="name" nowrap><a href="#Quad:setSize">Quad:setSize&nbsp;(width, height)</a></td>
+	<td class="name" nowrap><a href="#setSize">setSize (width, height)</a></td>
 	<td class="summary">Set the size of the quad</td>
 	</tr>
 	<tr>
-	<td class="name" nowrap><a href="#Quad:_setMultiplyColor">Quad:_setMultiplyColor&nbsp;(r, g, b, a)</a></td>
+	<td class="name" nowrap><a href="#_setMultiplyColor">_setMultiplyColor (r, g, b, a)</a></td>
 	<td class="summary">Override base method.</td>
 	</tr>
 	<tr>
-	<td class="name" nowrap><a href="#Quad:_getMultipliedColor">Quad:_getMultipliedColor&nbsp;()</a></td>
+	<td class="name" nowrap><a href="#_getMultipliedColor">_getMultipliedColor ()</a></td>
 	<td class="summary">Returns the multiplied alpha value as applied to the first vertex.</td>
 	</tr>
 	<tr>
-	<td class="name" nowrap><a href="#Quad:_updateColor">Quad:_updateColor&nbsp;()</a></td>
+	<td class="name" nowrap><a href="#_updateColor">_updateColor ()</a></td>
 	<td class="summary">overrides displayobj method redirecting on _updateVertexBuffer
+
 that already does the same thing for quads</td>
 	</tr>
 	<tr>
-	<td class="name" nowrap><a href="#Quad:setAlpha">Quad:setAlpha&nbsp;(a)</a></td>
+	<td class="name" nowrap><a href="#setAlpha">setAlpha (a)</a></td>
 	<td class="summary">Override base method.</td>
 	</tr>
 	<tr>
-	<td class="name" nowrap><a href="#Quad:getAlpha">Quad:getAlpha&nbsp;()</a></td>
+	<td class="name" nowrap><a href="#getAlpha">getAlpha ()</a></td>
 	<td class="summary">Returns the alpha value as set at the first vertex.</td>
 	</tr>
 	<tr>
-	<td class="name" nowrap><a href="#Quad:setVertexAlpha">Quad:setVertexAlpha&nbsp;(v, a)</a></td>
+	<td class="name" nowrap><a href="#setVertexAlpha">setVertexAlpha (v, a)</a></td>
 	<td class="summary">Set alpha value for a single vertex</td>
 	</tr>
 	<tr>
-	<td class="name" nowrap><a href="#Quad:getVertexAlpha">Quad:getVertexAlpha&nbsp;(v)</a></td>
+	<td class="name" nowrap><a href="#getVertexAlpha">getVertexAlpha (v)</a></td>
 	<td class="summary">Returns alpha value of a single vertex</td>
 	</tr>
 	<tr>
-	<td class="name" nowrap><a href="#Quad:setColor">Quad:setColor&nbsp;(r, g, b, a)</a></td>
+	<td class="name" nowrap><a href="#setColor">setColor (r, g, b, a)</a></td>
 	<td class="summary">Override base method.</td>
 	</tr>
 	<tr>
-	<td class="name" nowrap><a href="#Quad:getColor">Quad:getColor&nbsp;()</a></td>
+	<td class="name" nowrap><a href="#getColor">getColor ()</a></td>
 	<td class="summary">Returns the color of the first vertex.</td>
 	</tr>
 	<tr>
-	<td class="name" nowrap><a href="#Quad:setVertexColor">Quad:setVertexColor&nbsp;(v, r, g, b, a)</a></td>
+	<td class="name" nowrap><a href="#setVertexColor">setVertexColor (v, r, g, b, a)</a></td>
 	<td class="summary">Set color of a single vertex
+
 The following calls are valid:
+
 - setVertexColor(v,r,g,b)
+
 - setVertexColor(v,r,g,b,a)
+
 - setVertexColor(v,color)</td>
 	</tr>
 	<tr>
-	<td class="name" nowrap><a href="#Quad:getVertexColor">Quad:getVertexColor&nbsp;(v)</a></td>
+	<td class="name" nowrap><a href="#getVertexColor">getVertexColor (v)</a></td>
 	<td class="summary">Returns vertext color of a single vertex</td>
 	</tr>
 	<tr>
-	<td class="name" nowrap><a href="#Quad:setColors">Quad:setColors&nbsp;(c1, c2, c3, c4)</a></td>
+	<td class="name" nowrap><a href="#setColors">setColors (c1, c2, c3, c4)</a></td>
 	<td class="summary">Sets all the colors of the 4 vertices</td>
 	</tr>
 	<tr>
-	<td class="name" nowrap><a href="#Quad:getColors">Quad:getColors&nbsp;()</a></td>
+	<td class="name" nowrap><a href="#getColors">getColors ()</a></td>
 	<td class="summary">Gets all the colors of the 4 vertices</td>
 	</tr>
 </table>
@@ -205,6 +222,7 @@ The following calls are valid:
 	<tr>
 	<td class="name" nowrap><a href="#__defaultUseMultiplyColor">__defaultUseMultiplyColor</a></td>
 	<td class="summary">Quad are drawn using a pixel shader so it's necessary to have
+
 it enabled to inherits ancestors color values</td>
 	</tr>
 </table>
@@ -216,20 +234,24 @@ it enabled to inherits ancestors color values</td>
     <h2><a name="Functions"></a>Functions</h2>
     <dl class="function">
     <dt>
-    <a name = "Quad:init"></a>
-    <strong>Quad:init&nbsp;(width, height, pivotMode)</strong>
+    <a name = "init"></a>
+    <strong>init (width, height, pivotMode)</strong>
     </dt>
     <dd>
     Constructor.
 
+
     <h3>Parameters:</h3>
     <ul>
         <li><span class="parameter">width</span>
-         quad width</li>
+         quad width
+        </li>
         <li><span class="parameter">height</span>
-         quad height</li>
+         quad height
+        </li>
         <li><span class="parameter">pivotMode</span>
-         optional, defaul value is CENTER</li>
+         optional, defaul value is CENTER
+        </li>
     </ul>
 
 
@@ -238,8 +260,8 @@ it enabled to inherits ancestors color values</td>
 
 </dd>
     <dt>
-    <a name = "Quad:_createMesh"></a>
-    <strong>Quad:_createMesh&nbsp;()</strong>
+    <a name = "_createMesh"></a>
+    <strong>_createMesh ()</strong>
     </dt>
     <dd>
     Inner method.  It creates the quad mesh that will be displayed
@@ -249,14 +271,18 @@ it enabled to inherits ancestors color values</td>
 
 
 
+
+
 </dd>
     <dt>
-    <a name = "Quad:_updateVertexBuffer"></a>
-    <strong>Quad:_updateVertexBuffer&nbsp;()</strong>
+    <a name = "_updateVertexBuffer"></a>
+    <strong>_updateVertexBuffer ()</strong>
     </dt>
     <dd>
     Inner methods.
+
 Called everytime geometric or color information are changed,
+
 to update mesh vertices infos.
 
 
@@ -264,20 +290,25 @@ to update mesh vertices infos.
 
 
 
+
+
 </dd>
     <dt>
-    <a name = "Quad:setSize"></a>
-    <strong>Quad:setSize&nbsp;(width, height)</strong>
+    <a name = "setSize"></a>
+    <strong>setSize (width, height)</strong>
     </dt>
     <dd>
     Set the size of the quad
 
+
     <h3>Parameters:</h3>
     <ul>
         <li><span class="parameter">width</span>
-         quad width</li>
+         quad width
+        </li>
         <li><span class="parameter">height</span>
-         quad height</li>
+         quad height
+        </li>
     </ul>
 
 
@@ -286,22 +317,28 @@ to update mesh vertices infos.
 
 </dd>
     <dt>
-    <a name = "Quad:_setMultiplyColor"></a>
-    <strong>Quad:_setMultiplyColor&nbsp;(r, g, b, a)</strong>
+    <a name = "_setMultiplyColor"></a>
+    <strong>_setMultiplyColor (r, g, b, a)</strong>
     </dt>
     <dd>
     Override base method.  It calls _updateVertexBuffer
 
+
+
     <h3>Parameters:</h3>
     <ul>
         <li><span class="parameter">r</span>
-         [0,1]</li>
+         [0,1]
+        </li>
         <li><span class="parameter">g</span>
-         [0,1]</li>
+         [0,1]
+        </li>
         <li><span class="parameter">b</span>
-         [0,1]</li>
+         [0,1]
+        </li>
         <li><span class="parameter">a</span>
-         [0,1]</li>
+         [0,1]
+        </li>
     </ul>
 
 
@@ -310,12 +347,15 @@ to update mesh vertices infos.
 
 </dd>
     <dt>
-    <a name = "Quad:_getMultipliedColor"></a>
-    <strong>Quad:_getMultipliedColor&nbsp;()</strong>
+    <a name = "_getMultipliedColor"></a>
+    <strong>_getMultipliedColor ()</strong>
     </dt>
     <dd>
     Returns the multiplied alpha value as applied to the first vertex.
+
 If alpha values is different per vertices the return value has no real meaning
+
+
 
 
     <h3>Returns:</h3>
@@ -329,11 +369,12 @@ If alpha values is different per vertices the return value has no real meaning
 
 </dd>
     <dt>
-    <a name = "Quad:_updateColor"></a>
-    <strong>Quad:_updateColor&nbsp;()</strong>
+    <a name = "_updateColor"></a>
+    <strong>_updateColor ()</strong>
     </dt>
     <dd>
     overrides displayobj method redirecting on _updateVertexBuffer
+
 that already does the same thing for quads
 
 
@@ -341,18 +382,22 @@ that already does the same thing for quads
 
 
 
+
 </dd>
     <dt>
-    <a name = "Quad:setAlpha"></a>
-    <strong>Quad:setAlpha&nbsp;(a)</strong>
+    <a name = "setAlpha"></a>
+    <strong>setAlpha (a)</strong>
     </dt>
     <dd>
     Override base method.  It calls _updateVertexBuffer
 
+
+
     <h3>Parameters:</h3>
     <ul>
         <li><span class="parameter">a</span>
-         alpha value [0,255]</li>
+         alpha value [0,255]
+        </li>
     </ul>
 
 
@@ -361,12 +406,15 @@ that already does the same thing for quads
 
 </dd>
     <dt>
-    <a name = "Quad:getAlpha"></a>
-    <strong>Quad:getAlpha&nbsp;()</strong>
+    <a name = "getAlpha"></a>
+    <strong>getAlpha ()</strong>
     </dt>
     <dd>
     Returns the alpha value as set at the first vertex.
+
 If alpha values is different per vertices the return value has no real meaning
+
+
 
 
     <h3>Returns:</h3>
@@ -380,18 +428,21 @@ If alpha values is different per vertices the return value has no real meaning
 
 </dd>
     <dt>
-    <a name = "Quad:setVertexAlpha"></a>
-    <strong>Quad:setVertexAlpha&nbsp;(v, a)</strong>
+    <a name = "setVertexAlpha"></a>
+    <strong>setVertexAlpha (v, a)</strong>
     </dt>
     <dd>
     Set alpha value for a single vertex
 
+
     <h3>Parameters:</h3>
     <ul>
         <li><span class="parameter">v</span>
-         index of the vertex [1,4]</li>
+         index of the vertex [1,4]
+        </li>
         <li><span class="parameter">a</span>
-         alpha value [0,255]</li>
+         alpha value [0,255]
+        </li>
     </ul>
 
 
@@ -400,16 +451,18 @@ If alpha values is different per vertices the return value has no real meaning
 
 </dd>
     <dt>
-    <a name = "Quad:getVertexAlpha"></a>
-    <strong>Quad:getVertexAlpha&nbsp;(v)</strong>
+    <a name = "getVertexAlpha"></a>
+    <strong>getVertexAlpha (v)</strong>
     </dt>
     <dd>
     Returns alpha value of a single vertex
 
+
     <h3>Parameters:</h3>
     <ul>
         <li><span class="parameter">v</span>
-         index of the vertex [1,4]</li>
+         index of the vertex [1,4]
+        </li>
     </ul>
 
     <h3>Returns:</h3>
@@ -423,26 +476,36 @@ If alpha values is different per vertices the return value has no real meaning
 
 </dd>
     <dt>
-    <a name = "Quad:setColor"></a>
-    <strong>Quad:setColor&nbsp;(r, g, b, a)</strong>
+    <a name = "setColor"></a>
+    <strong>setColor (r, g, b, a)</strong>
     </dt>
     <dd>
     Override base method.  It calls _updateVertexBuffer
+
 The following calls are valid:
+
 - setColor(r,g,b)
+
 - setColor(r,g,b,a)
+
 - setColor(color)
+
+
 
     <h3>Parameters:</h3>
     <ul>
         <li><span class="parameter">r</span>
-         red value [0,255] or a Color</li>
+         red value [0,255] or a Color
+        </li>
         <li><span class="parameter">g</span>
-         green value [0,255] or nil</li>
+         green value [0,255] or nil
+        </li>
         <li><span class="parameter">b</span>
-         blue value [0,255] or nil</li>
+         blue value [0,255] or nil
+        </li>
         <li><span class="parameter">a</span>
-         alpha value [0,255] or nil</li>
+         alpha value [0,255] or nil
+        </li>
     </ul>
 
 
@@ -451,12 +514,15 @@ The following calls are valid:
 
 </dd>
     <dt>
-    <a name = "Quad:getColor"></a>
-    <strong>Quad:getColor&nbsp;()</strong>
+    <a name = "getColor"></a>
+    <strong>getColor ()</strong>
     </dt>
     <dd>
     Returns the color of the first vertex.
+
 If color value is per vertices the return value has no real meaning
+
+
 
 
     <h3>Returns:</h3>
@@ -470,28 +536,38 @@ If color value is per vertices the return value has no real meaning
 
 </dd>
     <dt>
-    <a name = "Quad:setVertexColor"></a>
-    <strong>Quad:setVertexColor&nbsp;(v, r, g, b, a)</strong>
+    <a name = "setVertexColor"></a>
+    <strong>setVertexColor (v, r, g, b, a)</strong>
     </dt>
     <dd>
     Set color of a single vertex
+
 The following calls are valid:
+
 - setVertexColor(v,r,g,b)
+
 - setVertexColor(v,r,g,b,a)
+
 - setVertexColor(v,color)
+
 
     <h3>Parameters:</h3>
     <ul>
         <li><span class="parameter">v</span>
-         index of the vertex [1,4]</li>
+         index of the vertex [1,4]
+        </li>
         <li><span class="parameter">r</span>
-         red value [0,255] or a Color</li>
+         red value [0,255] or a Color
+        </li>
         <li><span class="parameter">g</span>
-         green value [0,255] or nil</li>
+         green value [0,255] or nil
+        </li>
         <li><span class="parameter">b</span>
-         blue value [0,255] or nil</li>
+         blue value [0,255] or nil
+        </li>
         <li><span class="parameter">a</span>
-         alpha value [0,255] or nil</li>
+         alpha value [0,255] or nil
+        </li>
     </ul>
 
 
@@ -500,16 +576,18 @@ The following calls are valid:
 
 </dd>
     <dt>
-    <a name = "Quad:getVertexColor"></a>
-    <strong>Quad:getVertexColor&nbsp;(v)</strong>
+    <a name = "getVertexColor"></a>
+    <strong>getVertexColor (v)</strong>
     </dt>
     <dd>
     Returns vertext color of a single vertex
 
+
     <h3>Parameters:</h3>
     <ul>
         <li><span class="parameter">v</span>
-         index of the vertex [1,4]</li>
+         index of the vertex [1,4]
+        </li>
     </ul>
 
     <h3>Returns:</h3>
@@ -523,22 +601,27 @@ The following calls are valid:
 
 </dd>
     <dt>
-    <a name = "Quad:setColors"></a>
-    <strong>Quad:setColors&nbsp;(c1, c2, c3, c4)</strong>
+    <a name = "setColors"></a>
+    <strong>setColors (c1, c2, c3, c4)</strong>
     </dt>
     <dd>
     Sets all the colors of the 4 vertices
 
+
     <h3>Parameters:</h3>
     <ul>
         <li><span class="parameter">c1</span>
-         Color of vertex1</li>
+         Color of vertex1
+        </li>
         <li><span class="parameter">c2</span>
-         Color of vertex2</li>
+         Color of vertex2
+        </li>
         <li><span class="parameter">c3</span>
-         Color of vertex3</li>
+         Color of vertex3
+        </li>
         <li><span class="parameter">c4</span>
-         Color of vertex4</li>
+         Color of vertex4
+        </li>
     </ul>
 
 
@@ -547,11 +630,12 @@ The following calls are valid:
 
 </dd>
     <dt>
-    <a name = "Quad:getColors"></a>
-    <strong>Quad:getColors&nbsp;()</strong>
+    <a name = "getColors"></a>
+    <strong>getColors ()</strong>
     </dt>
     <dd>
     Gets all the colors of the 4 vertices
+
 
 
     <h3>Returns:</h3>
@@ -579,7 +663,9 @@ The following calls are valid:
     </dt>
     <dd>
     Quad are drawn using a pixel shader so it's necessary to have
+
 it enabled to inherits ancestors color values
+
 
 
 
@@ -593,7 +679,7 @@ it enabled to inherits ancestors color values
 </div> <!-- id="content" -->
 </div> <!-- id="main" -->
 <div id="about">
-<i>generated by <a href="http://github.com/stevedonovan/LDoc">LDoc 1.3.11</a></i>
+<i>generated by <a href="http://github.com/stevedonovan/LDoc">LDoc 1.4.2</a></i>
 </div> <!-- id="about" -->
 </div> <!-- id="container" -->
 </body>

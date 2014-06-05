@@ -37,7 +37,7 @@
 
 
 <h2>Modules</h2>
-<ul>
+<ul class="$(kind=='Topics' and '' or 'nowrap'">
   <li><a href="../modules/Core.Assets.html">Core.Assets</a></li>
   <li><a href="../modules/Core.Event.html">Core.Event</a></li>
   <li><a href="../modules/Core.EventDispatcher.html">Core.EventDispatcher</a></li>
@@ -60,6 +60,7 @@
   <li><a href="../modules/Display.Stage.html">Display.Stage</a></li>
   <li><a href="../modules/Display.TextField.html">Display.TextField</a></li>
   <li><a href="../modules/Display.TileMap.html">Display.TileMap</a></li>
+  <li><a href="../modules/include.html">include</a></li>
   <li><a href="../modules/Texture.ITextureAtlas.html">Texture.ITextureAtlas</a></li>
   <li><a href="../modules/Texture.SubTexture.html">Texture.SubTexture</a></li>
   <li><a href="../modules/Texture.Texture.html">Texture.Texture</a></li>
@@ -87,9 +88,9 @@
   <li><a href="../modules/Utils.CollisionKit.html">Utils.CollisionKit</a></li>
   <li><a href="../modules/Utils.Color.html">Utils.Color</a></li>
   <li><a href="../modules/Utils.Coroutines.html">Utils.Coroutines</a></li>
-  <li><a href="../modules/Utils.IO.html">Utils.IO</a></li>
   <li><a href="../modules/Utils.IniFile.html">Utils.IniFile</a></li>
   <li><a href="../modules/Utils.IniParser.html">Utils.IniParser</a></li>
+  <li><a href="../modules/Utils.IO.html">Utils.IO</a></li>
   <li><a href="../modules/Utils.Log.html">Utils.Log</a></li>
   <li><a href="../modules/Utils.Math.html">Utils.Math</a></li>
   <li><a href="../modules/Utils.PerformanceTimer.html">Utils.PerformanceTimer</a></li>
@@ -102,7 +103,6 @@
   <li><a href="../modules/Utils.Vector.html">Utils.Vector</a></li>
   <li><a href="../modules/Utils.XmlNode.html">Utils.XmlNode</a></li>
   <li><strong>Utils.XmlParser</strong></li>
-  <li><a href="../modules/include.html">include</a></li>
 </ul>
 
 </div>
@@ -110,7 +110,6 @@
 <div id="content">
 
 <h1>Module <code>Utils.XmlParser</code></h1>
-
 <p>LUA only XmlParser, original code from Alexander Makeev</p>
 <p></p>
 
@@ -118,27 +117,27 @@
 <h2><a href="#Functions">Functions</a></h2>
 <table class="function_list">
 	<tr>
-	<td class="name" nowrap><a href="#ToXmlString">ToXmlString&nbsp;(value)</a></td>
+	<td class="name" nowrap><a href="#ToXmlString">ToXmlString (value)</a></td>
 	<td class="summary">Converts a string value to an xml string</td>
 	</tr>
 	<tr>
-	<td class="name" nowrap><a href="#FromXmlString">FromXmlString&nbsp;(value)</a></td>
+	<td class="name" nowrap><a href="#FromXmlString">FromXmlString (value)</a></td>
 	<td class="summary">Converts an xml string to a string value</td>
 	</tr>
 	<tr>
-	<td class="name" nowrap><a href="#ParseArgs">ParseArgs&nbsp;(s)</a></td>
+	<td class="name" nowrap><a href="#ParseArgs">ParseArgs (s)</a></td>
 	<td class="summary">Parses a string retrieving a list of arguments (couples of key=val)</td>
 	</tr>
 	<tr>
-	<td class="name" nowrap><a href="#ParseXmlText">ParseXmlText&nbsp;(xmlText)</a></td>
+	<td class="name" nowrap><a href="#ParseXmlText">ParseXmlText (xmlText)</a></td>
 	<td class="summary">Parses a xml text and returns a lua table</td>
 	</tr>
 	<tr>
-	<td class="name" nowrap><a href="#ParseXmlFile">ParseXmlFile&nbsp;(xmlFileName)</a></td>
+	<td class="name" nowrap><a href="#ParseXmlFile">ParseXmlFile (xmlFileName)</a></td>
 	<td class="summary">loads a xmlfile and parses it</td>
 	</tr>
 	<tr>
-	<td class="name" nowrap><a href="#dump">dump&nbsp;(xml, log)</a></td>
+	<td class="name" nowrap><a href="#dump">dump (xml, log)</a></td>
 	<td class="summary">prints the content of a table obtained with XmlParser.parse</td>
 	</tr>
 </table>
@@ -151,14 +150,16 @@
     <dl class="function">
     <dt>
     <a name = "ToXmlString"></a>
-    <strong>ToXmlString&nbsp;(value)</strong>
+    <strong>ToXmlString (value)</strong>
     </dt>
     <dd>
     Converts a string value to an xml string
 
+
     <h3>Parameters:</h3>
     <ul>
         <li><span class="parameter">value</span>
+
         </li>
     </ul>
 
@@ -169,14 +170,16 @@
 </dd>
     <dt>
     <a name = "FromXmlString"></a>
-    <strong>FromXmlString&nbsp;(value)</strong>
+    <strong>FromXmlString (value)</strong>
     </dt>
     <dd>
     Converts an xml string to a string value
 
+
     <h3>Parameters:</h3>
     <ul>
         <li><span class="parameter">value</span>
+
         </li>
     </ul>
 
@@ -187,14 +190,16 @@
 </dd>
     <dt>
     <a name = "ParseArgs"></a>
-    <strong>ParseArgs&nbsp;(s)</strong>
+    <strong>ParseArgs (s)</strong>
     </dt>
     <dd>
     Parses a string retrieving a list of arguments (couples of key=val)
 
+
     <h3>Parameters:</h3>
     <ul>
         <li><span class="parameter">s</span>
+
         </li>
     </ul>
 
@@ -205,14 +210,16 @@
 </dd>
     <dt>
     <a name = "ParseXmlText"></a>
-    <strong>ParseXmlText&nbsp;(xmlText)</strong>
+    <strong>ParseXmlText (xmlText)</strong>
     </dt>
     <dd>
     Parses a xml text and returns a lua table
 
+
     <h3>Parameters:</h3>
     <ul>
         <li><span class="parameter">xmlText</span>
+
         </li>
     </ul>
 
@@ -223,14 +230,16 @@
 </dd>
     <dt>
     <a name = "ParseXmlFile"></a>
-    <strong>ParseXmlFile&nbsp;(xmlFileName)</strong>
+    <strong>ParseXmlFile (xmlFileName)</strong>
     </dt>
     <dd>
     loads a xmlfile and parses it
 
+
     <h3>Parameters:</h3>
     <ul>
         <li><span class="parameter">xmlFileName</span>
+
         </li>
     </ul>
 
@@ -248,17 +257,20 @@
 </dd>
     <dt>
     <a name = "dump"></a>
-    <strong>dump&nbsp;(xml, log)</strong>
+    <strong>dump (xml, log)</strong>
     </dt>
     <dd>
     prints the content of a table obtained with XmlParser.parse
 
+
     <h3>Parameters:</h3>
     <ul>
         <li><span class="parameter">xml</span>
-         the xml table</li>
+         the xml table
+        </li>
         <li><span class="parameter">log</span>
-         a log object</li>
+         a log object
+        </li>
     </ul>
 
 
@@ -272,7 +284,7 @@
 </div> <!-- id="content" -->
 </div> <!-- id="main" -->
 <div id="about">
-<i>generated by <a href="http://github.com/stevedonovan/LDoc">LDoc 1.3.11</a></i>
+<i>generated by <a href="http://github.com/stevedonovan/LDoc">LDoc 1.4.2</a></i>
 </div> <!-- id="about" -->
 </div> <!-- id="container" -->
 </body>

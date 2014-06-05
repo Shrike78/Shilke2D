@@ -37,7 +37,7 @@
 
 
 <h2>Modules</h2>
-<ul>
+<ul class="$(kind=='Topics' and '' or 'nowrap'">
   <li><a href="../modules/Core.Assets.html">Core.Assets</a></li>
   <li><a href="../modules/Core.Event.html">Core.Event</a></li>
   <li><a href="../modules/Core.EventDispatcher.html">Core.EventDispatcher</a></li>
@@ -60,6 +60,7 @@
   <li><a href="../modules/Display.Stage.html">Display.Stage</a></li>
   <li><a href="../modules/Display.TextField.html">Display.TextField</a></li>
   <li><a href="../modules/Display.TileMap.html">Display.TileMap</a></li>
+  <li><a href="../modules/include.html">include</a></li>
   <li><strong>Texture.ITextureAtlas</strong></li>
   <li><a href="../modules/Texture.SubTexture.html">Texture.SubTexture</a></li>
   <li><a href="../modules/Texture.Texture.html">Texture.Texture</a></li>
@@ -87,9 +88,9 @@
   <li><a href="../modules/Utils.CollisionKit.html">Utils.CollisionKit</a></li>
   <li><a href="../modules/Utils.Color.html">Utils.Color</a></li>
   <li><a href="../modules/Utils.Coroutines.html">Utils.Coroutines</a></li>
-  <li><a href="../modules/Utils.IO.html">Utils.IO</a></li>
   <li><a href="../modules/Utils.IniFile.html">Utils.IniFile</a></li>
   <li><a href="../modules/Utils.IniParser.html">Utils.IniParser</a></li>
+  <li><a href="../modules/Utils.IO.html">Utils.IO</a></li>
   <li><a href="../modules/Utils.Log.html">Utils.Log</a></li>
   <li><a href="../modules/Utils.Math.html">Utils.Math</a></li>
   <li><a href="../modules/Utils.PerformanceTimer.html">Utils.PerformanceTimer</a></li>
@@ -102,7 +103,6 @@
   <li><a href="../modules/Utils.Vector.html">Utils.Vector</a></li>
   <li><a href="../modules/Utils.XmlNode.html">Utils.XmlNode</a></li>
   <li><a href="../modules/Utils.XmlParser.html">Utils.XmlParser</a></li>
-  <li><a href="../modules/include.html">include</a></li>
 </ul>
 
 </div>
@@ -110,28 +110,29 @@
 <div id="content">
 
 <h1>Module <code>Texture.ITextureAtlas</code></h1>
-
 <p>Interface for TextureAtlas classes.</p>
 <p>
-A texture atlas class must provide methdods to iterate over texture list.</p>
+
+A texture atlas class must provide methdods to iterate over texture list.
+</p>
 
 
 <h2><a href="#Functions">Functions</a></h2>
 <table class="function_list">
 	<tr>
-	<td class="name" nowrap><a href="#ITextureAtlas:getSortedNames">ITextureAtlas:getSortedNames&nbsp;(prefix)</a></td>
+	<td class="name" nowrap><a href="#getSortedNames">getSortedNames (prefix)</a></td>
 	<td class="summary">Returns all the texture names that begin with "prefix", sorted alphabetically.</td>
 	</tr>
 	<tr>
-	<td class="name" nowrap><a href="#ITextureAtlas:getNumOfTextures">ITextureAtlas:getNumOfTextures&nbsp;(prefix)</a></td>
+	<td class="name" nowrap><a href="#getNumOfTextures">getNumOfTextures (prefix)</a></td>
 	<td class="summary">Returns the number of textures with a name that starts with prefix.</td>
 	</tr>
 	<tr>
-	<td class="name" nowrap><a href="#ITextureAtlas:getTexture">ITextureAtlas:getTexture&nbsp;(name)</a></td>
+	<td class="name" nowrap><a href="#getTexture">getTexture (name)</a></td>
 	<td class="summary">Returns a texture with a given name</td>
 	</tr>
 	<tr>
-	<td class="name" nowrap><a href="#ITextureAtlas:getTextures">ITextureAtlas:getTextures&nbsp;(prefix)</a></td>
+	<td class="name" nowrap><a href="#getTextures">getTextures (prefix)</a></td>
 	<td class="summary">Returns all the textures that begin with "prefix", sorted alphabetically.</td>
 	</tr>
 </table>
@@ -143,17 +144,21 @@ A texture atlas class must provide methdods to iterate over texture list.</p>
     <h2><a name="Functions"></a>Functions</h2>
     <dl class="function">
     <dt>
-    <a name = "ITextureAtlas:getSortedNames"></a>
-    <strong>ITextureAtlas:getSortedNames&nbsp;(prefix)</strong>
+    <a name = "getSortedNames"></a>
+    <strong>getSortedNames (prefix)</strong>
     </dt>
     <dd>
     Returns all the texture names that begin with "prefix", sorted alphabetically.
+
 If no prefix is provided it returns all the names
+
+
 
     <h3>Parameters:</h3>
     <ul>
         <li><span class="parameter">prefix</span>
-         optional, prefix to select texture names</li>
+         optional, prefix to select texture names
+        </li>
     </ul>
 
     <h3>Returns:</h3>
@@ -167,17 +172,21 @@ If no prefix is provided it returns all the names
 
 </dd>
     <dt>
-    <a name = "ITextureAtlas:getNumOfTextures"></a>
-    <strong>ITextureAtlas:getNumOfTextures&nbsp;(prefix)</strong>
+    <a name = "getNumOfTextures"></a>
+    <strong>getNumOfTextures (prefix)</strong>
     </dt>
     <dd>
     Returns the number of textures with a name that starts with prefix.
+
 If no prefix is provided it returns the number of all the textures.
+
+
 
     <h3>Parameters:</h3>
     <ul>
         <li><span class="parameter">prefix</span>
-         optional, prefix to select region/texture names</li>
+         optional, prefix to select region/texture names
+        </li>
     </ul>
 
     <h3>Returns:</h3>
@@ -191,16 +200,18 @@ If no prefix is provided it returns the number of all the textures.
 
 </dd>
     <dt>
-    <a name = "ITextureAtlas:getTexture"></a>
-    <strong>ITextureAtlas:getTexture&nbsp;(name)</strong>
+    <a name = "getTexture"></a>
+    <strong>getTexture (name)</strong>
     </dt>
     <dd>
     Returns a texture with a given name
 
+
     <h3>Parameters:</h3>
     <ul>
         <li><span class="parameter">name</span>
-         the name of the texture</li>
+         the name of the texture
+        </li>
     </ul>
 
     <h3>Returns:</h3>
@@ -214,17 +225,21 @@ If no prefix is provided it returns the number of all the textures.
 
 </dd>
     <dt>
-    <a name = "ITextureAtlas:getTextures"></a>
-    <strong>ITextureAtlas:getTextures&nbsp;(prefix)</strong>
+    <a name = "getTextures"></a>
+    <strong>getTextures (prefix)</strong>
     </dt>
     <dd>
     Returns all the textures that begin with "prefix", sorted alphabetically.
+
 If no prefix is provided it returns all the textures.
+
+
 
     <h3>Parameters:</h3>
     <ul>
         <li><span class="parameter">prefix</span>
-         optional, prefix to select region names</li>
+         optional, prefix to select region names
+        </li>
     </ul>
 
     <h3>Returns:</h3>
@@ -243,7 +258,7 @@ If no prefix is provided it returns all the textures.
 </div> <!-- id="content" -->
 </div> <!-- id="main" -->
 <div id="about">
-<i>generated by <a href="http://github.com/stevedonovan/LDoc">LDoc 1.3.11</a></i>
+<i>generated by <a href="http://github.com/stevedonovan/LDoc">LDoc 1.4.2</a></i>
 </div> <!-- id="about" -->
 </div> <!-- id="container" -->
 </body>

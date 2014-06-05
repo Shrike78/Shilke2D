@@ -37,7 +37,7 @@
 
 
 <h2>Modules</h2>
-<ul>
+<ul class="$(kind=='Topics' and '' or 'nowrap'">
   <li><a href="../modules/Core.Assets.html">Core.Assets</a></li>
   <li><a href="../modules/Core.Event.html">Core.Event</a></li>
   <li><a href="../modules/Core.EventDispatcher.html">Core.EventDispatcher</a></li>
@@ -60,6 +60,7 @@
   <li><a href="../modules/Display.Stage.html">Display.Stage</a></li>
   <li><a href="../modules/Display.TextField.html">Display.TextField</a></li>
   <li><a href="../modules/Display.TileMap.html">Display.TileMap</a></li>
+  <li><a href="../modules/include.html">include</a></li>
   <li><a href="../modules/Texture.ITextureAtlas.html">Texture.ITextureAtlas</a></li>
   <li><a href="../modules/Texture.SubTexture.html">Texture.SubTexture</a></li>
   <li><a href="../modules/Texture.Texture.html">Texture.Texture</a></li>
@@ -87,9 +88,9 @@
   <li><a href="../modules/Utils.CollisionKit.html">Utils.CollisionKit</a></li>
   <li><a href="../modules/Utils.Color.html">Utils.Color</a></li>
   <li><a href="../modules/Utils.Coroutines.html">Utils.Coroutines</a></li>
-  <li><a href="../modules/Utils.IO.html">Utils.IO</a></li>
   <li><a href="../modules/Utils.IniFile.html">Utils.IniFile</a></li>
   <li><a href="../modules/Utils.IniParser.html">Utils.IniParser</a></li>
+  <li><a href="../modules/Utils.IO.html">Utils.IO</a></li>
   <li><a href="../modules/Utils.Log.html">Utils.Log</a></li>
   <li><a href="../modules/Utils.Math.html">Utils.Math</a></li>
   <li><a href="../modules/Utils.PerformanceTimer.html">Utils.PerformanceTimer</a></li>
@@ -102,7 +103,6 @@
   <li><a href="../modules/Utils.Vector.html">Utils.Vector</a></li>
   <li><a href="../modules/Utils.XmlNode.html">Utils.XmlNode</a></li>
   <li><a href="../modules/Utils.XmlParser.html">Utils.XmlParser</a></li>
-  <li><a href="../modules/include.html">include</a></li>
 </ul>
 
 </div>
@@ -110,75 +110,107 @@
 <div id="content">
 
 <h1>Module <code>Display.MovieClip</code></h1>
-
 <p>A MovieClip is a simple way to display an animation depicted by a list
+
 of textures.</p>
 <p>
-<p>It inherits from Image and implements IAnimatable interface.
-<p>Pass the frames of the movie in a vector of textures to
+
+
+
+It inherits from Image and implements IAnimatable interface.
+
+
+
+Pass the frames of the movie in a vector of textures to
+
 the constructor. The movie clip will have the width and height of the
+
 first frame. If you group your frames with the help of a texture atlas
+
 (which is recommended), use the "getTextures" method of the atlas to
+
 receive the textures in the correct (alphabetic) order.
-<p>It's possible to specify the desired framerate via the constructor.
+
+
+
+It's possible to specify the desired framerate via the constructor.
+
+
 
 The methods "play" and "pause" control playback of the movie.
+
 The "play" method accept a startFrame value. by default the
+
 animation start at frame 1
-<p>By default an animation is played once. It's possible to set a
+
+
+
+By default an animation is played once. It's possible to set a
+
 repeatCount value to increase the number of repetition.
+
 A negative repeatCount means infinite loops.
-<p>An Event of type Event.COMPLETED is raised when the movie
+
+
+
+An Event of type Event.COMPLETED is raised when the movie
+
 finished playback of a single iteration.
-<p>The frame list can be inverted calling the "invertFrames" method</p>
+
+
+
+The frame list can be inverted calling the "invertFrames" method
+</p>
 
 
 <h2><a href="#Functions">Functions</a></h2>
 <table class="function_list">
 	<tr>
-	<td class="name" nowrap><a href="#MovieClip:init">MovieClip:init&nbsp;(textures, fps, pivotMode)</a></td>
+	<td class="name" nowrap><a href="#init">init (textures, fps, pivotMode)</a></td>
 	<td class="summary">Init requires a list of textures, fps and pivotMode</td>
 	</tr>
 	<tr>
-	<td class="name" nowrap><a href="#MovieClip:getNumFrames">MovieClip:getNumFrames&nbsp;()</a></td>
+	<td class="name" nowrap><a href="#getNumFrames">getNumFrames ()</a></td>
 	<td class="summary">Returns the number of frames handled by the animation</td>
 	</tr>
 	<tr>
-	<td class="name" nowrap><a href="#MovieClip:getCurrentFrame">MovieClip:getCurrentFrame&nbsp;()</a></td>
+	<td class="name" nowrap><a href="#getCurrentFrame">getCurrentFrame ()</a></td>
 	<td class="summary">Returns the number of the current displayed frame</td>
 	</tr>
 	<tr>
-	<td class="name" nowrap><a href="#MovieClip:play">MovieClip:play&nbsp;(startFrame, repeatCount)</a></td>
+	<td class="name" nowrap><a href="#play">play (startFrame, repeatCount)</a></td>
 	<td class="summary">Starts the animation</td>
 	</tr>
 	<tr>
-	<td class="name" nowrap><a href="#MovieClip:invertFrames">MovieClip:invertFrames&nbsp;()</a></td>
+	<td class="name" nowrap><a href="#invertFrames">invertFrames ()</a></td>
 	<td class="summary">Inverts the animation frame
+
 can be done only when the animation is not playing, else does nothing</td>
 	</tr>
 	<tr>
-	<td class="name" nowrap><a href="#MovieClip:setRepeatCount">MovieClip:setRepeatCount&nbsp;(repeatCount)</a></td>
+	<td class="name" nowrap><a href="#setRepeatCount">setRepeatCount (repeatCount)</a></td>
 	<td class="summary">Sets the repeatCount for this animation</td>
 	</tr>
 	<tr>
-	<td class="name" nowrap><a href="#MovieClip:getRepeatCount">MovieClip:getRepeatCount&nbsp;()</a></td>
+	<td class="name" nowrap><a href="#getRepeatCount">getRepeatCount ()</a></td>
 	<td class="summary">Gets the repeatCount for this animation</td>
 	</tr>
 	<tr>
-	<td class="name" nowrap><a href="#MovieClip:setPause">MovieClip:setPause&nbsp;(enabled)</a></td>
+	<td class="name" nowrap><a href="#setPause">setPause (enabled)</a></td>
 	<td class="summary">Pause / unpause the animation in pause</td>
 	</tr>
 	<tr>
-	<td class="name" nowrap><a href="#MovieClip:isPaused">MovieClip:isPaused&nbsp;()</a></td>
+	<td class="name" nowrap><a href="#isPaused">isPaused ()</a></td>
 	<td class="summary">Get the pause status
+
 return boolean if the animation is paused</td>
 	</tr>
 	<tr>
-	<td class="name" nowrap><a href="#MovieClip:stop">MovieClip:stop&nbsp;()</a></td>
+	<td class="name" nowrap><a href="#stop">stop ()</a></td>
 	<td class="summary">Stops the current animation and reset timing infos</td>
 	</tr>
 	<tr>
-	<td class="name" nowrap><a href="#MovieClip:advanceTime">MovieClip:advanceTime&nbsp;(deltaTime)</a></td>
+	<td class="name" nowrap><a href="#advanceTime">advanceTime (deltaTime)</a></td>
 	<td class="summary">IAnimatable interface implementation.</td>
 	</tr>
 </table>
@@ -190,20 +222,24 @@ return boolean if the animation is paused</td>
     <h2><a name="Functions"></a>Functions</h2>
     <dl class="function">
     <dt>
-    <a name = "MovieClip:init"></a>
-    <strong>MovieClip:init&nbsp;(textures, fps, pivotMode)</strong>
+    <a name = "init"></a>
+    <strong>init (textures, fps, pivotMode)</strong>
     </dt>
     <dd>
     Init requires a list of textures, fps and pivotMode
 
+
     <h3>Parameters:</h3>
     <ul>
         <li><span class="parameter">textures</span>
-         a list of textures that rapresents the frames of the animation</li>
+         a list of textures that rapresents the frames of the animation
+        </li>
         <li><span class="parameter">fps</span>
-         the animation fps value. If nil, default is 12</li>
+         the animation fps value. If nil, default is 12
+        </li>
         <li><span class="parameter">pivotMode</span>
-         default value is CENTER</li>
+         default value is CENTER
+        </li>
     </ul>
 
 
@@ -212,11 +248,12 @@ return boolean if the animation is paused</td>
 
 </dd>
     <dt>
-    <a name = "MovieClip:getNumFrames"></a>
-    <strong>MovieClip:getNumFrames&nbsp;()</strong>
+    <a name = "getNumFrames"></a>
+    <strong>getNumFrames ()</strong>
     </dt>
     <dd>
     Returns the number of frames handled by the animation
+
 
 
     <h3>Returns:</h3>
@@ -230,11 +267,12 @@ return boolean if the animation is paused</td>
 
 </dd>
     <dt>
-    <a name = "MovieClip:getCurrentFrame"></a>
-    <strong>MovieClip:getCurrentFrame&nbsp;()</strong>
+    <a name = "getCurrentFrame"></a>
+    <strong>getCurrentFrame ()</strong>
     </dt>
     <dd>
     Returns the number of the current displayed frame
+
 
 
     <h3>Returns:</h3>
@@ -248,18 +286,21 @@ return boolean if the animation is paused</td>
 
 </dd>
     <dt>
-    <a name = "MovieClip:play"></a>
-    <strong>MovieClip:play&nbsp;(startFrame, repeatCount)</strong>
+    <a name = "play"></a>
+    <strong>play (startFrame, repeatCount)</strong>
     </dt>
     <dd>
     Starts the animation
 
+
     <h3>Parameters:</h3>
     <ul>
         <li><span class="parameter">startFrame</span>
-         the frame where to begin with the animation. Default is 1</li>
+         the frame where to begin with the animation. Default is 1
+        </li>
         <li><span class="parameter">repeatCount</span>
-         the number of iteration. Default is 1. repeatCount <= 0 means infinite loop.</li>
+         the number of iteration. Default is 1. repeatCount <= 0 means infinite loop.
+        </li>
     </ul>
 
 
@@ -268,11 +309,12 @@ return boolean if the animation is paused</td>
 
 </dd>
     <dt>
-    <a name = "MovieClip:invertFrames"></a>
-    <strong>MovieClip:invertFrames&nbsp;()</strong>
+    <a name = "invertFrames"></a>
+    <strong>invertFrames ()</strong>
     </dt>
     <dd>
     Inverts the animation frame
+
 can be done only when the animation is not playing, else does nothing
 
 
@@ -280,18 +322,21 @@ can be done only when the animation is not playing, else does nothing
 
 
 
+
 </dd>
     <dt>
-    <a name = "MovieClip:setRepeatCount"></a>
-    <strong>MovieClip:setRepeatCount&nbsp;(repeatCount)</strong>
+    <a name = "setRepeatCount"></a>
+    <strong>setRepeatCount (repeatCount)</strong>
     </dt>
     <dd>
     Sets the repeatCount for this animation
 
+
     <h3>Parameters:</h3>
     <ul>
         <li><span class="parameter">repeatCount</span>
-         the number of iteration. repeatCount <= 0 means infinite loop.</li>
+         the number of iteration. repeatCount <= 0 means infinite loop.
+        </li>
     </ul>
 
 
@@ -300,11 +345,12 @@ can be done only when the animation is not playing, else does nothing
 
 </dd>
     <dt>
-    <a name = "MovieClip:getRepeatCount"></a>
-    <strong>MovieClip:getRepeatCount&nbsp;()</strong>
+    <a name = "getRepeatCount"></a>
+    <strong>getRepeatCount ()</strong>
     </dt>
     <dd>
     Gets the repeatCount for this animation
+
 
 
     <h3>Returns:</h3>
@@ -318,16 +364,18 @@ can be done only when the animation is not playing, else does nothing
 
 </dd>
     <dt>
-    <a name = "MovieClip:setPause"></a>
-    <strong>MovieClip:setPause&nbsp;(enabled)</strong>
+    <a name = "setPause"></a>
+    <strong>setPause (enabled)</strong>
     </dt>
     <dd>
     Pause / unpause the animation in pause
 
+
     <h3>Parameters:</h3>
     <ul>
         <li><span class="parameter">enabled</span>
-         set / unset pause status. Has no effects if the animation is stopped.</li>
+         set / unset pause status. Has no effects if the animation is stopped.
+        </li>
     </ul>
 
 
@@ -336,12 +384,14 @@ can be done only when the animation is not playing, else does nothing
 
 </dd>
     <dt>
-    <a name = "MovieClip:isPaused"></a>
-    <strong>MovieClip:isPaused&nbsp;()</strong>
+    <a name = "isPaused"></a>
+    <strong>isPaused ()</strong>
     </dt>
     <dd>
     Get the pause status
+
 return boolean if the animation is paused
+
 
 
 
@@ -350,8 +400,8 @@ return boolean if the animation is paused
 
 </dd>
     <dt>
-    <a name = "MovieClip:stop"></a>
-    <strong>MovieClip:stop&nbsp;()</strong>
+    <a name = "stop"></a>
+    <strong>stop ()</strong>
     </dt>
     <dd>
     Stops the current animation and reset timing infos
@@ -361,18 +411,21 @@ return boolean if the animation is paused
 
 
 
+
 </dd>
     <dt>
-    <a name = "MovieClip:advanceTime"></a>
-    <strong>MovieClip:advanceTime&nbsp;(deltaTime)</strong>
+    <a name = "advanceTime"></a>
+    <strong>advanceTime (deltaTime)</strong>
     </dt>
     <dd>
     IAnimatable interface implementation.
 
+
     <h3>Parameters:</h3>
     <ul>
         <li><span class="parameter">deltaTime</span>
-         millisec elapsed since last frame</li>
+         millisec elapsed since last frame
+        </li>
     </ul>
 
 
@@ -386,7 +439,7 @@ return boolean if the animation is paused
 </div> <!-- id="content" -->
 </div> <!-- id="main" -->
 <div id="about">
-<i>generated by <a href="http://github.com/stevedonovan/LDoc">LDoc 1.3.11</a></i>
+<i>generated by <a href="http://github.com/stevedonovan/LDoc">LDoc 1.4.2</a></i>
 </div> <!-- id="about" -->
 </div> <!-- id="container" -->
 </body>

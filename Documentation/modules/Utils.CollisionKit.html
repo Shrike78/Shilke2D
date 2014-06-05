@@ -37,7 +37,7 @@
 
 
 <h2>Modules</h2>
-<ul>
+<ul class="$(kind=='Topics' and '' or 'nowrap'">
   <li><a href="../modules/Core.Assets.html">Core.Assets</a></li>
   <li><a href="../modules/Core.Event.html">Core.Event</a></li>
   <li><a href="../modules/Core.EventDispatcher.html">Core.EventDispatcher</a></li>
@@ -60,6 +60,7 @@
   <li><a href="../modules/Display.Stage.html">Display.Stage</a></li>
   <li><a href="../modules/Display.TextField.html">Display.TextField</a></li>
   <li><a href="../modules/Display.TileMap.html">Display.TileMap</a></li>
+  <li><a href="../modules/include.html">include</a></li>
   <li><a href="../modules/Texture.ITextureAtlas.html">Texture.ITextureAtlas</a></li>
   <li><a href="../modules/Texture.SubTexture.html">Texture.SubTexture</a></li>
   <li><a href="../modules/Texture.Texture.html">Texture.Texture</a></li>
@@ -87,9 +88,9 @@
   <li><strong>Utils.CollisionKit</strong></li>
   <li><a href="../modules/Utils.Color.html">Utils.Color</a></li>
   <li><a href="../modules/Utils.Coroutines.html">Utils.Coroutines</a></li>
-  <li><a href="../modules/Utils.IO.html">Utils.IO</a></li>
   <li><a href="../modules/Utils.IniFile.html">Utils.IniFile</a></li>
   <li><a href="../modules/Utils.IniParser.html">Utils.IniParser</a></li>
+  <li><a href="../modules/Utils.IO.html">Utils.IO</a></li>
   <li><a href="../modules/Utils.Log.html">Utils.Log</a></li>
   <li><a href="../modules/Utils.Math.html">Utils.Math</a></li>
   <li><a href="../modules/Utils.PerformanceTimer.html">Utils.PerformanceTimer</a></li>
@@ -102,7 +103,6 @@
   <li><a href="../modules/Utils.Vector.html">Utils.Vector</a></li>
   <li><a href="../modules/Utils.XmlNode.html">Utils.XmlNode</a></li>
   <li><a href="../modules/Utils.XmlParser.html">Utils.XmlParser</a></li>
-  <li><a href="../modules/include.html">include</a></li>
 </ul>
 
 </div>
@@ -110,21 +110,28 @@
 <div id="content">
 
 <h1>Module <code>Utils.CollisionKit</code></h1>
-
 <p>Helper for image collision detection.</p>
 <p>
-It's based on flash functions logic.</p>
+
+It's based on flash functions logic.
+</p>
 
 
 <h2><a href="#Functions">Functions</a></h2>
 <table class="function_list">
 	<tr>
-	<td class="name" nowrap><a href="#imageHitTest">imageHitTest&nbsp;(i1, p1, a1, i2, p2, a2)</a></td>
+	<td class="name" nowrap><a href="#imageHitTest">imageHitTest (i1, p1, a1, i2, p2, a2)</a></td>
 	<td class="summary">Checks pixel perfect overlap of 2 raw images (MOAIImage).</td>
 	</tr>
 	<tr>
-	<td class="name" nowrap><a href="#imageHitTestEx">imageHitTestEx&nbsp;(i1, p1, a1, i2, p2, a2, rect1, rect2, rot1, rot2)</a></td>
-	<td class="summary">Checks pixel perfect overlap of 2 images</td>
+	<td class="name" nowrap><a href="#imageHitTestEx">imageHitTestEx (i1, p1, a1, i2, p2, a2, rect1, rect2, rot1, rot2)</a></td>
+	<td class="summary">Checks pixel perfect overlap of 2 images
+
+
+
+Depending on __USE_SIMULATION_COORDS__ the point 0,0 of the image is considered
+
+the top or the bottom left point</td>
 	</tr>
 </table>
 
@@ -136,28 +143,41 @@ It's based on flash functions logic.</p>
     <dl class="function">
     <dt>
     <a name = "imageHitTest"></a>
-    <strong>imageHitTest&nbsp;(i1, p1, a1, i2, p2, a2)</strong>
+    <strong>imageHitTest (i1, p1, a1, i2, p2, a2)</strong>
     </dt>
     <dd>
     Checks pixel perfect overlap of 2 raw images (MOAIImage).
-<p>Depending on __USE_SIMULATION_COORDS__ the point 0,0 of the image is considered
+
+
+
+Depending on __USE_SIMULATION_COORDS__ the point 0,0 of the image is considered
+
 the top or the bottom left point
+
+
+
 
 
     <h3>Parameters:</h3>
     <ul>
         <li><span class="parameter">i1</span>
-         image 1</li>
+         image 1
+        </li>
         <li><span class="parameter">p1</span>
-         top/bottom left position (vec2) of image1</li>
+         top/bottom left position (vec2) of image1
+        </li>
         <li><span class="parameter">a1</span>
-         alpha treshold to consider image1 pixel transparent</li>
+         alpha treshold to consider image1 pixel transparent
+        </li>
         <li><span class="parameter">i2</span>
-         image 2</li>
+         image 2
+        </li>
         <li><span class="parameter">p2</span>
-         top/bottom left position (vec2) of image2</li>
+         top/bottom left position (vec2) of image2
+        </li>
         <li><span class="parameter">a2</span>
-         alpha treshold to consider image2 pixel transparent</li>
+         alpha treshold to consider image2 pixel transparent
+        </li>
     </ul>
 
 
@@ -167,35 +187,50 @@ the top or the bottom left point
 </dd>
     <dt>
     <a name = "imageHitTestEx"></a>
-    <strong>imageHitTestEx&nbsp;(i1, p1, a1, i2, p2, a2, rect1, rect2, rot1, rot2)</strong>
+    <strong>imageHitTestEx (i1, p1, a1, i2, p2, a2, rect1, rect2, rot1, rot2)</strong>
     </dt>
     <dd>
-    Checks pixel perfect overlap of 2 images Depending on __USE_SIMULATION_COORDS__ the point 0,0 of the image is considered
+    Checks pixel perfect overlap of 2 images
+
+
+
+Depending on __USE_SIMULATION_COORDS__ the point 0,0 of the image is considered
+
 the top or the bottom left point
 
 
     <h3>Parameters:</h3>
     <ul>
         <li><span class="parameter">i1</span>
-         image 1</li>
+         image 1
+        </li>
         <li><span class="parameter">p1</span>
-         top/bottom left position (vec2) of image1</li>
+         top/bottom left position (vec2) of image1
+        </li>
         <li><span class="parameter">a1</span>
-         alpha treshold to consider image1 pixel transparent</li>
+         alpha treshold to consider image1 pixel transparent
+        </li>
         <li><span class="parameter">i2</span>
-         image 2</li>
+         image 2
+        </li>
         <li><span class="parameter">p2</span>
-         top/bottom left position (vec2) of image2</li>
+         top/bottom left position (vec2) of image2
+        </li>
         <li><span class="parameter">a2</span>
-         alpha treshold to consider image2 pixel transparent</li>
+         alpha treshold to consider image2 pixel transparent
+        </li>
         <li><span class="parameter">rect1</span>
-         (optional) can define a sub region over image1 (position and size)</li>
+         (optional) can define a sub region over image1 (position and size)
+        </li>
         <li><span class="parameter">rect2</span>
-         (optional) can define a sub region over image2 (position and size)</li>
+         (optional) can define a sub region over image2 (position and size)
+        </li>
         <li><span class="parameter">rot1</span>
-         (optional) if true rect1 must be considered rotated 90* anticlock wise</li>
+         (optional) if true rect1 must be considered rotated 90* anticlock wise
+        </li>
         <li><span class="parameter">rot2</span>
-         (optional) if true rect2 must be considered rotated 90* anticlock wise</li>
+         (optional) if true rect2 must be considered rotated 90* anticlock wise
+        </li>
     </ul>
 
 
@@ -209,7 +244,7 @@ the top or the bottom left point
 </div> <!-- id="content" -->
 </div> <!-- id="main" -->
 <div id="about">
-<i>generated by <a href="http://github.com/stevedonovan/LDoc">LDoc 1.3.11</a></i>
+<i>generated by <a href="http://github.com/stevedonovan/LDoc">LDoc 1.4.2</a></i>
 </div> <!-- id="about" -->
 </div> <!-- id="container" -->
 </body>

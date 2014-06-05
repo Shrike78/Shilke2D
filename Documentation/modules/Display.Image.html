@@ -37,7 +37,7 @@
 
 
 <h2>Modules</h2>
-<ul>
+<ul class="$(kind=='Topics' and '' or 'nowrap'">
   <li><a href="../modules/Core.Assets.html">Core.Assets</a></li>
   <li><a href="../modules/Core.Event.html">Core.Event</a></li>
   <li><a href="../modules/Core.EventDispatcher.html">Core.EventDispatcher</a></li>
@@ -60,6 +60,7 @@
   <li><a href="../modules/Display.Stage.html">Display.Stage</a></li>
   <li><a href="../modules/Display.TextField.html">Display.TextField</a></li>
   <li><a href="../modules/Display.TileMap.html">Display.TileMap</a></li>
+  <li><a href="../modules/include.html">include</a></li>
   <li><a href="../modules/Texture.ITextureAtlas.html">Texture.ITextureAtlas</a></li>
   <li><a href="../modules/Texture.SubTexture.html">Texture.SubTexture</a></li>
   <li><a href="../modules/Texture.Texture.html">Texture.Texture</a></li>
@@ -87,9 +88,9 @@
   <li><a href="../modules/Utils.CollisionKit.html">Utils.CollisionKit</a></li>
   <li><a href="../modules/Utils.Color.html">Utils.Color</a></li>
   <li><a href="../modules/Utils.Coroutines.html">Utils.Coroutines</a></li>
-  <li><a href="../modules/Utils.IO.html">Utils.IO</a></li>
   <li><a href="../modules/Utils.IniFile.html">Utils.IniFile</a></li>
   <li><a href="../modules/Utils.IniParser.html">Utils.IniParser</a></li>
+  <li><a href="../modules/Utils.IO.html">Utils.IO</a></li>
   <li><a href="../modules/Utils.Log.html">Utils.Log</a></li>
   <li><a href="../modules/Utils.Math.html">Utils.Math</a></li>
   <li><a href="../modules/Utils.PerformanceTimer.html">Utils.PerformanceTimer</a></li>
@@ -102,7 +103,6 @@
   <li><a href="../modules/Utils.Vector.html">Utils.Vector</a></li>
   <li><a href="../modules/Utils.XmlNode.html">Utils.XmlNode</a></li>
   <li><a href="../modules/Utils.XmlParser.html">Utils.XmlParser</a></li>
-  <li><a href="../modules/include.html">include</a></li>
 </ul>
 
 </div>
@@ -110,34 +110,37 @@
 <div id="content">
 
 <h1>Module <code>Display.Image</code></h1>
-
 <p>An Image is the Shilke2D equivalent of Flash's Bitmap class.</p>
 <p>
+
 Instead of BitmapData, Shilke2D uses textures to represent the
-pixels of an image.</p>
+
+pixels of an image.
+</p>
 
 
 <h2><a href="#Functions">Functions</a></h2>
 <table class="function_list">
 	<tr>
-	<td class="name" nowrap><a href="#Image:init">Image:init&nbsp;(texture, pivotMode)</a></td>
+	<td class="name" nowrap><a href="#init">init (texture, pivotMode)</a></td>
 	<td class="summary">At init phase it's possible to set a texture and a pivotMode.</td>
 	</tr>
 	<tr>
-	<td class="name" nowrap><a href="#Image:setPixelPreciseHitTest">Image:setPixelPreciseHitTest&nbsp;(enabled, alphaLevel)</a></td>
+	<td class="name" nowrap><a href="#setPixelPreciseHitTest">setPixelPreciseHitTest (enabled, alphaLevel)</a></td>
 	<td class="summary">For images is possible to force the hitTest to be pixel precise on texture pixels</td>
 	</tr>
 	<tr>
-	<td class="name" nowrap><a href="#Image:hitTest">Image:hitTest&nbsp;(x, y, targetSpace, forTouch)</a></td>
+	<td class="name" nowrap><a href="#hitTest">hitTest (x, y, targetSpace, forTouch)</a></td>
 	<td class="summary">If pixelPrecise hitTest is enabled the hitTest is made on texture pixel alpha value
+
 else using normal point into box test</td>
 	</tr>
 	<tr>
-	<td class="name" nowrap><a href="#Image:setTexture">Image:setTexture&nbsp;(texture)</a></td>
+	<td class="name" nowrap><a href="#setTexture">setTexture (texture)</a></td>
 	<td class="summary">Set a new texture.</td>
 	</tr>
 	<tr>
-	<td class="name" nowrap><a href="#Image:getTexture">Image:getTexture&nbsp;()</a></td>
+	<td class="name" nowrap><a href="#getTexture">getTexture ()</a></td>
 	<td class="summary">Returns the current texture</td>
 	</tr>
 </table>
@@ -149,18 +152,21 @@ else using normal point into box test</td>
     <h2><a name="Functions"></a>Functions</h2>
     <dl class="function">
     <dt>
-    <a name = "Image:init"></a>
-    <strong>Image:init&nbsp;(texture, pivotMode)</strong>
+    <a name = "init"></a>
+    <strong>init (texture, pivotMode)</strong>
     </dt>
     <dd>
     At init phase it's possible to set a texture and a pivotMode.
 
+
     <h3>Parameters:</h3>
     <ul>
         <li><span class="parameter">texture</span>
-         a Texture or nil.</li>
+         a Texture or nil.
+        </li>
         <li><span class="parameter">pivotMode</span>
-         default pivotMode is CENTER</li>
+         default pivotMode is CENTER
+        </li>
     </ul>
 
 
@@ -169,19 +175,23 @@ else using normal point into box test</td>
 
 </dd>
     <dt>
-    <a name = "Image:setPixelPreciseHitTest"></a>
-    <strong>Image:setPixelPreciseHitTest&nbsp;(enabled, alphaLevel)</strong>
+    <a name = "setPixelPreciseHitTest"></a>
+    <strong>setPixelPreciseHitTest (enabled, alphaLevel)</strong>
     </dt>
     <dd>
     For images is possible to force the hitTest to be pixel precise on texture pixels
-pixel transparent. Default value is 0
+
 
     <h3>Parameters:</h3>
     <ul>
         <li><span class="parameter">enabled</span>
-         boolean enable/disable pixelPrecise hitTest</li>
+         boolean enable/disable pixelPrecise hitTest
+        </li>
         <li><span class="parameter">alphaLevel</span>
-         if prixelPrecise hitTest is enabled this value define the alpha treshold to consider</li>
+         if prixelPrecise hitTest is enabled this value define the alpha treshold to consider
+
+pixel transparent. Default value is 0
+        </li>
     </ul>
 
 
@@ -190,23 +200,29 @@ pixel transparent. Default value is 0
 
 </dd>
     <dt>
-    <a name = "Image:hitTest"></a>
-    <strong>Image:hitTest&nbsp;(x, y, targetSpace, forTouch)</strong>
+    <a name = "hitTest"></a>
+    <strong>hitTest (x, y, targetSpace, forTouch)</strong>
     </dt>
     <dd>
     If pixelPrecise hitTest is enabled the hitTest is made on texture pixel alpha value
+
 else using normal point into box test
+
 
     <h3>Parameters:</h3>
     <ul>
         <li><span class="parameter">x</span>
-         coordinate in targetSpace system</li>
+         coordinate in targetSpace system
+        </li>
         <li><span class="parameter">y</span>
-         coordinate in targetSpace system</li>
+         coordinate in targetSpace system
+        </li>
         <li><span class="parameter">targetSpace</span>
-         the referred coorindate system. If nil the top most container / stage</li>
+         the referred coorindate system. If nil the top most container / stage
+        </li>
         <li><span class="parameter">forTouch</span>
-         boolean. If true the check is done only for visible and touchable object</li>
+         boolean. If true the check is done only for visible and touchable object
+        </li>
     </ul>
 
     <h3>Returns:</h3>
@@ -220,21 +236,33 @@ else using normal point into box test
 
 </dd>
     <dt>
-    <a name = "Image:setTexture"></a>
-    <strong>Image:setTexture&nbsp;(texture)</strong>
+    <a name = "setTexture"></a>
+    <strong>setTexture (texture)</strong>
     </dt>
     <dd>
     Set a new texture.
-<p>If the new and the old textures shared the same textureData
+
+
+
+If the new and the old textures shared the same textureData
+
 the switch is just an uv switch, else a full texture switch
-<p>It would be preferrable that all the textures that can
+
+
+
+It would be preferrable that all the textures that can
+
 be assigned to a specific image belongs to the same
+
 texture atlas.
+
+
 
     <h3>Parameters:</h3>
     <ul>
         <li><span class="parameter">texture</span>
-         the new texture to be set for the image</li>
+         the new texture to be set for the image
+        </li>
     </ul>
 
 
@@ -243,11 +271,12 @@ texture atlas.
 
 </dd>
     <dt>
-    <a name = "Image:getTexture"></a>
-    <strong>Image:getTexture&nbsp;()</strong>
+    <a name = "getTexture"></a>
+    <strong>getTexture ()</strong>
     </dt>
     <dd>
     Returns the current texture
+
 
 
     <h3>Returns:</h3>
@@ -266,7 +295,7 @@ texture atlas.
 </div> <!-- id="content" -->
 </div> <!-- id="main" -->
 <div id="about">
-<i>generated by <a href="http://github.com/stevedonovan/LDoc">LDoc 1.3.11</a></i>
+<i>generated by <a href="http://github.com/stevedonovan/LDoc">LDoc 1.4.2</a></i>
 </div> <!-- id="about" -->
 </div> <!-- id="container" -->
 </body>

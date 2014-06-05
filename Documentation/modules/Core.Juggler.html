@@ -38,7 +38,7 @@
 
 
 <h2>Modules</h2>
-<ul>
+<ul class="$(kind=='Topics' and '' or 'nowrap'">
   <li><a href="../modules/Core.Assets.html">Core.Assets</a></li>
   <li><a href="../modules/Core.Event.html">Core.Event</a></li>
   <li><a href="../modules/Core.EventDispatcher.html">Core.EventDispatcher</a></li>
@@ -61,6 +61,7 @@
   <li><a href="../modules/Display.Stage.html">Display.Stage</a></li>
   <li><a href="../modules/Display.TextField.html">Display.TextField</a></li>
   <li><a href="../modules/Display.TileMap.html">Display.TileMap</a></li>
+  <li><a href="../modules/include.html">include</a></li>
   <li><a href="../modules/Texture.ITextureAtlas.html">Texture.ITextureAtlas</a></li>
   <li><a href="../modules/Texture.SubTexture.html">Texture.SubTexture</a></li>
   <li><a href="../modules/Texture.Texture.html">Texture.Texture</a></li>
@@ -88,9 +89,9 @@
   <li><a href="../modules/Utils.CollisionKit.html">Utils.CollisionKit</a></li>
   <li><a href="../modules/Utils.Color.html">Utils.Color</a></li>
   <li><a href="../modules/Utils.Coroutines.html">Utils.Coroutines</a></li>
-  <li><a href="../modules/Utils.IO.html">Utils.IO</a></li>
   <li><a href="../modules/Utils.IniFile.html">Utils.IniFile</a></li>
   <li><a href="../modules/Utils.IniParser.html">Utils.IniParser</a></li>
+  <li><a href="../modules/Utils.IO.html">Utils.IO</a></li>
   <li><a href="../modules/Utils.Log.html">Utils.Log</a></li>
   <li><a href="../modules/Utils.Math.html">Utils.Math</a></li>
   <li><a href="../modules/Utils.PerformanceTimer.html">Utils.PerformanceTimer</a></li>
@@ -103,7 +104,6 @@
   <li><a href="../modules/Utils.Vector.html">Utils.Vector</a></li>
   <li><a href="../modules/Utils.XmlNode.html">Utils.XmlNode</a></li>
   <li><a href="../modules/Utils.XmlParser.html">Utils.XmlParser</a></li>
-  <li><a href="../modules/include.html">include</a></li>
 </ul>
 
 </div>
@@ -111,49 +111,65 @@
 <div id="content">
 
 <h1>Module <code>Core.Juggler</code></h1>
-
 <p>A Juggler animates objects implementing IAnimatable interface.</p>
 <p>
-<p>A juggler is a simple object. It does no more than
+
+
+
+A juggler is a simple object. It does no more than
+
 saving a list of objects implementing "IAnimatable" and advancing
+
 their time if it is told to do so (by calling its own "advanceTime"
+
 method). When an animation is completed, it throws it away.
-<p>You can create juggler objects yourself, just as well. That way,
+
+
+
+You can create juggler objects yourself, just as well. That way,
+
 you can group your game into logical components that handle their
+
 animations independently. All you have to do is call the "advanceTime"
+
 method on your custom juggler once per frame.
-<p>Moreover the Juggler implements itself the IAnimatable interface,
-so a Juggler can be add to another Juggler. </p>
+
+
+
+Moreover the Juggler implements itself the IAnimatable interface,
+
+so a Juggler can be add to another Juggler.
+</p>
 
 
 <h2><a href="#Functions">Functions</a></h2>
 <table class="function_list">
 	<tr>
-	<td class="name" nowrap><a href="#Juggler:setPause">Juggler:setPause&nbsp;(paused)</a></td>
+	<td class="name" nowrap><a href="#setPause">setPause (paused)</a></td>
 	<td class="summary">Used to pause the current juggler execution.</td>
 	</tr>
 	<tr>
-	<td class="name" nowrap><a href="#Juggler:isPaused">Juggler:isPaused&nbsp;()</a></td>
+	<td class="name" nowrap><a href="#isPaused">isPaused ()</a></td>
 	<td class="summary">Return the current juggler pause state.</td>
 	</tr>
 	<tr>
-	<td class="name" nowrap><a href="#Juggler:advanceTime">Juggler:advanceTime&nbsp;(deltaTime)</a></td>
+	<td class="name" nowrap><a href="#advanceTime">advanceTime (deltaTime)</a></td>
 	<td class="summary">Advances the time of all the objects added to the juggler.</td>
 	</tr>
 	<tr>
-	<td class="name" nowrap><a href="#Juggler:add">Juggler:add&nbsp;(obj)</a></td>
+	<td class="name" nowrap><a href="#add">add (obj)</a></td>
 	<td class="summary">Add an IAnimatable object to the juggler.</td>
 	</tr>
 	<tr>
-	<td class="name" nowrap><a href="#Juggler:remove">Juggler:remove&nbsp;(obj)</a></td>
+	<td class="name" nowrap><a href="#remove">remove (obj)</a></td>
 	<td class="summary">Remove an object from the juggler.</td>
 	</tr>
 	<tr>
-	<td class="name" nowrap><a href="#Juggler:onRemoveEvent">Juggler:onRemoveEvent&nbsp;(event)</a></td>
+	<td class="name" nowrap><a href="#onRemoveEvent">onRemoveEvent (event)</a></td>
 	<td class="summary">Internal function.</td>
 	</tr>
 	<tr>
-	<td class="name" nowrap><a href="#Juggler:clear">Juggler:clear&nbsp;()</a></td>
+	<td class="name" nowrap><a href="#clear">clear ()</a></td>
 	<td class="summary">Remove all the objects from the juggler.</td>
 	</tr>
 </table>
@@ -172,17 +188,21 @@ so a Juggler can be add to another Juggler. </p>
     <h2><a name="Functions"></a>Functions</h2>
     <dl class="function">
     <dt>
-    <a name = "Juggler:setPause"></a>
-    <strong>Juggler:setPause&nbsp;(paused)</strong>
+    <a name = "setPause"></a>
+    <strong>setPause (paused)</strong>
     </dt>
     <dd>
     Used to pause the current juggler execution.
+
 When a juggler is paused also the execution of all the managed IAnimatable objects is paused
+
+
 
     <h3>Parameters:</h3>
     <ul>
         <li><span class="parameter">paused</span>
-         true/false to enable/disable the pause status</li>
+         true/false to enable/disable the pause status
+        </li>
     </ul>
 
     <h3>Returns:</h3>
@@ -196,11 +216,12 @@ When a juggler is paused also the execution of all the managed IAnimatable objec
 
 </dd>
     <dt>
-    <a name = "Juggler:isPaused"></a>
-    <strong>Juggler:isPaused&nbsp;()</strong>
+    <a name = "isPaused"></a>
+    <strong>isPaused ()</strong>
     </dt>
     <dd>
     Return the current juggler pause state.
+
 
 
     <h3>Returns:</h3>
@@ -214,59 +235,22 @@ When a juggler is paused also the execution of all the managed IAnimatable objec
 
 </dd>
     <dt>
-    <a name = "Juggler:advanceTime"></a>
-    <strong>Juggler:advanceTime&nbsp;(deltaTime)</strong>
+    <a name = "advanceTime"></a>
+    <strong>advanceTime (deltaTime)</strong>
     </dt>
     <dd>
     Advances the time of all the objects added to the juggler.
+
 After the animation phase is done, it checks for queued add/remove
+
 operations and executes them in the same request order.
+
+
 
     <h3>Parameters:</h3>
     <ul>
         <li><span class="parameter">deltaTime</span>
-         millisec elapsed since last call</li>
-    </ul>
-
-
-
-
-
-</dd>
-    <dt>
-    <a name = "Juggler:add"></a>
-    <strong>Juggler:add&nbsp;(obj)</strong>
-    </dt>
-    <dd>
-    Add an IAnimatable object to the juggler.
-If the juggler is playing (in advanceTime) the add is queued, if not
-the obj is added immediatly. If it's an eventDispatcher, the
-juggler register itself as a listener for the REMOVE_FROM_JUGGLER
-
-    <h3>Parameters:</h3>
-    <ul>
-        <li><span class="parameter">obj</span>
-         An object that implement the IAnimatable interface</li>
-    </ul>
-
-
-
-
-
-</dd>
-    <dt>
-    <a name = "Juggler:remove"></a>
-    <strong>Juggler:remove&nbsp;(obj)</strong>
-    </dt>
-    <dd>
-    Remove an object from the juggler.
-If the juggler is playing (in advanceTime) the remove is queued,
-if not the obj is removed immediatly. If it's an eventDispatcher,
-the juggler deregister itself as listener for the REMOVE_FROM_JUGGLER
-
-    <h3>Parameters:</h3>
-    <ul>
-        <li><span class="parameter">obj</span>
+         millisec elapsed since last call
         </li>
     </ul>
 
@@ -276,16 +260,74 @@ the juggler deregister itself as listener for the REMOVE_FROM_JUGGLER
 
 </dd>
     <dt>
-    <a name = "Juggler:onRemoveEvent"></a>
-    <strong>Juggler:onRemoveEvent&nbsp;(event)</strong>
+    <a name = "add"></a>
+    <strong>add (obj)</strong>
+    </dt>
+    <dd>
+    Add an IAnimatable object to the juggler.
+
+If the juggler is playing (in advanceTime) the add is queued, if not
+
+the obj is added immediatly. If it's an eventDispatcher, the
+
+juggler register itself as a listener for the REMOVE_FROM_JUGGLER
+
+
+
+    <h3>Parameters:</h3>
+    <ul>
+        <li><span class="parameter">obj</span>
+         An object that implement the IAnimatable interface
+        </li>
+    </ul>
+
+
+
+
+
+</dd>
+    <dt>
+    <a name = "remove"></a>
+    <strong>remove (obj)</strong>
+    </dt>
+    <dd>
+    Remove an object from the juggler.
+
+If the juggler is playing (in advanceTime) the remove is queued,
+
+if not the obj is removed immediatly. If it's an eventDispatcher,
+
+the juggler deregister itself as listener for the REMOVE_FROM_JUGGLER
+
+
+
+    <h3>Parameters:</h3>
+    <ul>
+        <li><span class="parameter">obj</span>
+
+        </li>
+    </ul>
+
+
+
+
+
+</dd>
+    <dt>
+    <a name = "onRemoveEvent"></a>
+    <strong>onRemoveEvent (event)</strong>
     </dt>
     <dd>
     Internal function.
+
 Called when a listened obj dispatch an Event.REMOVE_FROM_JUGGLER event
+
+
 
     <h3>Parameters:</h3>
     <ul>
         <li><span class="parameter">event</span>
+
         </li>
     </ul>
 
@@ -295,12 +337,15 @@ Called when a listened obj dispatch an Event.REMOVE_FROM_JUGGLER event
 
 </dd>
     <dt>
-    <a name = "Juggler:clear"></a>
-    <strong>Juggler:clear&nbsp;()</strong>
+    <a name = "clear"></a>
+    <strong>clear ()</strong>
     </dt>
     <dd>
     Remove all the objects from the juggler.
+
 If the juggler is playing (advaceTime) the removal of the objects will take place during the next frame
+
+
 
 
 
@@ -318,11 +363,14 @@ If the juggler is playing (advaceTime) the removal of the objects will take plac
     <dd>
     Used internally to handle pending operation scheduled while "playing"
 
+
     <h3>Fields:</h3>
     <ul>
         <li><span class="parameter">ADD</span>
+
         </li>
         <li><span class="parameter">REMOVE</span>
+
         </li>
     </ul>
 
@@ -337,7 +385,7 @@ If the juggler is playing (advaceTime) the removal of the objects will take plac
 </div> <!-- id="content" -->
 </div> <!-- id="main" -->
 <div id="about">
-<i>generated by <a href="http://github.com/stevedonovan/LDoc">LDoc 1.3.11</a></i>
+<i>generated by <a href="http://github.com/stevedonovan/LDoc">LDoc 1.4.2</a></i>
 </div> <!-- id="about" -->
 </div> <!-- id="container" -->
 </body>

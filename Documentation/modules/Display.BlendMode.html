@@ -39,7 +39,7 @@
 
 
 <h2>Modules</h2>
-<ul>
+<ul class="$(kind=='Topics' and '' or 'nowrap'">
   <li><a href="../modules/Core.Assets.html">Core.Assets</a></li>
   <li><a href="../modules/Core.Event.html">Core.Event</a></li>
   <li><a href="../modules/Core.EventDispatcher.html">Core.EventDispatcher</a></li>
@@ -62,6 +62,7 @@
   <li><a href="../modules/Display.Stage.html">Display.Stage</a></li>
   <li><a href="../modules/Display.TextField.html">Display.TextField</a></li>
   <li><a href="../modules/Display.TileMap.html">Display.TileMap</a></li>
+  <li><a href="../modules/include.html">include</a></li>
   <li><a href="../modules/Texture.ITextureAtlas.html">Texture.ITextureAtlas</a></li>
   <li><a href="../modules/Texture.SubTexture.html">Texture.SubTexture</a></li>
   <li><a href="../modules/Texture.Texture.html">Texture.Texture</a></li>
@@ -89,9 +90,9 @@
   <li><a href="../modules/Utils.CollisionKit.html">Utils.CollisionKit</a></li>
   <li><a href="../modules/Utils.Color.html">Utils.Color</a></li>
   <li><a href="../modules/Utils.Coroutines.html">Utils.Coroutines</a></li>
-  <li><a href="../modules/Utils.IO.html">Utils.IO</a></li>
   <li><a href="../modules/Utils.IniFile.html">Utils.IniFile</a></li>
   <li><a href="../modules/Utils.IniParser.html">Utils.IniParser</a></li>
+  <li><a href="../modules/Utils.IO.html">Utils.IO</a></li>
   <li><a href="../modules/Utils.Log.html">Utils.Log</a></li>
   <li><a href="../modules/Utils.Math.html">Utils.Math</a></li>
   <li><a href="../modules/Utils.PerformanceTimer.html">Utils.PerformanceTimer</a></li>
@@ -104,7 +105,6 @@
   <li><a href="../modules/Utils.Vector.html">Utils.Vector</a></li>
   <li><a href="../modules/Utils.XmlNode.html">Utils.XmlNode</a></li>
   <li><a href="../modules/Utils.XmlParser.html">Utils.XmlParser</a></li>
-  <li><a href="../modules/include.html">include</a></li>
 </ul>
 
 </div>
@@ -112,23 +112,39 @@
 <div id="content">
 
 <h1>Module <code>Display.BlendMode</code></h1>
-
 <p>BlendMode provides constant values for visual blend mode effects.</p>
 <p>
-<p>A blend mode is always defined by two blendFactor values.
+
+
+
+A blend mode is always defined by two blendFactor values.
+
 A blend factor represents a particular four-value vector that is multiplied with the source
+
 or destination color in the blending formula.
-<p>The default GL_FUNC_ADD blending equation formula is:
-<p>result = source * sourceFactor + destination * destinationFactor
-<p>In the formula, the source color is the output color of the pixel shader program.
+
+
+
+The default GL_FUNC_ADD blending equation formula is:
+
+
+
+result = source * sourceFactor + destination * destinationFactor
+
+
+
+In the formula, the source color is the output color of the pixel shader program.
+
 The destination color is the color that currently exists in the color buffer, as set by
-previous clear and draw operations.</p>
+
+previous clear and draw operations.
+</p>
 
 
 <h2><a href="#Functions">Functions</a></h2>
 <table class="function_list">
 	<tr>
-	<td class="name" nowrap><a href="#getBlendFactors">getBlendFactors&nbsp;(blendmode, pma)</a></td>
+	<td class="name" nowrap><a href="#getBlendFactors">getBlendFactors (blendmode, pma)</a></td>
 	<td class="summary">Returns blendfactors given blendmode enum</td>
 	</tr>
 </table>
@@ -137,6 +153,7 @@ previous clear and draw operations.</p>
 	<tr>
 	<td class="name" nowrap><a href="#BlendMode">BlendMode</a></td>
 	<td class="summary">BlendMode namespace contains enums for OpenGL blend factors and blend equations and
+
 also specific Shilke2D enums for typical blend modes</td>
 	</tr>
 </table>
@@ -161,6 +178,7 @@ also specific Shilke2D enums for typical blend modes</td>
 	<tr>
 	<td class="name" nowrap><a href="#SCREEN">SCREEN</a></td>
 	<td class="summary">Multiplies the complement (inverse) of the display object color with the complement of
+
  the background color, resulting in a bleaching effect.</td>
 	</tr>
 	<tr>
@@ -177,17 +195,20 @@ also specific Shilke2D enums for typical blend modes</td>
     <dl class="function">
     <dt>
     <a name = "getBlendFactors"></a>
-    <strong>getBlendFactors&nbsp;(blendmode, pma)</strong>
+    <strong>getBlendFactors (blendmode, pma)</strong>
     </dt>
     <dd>
     Returns blendfactors given blendmode enum
 
+
     <h3>Parameters:</h3>
     <ul>
         <li><span class="parameter">blendmode</span>
-         the enum blendmode needed.</li>
+         the enum blendmode needed.
+        </li>
         <li><span class="parameter">pma</span>
-         [optional] Used to select if with premultipied alpha or not. Default is true.</li>
+         [optional] Used to select if with premultipied alpha or not. Default is true.
+        </li>
     </ul>
 
     <h3>Returns:</h3>
@@ -211,37 +232,53 @@ also specific Shilke2D enums for typical blend modes</td>
     </dt>
     <dd>
     BlendMode namespace contains enums for OpenGL blend factors and blend equations and
+
 also specific Shilke2D enums for typical blend modes
+
 
     <h3>Fields:</h3>
     <ul>
         <li><span class="parameter">GL_FUNC_ADD</span>
+
         </li>
         <li><span class="parameter">GL_FUNC_SUBTRACT</span>
+
         </li>
         <li><span class="parameter">GL_FUNC_REVERSE_SUBTRACT</span>
+
         </li>
         <li><span class="parameter">GL_ONE</span>
+
         </li>
         <li><span class="parameter">GL_ZERO</span>
+
         </li>
         <li><span class="parameter">GL_DST_ALPHA</span>
+
         </li>
         <li><span class="parameter">GL_DST_COLOR</span>
+
         </li>
         <li><span class="parameter">GL_SRC_COLOR</span>
+
         </li>
         <li><span class="parameter">GL_ONE_MINUS_DST_ALPHA</span>
+
         </li>
         <li><span class="parameter">GL_ONE_MINUS_DST_COLOR</span>
+
         </li>
         <li><span class="parameter">GL_ONE_MINUS_SRC_ALPHA</span>
+
         </li>
         <li><span class="parameter">GL_ONE_MINUS_SRC_COLOR</span>
+
         </li>
         <li><span class="parameter">GL_SRC_ALPHA</span>
+
         </li>
         <li><span class="parameter">GL_SRC_ALPHA_SATURATE</span>
+
         </li>
     </ul>
 
@@ -265,6 +302,7 @@ also specific Shilke2D enums for typical blend modes
 
 
 
+
 </dd>
     <dt>
     <a name = "NORMAL"></a>
@@ -272,6 +310,7 @@ also specific Shilke2D enums for typical blend modes
     </dt>
     <dd>
     The display object appears in front of the background.
+
 
 
 
@@ -291,6 +330,7 @@ also specific Shilke2D enums for typical blend modes
 
 
 
+
 </dd>
     <dt>
     <a name = "MULTIPLY"></a>
@@ -304,6 +344,7 @@ also specific Shilke2D enums for typical blend modes
 
 
 
+
 </dd>
     <dt>
     <a name = "SCREEN"></a>
@@ -311,7 +352,9 @@ also specific Shilke2D enums for typical blend modes
     </dt>
     <dd>
     Multiplies the complement (inverse) of the display object color with the complement of
+
  the background color, resulting in a bleaching effect.
+
 
 
 
@@ -331,6 +374,7 @@ also specific Shilke2D enums for typical blend modes
 
 
 
+
 </dd>
 </dl>
 
@@ -338,7 +382,7 @@ also specific Shilke2D enums for typical blend modes
 </div> <!-- id="content" -->
 </div> <!-- id="main" -->
 <div id="about">
-<i>generated by <a href="http://github.com/stevedonovan/LDoc">LDoc 1.3.11</a></i>
+<i>generated by <a href="http://github.com/stevedonovan/LDoc">LDoc 1.4.2</a></i>
 </div> <!-- id="about" -->
 </div> <!-- id="container" -->
 </body>

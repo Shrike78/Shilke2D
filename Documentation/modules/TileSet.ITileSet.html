@@ -37,7 +37,7 @@
 
 
 <h2>Modules</h2>
-<ul>
+<ul class="$(kind=='Topics' and '' or 'nowrap'">
   <li><a href="../modules/Core.Assets.html">Core.Assets</a></li>
   <li><a href="../modules/Core.Event.html">Core.Event</a></li>
   <li><a href="../modules/Core.EventDispatcher.html">Core.EventDispatcher</a></li>
@@ -60,6 +60,7 @@
   <li><a href="../modules/Display.Stage.html">Display.Stage</a></li>
   <li><a href="../modules/Display.TextField.html">Display.TextField</a></li>
   <li><a href="../modules/Display.TileMap.html">Display.TileMap</a></li>
+  <li><a href="../modules/include.html">include</a></li>
   <li><a href="../modules/Texture.ITextureAtlas.html">Texture.ITextureAtlas</a></li>
   <li><a href="../modules/Texture.SubTexture.html">Texture.SubTexture</a></li>
   <li><a href="../modules/Texture.Texture.html">Texture.Texture</a></li>
@@ -87,9 +88,9 @@
   <li><a href="../modules/Utils.CollisionKit.html">Utils.CollisionKit</a></li>
   <li><a href="../modules/Utils.Color.html">Utils.Color</a></li>
   <li><a href="../modules/Utils.Coroutines.html">Utils.Coroutines</a></li>
-  <li><a href="../modules/Utils.IO.html">Utils.IO</a></li>
   <li><a href="../modules/Utils.IniFile.html">Utils.IniFile</a></li>
   <li><a href="../modules/Utils.IniParser.html">Utils.IniParser</a></li>
+  <li><a href="../modules/Utils.IO.html">Utils.IO</a></li>
   <li><a href="../modules/Utils.Log.html">Utils.Log</a></li>
   <li><a href="../modules/Utils.Math.html">Utils.Math</a></li>
   <li><a href="../modules/Utils.PerformanceTimer.html">Utils.PerformanceTimer</a></li>
@@ -102,7 +103,6 @@
   <li><a href="../modules/Utils.Vector.html">Utils.Vector</a></li>
   <li><a href="../modules/Utils.XmlNode.html">Utils.XmlNode</a></li>
   <li><a href="../modules/Utils.XmlParser.html">Utils.XmlParser</a></li>
-  <li><a href="../modules/include.html">include</a></li>
 </ul>
 
 </div>
@@ -110,78 +110,91 @@
 <div id="content">
 
 <h1>Module <code>TileSet.ITileSet</code></h1>
-
 <p>ITileset defines a common interface for all TileSet class types, giving implementation rules:
+
+
 
 - A TileSet is a collection of tiles built upon a texture set.</p>
 <p>
+
 - A TileSet can be made only of tiles of the same size.
+
 - A TileSets wrap MOAIGfxQuadDeck2D structure, binding each texture set source to a single
+
 quad deck.
+
 - ITileSet Implementations require a convesion logic between global ids (used by tilemaps)
+
 and a couple of MOAIGfxQuadDeck2D / QuadDeck ids.
-<p>The texture set can have multiple configuration. It's usually based on a
+
+
+
+The texture set can have multiple configuration. It's usually based on a
+
 single texture atlas but there're situation (i.e. if the number of tiles is huge
+
 or it's required to share a subset of tiles between different tilesets) that requires
-different atlases. </p>
+
+different atlases.
+</p>
 
 
 <h2><a href="#Functions">Functions</a></h2>
 <table class="function_list">
 	<tr>
-	<td class="name" nowrap><a href="#ITileSet:init">ITileSet:init&nbsp;(name, properties)</a></td>
+	<td class="name" nowrap><a href="#init">init (name, properties)</a></td>
 	<td class="summary">A TileSet can have a name and some properties</td>
 	</tr>
 	<tr>
-	<td class="name" nowrap><a href="#ITileSet:_getDeckInfoByGid">ITileSet:_getDeckInfoByGid&nbsp;(id)</a></td>
+	<td class="name" nowrap><a href="#_getDeckInfoByGid">_getDeckInfoByGid (id)</a></td>
 	<td class="summary">convert a global tileset id to a deck + deck id</td>
 	</tr>
 	<tr>
-	<td class="name" nowrap><a href="#ITileSet:_getGidByDeckInfo">ITileSet:_getGidByDeckInfo&nbsp;(deck, deckId)</a></td>
+	<td class="name" nowrap><a href="#_getGidByDeckInfo">_getGidByDeckInfo (deck, deckId)</a></td>
 	<td class="summary">convert a deck + deck id to a global tileset id</td>
 	</tr>
 	<tr>
-	<td class="name" nowrap><a href="#ITileSet:_hasDeck">ITileSet:_hasDeck&nbsp;(deck)</a></td>
+	<td class="name" nowrap><a href="#_hasDeck">_hasDeck (deck)</a></td>
 	<td class="summary">used to check if a deck is valid for a given tileset</td>
 	</tr>
 	<tr>
-	<td class="name" nowrap><a href="#ITileSet:getTileWidth">ITileSet:getTileWidth&nbsp;()</a></td>
+	<td class="name" nowrap><a href="#getTileWidth">getTileWidth ()</a></td>
 	<td class="summary">Returns the width of the tiles of the tileset</td>
 	</tr>
 	<tr>
-	<td class="name" nowrap><a href="#ITileSet:getTileHeight">ITileSet:getTileHeight&nbsp;()</a></td>
+	<td class="name" nowrap><a href="#getTileHeight">getTileHeight ()</a></td>
 	<td class="summary">Returns the height of the tiles of the tileset</td>
 	</tr>
 	<tr>
-	<td class="name" nowrap><a href="#ITileSet:getNumOfTiles">ITileSet:getNumOfTiles&nbsp;()</a></td>
+	<td class="name" nowrap><a href="#getNumOfTiles">getNumOfTiles ()</a></td>
 	<td class="summary">Returns the number of tiles of the tileset</td>
 	</tr>
 	<tr>
-	<td class="name" nowrap><a href="#ITileSet:getTile">ITileSet:getTile&nbsp;(id)</a></td>
+	<td class="name" nowrap><a href="#getTile">getTile (id)</a></td>
 	<td class="summary">Returns a tile given the tileset id</td>
 	</tr>
 	<tr>
-	<td class="name" nowrap><a href="#ITileSet:setName">ITileSet:setName&nbsp;(name)</a></td>
+	<td class="name" nowrap><a href="#setName">setName (name)</a></td>
 	<td class="summary">Sets te name of the tileset</td>
 	</tr>
 	<tr>
-	<td class="name" nowrap><a href="#ITileSet:getName">ITileSet:getName&nbsp;()</a></td>
+	<td class="name" nowrap><a href="#getName">getName ()</a></td>
 	<td class="summary">Gets te name of the tileset</td>
 	</tr>
 	<tr>
-	<td class="name" nowrap><a href="#ITileSet:setProperty">ITileSet:setProperty&nbsp;(name, value)</a></td>
+	<td class="name" nowrap><a href="#setProperty">setProperty (name, value)</a></td>
 	<td class="summary">Sets a property of the tileset</td>
 	</tr>
 	<tr>
-	<td class="name" nowrap><a href="#ITileSet:getProperty">ITileSet:getProperty&nbsp;(name)</a></td>
+	<td class="name" nowrap><a href="#getProperty">getProperty (name)</a></td>
 	<td class="summary">Gets a property of the tileset</td>
 	</tr>
 	<tr>
-	<td class="name" nowrap><a href="#ITileSet:setTileProperty">ITileSet:setTileProperty&nbsp;(id, name, value)</a></td>
+	<td class="name" nowrap><a href="#setTileProperty">setTileProperty (id, name, value)</a></td>
 	<td class="summary">Sets a property of a tile of the tileset</td>
 	</tr>
 	<tr>
-	<td class="name" nowrap><a href="#ITileSet:getTileProperty">ITileSet:getTileProperty&nbsp;(id, name)</a></td>
+	<td class="name" nowrap><a href="#getTileProperty">getTileProperty (id, name)</a></td>
 	<td class="summary">Gets a property of a tile of the tileset</td>
 	</tr>
 </table>
@@ -193,18 +206,21 @@ different atlases. </p>
     <h2><a name="Functions"></a>Functions</h2>
     <dl class="function">
     <dt>
-    <a name = "ITileSet:init"></a>
-    <strong>ITileSet:init&nbsp;(name, properties)</strong>
+    <a name = "init"></a>
+    <strong>init (name, properties)</strong>
     </dt>
     <dd>
     A TileSet can have a name and some properties
 
+
     <h3>Parameters:</h3>
     <ul>
         <li><span class="parameter">name</span>
-         the name of the tileset</li>
+         the name of the tileset
+        </li>
         <li><span class="parameter">properties</span>
-         the named properties of the tileset. Must be in a set of (key, values) form</li>
+         the named properties of the tileset. Must be in a set of (key, values) form
+        </li>
     </ul>
 
 
@@ -213,16 +229,18 @@ different atlases. </p>
 
 </dd>
     <dt>
-    <a name = "ITileSet:_getDeckInfoByGid"></a>
-    <strong>ITileSet:_getDeckInfoByGid&nbsp;(id)</strong>
+    <a name = "_getDeckInfoByGid"></a>
+    <strong>_getDeckInfoByGid (id)</strong>
     </dt>
     <dd>
     convert a global tileset id to a deck + deck id
 
+
     <h3>Parameters:</h3>
     <ul>
         <li><span class="parameter">id</span>
-         the global tileset id</li>
+         the global tileset id
+        </li>
     </ul>
 
     <h3>Returns:</h3>
@@ -238,18 +256,21 @@ different atlases. </p>
 
 </dd>
     <dt>
-    <a name = "ITileSet:_getGidByDeckInfo"></a>
-    <strong>ITileSet:_getGidByDeckInfo&nbsp;(deck, deckId)</strong>
+    <a name = "_getGidByDeckInfo"></a>
+    <strong>_getGidByDeckInfo (deck, deckId)</strong>
     </dt>
     <dd>
     convert a deck + deck id to a global tileset id
 
+
     <h3>Parameters:</h3>
     <ul>
         <li><span class="parameter">deck</span>
-         the deck</li>
+         the deck
+        </li>
         <li><span class="parameter">deckId</span>
-         the id of the tile in the provided deck</li>
+         the id of the tile in the provided deck
+        </li>
     </ul>
 
     <h3>Returns:</h3>
@@ -263,16 +284,18 @@ different atlases. </p>
 
 </dd>
     <dt>
-    <a name = "ITileSet:_hasDeck"></a>
-    <strong>ITileSet:_hasDeck&nbsp;(deck)</strong>
+    <a name = "_hasDeck"></a>
+    <strong>_hasDeck (deck)</strong>
     </dt>
     <dd>
     used to check if a deck is valid for a given tileset
 
+
     <h3>Parameters:</h3>
     <ul>
         <li><span class="parameter">deck</span>
-         the deck to be checked</li>
+         the deck to be checked
+        </li>
     </ul>
 
     <h3>Returns:</h3>
@@ -286,11 +309,12 @@ different atlases. </p>
 
 </dd>
     <dt>
-    <a name = "ITileSet:getTileWidth"></a>
-    <strong>ITileSet:getTileWidth&nbsp;()</strong>
+    <a name = "getTileWidth"></a>
+    <strong>getTileWidth ()</strong>
     </dt>
     <dd>
     Returns the width of the tiles of the tileset
+
 
 
     <h3>Returns:</h3>
@@ -304,11 +328,12 @@ different atlases. </p>
 
 </dd>
     <dt>
-    <a name = "ITileSet:getTileHeight"></a>
-    <strong>ITileSet:getTileHeight&nbsp;()</strong>
+    <a name = "getTileHeight"></a>
+    <strong>getTileHeight ()</strong>
     </dt>
     <dd>
     Returns the height of the tiles of the tileset
+
 
 
     <h3>Returns:</h3>
@@ -322,11 +347,12 @@ different atlases. </p>
 
 </dd>
     <dt>
-    <a name = "ITileSet:getNumOfTiles"></a>
-    <strong>ITileSet:getNumOfTiles&nbsp;()</strong>
+    <a name = "getNumOfTiles"></a>
+    <strong>getNumOfTiles ()</strong>
     </dt>
     <dd>
     Returns the number of tiles of the tileset
+
 
 
     <h3>Returns:</h3>
@@ -340,16 +366,18 @@ different atlases. </p>
 
 </dd>
     <dt>
-    <a name = "ITileSet:getTile"></a>
-    <strong>ITileSet:getTile&nbsp;(id)</strong>
+    <a name = "getTile"></a>
+    <strong>getTile (id)</strong>
     </dt>
     <dd>
     Returns a tile given the tileset id
 
+
     <h3>Parameters:</h3>
     <ul>
         <li><span class="parameter">id</span>
-         tile id</li>
+         tile id
+        </li>
     </ul>
 
     <h3>Returns:</h3>
@@ -363,16 +391,18 @@ different atlases. </p>
 
 </dd>
     <dt>
-    <a name = "ITileSet:setName"></a>
-    <strong>ITileSet:setName&nbsp;(name)</strong>
+    <a name = "setName"></a>
+    <strong>setName (name)</strong>
     </dt>
     <dd>
     Sets te name of the tileset
 
+
     <h3>Parameters:</h3>
     <ul>
         <li><span class="parameter">name</span>
-         the name to be set</li>
+         the name to be set
+        </li>
     </ul>
 
 
@@ -381,11 +411,12 @@ different atlases. </p>
 
 </dd>
     <dt>
-    <a name = "ITileSet:getName"></a>
-    <strong>ITileSet:getName&nbsp;()</strong>
+    <a name = "getName"></a>
+    <strong>getName ()</strong>
     </dt>
     <dd>
     Gets te name of the tileset
+
 
 
     <h3>Returns:</h3>
@@ -399,18 +430,21 @@ different atlases. </p>
 
 </dd>
     <dt>
-    <a name = "ITileSet:setProperty"></a>
-    <strong>ITileSet:setProperty&nbsp;(name, value)</strong>
+    <a name = "setProperty"></a>
+    <strong>setProperty (name, value)</strong>
     </dt>
     <dd>
     Sets a property of the tileset
 
+
     <h3>Parameters:</h3>
     <ul>
         <li><span class="parameter">name</span>
-         the name of the property</li>
+         the name of the property
+        </li>
         <li><span class="parameter">value</span>
-         the value of the property</li>
+         the value of the property
+        </li>
     </ul>
 
 
@@ -419,16 +453,18 @@ different atlases. </p>
 
 </dd>
     <dt>
-    <a name = "ITileSet:getProperty"></a>
-    <strong>ITileSet:getProperty&nbsp;(name)</strong>
+    <a name = "getProperty"></a>
+    <strong>getProperty (name)</strong>
     </dt>
     <dd>
     Gets a property of the tileset
 
+
     <h3>Parameters:</h3>
     <ul>
         <li><span class="parameter">name</span>
-         the name of the property</li>
+         the name of the property
+        </li>
     </ul>
 
     <h3>Returns:</h3>
@@ -442,20 +478,24 @@ different atlases. </p>
 
 </dd>
     <dt>
-    <a name = "ITileSet:setTileProperty"></a>
-    <strong>ITileSet:setTileProperty&nbsp;(id, name, value)</strong>
+    <a name = "setTileProperty"></a>
+    <strong>setTileProperty (id, name, value)</strong>
     </dt>
     <dd>
     Sets a property of a tile of the tileset
 
+
     <h3>Parameters:</h3>
     <ul>
         <li><span class="parameter">id</span>
-         the id of the tile</li>
+         the id of the tile
+        </li>
         <li><span class="parameter">name</span>
-         the name of the property</li>
+         the name of the property
+        </li>
         <li><span class="parameter">value</span>
-         the value of the property</li>
+         the value of the property
+        </li>
     </ul>
 
 
@@ -464,18 +504,21 @@ different atlases. </p>
 
 </dd>
     <dt>
-    <a name = "ITileSet:getTileProperty"></a>
-    <strong>ITileSet:getTileProperty&nbsp;(id, name)</strong>
+    <a name = "getTileProperty"></a>
+    <strong>getTileProperty (id, name)</strong>
     </dt>
     <dd>
     Gets a property of a tile of the tileset
 
+
     <h3>Parameters:</h3>
     <ul>
         <li><span class="parameter">id</span>
-         the id of the tile</li>
+         the id of the tile
+        </li>
         <li><span class="parameter">name</span>
-         the name of the property</li>
+         the name of the property
+        </li>
     </ul>
 
     <h3>Returns:</h3>
@@ -494,7 +537,7 @@ different atlases. </p>
 </div> <!-- id="content" -->
 </div> <!-- id="main" -->
 <div id="about">
-<i>generated by <a href="http://github.com/stevedonovan/LDoc">LDoc 1.3.11</a></i>
+<i>generated by <a href="http://github.com/stevedonovan/LDoc">LDoc 1.4.2</a></i>
 </div> <!-- id="about" -->
 </div> <!-- id="container" -->
 </body>

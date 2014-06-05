@@ -38,7 +38,7 @@
 
 
 <h2>Modules</h2>
-<ul>
+<ul class="$(kind=='Topics' and '' or 'nowrap'">
   <li><a href="../modules/Core.Assets.html">Core.Assets</a></li>
   <li><a href="../modules/Core.Event.html">Core.Event</a></li>
   <li><a href="../modules/Core.EventDispatcher.html">Core.EventDispatcher</a></li>
@@ -61,6 +61,7 @@
   <li><a href="../modules/Display.Stage.html">Display.Stage</a></li>
   <li><a href="../modules/Display.TextField.html">Display.TextField</a></li>
   <li><a href="../modules/Display.TileMap.html">Display.TileMap</a></li>
+  <li><a href="../modules/include.html">include</a></li>
   <li><a href="../modules/Texture.ITextureAtlas.html">Texture.ITextureAtlas</a></li>
   <li><a href="../modules/Texture.SubTexture.html">Texture.SubTexture</a></li>
   <li><a href="../modules/Texture.Texture.html">Texture.Texture</a></li>
@@ -88,9 +89,9 @@
   <li><a href="../modules/Utils.CollisionKit.html">Utils.CollisionKit</a></li>
   <li><a href="../modules/Utils.Color.html">Utils.Color</a></li>
   <li><a href="../modules/Utils.Coroutines.html">Utils.Coroutines</a></li>
-  <li><a href="../modules/Utils.IO.html">Utils.IO</a></li>
   <li><a href="../modules/Utils.IniFile.html">Utils.IniFile</a></li>
   <li><a href="../modules/Utils.IniParser.html">Utils.IniParser</a></li>
+  <li><a href="../modules/Utils.IO.html">Utils.IO</a></li>
   <li><a href="../modules/Utils.Log.html">Utils.Log</a></li>
   <li><a href="../modules/Utils.Math.html">Utils.Math</a></li>
   <li><a href="../modules/Utils.PerformanceTimer.html">Utils.PerformanceTimer</a></li>
@@ -103,7 +104,6 @@
   <li><a href="../modules/Utils.Vector.html">Utils.Vector</a></li>
   <li><a href="../modules/Utils.XmlNode.html">Utils.XmlNode</a></li>
   <li><a href="../modules/Utils.XmlParser.html">Utils.XmlParser</a></li>
-  <li><a href="../modules/include.html">include</a></li>
 </ul>
 
 </div>
@@ -111,34 +111,45 @@
 <div id="content">
 
 <h1>Module <code>Texture.TextureManager</code></h1>
-
 <p>TextureManager allows to mount a texture atlas as a logical resource path.</p>
 <p>
+
 That means that calling TextureManager.getTexture() makes transparent the load
+
 of a real texture or of a subtexture of a texture atlas.
-<p>That allows to create code that doesn't depend on how data is packed.
+
+
+
+That allows to create code that doesn't depend on how data is packed.
+
 A use case is to always call TextureManager.getTexture() and, depending on how
+
 data is packed, add only at initialization phase a list of
+
 TextureManager.mountAtlas calls.
-<p>This list of atlas resources could be moreover defined by external data</p>
+
+
+
+This list of atlas resources could be moreover defined by external data
+</p>
 
 
 <h2><a href="#Functions">Functions</a></h2>
 <table class="function_list">
 	<tr>
-	<td class="name" nowrap><a href="#mountAtlas">mountAtlas&nbsp;(mountDir, atlas)</a></td>
+	<td class="name" nowrap><a href="#mountAtlas">mountAtlas (mountDir, atlas)</a></td>
 	<td class="summary">Mount a texture atlas as logica resource at a specific path.</td>
 	</tr>
 	<tr>
-	<td class="name" nowrap><a href="#unmountAtlas">unmountAtlas&nbsp;(mountDir, atlas)</a></td>
+	<td class="name" nowrap><a href="#unmountAtlas">unmountAtlas (mountDir, atlas)</a></td>
 	<td class="summary">Unmount an atlas from given path</td>
 	</tr>
 	<tr>
-	<td class="name" nowrap><a href="#getTexture">getTexture&nbsp;(fileName, useCache)</a></td>
+	<td class="name" nowrap><a href="#getTexture">getTexture (fileName, useCache)</a></td>
 	<td class="summary">Returns a texture given a fileName.</td>
 	</tr>
 	<tr>
-	<td class="name" nowrap><a href="#clearCache">clearCache&nbsp;(texture)</a></td>
+	<td class="name" nowrap><a href="#clearCache">clearCache (texture)</a></td>
 	<td class="summary">Remove a texture from the cache.</td>
 	</tr>
 </table>
@@ -162,19 +173,25 @@ TextureManager.mountAtlas calls.
     <dl class="function">
     <dt>
     <a name = "mountAtlas"></a>
-    <strong>mountAtlas&nbsp;(mountDir, atlas)</strong>
+    <strong>mountAtlas (mountDir, atlas)</strong>
     </dt>
     <dd>
     Mount a texture atlas as logica resource at a specific path.
+
 It's possible to mount the same atlas at different paths.
+
 It's possible to mount multiple atlas at same path.
+
+
 
     <h3>Parameters:</h3>
     <ul>
         <li><span class="parameter">mountDir</span>
-         the path where to mount the atlas</li>
+         the path where to mount the atlas
+        </li>
         <li><span class="parameter">atlas</span>
-         the texture atlas to be mounted</li>
+         the texture atlas to be mounted
+        </li>
     </ul>
 
 
@@ -184,17 +201,20 @@ It's possible to mount multiple atlas at same path.
 </dd>
     <dt>
     <a name = "unmountAtlas"></a>
-    <strong>unmountAtlas&nbsp;(mountDir, atlas)</strong>
+    <strong>unmountAtlas (mountDir, atlas)</strong>
     </dt>
     <dd>
     Unmount an atlas from given path
 
+
     <h3>Parameters:</h3>
     <ul>
         <li><span class="parameter">mountDir</span>
-         the path where to unmount the atlas</li>
+         the path where to unmount the atlas
+        </li>
         <li><span class="parameter">atlas</span>
-         the texture atlas to be unmounted</li>
+         the texture atlas to be unmounted
+        </li>
     </ul>
 
 
@@ -204,19 +224,25 @@ It's possible to mount multiple atlas at same path.
 </dd>
     <dt>
     <a name = "getTexture"></a>
-    <strong>getTexture&nbsp;(fileName, useCache)</strong>
+    <strong>getTexture (fileName, useCache)</strong>
     </dt>
     <dd>
     Returns a texture given a fileName.  The texture can be a physical resource or a subtexture
+
 obtained from a texture atlas.
+
 Textures not stored in mounted atlas are loaded through Assets.getText internal call
+
+
 
     <h3>Parameters:</h3>
     <ul>
         <li><span class="parameter">fileName</span>
-         name of the texture to be retrieved</li>
+         name of the texture to be retrieved
+        </li>
         <li><span class="parameter">useCache</span>
-         if defined override default Assets.__defaultCacheTexture value</li>
+         if defined override default Assets.__defaultCacheTexture value
+        </li>
     </ul>
 
 
@@ -226,17 +252,22 @@ Textures not stored in mounted atlas are loaded through Assets.getText internal 
 </dd>
     <dt>
     <a name = "clearCache"></a>
-    <strong>clearCache&nbsp;(texture)</strong>
+    <strong>clearCache (texture)</strong>
     </dt>
     <dd>
     Remove a texture from the cache.  If texture is nil, clears the whole texture cache.
+
 It calls also Assets.clearCache method
-If nil the whole cache is cleared
+
+
 
     <h3>Parameters:</h3>
     <ul>
         <li><span class="parameter">texture</span>
-         texture path or concrete resource to be removed from cache. </li>
+         texture path or concrete resource to be removed from cache.
+
+If nil the whole cache is cleared
+        </li>
     </ul>
 
 
@@ -259,6 +290,7 @@ If nil the whole cache is cleared
 
 
 
+
 </dd>
     <dt>
     <a name = "__textureCache"></a>
@@ -272,6 +304,7 @@ If nil the whole cache is cleared
 
 
 
+
 </dd>
 </dl>
 
@@ -279,7 +312,7 @@ If nil the whole cache is cleared
 </div> <!-- id="content" -->
 </div> <!-- id="main" -->
 <div id="about">
-<i>generated by <a href="http://github.com/stevedonovan/LDoc">LDoc 1.3.11</a></i>
+<i>generated by <a href="http://github.com/stevedonovan/LDoc">LDoc 1.4.2</a></i>
 </div> <!-- id="about" -->
 </div> <!-- id="container" -->
 </body>

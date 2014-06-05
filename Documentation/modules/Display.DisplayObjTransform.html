@@ -37,7 +37,7 @@
 
 
 <h2>Modules</h2>
-<ul>
+<ul class="$(kind=='Topics' and '' or 'nowrap'">
   <li><a href="../modules/Core.Assets.html">Core.Assets</a></li>
   <li><a href="../modules/Core.Event.html">Core.Event</a></li>
   <li><a href="../modules/Core.EventDispatcher.html">Core.EventDispatcher</a></li>
@@ -60,6 +60,7 @@
   <li><a href="../modules/Display.Stage.html">Display.Stage</a></li>
   <li><a href="../modules/Display.TextField.html">Display.TextField</a></li>
   <li><a href="../modules/Display.TileMap.html">Display.TileMap</a></li>
+  <li><a href="../modules/include.html">include</a></li>
   <li><a href="../modules/Texture.ITextureAtlas.html">Texture.ITextureAtlas</a></li>
   <li><a href="../modules/Texture.SubTexture.html">Texture.SubTexture</a></li>
   <li><a href="../modules/Texture.Texture.html">Texture.Texture</a></li>
@@ -87,9 +88,9 @@
   <li><a href="../modules/Utils.CollisionKit.html">Utils.CollisionKit</a></li>
   <li><a href="../modules/Utils.Color.html">Utils.Color</a></li>
   <li><a href="../modules/Utils.Coroutines.html">Utils.Coroutines</a></li>
-  <li><a href="../modules/Utils.IO.html">Utils.IO</a></li>
   <li><a href="../modules/Utils.IniFile.html">Utils.IniFile</a></li>
   <li><a href="../modules/Utils.IniParser.html">Utils.IniParser</a></li>
+  <li><a href="../modules/Utils.IO.html">Utils.IO</a></li>
   <li><a href="../modules/Utils.Log.html">Utils.Log</a></li>
   <li><a href="../modules/Utils.Math.html">Utils.Math</a></li>
   <li><a href="../modules/Utils.PerformanceTimer.html">Utils.PerformanceTimer</a></li>
@@ -102,7 +103,6 @@
   <li><a href="../modules/Utils.Vector.html">Utils.Vector</a></li>
   <li><a href="../modules/Utils.XmlNode.html">Utils.XmlNode</a></li>
   <li><a href="../modules/Utils.XmlParser.html">Utils.XmlParser</a></li>
-  <li><a href="../modules/include.html">include</a></li>
 </ul>
 
 </div>
@@ -110,7 +110,6 @@
 <div id="content">
 
 <h1>Module <code>Display.DisplayObjTransform</code></h1>
-
 <p>A DisplayObj position and transformation in space is defined by 3 vec2 and a scalar value:
 -pivot
 -position
@@ -127,71 +126,71 @@ at least reduce memory and performance issues</p>
 <h2><a href="#Functions">Functions</a></h2>
 <table class="function_list">
 	<tr>
-	<td class="name" nowrap><a href="#DisplayObjTransform:init">DisplayObjTransform:init&nbsp;(...)</a></td>
+	<td class="name" nowrap><a href="#init">init (...)</a></td>
 	<td class="summary">Constructor.</td>
 	</tr>
 	<tr>
-	<td class="name" nowrap><a href="#DisplayObjTransform:copy">DisplayObjTransform:copy&nbsp;(c)</a></td>
+	<td class="name" nowrap><a href="#copy">copy (c)</a></td>
 	<td class="summary">copies components from given DisplayObjTransform</td>
 	</tr>
 	<tr>
-	<td class="name" nowrap><a href="#DisplayObjTransform:clone">DisplayObjTransform:clone&nbsp;()</a></td>
+	<td class="name" nowrap><a href="#clone">clone ()</a></td>
 	<td class="summary">returns a new DisplayObjTransform with the same values</td>
 	</tr>
 	<tr>
-	<td class="name" nowrap><a href="#DisplayObjTransform:getPivot">DisplayObjTransform:getPivot&nbsp;()</a></td>
+	<td class="name" nowrap><a href="#getPivot">getPivot ()</a></td>
 	<td class="summary">get pivot</td>
 	</tr>
 	<tr>
-	<td class="name" nowrap><a href="#DisplayObjTransform:setPivot">DisplayObjTransform:setPivot&nbsp;(px, py)</a></td>
+	<td class="name" nowrap><a href="#setPivot">setPivot (px, py)</a></td>
 	<td class="summary">set pivot</td>
 	</tr>
 	<tr>
-	<td class="name" nowrap><a href="#DisplayObjTransform:getPosition">DisplayObjTransform:getPosition&nbsp;()</a></td>
+	<td class="name" nowrap><a href="#getPosition">getPosition ()</a></td>
 	<td class="summary">get position</td>
 	</tr>
 	<tr>
-	<td class="name" nowrap><a href="#DisplayObjTransform:setPosition">DisplayObjTransform:setPosition&nbsp;(x, y)</a></td>
+	<td class="name" nowrap><a href="#setPosition">setPosition (x, y)</a></td>
 	<td class="summary">set position</td>
 	</tr>
 	<tr>
-	<td class="name" nowrap><a href="#DisplayObjTransform:getRotation">DisplayObjTransform:getRotation&nbsp;()</a></td>
+	<td class="name" nowrap><a href="#getRotation">getRotation ()</a></td>
 	<td class="summary">get rotation</td>
 	</tr>
 	<tr>
-	<td class="name" nowrap><a href="#DisplayObjTransform:setRotation">DisplayObjTransform:setRotation&nbsp;(r)</a></td>
+	<td class="name" nowrap><a href="#setRotation">setRotation (r)</a></td>
 	<td class="summary">set rotation</td>
 	</tr>
 	<tr>
-	<td class="name" nowrap><a href="#DisplayObjTransform:getScale">DisplayObjTransform:getScale&nbsp;()</a></td>
+	<td class="name" nowrap><a href="#getScale">getScale ()</a></td>
 	<td class="summary">get scale</td>
 	</tr>
 	<tr>
-	<td class="name" nowrap><a href="#DisplayObjTransform:setScale">DisplayObjTransform:setScale&nbsp;(sx, sy)</a></td>
+	<td class="name" nowrap><a href="#setScale">setScale (sx, sy)</a></td>
 	<td class="summary">set scale</td>
 	</tr>
 	<tr>
-	<td class="name" nowrap><a href="#__add">__add&nbsp;(t1, t2)</a></td>
+	<td class="name" nowrap><a href="#__add">__add (t1, t2)</a></td>
 	<td class="summary">sums component by component two DisplayObjTransform object</td>
 	</tr>
 	<tr>
-	<td class="name" nowrap><a href="#__sub">__sub&nbsp;(t1, t2)</a></td>
+	<td class="name" nowrap><a href="#__sub">__sub (t1, t2)</a></td>
 	<td class="summary">subtracts component by component two DisplayObjTransform object</td>
 	</tr>
 	<tr>
-	<td class="name" nowrap><a href="#__mul">__mul&nbsp;(t1, t2)</a></td>
+	<td class="name" nowrap><a href="#__mul">__mul (t1, t2)</a></td>
 	<td class="summary">Multiplies each component of a DisplayObjTransform by a scalar value.</td>
 	</tr>
 	<tr>
-	<td class="name" nowrap><a href="#__div">__div&nbsp;(t, d)</a></td>
+	<td class="name" nowrap><a href="#__div">__div (t, d)</a></td>
 	<td class="summary">Divides each component of a DisplayObjTransform by a scalar value.</td>
 	</tr>
 	<tr>
-	<td class="name" nowrap><a href="#__eq">__eq&nbsp;(t1, t2)</a></td>
+	<td class="name" nowrap><a href="#__eq">__eq (t1, t2)</a></td>
 	<td class="summary">the == operation</td>
 	</tr>
 	<tr>
-	<td class="name" nowrap><a href="#blend">blend&nbsp;(t1, t2, a)</a></td>
+	<td class="name" nowrap><a href="#blend">blend (t1, t2, a)</a></td>
 	<td class="summary">blend each component of two DisplayObjTransform by a given blend value</td>
 	</tr>
 </table>
@@ -203,8 +202,8 @@ at least reduce memory and performance issues</p>
     <h2><a name="Functions"></a>Functions</h2>
     <dl class="function">
     <dt>
-    <a name = "DisplayObjTransform:init"></a>
-    <strong>DisplayObjTransform:init&nbsp;(...)</strong>
+    <a name = "init"></a>
+    <strong>init (...)</strong>
     </dt>
     <dd>
     Constructor.  pivot, position, rotation and scale infos must be provided. It can be either in the
@@ -212,9 +211,11 @@ scalar form of px,py,x,y,r,sx,sy or in a vectorial (vec2) form like pivot, posit
 (where rotation is always a single scalar value)
 Default values are zeroes for all components but scale (x,y) that defaults to 1.
 
+
     <h3>Parameters:</h3>
     <ul>
         <li><span class="parameter">...</span>
+
         </li>
     </ul>
 
@@ -224,16 +225,18 @@ Default values are zeroes for all components but scale (x,y) that defaults to 1.
 
 </dd>
     <dt>
-    <a name = "DisplayObjTransform:copy"></a>
-    <strong>DisplayObjTransform:copy&nbsp;(c)</strong>
+    <a name = "copy"></a>
+    <strong>copy (c)</strong>
     </dt>
     <dd>
     copies components from given DisplayObjTransform
 
+
     <h3>Parameters:</h3>
     <ul>
         <li><span class="parameter">c</span>
-         the object to be copied</li>
+         the object to be copied
+        </li>
     </ul>
 
 
@@ -242,11 +245,12 @@ Default values are zeroes for all components but scale (x,y) that defaults to 1.
 
 </dd>
     <dt>
-    <a name = "DisplayObjTransform:clone"></a>
-    <strong>DisplayObjTransform:clone&nbsp;()</strong>
+    <a name = "clone"></a>
+    <strong>clone ()</strong>
     </dt>
     <dd>
     returns a new DisplayObjTransform with the same values
+
 
 
     <h3>Returns:</h3>
@@ -260,11 +264,12 @@ Default values are zeroes for all components but scale (x,y) that defaults to 1.
 
 </dd>
     <dt>
-    <a name = "DisplayObjTransform:getPivot"></a>
-    <strong>DisplayObjTransform:getPivot&nbsp;()</strong>
+    <a name = "getPivot"></a>
+    <strong>getPivot ()</strong>
     </dt>
     <dd>
     get pivot
+
 
 
     <h3>Returns:</h3>
@@ -280,17 +285,20 @@ Default values are zeroes for all components but scale (x,y) that defaults to 1.
 
 </dd>
     <dt>
-    <a name = "DisplayObjTransform:setPivot"></a>
-    <strong>DisplayObjTransform:setPivot&nbsp;(px, py)</strong>
+    <a name = "setPivot"></a>
+    <strong>setPivot (px, py)</strong>
     </dt>
     <dd>
     set pivot
 
+
     <h3>Parameters:</h3>
     <ul>
         <li><span class="parameter">px</span>
+
         </li>
         <li><span class="parameter">py</span>
+
         </li>
     </ul>
 
@@ -300,11 +308,12 @@ Default values are zeroes for all components but scale (x,y) that defaults to 1.
 
 </dd>
     <dt>
-    <a name = "DisplayObjTransform:getPosition"></a>
-    <strong>DisplayObjTransform:getPosition&nbsp;()</strong>
+    <a name = "getPosition"></a>
+    <strong>getPosition ()</strong>
     </dt>
     <dd>
     get position
+
 
 
     <h3>Returns:</h3>
@@ -320,17 +329,20 @@ Default values are zeroes for all components but scale (x,y) that defaults to 1.
 
 </dd>
     <dt>
-    <a name = "DisplayObjTransform:setPosition"></a>
-    <strong>DisplayObjTransform:setPosition&nbsp;(x, y)</strong>
+    <a name = "setPosition"></a>
+    <strong>setPosition (x, y)</strong>
     </dt>
     <dd>
     set position
 
+
     <h3>Parameters:</h3>
     <ul>
         <li><span class="parameter">x</span>
+
         </li>
         <li><span class="parameter">y</span>
+
         </li>
     </ul>
 
@@ -340,11 +352,12 @@ Default values are zeroes for all components but scale (x,y) that defaults to 1.
 
 </dd>
     <dt>
-    <a name = "DisplayObjTransform:getRotation"></a>
-    <strong>DisplayObjTransform:getRotation&nbsp;()</strong>
+    <a name = "getRotation"></a>
+    <strong>getRotation ()</strong>
     </dt>
     <dd>
     get rotation
+
 
 
     <h3>Returns:</h3>
@@ -358,15 +371,17 @@ Default values are zeroes for all components but scale (x,y) that defaults to 1.
 
 </dd>
     <dt>
-    <a name = "DisplayObjTransform:setRotation"></a>
-    <strong>DisplayObjTransform:setRotation&nbsp;(r)</strong>
+    <a name = "setRotation"></a>
+    <strong>setRotation (r)</strong>
     </dt>
     <dd>
     set rotation
 
+
     <h3>Parameters:</h3>
     <ul>
         <li><span class="parameter">r</span>
+
         </li>
     </ul>
 
@@ -376,11 +391,12 @@ Default values are zeroes for all components but scale (x,y) that defaults to 1.
 
 </dd>
     <dt>
-    <a name = "DisplayObjTransform:getScale"></a>
-    <strong>DisplayObjTransform:getScale&nbsp;()</strong>
+    <a name = "getScale"></a>
+    <strong>getScale ()</strong>
     </dt>
     <dd>
     get scale
+
 
 
     <h3>Returns:</h3>
@@ -396,17 +412,20 @@ Default values are zeroes for all components but scale (x,y) that defaults to 1.
 
 </dd>
     <dt>
-    <a name = "DisplayObjTransform:setScale"></a>
-    <strong>DisplayObjTransform:setScale&nbsp;(sx, sy)</strong>
+    <a name = "setScale"></a>
+    <strong>setScale (sx, sy)</strong>
     </dt>
     <dd>
     set scale
 
+
     <h3>Parameters:</h3>
     <ul>
         <li><span class="parameter">sx</span>
+
         </li>
         <li><span class="parameter">sy</span>
+
         </li>
     </ul>
 
@@ -417,17 +436,20 @@ Default values are zeroes for all components but scale (x,y) that defaults to 1.
 </dd>
     <dt>
     <a name = "__add"></a>
-    <strong>__add&nbsp;(t1, t2)</strong>
+    <strong>__add (t1, t2)</strong>
     </dt>
     <dd>
     sums component by component two DisplayObjTransform object
 
+
     <h3>Parameters:</h3>
     <ul>
         <li><span class="parameter">t1</span>
-         DisplayObjTransform</li>
+         DisplayObjTransform
+        </li>
         <li><span class="parameter">t2</span>
-         DisplayObjTransform</li>
+         DisplayObjTransform
+        </li>
     </ul>
 
     <h3>Returns:</h3>
@@ -442,17 +464,20 @@ Default values are zeroes for all components but scale (x,y) that defaults to 1.
 </dd>
     <dt>
     <a name = "__sub"></a>
-    <strong>__sub&nbsp;(t1, t2)</strong>
+    <strong>__sub (t1, t2)</strong>
     </dt>
     <dd>
     subtracts component by component two DisplayObjTransform object
 
+
     <h3>Parameters:</h3>
     <ul>
         <li><span class="parameter">t1</span>
-         DisplayObjTransform</li>
+         DisplayObjTransform
+        </li>
         <li><span class="parameter">t2</span>
-         DisplayObjTransform</li>
+         DisplayObjTransform
+        </li>
     </ul>
 
     <h3>Returns:</h3>
@@ -467,18 +492,21 @@ Default values are zeroes for all components but scale (x,y) that defaults to 1.
 </dd>
     <dt>
     <a name = "__mul"></a>
-    <strong>__mul&nbsp;(t1, t2)</strong>
+    <strong>__mul (t1, t2)</strong>
     </dt>
     <dd>
     Multiplies each component of a DisplayObjTransform by a scalar value.
 One of the params must be a number.
 
+
     <h3>Parameters:</h3>
     <ul>
         <li><span class="parameter">t1</span>
-         DisplayObjTransform or a number</li>
+         DisplayObjTransform or a number
+        </li>
         <li><span class="parameter">t2</span>
-         DisplayObjTransform or a number</li>
+         DisplayObjTransform or a number
+        </li>
     </ul>
 
     <h3>Returns:</h3>
@@ -493,17 +521,20 @@ One of the params must be a number.
 </dd>
     <dt>
     <a name = "__div"></a>
-    <strong>__div&nbsp;(t, d)</strong>
+    <strong>__div (t, d)</strong>
     </dt>
     <dd>
     Divides each component of a DisplayObjTransform by a scalar value.
 
+
     <h3>Parameters:</h3>
     <ul>
         <li><span class="parameter">t</span>
-         DisplayObjTransform</li>
+         DisplayObjTransform
+        </li>
         <li><span class="parameter">d</span>
-         number</li>
+         number
+        </li>
     </ul>
 
     <h3>Returns:</h3>
@@ -518,16 +549,19 @@ One of the params must be a number.
 </dd>
     <dt>
     <a name = "__eq"></a>
-    <strong>__eq&nbsp;(t1, t2)</strong>
+    <strong>__eq (t1, t2)</strong>
     </dt>
     <dd>
     the == operation
 
+
     <h3>Parameters:</h3>
     <ul>
         <li><span class="parameter">t1</span>
+
         </li>
         <li><span class="parameter">t2</span>
+
         </li>
     </ul>
 
@@ -538,19 +572,23 @@ One of the params must be a number.
 </dd>
     <dt>
     <a name = "blend"></a>
-    <strong>blend&nbsp;(t1, t2, a)</strong>
+    <strong>blend (t1, t2, a)</strong>
     </dt>
     <dd>
     blend each component of two DisplayObjTransform by a given blend value
 
+
     <h3>Parameters:</h3>
     <ul>
         <li><span class="parameter">t1</span>
-         DisplayObjTransform</li>
+         DisplayObjTransform
+        </li>
         <li><span class="parameter">t2</span>
-         DisplayObjTransform</li>
+         DisplayObjTransform
+        </li>
         <li><span class="parameter">a</span>
-         number [0..1]</li>
+         number [0..1]
+        </li>
     </ul>
 
     <h3>Returns:</h3>
@@ -569,7 +607,7 @@ One of the params must be a number.
 </div> <!-- id="content" -->
 </div> <!-- id="main" -->
 <div id="about">
-<i>generated by <a href="http://github.com/stevedonovan/LDoc">LDoc 1.3.11</a></i>
+<i>generated by <a href="http://github.com/stevedonovan/LDoc">LDoc 1.4.2</a></i>
 </div> <!-- id="about" -->
 </div> <!-- id="container" -->
 </body>
