@@ -56,7 +56,7 @@ if not __USE_SIMULATION_COORDS__ then
 		for j = 1,r1.h do
 			local _,_,_,a = i1:getRGBA(r1.x + i, r1.y + j)
 			if a > a1 then
-				_,_,_,a = i1:getRGBA(r2.x + i, r2.y + j)
+				_,_,_,a = i2:getRGBA(r2.x + i, r2.y + j)
 				if a > a2 then
 					return true
 				end
@@ -71,7 +71,7 @@ else --__USE_SIMULATION_COORDS__
 		for j = 1,r1.h do
 			local _,_,_,a = i1:getRGBA(r1.x + i, r1.y -j)
 			if a > a1 then
-				_,_,_,a = i1:getRGBA(r2.x + i, r2.y - j)
+				_,_,_,a = i2:getRGBA(r2.x + i, r2.y - j)
 				if a > a2 then
 					return true
 				end
@@ -167,7 +167,7 @@ if not __USE_SIMULATION_COORDS__ then
 			for j = 1,r1.h do
 				local _,_,_,a = i1:getRGBA(_x1 + i, _y1 + j)
 				if a > a1 then
-					_,_,_,a = i1:getRGBA(_x2 + i, _y2 + j)
+					_,_,_,a = i2:getRGBA(_x2 + i, _y2 + j)
 					if a > a2 then
 						return true
 					end
@@ -195,7 +195,7 @@ if not __USE_SIMULATION_COORDS__ then
 			for j = 1,r1.h do
 				local _,_,_,a = i1:getRGBA(_x1 - j, _y1 + i)
 				if a > a1 then
-					_,_,_,a = i1:getRGBA(_x2 + i, _y2 + j)
+					_,_,_,a = i2:getRGBA(_x2 + i, _y2 + j)
 					if a > a2 then
 						return true
 					end
@@ -225,7 +225,7 @@ else --__USE_SIMULATION_COORDS__
 			for j = 1,r1.h do
 				local _,_,_,a = i1:getRGBA(_x1 + i, _y1 -j)
 				if a > a1 then
-					_,_,_,a = i1:getRGBA(_x2 + i, _y2 - j)
+					_,_,_,a = i2:getRGBA(_x2 + i, _y2 - j)
 					if a > a2 then
 						return true
 					end
@@ -253,7 +253,7 @@ else --__USE_SIMULATION_COORDS__
 			for j = 1,r1.h do
 				local _,_,_,a = i1:getRGBA(_x1 + j, _y1 + i)
 				if a > a1 then
-					_,_,_,a = i1:getRGBA(_x2 + i, _y2 - j)
+					_,_,_,a = i2:getRGBA(_x2 + i, _y2 - j)
 					if a > a2 then
 						return true
 					end
