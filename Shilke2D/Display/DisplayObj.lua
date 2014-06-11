@@ -823,7 +823,6 @@ end
 --width of the axis aligned bounding box of the object in that space)
 --@param targetSpace (optional) the object related to which we want to calculate width. default value is 'self'
 function DisplayObj:getWidth(targetSpace)
-	--local targetSpace = targetSpace or self._parent
 	local targetSpace = targetSpace or self
 	return self:getBounds(targetSpace,__helperRect).w
 end
@@ -832,9 +831,14 @@ end
 --height of the axis aligned bounding box of the object in that space)
 --@param targetSpace (optional) the object related to which we want to calculate height. default value is 'self'
 function DisplayObj:getHeight(targetSpace)
-	--local targetSpace = targetSpace or self._parent
 	local targetSpace = targetSpace or self
 	return self:getBounds(targetSpace,__helperRect).h
+end
+
+function DisplayObj:getSize(targetSpace)
+	local targetSpace = targetSpace or self
+	local r = self:getBounds(targetSpace,__helperRect)
+	return r.w, r.h
 end
 
 --[[---

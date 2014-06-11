@@ -126,11 +126,12 @@ function BaseQuad:setSize(width,height)
 end
 
 
----Get the size of the object in local coords
---@return width widht of the quad
---@return height height of the quad
-function BaseQuad:getSize()
-	return self._width, self._height
+function BaseQuad:getSize(targetSpace)
+	if not targetSpace or targetSpace == self then
+		return self._width, self._height
+	else
+		return DisplayObj.getSize(self, targetSpace)
+	end
 end
 
 ---Set the pivotMode object.
