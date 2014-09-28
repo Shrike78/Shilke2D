@@ -134,4 +134,16 @@ function table.dump(t,outFunc)
 		end
 	end
 end
-    
+   
+--[[---
+works on index tables (tables used like arrays). extends t1 content adding values from t2.
+works in same way of python list.extend
+@param t1 list to be extended (at the end t1 will be modified)
+@param t2 list to extend with
+@return list return a reference of t1 
+--]]
+function table.extend(t1, t2)
+	for _,v in ipairs(t2) do
+		t1[#t1+1] = v
+	end
+end
