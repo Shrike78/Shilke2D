@@ -39,6 +39,15 @@ function touched(touch)
   --override function
 end
 
+local function convertXY(x,y)
+	local x = x / __scalex
+	local y = y / __scaley
+	if __yCorrection then
+		y = __yCorrection - y
+	end
+	return x,y
+end
+
 --[[---
 Inner event handling method to which touch and mouse events are redirected
 @param eventType MOAITouchSensor event type on which redirect touch phase
@@ -51,17 +60,14 @@ function onEvent(eventType, idx, x, y, tapCount)
 	if __DEBUG_CALLBACKS__ then
 		require('mobdebug').on()
 	end
-	local touch = {}
-	local x = x / __scalex
-	local y = y / __scaley
 	
-	if __yCorrection then
-		y = __yCorrection - y
-	end
+	local x, y = convertXY(x, y)
+	local touch = {}
+	
 	
 	touch.id = idx
 	touch.tapCount = tapCount
-	touch.x, touch.y = x, y
+	touch.x, touch.y = x,y
 	--TODO: check the "prev / delta logic when not TOUCH_MOVE"
 	
 	if (eventType == MOAITouchSensor.TOUCH_DOWN) then
@@ -117,6 +123,16 @@ if MOAIInputMgr.device.pointer then
 	MOAIInputMgr.device.pointer:setCallback(onPointer)
 	MOAIInputMgr.device.mouseLeft:setCallback(onLeftClick)
 --	MOAIInputMgr.device.mouseRight:setCallback(onClick)
+	
+	--[[---
+	Defined only when device is mouse (pointer), mainly for debug purposes.
+	It returns the mouse pointer position coordinates in Shilke2D screen space
+	@return x
+	@return y
+	--]]
+	function getPointerPosition()
+		return convertXY(pointerX, pointerY)
+	end
 else
 	--touch input
 	MOAIInputMgr.device.touch:setCallback(onEvent)
