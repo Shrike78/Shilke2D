@@ -53,21 +53,21 @@ end
 ---Sets a callback function with arguments that will be called 
 --when the tween starts. 
 function Tween:callOnStart(func ,...)
-    self._onStart = func and Callbacks.callback(func,...)
+    self._onStart = func and Callback(func,...)
     return self
 end
 
 --Sets a callback function with arguments that will be called 
 --each time advanceTime is called
 function Tween:callOnUpdate(func ,...)
-    self._onUpdate = func and Callbacks.callback(func,...)
+    self._onUpdate = func and Callback(func,...)
     return self
 end
 
 ---Sets a callback function with arguments that will be called 
 --when the tween is completed. 
 function Tween:callOnComplete(func ,...)
-    self._onComplete = func and Callbacks.callback(func,...)
+    self._onComplete = func and Callback(func,...)
     return self
 end
 
