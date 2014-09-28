@@ -19,4 +19,5 @@ Advance the time by a number of seconds.
 @return nil
 --]]
 function IAnimatable:advanceTime(deltaTime)
+	error("method must be overridden")
 end
