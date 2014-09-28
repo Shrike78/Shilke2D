@@ -1,5 +1,6 @@
 --[[---
-Utility functions to work with bitfields
+Utility functions to work with bitfields.
+It's based on 32 bit bitfields logic and requires lua to be compiled with 64 bit precision
 --]]
 BitOp = {}
 
@@ -109,4 +110,53 @@ function BitOp.toString(a)
 		a=a/2
 	end
 	return table.concat(print_table)
+end
+
+
+--[[---
+split a bitfield into two bitfields given a mask that indicates low (0) and high (1) bits
+
+@usage
+
+a 		= 00100000000000000000000000000010
+mask 	= 11111111000000000000000000000000
+
+l,h 	= BitOp.splitmask(a, mask)
+
+l	=> 00000000000000000000000000000010
+h	=> 00100000000000000000000000000000
+
+@param a input bitfield
+@param mask the mask bitfield used to split into high, low values
+@return l the low part of the bitfield (0 values on the mask)
+@return h the hih part of the bitfield (1 values on the mask)
+--]]
+function BitOp.splitmask(a, mask)
+	local m = BitOp.bnot(mask) + 1
+	local r = a % m
+	return r, a-r
+end
+
+--[[---
+split a bitfield into two bitfields given a size for the high mask
+
+@usage
+
+a 		= 00100000000000000000000000000010
+hbits 	= 8 (=> mask = 11111111000000000000000000000000)
+
+l,h 	= BitOp.splitbits(a, hbits)
+
+l	=> 00000000000000000000000000000010
+h	=> 00100000000000000000000000000000
+
+@param a input bitfield
+@param hbits the number of bit used to mask high value
+@return l the low part of the bitfield (0 values on the mask)
+@return h the hih part of the bitfield (1 values on the mask)
+--]]
+function BitOp.splitbits(a, hbits)
+	local m = BitOp.lshift(1, 32 - hbits)
+	local r = a % m
+	return r, a-r
 end
