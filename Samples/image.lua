@@ -1,7 +1,7 @@
 -- uncomment to debug touch and keyboard callbacks. works with Mobdebug
 --__DEBUG_CALLBACKS__ = true
 
---By default (0,0) is topleft point and y is from top to bottom. Definint this allows to 
+--By default (0,0) is topleft point and y is from top to bottom. Defining this allows to 
 --set (0,0) as bottomleft point and having y from bottom to top.
 --__USE_SIMULATION_COORDS__ = true
 
@@ -28,10 +28,10 @@ function setup()
 	
 	--show as overlay fps and memory allocation
 	shilke:showStats(true)
-    
-    --if not set, the default color is (0,0,0,255)
-    stage:setBackground(10,10,10)
-    
+
+	--if not set, the default color is (0,0,0)
+	stage:setBackgroundColor(10,10,10)
+
 	--create an Image, a static image object.
 	--By default the pivot is set in the center of the image
 	local moaiImg = Image(Assets.getTexture("moai.png"))

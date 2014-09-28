@@ -1,7 +1,7 @@
 -- uncomment to debug touch and keyboard callbacks. works with Mobdebug
 __DEBUG_CALLBACKS__ = true
 
---By default (0,0) is topleft point and y is from top to bottom. Definint this allows to 
+--By default (0,0) is topleft point and y is from top to bottom. Defining this allows to 
 --set (0,0) as bottomleft point and having y from bottom to top.
 --__USE_SIMULATION_COORDS__ = true
 

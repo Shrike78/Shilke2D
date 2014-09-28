@@ -1,7 +1,7 @@
 -- uncomment to debug touch and keyboard callbacks. works with Mobdebug
 --__DEBUG_CALLBACKS__ = true
 
---By default (0,0) is topleft point and y is from top to bottom. Definint this allows to 
+--By default (0,0) is topleft point and y is from top to bottom. Defining this allows to 
 --set (0,0) as bottomleft point and having y from bottom to top.
 --__USE_SIMULATION_COORDS__ = true
 
@@ -28,14 +28,14 @@ function setup()
 	
 	--show as overlay fps and memory allocation
 	shilke:showStats(true)
-    
-    --if not set, the default color is (0,0,0,255)
-    stage:setBackground(128,128,128)
-	
-    --the juggler is the animator of all the animated objs, like
-    --movieclips, tweens or other jugglers too.
-    juggler = shilke.juggler
-    
+
+	--if not set, the default color is (0,0,0)
+	stage:setBackgroundColor(128,128,128)
+
+	--the juggler is the animator of all the animated objs, like
+	--movieclips, tweens or other jugglers too.
+	juggler = shilke.juggler
+
 	--it's possible to load an image and automatically create sub regions if the regions
 	--have all the same size and the margin and spacign between the regions are known
 	--it's also possible to specify a prefix and a padding to format the textures name
