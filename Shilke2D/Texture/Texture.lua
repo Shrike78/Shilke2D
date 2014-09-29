@@ -66,6 +66,16 @@ function Texture.fromTexture(texture, region, rotated)
 end
 
 
+--[[---
+Load an external file and create a texture.
+@param fileName the name of the image file to load
+--]]
+function Texture.fromFileName(fileName)
+	local srcData = Assets.getRawImage(fileName)
+	return Texture(srcData)
+end
+
+
 ---Constructor.
 --Create a Texture starting from a MOAI object. 
 --@param srcData can be a string (path) or a MOAIImageTexture or a MOAIImage
