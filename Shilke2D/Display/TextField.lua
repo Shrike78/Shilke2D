@@ -30,6 +30,8 @@ local function loadSystemFont()
 	return font
 end
 
+
+
 TextField.__systemFont = loadSystemFont()
 
 --[[---
@@ -47,17 +49,20 @@ function TextField:init(width, height, text, font, fontSize, pivotMode)
 if __USE_SIMULATION_COORDS__  then
     self._prop:setYFlip ( true )
 end
+
 	self._prop:setRect(0,0,self._width,self._height)
 
-	local font = font or TextField.__systemFont
-	local fontSize = fontSize or 16
-	self.text = text or ""
+	self._font = font or TextField.__systemFont
+	self._fontSize = fontSize or 16
+	self._text = text or ""
 	
 	self:setAlignment(TextField.LEFT_JUSTIFY,TextField.TOP_JUSTIFY)
-
-	self:setFont(font,fontSize)
-	self:setText(self.text)
+	
+	
+	self:setFont(self._font, self._fontSize)
+	self:setText(self._text)
 end
+
 
 ---Creates a MOAITextBox as inner prop
 --@return MOAITextBox
@@ -85,7 +90,7 @@ end
 --@param hAlign
 function TextField:setHAlignement(hAlign)
 	self.hAlign = hAlign
-	self._prop:setAlignment( self.hAlign, self.vAlign)
+	self._prop:setAlignment(self.hAlign, self.vAlign)
 end
 
 ---Returns horizontal alignment
@@ -119,28 +124,54 @@ end
 --@param font name or font object
 --@param size optional, if not provided is not updated
 function TextField:setFont(font,size)
-	local _font
 	if type(font) == 'string' then
-		_font = MOAIFont.new()
-		_font:load(font)
+		self._font = MOAIFont.new()
+		self._font:load(font)
 	else
-		_font = font
+		self._font = font
 	end
-	self._prop:setFont(_font)
+	self._prop:setFont(self._font)
 	if size then
-		self._prop:setTextSize(size)
+		self._fontSize = size
+		self._prop:setTextSize(self._fontSize)
 	end
 	return self
+end
+
+---Gets font
+--@return font used font
+--@return size used font size
+function TextField:getFont()
+	return self._font, self._fontSize
+end
+
+---Sets font size
+--@param size
+function TextField:setFontSize(size)
+	self._fontSize = size
+	self._prop:setTextSize(self._fontSize)
+	return self
+end
+
+---Gets font size
+--@return size current font size
+function TextField:getFontSize()
+	return self._fontSize
 end
 
 ---Sets the text to be displayed
 --@param text if nil is replaced by ""
 function TextField:setText(text)
-	self.text = text or ""
-	self._prop:setString(self.text)
+	self._text = text or ""
+	self._prop:setString(self._text)
 	return self
 end
 
+---Gets the displayed text 
+--@return text current displayed text
+function TextField:getText()
+	return self._text
+end
 
 ---Returns the bounding rect around the text related to a specific coordinate system
 --@param resultRect if provided uses it instead of creating a new Rect
@@ -148,7 +179,7 @@ end
 --@return Rect
 function TextField:getTextBound(resultRect,targetSpace)
 	local r = resultRect or Rect()
-	local xmin,ymin,xmax,ymax = self._prop:getStringBounds(1,self.text:len())
+	local xmin,ymin,xmax,ymax = self._prop:getStringBounds(1,self._text:len())
 	if targetSpace ~= self then
         self:updateTransformationMatrix(targetSpace)
 	    
@@ -172,7 +203,7 @@ end
 --@return a list of point expressed as x,y [x,y,....] with the last point as a replica of the first one.
 --The result can be used with a MOAIDraw.drawLine call
 function TextField:getOrientedTextBound(targetSpace)
-	local xmin,ymin,xmax,ymax = self._prop:getStringBounds(1,self.text:len())
+	local xmin,ymin,xmax,ymax = self._prop:getStringBounds(1,self._text:len())
 	local q = {xmin,ymin,xmax,ymin,xmax,ymax,xmin,ymax}
 	if targetSpace ~= self then
         self:updateTransformationMatrix(targetSpace)
