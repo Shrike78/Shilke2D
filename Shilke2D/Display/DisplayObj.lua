@@ -24,15 +24,33 @@ Within the display tree, each object has its own local coordinate
 system. If you rotate a container, you rotate that coordinate system
 and thus all the children of the container.
 
+- TargetSpace
+
+Several methods returns geometrical infos about the displayObject related to a 
+specific target space, that can be the local space, or the space of one of the 
+ancestors of the object. The targetSpace is defined using the displayObject 
+rapresenting the target space itself.
+
+Some of the methods (getSize, getWidth and getHeight) have as default value the local 
+target space, because usually the desired behavior is to get the size of the object
+in local coords (but it's nice to have the possibility to calculate the size of the object
+in a different target space in a easy way).
+
+All the others methods have as default value the top most container (usually the stage), 
+because usually functionality like hitTest, getBounds, localToGlobal, globalToLocal refers 
+to a different space, stage in particular
+
 - Subclassing
 
-Since DisplayObject is an abstract class, you cannot instantiate it
-directly, but have to use one of its subclasses instead.
+DisplayObject is an abstract class because it doesn't implement the getRect method, that's
+supposed to return the containing rect of the displayObject in local coordinates.
 
-You will need to implement the following method when you subclass
-DisplayObject:
+All the geometrical methods rely on this function to evaluate local and global bounds. 
 
-function DisplayObj:getRect(targetSpace,resultRect)
+Therefore subclassing of a DisplayObj requires a concrete implementation of
+
+function DisplayObj:getRect(resultRect)
+
 --]]
 
 --basic math function calls
@@ -70,6 +88,8 @@ function DisplayObj:init()
     EventDispatcher.init(self)
     	
     self._prop = self:_createProp()
+	self._renderTable = self._prop
+    
 	--use alpha value as opacity
 	self._prop:setBlendMode(MOAIProp2D.GL_SRC_ALPHA, MOAIProp2D.GL_ONE_MINUS_SRC_ALPHA)
 	
@@ -112,14 +132,15 @@ end
 --@return string
 function DisplayObj:dbgInfo(recursive)
     local sb = StringBuilder()
-    sb:writeln("[name = ",self._name,"]")
+    sb:writeln("name = ",self._name)
     sb:writeln("pivot = ",self._prop:getPiv())
     sb:writeln("position = ",self._prop:getLoc())
     sb:writeln("scale = ",self._prop:getScl())
     sb:writeln("rotation = ",self._prop:getRot())
+    sb:writeln("color = ",self._prop:getColor())
     sb:writeln("visible = ",(self._visible))
     sb:writeln("touchable = ",self._touchable)
-            
+	
     return sb:toString(true)
 end
 
@@ -143,13 +164,14 @@ function DisplayObj:_setParent(parent)
     self._parent = parent
     if parent then
 		--if not set before it can raise problems
-		self._prop:setParent(nil)
-        self._prop:setParent(parent._prop)
+		self._prop:setAttrLink(MOAITransform.INHERIT_TRANSFORM, parent._prop, MOAITransform.TRANSFORM_TRAIT)
+		self._prop:setAttrLink(MOAIColor.INHERIT_COLOR, parent._prop, MOAIColor.COLOR_TRAIT)
        	if self._useMultiplyColor then
 			self:_setMultiplyColor(parent:_getMultipliedColor())
 		end
     else
-		self._prop:setParent(nil)
+		self._prop:clearAttrLink(MOAITransform.INHERIT_TRANSFORM)
+		self._prop:clearAttrLink(MOAIColor.INHERIT_COLOR)
        	if self._useMultiplyColor then
 			self:_setMultiplyColor(1,1,1,1)
 		end
@@ -167,7 +189,6 @@ end
 ---Remove a displayObject from the parent container
 function DisplayObj:removeFromParent()
     if self._parent then
---        self._prop:clearNodeLink(self._parent._prop)
         self._parent:removeChild(self)
     end
 end
@@ -362,6 +383,19 @@ function DisplayObj:getPivot()
     return x,y
 end
 
+---Set pivot of the object using a vec2
+--@param v vec2 
+function DisplayObj:setPivot_v2(v)
+    self._prop:setPiv(v.x,v.y,0)
+end
+
+---Return current pivot position using a vec2
+--@return vec2
+function DisplayObj:getPivot_v2()
+    local x,y = self._prop:getPiv()
+    return vec2(x,y)
+end
+
 ---Set Pivot x position
 function DisplayObj:setPivotX(x)
 	self._prop:setAttr(MOAITransform.ATTR_X_PIV,x)
@@ -516,6 +550,7 @@ end
 Inner method, called to force update of transformation matrix used 
 to calculate relative position into the displayList
 @param targetSpace could be self, nil or an ancestor displayObj.
+nil means top most container
 --]]
 function DisplayObj:updateTransformationMatrix(targetSpace)
 	
@@ -523,7 +558,7 @@ function DisplayObj:updateTransformationMatrix(targetSpace)
 		if self._bTransformMatrixIsIdentity then 
 			return
 		else
-			self._transformMatrix:setParent(nil)
+			self._transformMatrix:clearAttrLink(MOAITransform.INHERIT_TRANSFORM)
 			self._transformMatrix:setPiv(0,0,0)
 			self._transformMatrix:setLoc(0,0,0)
 			self._transformMatrix:setScl(1,1)
@@ -536,7 +571,8 @@ function DisplayObj:updateTransformationMatrix(targetSpace)
 	
 	if self._parent then
 		self._parent:updateTransformationMatrix(targetSpace)
-		self._transformMatrix:setParent(self._parent._transformMatrix)
+		self._transformMatrix:setAttrLink(MOAITransform.INHERIT_TRANSFORM,
+			self._parent._transformMatrix, MOAITransform.TRANSFORM_TRAIT)
 		self._transformMatrix:setPiv(self._prop:getPiv())
 		self._transformMatrix:setLoc(self._prop:getLoc())
 		self._transformMatrix:setScl(self._prop:getScl())
@@ -644,24 +680,51 @@ defined for concrete displayObj classes.
 @return Rect 
 --]]
 function DisplayObj:getRect(resultRect)
-    error("method must be overridden")
+	error("method must be overridden")
+	return resultRect
 end
 
----Get object width related on parent trasnformation (so with scaling applied)
-function DisplayObj:getWidth()
-	return self:getBounds(self._parent,__helperRect).w
+--[[---
+Get width of the object as it appears in another target space (width is calculated as
+width of the axis aligned bounding box of the object in that space)
+@param targetSpace (optional) the object related to which we want to calculate width. default value is 'self'
+@return width
+--]]
+function DisplayObj:getWidth(targetSpace)
+	local targetSpace = targetSpace or self
+	return self:getBounds(targetSpace,__helperRect).w
 end
 
----Get object height related on parent trasnformation (so with scaling applied)
-function DisplayObj:getHeight()
-	return self:getBounds(self._parent,__helperRect).h
+--[[---
+Get height of the object as it appears in another target space (height is calculated as
+height of the axis aligned bounding box of the object in that space)
+@param targetSpace (optional) the object related to which we want to calculate height. default value is 'self'
+@return height
+--]]
+function DisplayObj:getHeight(targetSpace)
+	local targetSpace = targetSpace or self
+	return self:getBounds(targetSpace,__helperRect).h
+end
+
+--[[---
+Get width and height of the object as it appears in another target space (calculated as
+size of the axis aligned bounding box of the object in that space)
+@param targetSpace (optional) the object related to which we want to calculate height. default value is 'self'
+@return width
+@return height
+--]]
+function DisplayObj:getSize(targetSpace)
+	local targetSpace = targetSpace or self
+	local r = self:getBounds(targetSpace,__helperRect)
+	return r.w, r.h
 end
 
 --[[---
 Returns a rectangle that completely encloses the object as it 
 appears in another coordinate system.
-@param targetSpace the object related to which we want to calculate bounds
-@param resultRect optional, if provided is filled and returned
+@param targetSpace (optional) the object related to which we want to calculate bounds. 
+default value is the top most container
+@param resultRect (optional) if provided is filled and returned
 @return Rect
 --]]
 function DisplayObj:getBounds(targetSpace,resultRect)
@@ -696,7 +759,8 @@ end
  --[[---
 Returns an array of vertices describing a quad that rapresents object bounding rect as it appears into 
 another coordinate system
-@param targetSpace the object related to which we want to calculate the oriented bounds
+@param targetSpace the object related to which we want to calculate the oriented bounds. 
+default value refers to the top most container
 @return array of position [x,y,...] for 4 points plus first point replicated. 
 The array can be directely used for rendering
 --]]
@@ -722,6 +786,7 @@ end
 
 ---Draw the axis aligned bound of the object as appears into top most container / stage coords
 function DisplayObj:drawAABounds(drawContainer)
+	--drawContainer is unused -> used only by displayObjContainer
 	local r = self:getBounds(nil,__helperRect)
     MOAIDraw.drawRect(r.x,r.y,r.x+r.w,r.y+r.h)
 end

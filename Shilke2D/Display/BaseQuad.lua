@@ -82,19 +82,19 @@ end
 
 --ordered by PivotMode enum values
 BaseQuad.__pivotModeFunctions = {
-        BaseQuad._doNothing,	--"CUSTOM"
-		
-        BaseQuad._pivotModeBL,	--"BOTTOM_LEFT"
-        BaseQuad._pivotModeBC,	--"BOTTOM_CENTER"
-        BaseQuad._pivotModeBR,	--"BOTTOM_RIGHT"
-  
-		BaseQuad._pivotModeCL,	--"CENTER_LEFT"
-		BaseQuad._pivotModeC,	--"CENTER"
-		BaseQuad._pivotModeCR,	--"CENTER_RIGHT"
-		
-        BaseQuad._pivotModeTL,	--"TOP_LEFT"
-        BaseQuad._pivotModeTC,	--"TOP_CENTER"
-        BaseQuad._pivotModeTR	--"TOP_RIGHT"
+	BaseQuad._doNothing,	--"CUSTOM"
+
+	BaseQuad._pivotModeBL,	--"BOTTOM_LEFT"
+	BaseQuad._pivotModeBC,	--"BOTTOM_CENTER"
+	BaseQuad._pivotModeBR,	--"BOTTOM_RIGHT"
+
+	BaseQuad._pivotModeCL,	--"CENTER_LEFT"
+	BaseQuad._pivotModeC,	--"CENTER"
+	BaseQuad._pivotModeCR,	--"CENTER_RIGHT"
+
+	BaseQuad._pivotModeTL,	--"TOP_LEFT"
+	BaseQuad._pivotModeTC,	--"TOP_CENTER"
+	BaseQuad._pivotModeTR	--"TOP_RIGHT"
 }
 
 ---Initialization.
@@ -103,8 +103,8 @@ BaseQuad.__pivotModeFunctions = {
 --@param pivotMode by default PivotMode.CENTER
 function BaseQuad:init(width,height,pivotMode)
 	DisplayObj.init(self)
-	self._width = width
-	self._height = height
+	self._width = width or 0
+	self._height = height or 0
 	local pivotMode = pivotMode or PivotMode.CENTER
 	self:setPivotMode(pivotMode)
 end
@@ -116,7 +116,31 @@ end
 function BaseQuad:setSize(width,height)
 	self._width = width
 	self._height = height
-    BaseQuad.__pivotModeFunctions[self._pivotMode](self)
+	BaseQuad.__pivotModeFunctions[self._pivotMode](self)
+end
+
+function BaseQuad:getSize(targetSpace)
+	if not targetSpace or targetSpace == self then
+		return self._width, self._height
+	else
+		return DisplayObj.getSize(self, targetSpace)
+	end
+end
+
+function BaseQuad:getWidth(targetSpace)
+	if not targetSpace or targetSpace == self then
+		return self._width
+	else
+		return DisplayObj.getWidth(self, targetSpace)
+	end
+end
+
+function BaseQuad:getHeight(targetSpace)
+	if not targetSpace or targetSpace == self then
+		return self._height
+	else
+		return DisplayObj.getHeight(self, targetSpace)
+	end
 end
 
 ---Set the pivotMode object.
@@ -133,25 +157,38 @@ end
 
 --[[---
 Set pivot coordinates.
-That means to set a CUSTOM pivot defining pivot point, that will not change event if 
-size of the object would be changed
+A CUSTOM pivot point is not recalculated when object size changes
 @param x pivot x coordinate
 @param y pivot y coordinate
 --]]
 function BaseQuad:setPivot(x,y)
-    self:setPivotMode(PivotMode.CUSTOM)
+	if self._pivotMode ~= PivotMode.CUSTOM then
+		self:setPivotMode(PivotMode.CUSTOM)
+	end
 	self._prop:setPiv(x,y,0)
 end
 
----Set Pivot x position
+--[[---
+Set Pivot x position
+A CUSTOM pivot point is not recalculated when object size changes
+@param x pivot x coordinate
+--]]
 function BaseQuad:setPivotX(x)
-    self:setPivotMode(PivotMode.CUSTOM)
+	if self._pivotMode ~= PivotMode.CUSTOM then
+		self:setPivotMode(PivotMode.CUSTOM)
+	end
 	self._prop:setAttr(MOAITransform.ATTR_X_PIV, x)    
 end
 
----Set Pivot y position
+--[[---
+Set Pivot y position
+A CUSTOM pivot point is not recalculated when object size changes
+@param y pivot y coordinate
+--]]
 function BaseQuad:setPivotY(y)
-    self:setPivotMode(PivotMode.CUSTOM)
+	if self._pivotMode ~= PivotMode.CUSTOM then
+		self:setPivotMode(PivotMode.CUSTOM)
+	end
 	self._prop:setAttr(MOAITransform.ATTR_Y_PIV, y)
 end
 
@@ -165,28 +202,5 @@ function BaseQuad:getRect(resultRect)
 	r.w = self._width
 	r.h = self._height
 	return r
-end
-
-
----Get object width related on parent trasnformation (so with scaling applied)
-function BaseQuad:getWidth()
-    local w,h = self._width,self._height
-    if self._parent then
-      local r = RAD(self._prop:getAttr(MOAITransform.ATTR_Z_ROT))
-      local sx,sy = self._prop:getScl()
-      w = ABS( sx * w * COS(r)) + ABS(sy * h * SIN(r))
-    end
-    return w
-end
-
----Get object height related on parent trasnformation (so with scaling applied)
-function BaseQuad:getHeight()
-    local w,h = self._width,self._height
-    if self._parent then
-      local r = RAD(self._prop:getAttr(MOAITransform.ATTR_Z_ROT))
-      local sx,sy = self._prop:getScl() 
-      h = ABS( sx * w * SIN(r)) + ABS(sy * h * COS(r))
-    end
-    return h
 end
 
