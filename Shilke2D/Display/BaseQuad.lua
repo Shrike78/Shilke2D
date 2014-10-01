@@ -8,14 +8,6 @@ as a middle class that has no meeaning to be instantiated by itself.
 BaseQuad allows different pivotMode. Default PivotMode is PivotMode.CENTER               
 --]]
 
---basic math function calls
-local RAD = math.rad
-local ABS = math.abs
-local COS = math.cos
-local SIN = math.sin
-local INV_255 = 1/255
-
-
 ---PivotMode function
 PivotMode = 
 {

@@ -48,24 +48,40 @@ end
 
 
 --[[---
-Load a raw image.
+Load a raw image. It's possible to specify a color transformation on load, with PREMULTIPLY_ALPHA as 
+default value.
+If straight alpha is used configure accordingly the alpha mode of the displayObjects that are going to use
+the loaded image.
 @param fileName the name of the raw image to load, relative to the working dir or absolute (starting with /)
+@param transformOptions[opt] ColorTransform.NONE or a combination of ColorTransform.POW_TWO, 
+ColorTransform.QUANTIZE, ColorTransform.TRUECOLOR and ColorTransform.PREMULTIPLY_ALPHA. 
+Default value is ColorTransform.PREMULTIPLY_ALPHA.
 @return a MOAIImage if fileName is a valid path, else nil
 @return an error message if fileName is not a valid path
 --]]
-function Assets.getRawImage(fileName)
-	
+function Assets.getRawImage(fileName, transformOptions)
+	local transformOptions = transformOptions or ColorTransform.PREMULTIPLY_ALPHA
 	local img = MOAIImage.new()
 	-- if the file is "absolute" we need to load the image with absolute 'asDevice' file Name
 	if string.starts(fileName,"/") then
-		img:load(IO.getAbsolutePath(fileName,true),MOAIImage.PREMULTIPLY_ALPHA)
+		img:load(IO.getAbsolutePath(fileName,true),transformOptions)
 	else
-		img:load(fileName,MOAIImage.PREMULTIPLY_ALPHA)
+		img:load(fileName, transformOptions)
+	end
+	--if premultiply_alpha is used to load, the transparentColor is already forced to 0
+	if not BitOp.testflag(transformOptions, ColorTransform.PREMULTIPLY_ALPHA) then
+		--If straight alpha is used check if a transparent white or black transformation
+		--has been required
+		if BitOp.testflag(transformOptions, ColorTransform.TRANSPARENT_BLACK) then
+			BitmapData.setTransparentColor(img,Color.BLACK)
+		elseif BitOp.testflag(transformOptions, ColorTransform.TRANSPARENT_WHITE) then
+			BitmapData.setTransparentColor(img,Color.WHITE)
+		end
 	end
 	local w,h = img:getSize()
 	if w == 0 and h == 0 then
 		return nil, fileName .. " is not a valid path"
-	end	
+	end
     return img
 end
 

@@ -1,4 +1,7 @@
 *.DS_Store
 *.bak
+Assets_Ex/
 Documentation/
+Extensions/
+Samples_Ex/
 /.project

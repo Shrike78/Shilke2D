@@ -19,7 +19,7 @@ Quad = class(BaseQuad)
 
 ---Quad are drawn using a pixel shader so it's necessary to have
 --it enabled to inherits ancestors color values
-Quad._defaultUseMultiplyColor = true
+Quad.__defaultUseMultiplyColor = true
 
 --[[---
 Constructor.
@@ -30,7 +30,8 @@ Constructor.
 function Quad:init(width,height,pivotMode)
 	BaseQuad.init(self,width,height,pivotMode)
 	
-	self._colors = {{1,1,1,1},
+	--use the base color as first of the 4 colors of the quad
+	self._colors = {self._color,
 					{1,1,1,1},
 					{1,1,1,1},
 					{1,1,1,1}}
@@ -45,29 +46,29 @@ end
 function Quad:_createMesh()
 		
 	local vertexFormat = MOAIVertexFormat.new ()
-    vertexFormat:declareCoord ( 1, MOAIVertexFormat.GL_FLOAT, 2 )
-    vertexFormat:declareColor ( 2, MOAIVertexFormat.GL_UNSIGNED_BYTE )
-	
-    self._vbo = MOAIVertexBuffer.new ()
-    self._vbo:setFormat ( vertexFormat )
-    self._vbo:reserveVerts ( 4 )
-	
-    self._mesh = MOAIMesh.new ()
+	vertexFormat:declareCoord ( 1, MOAIVertexFormat.GL_FLOAT, 2 )
+	vertexFormat:declareColor ( 2, MOAIVertexFormat.GL_UNSIGNED_BYTE )
+
+	self._vbo = MOAIVertexBuffer.new ()
+	self._vbo:setFormat ( vertexFormat )
+	self._vbo:reserveVerts ( 4 )
+
+	self._mesh = MOAIMesh.new ()
 	self._mesh:setVertexBuffer ( self._vbo )
 	self._mesh:setPrimType ( MOAIMesh.GL_TRIANGLE_FAN )
-	
+
 	local shader = MOAIShader.new ()
-    local vsh = IO.getFile("/Shilke2D/Resources/quad.vsh")
-    local fsh = IO.getFile("/Shilke2D/Resources/quad.fsh")
-    
-    shader:reserveUniforms(2)
-    shader:declareUniform(1, 'transform', MOAIShader.UNIFORM_WORLD_VIEW_PROJ )
-    shader:declareUniform(2, 'ucolor', MOAIShader.UNIFORM_PEN_COLOR )
-    
-    shader:setVertexAttribute ( 1, 'position' )
-    shader:setVertexAttribute ( 2, 'color' )
-    shader:load ( vsh, fsh )
-	
+	local vsh = IO.getFile("/Shilke2D/Resources/quad.vsh")
+	local fsh = IO.getFile("/Shilke2D/Resources/quad.fsh")
+
+	shader:reserveUniforms(2)
+	shader:declareUniform(1, 'transform', MOAIShader.UNIFORM_WORLD_VIEW_PROJ )
+	shader:declareUniform(2, 'ucolor', MOAIShader.UNIFORM_PEN_COLOR )
+
+	shader:setVertexAttribute ( 1, 'position' )
+	shader:setVertexAttribute ( 2, 'color' )
+	shader:load ( vsh, fsh )
+
 	self._mesh:setShader(shader)
 end
 
@@ -84,17 +85,28 @@ function Quad:_updateVertexBuffer()
 	self._vbo:reset()
 	
 	local mc = self._multiplyColor
-	
+	local c,a
 	for i=1, #vcoords do
 		-- write vertex position
 		self._vbo:writeFloat ( vcoords[i][1], vcoords[i][2] )              
 		-- write RGBA value
-		self._vbo:writeColor32 ( 	
-									self._colors[i][1] * mc[1], 
-									self._colors[i][2] * mc[2], 
-									self._colors[i][3] * mc[3], 
-									self._colors[i][4] * mc[4]
-								)  
+		c = self._colors[i]
+		if self._premultipliedAlpha then
+			a = c[4] * mc[4]
+			self._vbo:writeColor32(
+						c[1] * mc[1] * a, 
+						c[2] * mc[2] * a, 
+						c[3] * mc[3] * a, 
+						a
+					)
+		else
+			self._vbo:writeColor32(
+						c[1] * mc[1], 
+						c[2] * mc[2], 
+						c[3] * mc[3], 
+						c[4] * mc[4]
+					)
+		end
 	end
     
 	self._vbo:bless ()	
@@ -117,26 +129,31 @@ Override base method. It calls _updateVertexBuffer
 @param a [0,1]
 --]]
 function Quad:_setMultiplyColor(r,g,b,a)
-    local mc = self._multiplyColor
+	local mc = self._multiplyColor
 	mc[1] = r
 	mc[2] = g
 	mc[3] = b
 	mc[4] = a
-    self:_updateVertexBuffer()
+	self:_updateVertexBuffer()
 end
 
 ---Returns the multiplied alpha value as applied to the first vertex. 
 --If alpha values is different per vertices the return value has no real meaning
 --@return int obtained by Color.rgba2int([0,255],[0,255],[0,255],[0,255])
 function Quad:_getMultipliedColor()
-    local mc = self._multiplyColor
+	local mc = self._multiplyColor
 	local r = mc[1] * self._colors[1][1]  
 	local g = mc[2] * self._colors[1][2]  
 	local b = mc[3] * self._colors[1][3]  
 	local a = mc[4] * self._colors[1][4]
-    return r,g,b,a
+	return r,g,b,a
 end
 
+---overrides displayobj method redirecting on _updateVertexBuffer
+--that already does the same thing for quads
+function Quad:_updateColor()
+	self:_updateVertexBuffer()
+end
 
 ---Override base method. It calls _updateVertexBuffer
 --@param a alpha value [0,255]
@@ -159,7 +176,7 @@ end
 --@param v index of the vertex [1,4]
 --@param a alpha value [0,255]
 function Quad:setVertexAlpha(v,a) 
-    self._colors[v][4] = a * INV_255
+	self._colors[v][4] = a * INV_255
 	self:_updateVertexBuffer()
 end
 
@@ -175,27 +192,21 @@ Override base method. It calls _updateVertexBuffer
 The following calls are valid:
 - setColor(r,g,b)
 - setColor(r,g,b,a)
-- setColor(color)
-@param r red value [0,255] or a Color
+- setColor("#FFFFFF")
+- setColor("#FFFFFFFF")
+- setColor(Color)
+@param r red value [0,255] or a Color or hex string
 @param g green value [0,255] or nil
 @param b blue value [0,255] or nil
 @param a alpha value [0,255] or nil
 --]]
 function Quad:setColor(r,g,b,a)
-	local _r,_g,_b,_a
-	if type(r) == 'number' then
-		_r = r * INV_255
-		_g = g * INV_255
-		_b = b * INV_255
-		_a = a and a * INV_255 or self._colors[1][4]
-	else
-		_r, _g, _b, _a = r:unpack_normalized()
-	end
+	local r,g,b,a = Color._paramConversion(r,g,b,a,self._colors[1][4])	
 	for i = 1,4 do
-		self._colors[i][1] = _r
-		self._colors[i][2] = _g
-		self._colors[i][3] = _b
-		self._colors[i][4] = _a
+		self._colors[i][1] = r
+		self._colors[i][2] = g
+		self._colors[i][3] = b
+		self._colors[i][4] = a
 	end
 	self:_updateVertexBuffer()
 end
@@ -204,8 +215,7 @@ end
 --If color value is per vertices the return value has no real meaning
 --@return Color
 function Quad:getColor()
-  local r,g,b,a = self._colors[1][1],self._colors[1][2],self._colors[1][3],self._colors[1][4]
-  return Color(r*255,g*255,b*255,a*255)
+	return Color.fromNormalizedValues(unpack(self._colors[1]))
 end
 
 --[[---
@@ -213,7 +223,9 @@ Set color of a single vertex
 The following calls are valid:
 - setVertexColor(v,r,g,b)
 - setVertexColor(v,r,g,b,a)
-- setVertexColor(v,color)
+- setVertexColor(v,"#FFFFFF")
+- setVertexColor(v,"#FFFFFFFF")
+- setVertexColor(v,Color)
 @param v index of the vertex [1,4]
 @param r red value [0,255] or a Color
 @param g green value [0,255] or nil
@@ -221,17 +233,8 @@ The following calls are valid:
 @param a alpha value [0,255] or nil
 --]]
 function Quad:setVertexColor(v,r,g,b,a) 
-	local col = self._colors[v]
-	
-	if type(r) == 'number' then
-		col[1] = r * INV_255
-		col[2] = g * INV_255
-		col[3] = b * INV_255
-		col[4] = a and a * INV_255 or col[4]
-	else
-		col[1], col[2], col[3], col[4] = r:unpack_normalized()
-	end
-    
+	local c = self._colors[v]
+	c[1], c[2], c[3], c[4] = Color._paramConversion(r,g,b,a,c[4])
 	self:_updateVertexBuffer()
 end
 
@@ -239,8 +242,7 @@ end
 --@param v index of the vertex [1,4]
 --@return Color
 function Quad:getVertexColor(v)
-  local r,g,b,a = self._colors[v][1],self._colors[v][2],self._colors[v][3],self._colors[v][4]
-  return Color(r*255,g*255,b*255,a*255)
+  return Color.fromNormalizedValues(unpack(self._colors[v]))
 end
 
 ---Sets all the colors of the 4 vertices
@@ -259,4 +261,17 @@ function Quad:setColors(c1,c2,c3,c4)
 	self:_updateVertexBuffer()
 end
 
+---Gets all the colors of the 4 vertices
+--@return c1 Color of vertex1
+--@return c2 Color of vertex2
+--@return c3 Color of vertex3
+--@return c4 Color of vertex4
+function Quad:getColors()
+	local colors = {}
+	for v = 1,4 do
+		local c = self._colors[v]
+		colors[#colors+1] = Color.fromNormalizedValues(unpack(c))
+	end
+	return unpack(colors)
+end
 

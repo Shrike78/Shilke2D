@@ -6,6 +6,9 @@ Current implementation allows to use only standard true type fonts.
 --]]
 TextField = class(BaseQuad)
 
+---Textfields (at least when used with ttf) have premultiplied value set to false to be correctly displayed.
+TextField.__defaultHasPremultipliedAlpha = false
+
 ---Used to align vertically or horizontally the text
 TextField.CENTER_JUSTIFY = MOAITextBox.CENTER_JUSTIFY
 
@@ -88,7 +91,7 @@ end
 
 ---Sets horizontal alignment
 --@param hAlign
-function TextField:setHAlignement(hAlign)
+function TextField:setHAlignment(hAlign)
 	self.hAlign = hAlign
 	self._prop:setAlignment(self.hAlign, self.vAlign)
 end
@@ -101,7 +104,7 @@ end
 
 ---Sets vertical alignment
 --@param vAlign
-function TextField:setVAlignement(vAlign)
+function TextField:setVAlignment(vAlign)
 	self.vAlign = vAlign
 	self._prop:setAlignment( self.hAlign, self.vAlign)
 end

@@ -103,6 +103,23 @@ function Rect:init(x,y,w,h)
     self.h = h or 0
 end
 
+
+--[[---
+assign rect values
+@param x 
+@param y 
+@param w 
+@param h 
+@return Rect self 
+--]]
+function Rect:set(x,y,w,h)
+    self.x = x
+    self.y = y
+    self.w = w
+    self.h = h
+	return self
+end
+
 ---Updates itself copying another rect
 --@param r the rect to be copied
 --@return self
@@ -183,6 +200,20 @@ function Circle:init(x,y,r)
     self.x = x or 0
     self.y = y or 0
     self.r = r or 0
+end
+
+--[[---
+assign circle values
+@param x 
+@param y 
+@param r
+@return Circle self 
+--]]
+function Circle:set(x,y,r)
+    self.x = x
+    self.y = y
+    self.r = r
+	return self
 end
 
 ---Updates itself copying another circle

@@ -13,6 +13,7 @@ end
 
 
 require("Shilke2D/Utils/ClassEx")
+require("Shilke2D/Utils/BitmapData")
 require("Shilke2D/Utils/Callbacks")
 require("Shilke2D/Utils/IO")
 require("Shilke2D/Utils/StringBuilder")
@@ -49,6 +50,7 @@ require("Shilke2D/Core/Timer")
 require("Shilke2D/Core/Keymap")
 
 --Shilke2D/Display
+require("Shilke2D/Display/BlendMode")
 require("Shilke2D/Display/DisplayObj")
 require("Shilke2D/Display/DisplayObjContainer")
 require("Shilke2D/Display/Stage")

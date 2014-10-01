@@ -277,6 +277,46 @@ function Color.fromNormalizedValues(r,g,b,a)
 	)
 end
 
+
+--[[---
+Utility function used by functions that want to accept color expressed either as
+Color object or as [0..255] rgb or rgba values or as hex string. 
+
+It' possible to provide also a "default alpha value" to be used as return value with 
+the r,g,b [0..255] configuration in case of nil alpha. 
+
+@param r [0..255] value or Color object or hex string
+@param g [0..255] value or nil
+@param b [0..255] value or nil
+@param a[opt] [0..255] value or nil
+@param da[opt] [0..255] default alpha value.
+@return _r [0..1]
+@return _g [0..1]
+@return _b [0..1]
+@return _a [0..1] (or provided default alpha value)
+--]]
+function Color._paramConversion(r,g,b,a,da)
+	local _r,_g,_b,_a
+	local t = class_type(r)
+	if t == Color then
+		_r,_g,_b,_a = r:unpack_normalized()
+	elseif t == 'number' then
+		_r = r * INV_255
+		_g = g * INV_255
+		_b = b * INV_255
+		_a = a and (a * INV_255) or da
+	elseif t == 'string' then
+		_r, _g, _b, _a = Color.hex2rgba(r)
+		_r = _r * INV_255
+		_g = _g * INV_255
+		_b = _b * INV_255
+		_a = _a * INV_255
+	else
+		error("no suitable conversion of this parameters")
+	end
+	return _r,_g,_b,_a
+end
+
 --list of predefined named colors
 Color.ALICEBLUE			= Color(240,248,255) --- (240,248,255)
 Color.ANTIQUEWHITE			= Color(250,235,215) --- (250,235,215)

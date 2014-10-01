@@ -14,9 +14,10 @@ function StringBuilder:reset()
     self.len = 0
 end
 
----Appends a set of stringified items
---@param ... each param is converted calling tostring() and is 
---appended to the inner string list
+--[[---Appends a set of stringified items
+@param ... each param is converted calling tostring() and is 
+appended to the inner string list
+--]]
 function StringBuilder:write(...)
     local args = {...}
     for i = 1, #args do
@@ -32,18 +33,22 @@ function StringBuilder:writeln(...)
     self:write("\n")
 end
 
----Returns the length of the final string.
---The value is updated each time a new
---string is added to the builder
---@return number
+--[[---
+Returns the length of the final string.
+The value is updated each time a new
+string is added to the builder
+@return number
+--]]
 function StringBuilder:lenght()
     return self.len
 end
 
----Returns the resulting string and, if bFlush is true,
---resets the builder
---@param bFlush bool, if true clear the builder
---@return string
+--[[---
+Returns the resulting string and, if bFlush is true,
+resets the builder
+@param bFlush bool, if true clear the builder
+@return string
+--]]
 function StringBuilder:toString(bFlush)
     local s = table.concat(self.t)
     local bFlush = bFlush or false

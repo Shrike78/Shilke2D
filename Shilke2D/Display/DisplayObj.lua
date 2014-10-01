@@ -24,6 +24,27 @@ Within the display tree, each object has its own local coordinate
 system. If you rotate a container, you rotate that coordinate system
 and thus all the children of the container.
 
+
+- Color, Alpha and BlendModes
+
+By default displayobject are configured to use premultiplied alpha instead of straight alpha.
+
+That can be changed using 
+
+DisplayObj:setPremultipliedAlpha()
+
+Choosing between premultiplied or straight alpha setting changes how blendmodes apply 
+to objects. Premultiplied alpha it's usually the best choice because it saves calculation 
+time giving better performances.
+
+It's also possible to change the blend mode of a display object using 
+
+DisplayObj:setBlendMode() 
+
+that accept or a blend equation with a src and dst blend factors, or a blend mode preset.
+(see Display.BlendMode module)
+
+
 - TargetSpace
 
 Several methods returns geometrical infos about the displayObject related to a 
@@ -70,8 +91,6 @@ local MIN_VALUE = -math.huge
 --helper for getBound / rect calls
 local __helperRect = Rect()
 
---used as default multiplyColor value
-
 DisplayObj = class(EventDispatcher)
 
 --[[---
@@ -81,7 +100,12 @@ Special cases are when an object is rendered using a shader that doesn't
 take care of hierarchy, and so it's required to manually modify colors 
 according to multiply value.
 --]]
-DisplayObj._defaultUseMultiplyColor = false
+DisplayObj.__defaultUseMultiplyColor = false
+
+--[[---
+Used to define the default alpha behaviour of a displayObj type. That influences blend modes.
+--]]
+DisplayObj.__defaultHasPremultipliedAlpha = true
 
 ---Initialization.
 function DisplayObj:init()
@@ -89,21 +113,28 @@ function DisplayObj:init()
     	
     self._prop = self:_createProp()
 	self._renderTable = self._prop
-    
-	--use alpha value as opacity
-	self._prop:setBlendMode(MOAIProp2D.GL_SRC_ALPHA, MOAIProp2D.GL_ONE_MINUS_SRC_ALPHA)
 	
 	--exact clone of transformation prop, used to calculate transformMatrix depending
 	--on a specific targetSpace
-    self._transformMatrix = MOAITransform.new() 
-    
+	self._transformMatrix = MOAITransform.new()
+	
     self._name = nil
     self._parent = nil
     
 	self._visible = true
     self._touchable = true
-	self._useMultiplyColor = self._defaultUseMultiplyColor
 	
+	--set default values for the class
+	self._useMultiplyColor = self.__defaultUseMultiplyColor
+	self._premultipliedAlpha = self.__defaultHasPremultipliedAlpha
+	
+	self._blendEquation = BlendEquation.GL_FUNC_ADD
+	self._blendSrcFactor = BlendFactor.GL_ONE
+	self._blendDstFactor = BlendFactor.GL_ONE_MINUS_SRC_ALPHA
+	if not self._premultipliedAlpha then
+		self:setBlendMode(BlendMode.NORMAL)
+	end
+	self._color = {1,1,1,1}
     self._multiplyColor = {1,1,1,1}
 
 end
@@ -310,19 +341,65 @@ function DisplayObj:_getMultipliedColor()
     return r,g,b,a
 end
 
+--[[---
+--]]
+function DisplayObj:setBlendMode(blendEquation, srcFactor, dstFactor)
+	if type(blendEquation) == "string" then
+		blendEquation, srcFactor, dstFactor = BlendMode.getParams(blendEquation, self._premultipliedAlpha)
+	end
+	self._blendEquation = blendEquation
+	self._blendSrcFactor, self._blendDstFactor = srcFactor, dstFactor
+	self._prop:setBlendEquation(self._blendEquation)
+	self._prop:setBlendMode(self._blendSrcFactor, self._blendDstFactor)
+end
 
--- public Setter and Getter
+function DisplayObj:getBlendMode()
+	return self._blendEquation, self._blendSrcFactor, self._blendDstFactor
+end
+
+--[[---
+Defines if alpha value has to be used as opacity value for rgb or not.
+When the value change the blendMode is reset to NORMAL preset (with
+blend factors depending on the premultiplyAlpha value set)
+@param bUse default is true
+--]]
+function DisplayObj:setPremultipliedAlpha(bUse)
+	local bPremultipliedAlpha = not (bUse == false)
+	if self._premultipliedAlpha ~= bPremultipliedAlpha then 
+		self._premultipliedAlpha = bPremultipliedAlpha
+		self:_updateColor()
+		self:setBlendMode(BlendMode.NORMAL)
+	end
+end
+
+---Returns if alpha value is used as opacity value for rgb or not
+--@return bool
+function DisplayObj:hasPremultipliedAlpha()
+	return self._premultipliedAlpha
+end
+
+function DisplayObj:_updateColor()
+	local c = self._color
+	if self._premultipliedAlpha then
+		local a = c[4]
+		self._prop:setColor(c[1]*a,c[2]*a,c[3]*a,a)
+	else
+		self._prop:setColor(c[1],c[2],c[3],c[4])
+	end
+end
+
 
 ---Set alpha value of the object
 --@param a alpha value [0,255]
 function DisplayObj:setAlpha(a)
-    self._prop:setAttr(MOAIColor.ATTR_A_COL, a * INV_255)
+	self._color[4] = a * INV_255
+	self:_updateColor()
 end
 
 --Return alpha value of the object
 --@return alpha [0,255]
 function DisplayObj:getAlpha()
-   return self._prop:getAttr(MOAIColor.ATTR_A_COL) * 255
+   return self._color[4] * 255
 end
 
 
@@ -331,36 +408,24 @@ Set obj color.
 The following calls are valid:
 - setColor(r,g,b)
 - setColor(r,g,b,a)
-- setColor(color)
-@param r red value [0,255] or a Color
+- setColor("#FFFFFF")
+- setColor("#FFFFFFFF")
+- setColor(Color)
+@param r red value [0,255] or a Color or hex string
 @param g green value [0,255] or nil
 @param b blue value [0,255] or nil
 @param a alpha value [0,255] or nil
 --]]
 function DisplayObj:setColor(r,g,b,a)
-	local prop = self._prop
-	if type(r) == 'number' then
-		prop:setColor(
-						r*INV_255,
-						g*INV_255,
-						b*INV_255,
-						a and a * INV_255 or prop:getAttr(MOAIColor.ATTR_A_COL)
-					)
-	else
-		prop:setColor(r:unpack_normalized())
-	end
+	local c = self._color
+	c[1], c[2], c[3], c[4] = Color._paramConversion(r,g,b,a,c[4])
+	self:_updateColor()
 end
 
 ---Return the current Color of the object
---@return Color(r,g,b,a)
+--@return Color
 function DisplayObj:getColor()
-	local prop = self._prop
-	return Color(	
-					prop:getAttr(MOAIColor.ATTR_R_COL)*255,
-					prop:getAttr(MOAIColor.ATTR_G_COL)*255,
-					prop:getAttr(MOAIColor.ATTR_B_COL)*255,
-					prop:getAttr(MOAIColor.ATTR_A_COL)*255
-				)
+	return Color.fromNormalizedValues(unpack(self._color))
 end
 
 

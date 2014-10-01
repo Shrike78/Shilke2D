@@ -37,16 +37,8 @@ Creates a texture of specific width and height and color
 function Texture.fromColor(width, height, r, g, b, a)
 	local img = MOAIImage.new()
 	img:init(width,height)
-	local _r,_g,_b,_a
-	if type(r) == 'number' then
-		_r = r/255
-		_g = g/255
-		_b = b/255
-		_a = a and a / 255 or 1
-	else
-		_r, _g, _b, _a = r:unpack_normalized()
-	end	
-	img:fillRect (0,0,width,height,_r,_g,_b,_a)
+	local r,g,b,a = Color._paramConversion(r,g,b,a,1)
+	img:fillRect (0,0,width,height,r,g,b,a)
     return Texture(img)
 end
 
@@ -67,14 +59,29 @@ end
 
 
 --[[---
-Load an external file and create a texture.
+Load an external file and create a texture. Transform options can be provided, where PREMULTIPLY_ALPHA
+is the default value. 
+If a texture is created with straight alpha, once the texture is assigned to a displayObj 
+(image or subclasses) the premultiplyAlpha value of the object should be changed accordingly.
+
 @param fileName the name of the image file to load
+@param transformOptions[opt] ColorTransform.NONE or a combination of ColorTransform.POW_TWO, 
+ColorTransform.QUANTIZE, ColorTransform.TRUECOLOR and ColorTransform.PREMULTIPLY_ALPHA. 
+Default value is ColorTransform.PREMULTIPLY_ALPHA.
+@return Texture
 --]]
-function Texture.fromFileName(fileName)
-	local srcData = Assets.getRawImage(fileName)
+function Texture.fromFileName(fileName, transformOptions)
+	local srcData = Assets.getRawImage(fileName, transformOptions)
 	return Texture(srcData)
 end
 
+--[[---
+Create a texture starting from raw data.
+It can be a filename, a MOAIImage, a MOAIImageTexture or a MOAIFrameBufferTexture
+--]]
+function Texture.fromData(data)
+	return Texture(data)
+end
 
 ---Constructor.
 --Create a Texture starting from a MOAI object. 
@@ -195,6 +202,31 @@ end
 function Texture:_getRect()
 	local r = Rect(0,0, self.width, self.height)
 	return r
+end
+
+--[[---
+return texture width
+@return width
+--]]
+function Texture:getWidth()
+	return self.width
+end
+
+--[[---
+return texture height
+@return height
+--]]
+function Texture:getHeight()
+	return self.height
+end
+
+--[[---
+return texture size
+@return width
+@return height
+--]]
+function Texture:getSize()
+	return self.width, self.height
 end
 
 --[[---

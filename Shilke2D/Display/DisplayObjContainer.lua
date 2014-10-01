@@ -21,7 +21,6 @@ local min = math.min
 local max = math.max
 local MAX_VALUE = math.huge
 local MIN_VALUE = -math.huge
-local INV_255 = 1/255
 
 
 DisplayObjContainer = class(DisplayObj)
@@ -33,7 +32,7 @@ to correctly react to the events. Used mainly by children objects drawn using pi
 Disabling multiplyColor calling useMultiplyColor() makes possible to optimize DisplayObjContainer 
 color / alpha management, but only if sure that no children are using multiplyColor feature
 --]]
-DisplayObjContainer._defaultUseMultiplyColor = true
+DisplayObjContainer.__defaultUseMultiplyColor = true
 
 --[[---iterator for DisplayObjContainer children. 
 It's possible to retrieve only children of a given 'typeFilter' type
