@@ -17,9 +17,7 @@ pen handling
 --]]
 DrawableObject = class(DisplayObj)
 
---[[---
-constructor
---]]
+---constructor
 function DrawableObject:init()
 	DisplayObj.init(self)
 

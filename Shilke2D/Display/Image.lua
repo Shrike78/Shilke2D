@@ -13,7 +13,7 @@ At init phase it's possible to set a texture and a pivotMode.
 --]]
 function Image:init(texture, pivotMode)
 	if texture then
-		BaseQuad.init(self,texture.width,texture.height,pivotMode)
+		BaseQuad.init(self,texture:getWidth(),texture:getHeight(),pivotMode)
 		self.texture = texture
 		self._prop:setDeck(texture:_getQuad())
 	else
@@ -123,13 +123,13 @@ function Image:setTexture(texture)
 			--if first set (called by init) or texture switch between
 			--subtexture of the same texture atlas, an update is
 			--required only if the shape changes
+			local tw, th = texture:getSize()
 			local bUpdateGeometry = not self.texture or 
-				(self.texture.width ~= texture.width) or 
-				(self.texture.height ~= texture.height)
+				(self.width ~= tw) or (self.height ~= th)
 			self.texture = texture
 			self._prop:setDeck(texture:_getQuad())
 			if bUpdateGeometry then
-				self:setSize(texture.width,texture.height)
+				self:setSize(tw,th)
 			end
 		end
 	end

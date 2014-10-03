@@ -40,7 +40,7 @@ function Button:init(upState, downState, label)
     self.contents:addChild(self.background)
     self:addChild(self.contents)
     if label then
-        self.textField = TextField(upState.width,upState.height,label,nil,nil,
+        self.textField = TextField(upState:getWidth(),upState:getHeight(),label,nil,nil,
             PivotMode.CENTER)
         self.textField:setPosition(self.textField:getWidth()/2,
 			self.textField:getHeight()/2)
@@ -62,6 +62,19 @@ end
 --@return TextField or nil
 function Button:getTextField()
     return self.textField
+end
+
+
+function Button:getUpState()
+	return self.upState
+end
+
+function Button:getDownState()
+	return self.downState
+end
+
+function Button:getLabel()
+	return self.textField and self.textField:getText() or ""
 end
 
 

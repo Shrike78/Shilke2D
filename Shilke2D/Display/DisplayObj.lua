@@ -102,9 +102,7 @@ according to multiply value.
 --]]
 DisplayObj.__defaultUseMultiplyColor = false
 
---[[---
-Used to define the default alpha behaviour of a displayObj type. That influences blend modes.
---]]
+---Used to define the default alpha behaviour of a displayObj type. That influences blend modes.
 DisplayObj.__defaultHasPremultipliedAlpha = true
 
 ---Initialization.

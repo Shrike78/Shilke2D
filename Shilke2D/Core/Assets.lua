@@ -108,7 +108,7 @@ function Assets.getTexture(fileName,useCache)
 		return nil, err
 	end
 	
-	local txt = Texture(rawImage)
+	local txt = Texture.fromData(rawImage)
 	if useCache then
 		__textureCache[cacheName] = txt
     end
