@@ -342,6 +342,12 @@ function DisplayObj:_getMultipliedColor()
 end
 
 --[[---
+Set the blend mode for the display object. A blend mode can be expressed in terms of
+blend equation plus src & dst blend factors or as named preset (must be a valid 
+registerd name)
+@param blendEquation BlendEquation or preset string
+@param srcFactor BlendFactor or nil
+@param dstFactor BlendFactor or nil
 --]]
 function DisplayObj:setBlendMode(blendEquation, srcFactor, dstFactor)
 	if type(blendEquation) == "string" then
@@ -353,14 +359,20 @@ function DisplayObj:setBlendMode(blendEquation, srcFactor, dstFactor)
 	self._prop:setBlendMode(self._blendSrcFactor, self._blendDstFactor)
 end
 
+--[[---
+return current blend mode in terms of blend equation and blend factors
+@return BlendEquation the currently set blend equation
+@return BlendFactor the currentrly set src blend factor
+@return BlendFactor the currentrly set dst blend factor
+--]]
 function DisplayObj:getBlendMode()
 	return self._blendEquation, self._blendSrcFactor, self._blendDstFactor
 end
 
 --[[---
-Defines if alpha value has to be used as opacity value for rgb or not.
-When the value change the blendMode is reset to NORMAL preset (with
-blend factors depending on the premultiplyAlpha value set)
+Defines if alpha value has to be used as straight or premultiplied.
+When the value change the blendMode is reset to NORMAL preset 
+(whith blend factors depending on alpha mode)
 @param bUse default is true
 --]]
 function DisplayObj:setPremultipliedAlpha(bUse)
@@ -372,12 +384,17 @@ function DisplayObj:setPremultipliedAlpha(bUse)
 	end
 end
 
----Returns if alpha value is used as opacity value for rgb or not
+---Returns if alpha is used as straight or premultiplied
 --@return bool
 function DisplayObj:hasPremultipliedAlpha()
 	return self._premultipliedAlpha
 end
 
+--[[
+Inner function used to update color after changing in color / alpha
+Need to be called every time color or alpha information change 
+(including premultiplied/straight setting)
+--]]
 function DisplayObj:_updateColor()
 	local c = self._color
 	if self._premultipliedAlpha then

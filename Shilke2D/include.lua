@@ -1,12 +1,37 @@
 --[[---
-Shilke2D/include is the entry point for each project based on Shilke2D
+Shilke2D/include is the entry point for each project based on Shilke2D.
+There are some specific Shilke2D configuration options that must be set before to include
+this file.
 --]]
+
+if __DEBUG_CALLBACKS__ == nil then
+	--[[---
+	Used to enable debug of default Shilke2D callbacks  (post draw and input callbacks)
+	This feature relies on ZeroBraneStudio mobdebug feature so it can be enabled only
+	when debugging from this IDE. By default is set to false
+	--]]
+	__DEBUG_CALLBACKS__ = false
+end
+
+
+if __USE_SIMULATION_COORDS__ == nil then
+	--[[---
+	--Shilke2D default coordinate system has (0,0) as topleft point and y grows from top to bottom. 
+	It's possible to change coordinate system having (0,0) as bottomleft point and y growing from 
+	bottom to top (so called coordinate system) setting this option to true
+	By default is set to false
+	--]]
+	__USE_SIMULATION_COORDS__ = false
+end
+
 
 ---
 if __STARLING_TWEEN__ == nil then
-	---Used to selective include tween library.
-	--By default tween library is loaded. 
-	--Define __STARLING_TWEEN__ = false before include to disable it
+	--[[---
+	Used to selective include tween library.
+	By default tween library is loaded. 
+	Define __STARLING_TWEEN__ = false before include to disable it
+	--]]
 	__STARLING_TWEEN__ = true
 end
 
@@ -71,13 +96,15 @@ require("Shilke2D/Texture/TexturePacker")
 require("Shilke2D/Texture/TextureManager")
 
 --Shilke2D/Tween
-require("Shilke2D/Tween/Tween")
-require("Shilke2D/Tween/TweenDelay")
-require("Shilke2D/Tween/Transition")
-require("Shilke2D/Tween/TweenEase")
-require("Shilke2D/Tween/Bezier")
-require("Shilke2D/Tween/TweenBezier")
-require("Shilke2D/Tween/TweenParallel")
-require("Shilke2D/Tween/TweenLoop")
-require("Shilke2D/Tween/TweenSequence")
-require("Shilke2D/Tween/DisplayObjTweener")
+if __STARLING_TWEEN__ then
+	require("Shilke2D/Tween/Tween")
+	require("Shilke2D/Tween/TweenDelay")
+	require("Shilke2D/Tween/Transition")
+	require("Shilke2D/Tween/TweenEase")
+	require("Shilke2D/Tween/Bezier")
+	require("Shilke2D/Tween/TweenBezier")
+	require("Shilke2D/Tween/TweenParallel")
+	require("Shilke2D/Tween/TweenLoop")
+	require("Shilke2D/Tween/TweenSequence")
+	require("Shilke2D/Tween/DisplayObjTweener")
+end
