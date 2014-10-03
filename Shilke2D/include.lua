@@ -24,15 +24,13 @@ if __USE_SIMULATION_COORDS__ == nil then
 	__USE_SIMULATION_COORDS__ = false
 end
 
-
----
-if __STARLING_TWEEN__ == nil then
+if __SHILKE2D_TWEEN__ == nil then
 	--[[---
 	Used to selective include tween library.
 	By default tween library is loaded. 
-	Define __STARLING_TWEEN__ = false before include to disable it
+	Define __SHILKE2D_TWEEN__ = false before include to disable it
 	--]]
-	__STARLING_TWEEN__ = true
+	__SHILKE2D_TWEEN__ = true
 end
 
 
@@ -96,7 +94,7 @@ require("Shilke2D/Texture/TexturePacker")
 require("Shilke2D/Texture/TextureManager")
 
 --Shilke2D/Tween
-if __STARLING_TWEEN__ then
+if __SHILKE2D_TWEEN__ then
 	require("Shilke2D/Tween/Tween")
 	require("Shilke2D/Tween/TweenDelay")
 	require("Shilke2D/Tween/Transition")
