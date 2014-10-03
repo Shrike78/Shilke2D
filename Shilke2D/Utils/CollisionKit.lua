@@ -20,16 +20,20 @@ function imageHitTest(i1,p1,a1,i2,p2,a2)
 	
 	local w1,h1 = i1:getSize()
 	local w2,h2 = i2:getSize()
-
+	
 	--alpha values are [0,255]
 	local a1 = a1/255
 	local a2 = a2/255
     
     local r1 = Rect(p1.x,p1.y,w1,h1)
     local r2 = Rect(p2.x,p2.y,w2,h2)
+    --check for rect intersection
     if not r1:intersects(r2) then 
         return false 
-    end
+    end	
+
+	
+	--adjust r1,r2 to be intersection of the original rects
     if p1.x <= p2.x then
         r1.x = p2.x - p1.x
         r2.x = 0
@@ -49,21 +53,22 @@ function imageHitTest(i1,p1,a1,i2,p2,a2)
         r1.h = r2.h - r2.y
     end
 	
+	--skip cases of edge collision
 	if r1.w == 0 or r1.h == 0 then return false end
-if not __USE_SIMULATION_COORDS__ then
 	
+if not __USE_SIMULATION_COORDS__ then	
 	for i = 1,r1.w do
 		for j = 1,r1.h do
 			local _,_,_,a = i1:getRGBA(r1.x + i, r1.y + j)
 			if a > a1 then
-				_,_,_,a = i1:getRGBA(r2.x + i, r2.y + j)
+				_,_,_,a = i2:getRGBA(r2.x + i, r2.y + j)
 				if a > a2 then
 					return true
 				end
 			end
 		end
 	end
-else
+else --__USE_SIMULATION_COORDS__
 	r1.y = h1 - r1.y
 	r2.y = h2 - r2.y
 	
@@ -71,7 +76,7 @@ else
 		for j = 1,r1.h do
 			local _,_,_,a = i1:getRGBA(r1.x + i, r1.y -j)
 			if a > a1 then
-				_,_,_,a = i1:getRGBA(r2.x + i, r2.y - j)
+				_,_,_,a = i2:getRGBA(r2.x + i, r2.y - j)
 				if a > a2 then
 					return true
 				end
@@ -128,15 +133,21 @@ function imageHitTestEx(i1,p1,a1,i2,p2,a2,rect1,rect2,rot1,rot2)
 		w2,h2 = h2,w2
 	end
 	
+
 	--alpha values are [0,255]
 	local a1 = a1/255
 	local a2 = a2/255
     
-    local r1 = Rect(p1.x,p1.y,w1,h1)
-    local r2 = Rect(p2.x,p2.y,w2,h2)
-    if not r1:intersects(r2) then 
-        return false 
-    end
+	local r1 = Rect(p1.x,p1.y,w1,h1)
+	local r2 = Rect(p2.x,p2.y,w2,h2)
+	
+	--check for intersection
+	if not r1:intersects(r2) then 
+		return false 
+	end
+ 
+	--adjust r1,r2 to be intersection of the original rects
+	
     if p1.x <= p2.x then
         r1.x = p2.x - p1.x
         r2.x = 0
@@ -156,6 +167,7 @@ function imageHitTestEx(i1,p1,a1,i2,p2,a2,rect1,rect2,rot1,rot2)
         r1.h = r2.h - r2.y
     end
 	
+	--skip cases of edge collision
 	if r1.w == 0 or r1.h == 0 then return false end
 
 if not __USE_SIMULATION_COORDS__ then
@@ -167,7 +179,7 @@ if not __USE_SIMULATION_COORDS__ then
 			for j = 1,r1.h do
 				local _,_,_,a = i1:getRGBA(_x1 + i, _y1 + j)
 				if a > a1 then
-					_,_,_,a = i1:getRGBA(_x2 + i, _y2 + j)
+					_,_,_,a = i2:getRGBA(_x2 + i, _y2 + j)
 					if a > a2 then
 						return true
 					end
@@ -195,7 +207,7 @@ if not __USE_SIMULATION_COORDS__ then
 			for j = 1,r1.h do
 				local _,_,_,a = i1:getRGBA(_x1 - j, _y1 + i)
 				if a > a1 then
-					_,_,_,a = i1:getRGBA(_x2 + i, _y2 + j)
+					_,_,_,a = i2:getRGBA(_x2 + i, _y2 + j)
 					if a > a2 then
 						return true
 					end
@@ -217,7 +229,7 @@ if not __USE_SIMULATION_COORDS__ then
 			end
 		end
 	end
-else
+else --__USE_SIMULATION_COORDS__
 	if not rot1 and not rot2 then
 		local _x1,_y1 = (o1x + r1.x), (o1y + h1 - r1.y)
 		local _x2,_y2 = (o2x + r2.x), (o2y + h2 - r2.y)
@@ -225,7 +237,7 @@ else
 			for j = 1,r1.h do
 				local _,_,_,a = i1:getRGBA(_x1 + i, _y1 -j)
 				if a > a1 then
-					_,_,_,a = i1:getRGBA(_x2 + i, _y2 - j)
+					_,_,_,a = i2:getRGBA(_x2 + i, _y2 - j)
 					if a > a2 then
 						return true
 					end
@@ -253,7 +265,7 @@ else
 			for j = 1,r1.h do
 				local _,_,_,a = i1:getRGBA(_x1 + j, _y1 + i)
 				if a > a1 then
-					_,_,_,a = i1:getRGBA(_x2 + i, _y2 - j)
+					_,_,_,a = i2:getRGBA(_x2 + i, _y2 - j)
 					if a > a2 then
 						return true
 					end
