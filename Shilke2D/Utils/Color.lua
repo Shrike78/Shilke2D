@@ -234,7 +234,7 @@ convert an hex color string (that can start or not with #) to r,g,b,a [0..255] v
 @return r [0..255]
 @return g [0..255]
 @return b [0..255]
-@return a [0..255]
+@return a [0..255] if the hex string doesn't contains alpha info it returns 255
 --]]
 function Color.hex2rgba(hex)
     hex = hex:gsub("#","")
