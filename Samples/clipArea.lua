@@ -40,7 +40,7 @@ function setup()
 	stage:addChild(moaiImg)
 	
 	--load the PlanetCute texture atlas and retrieves all the "Character*.png" textures
-	local atlas = TexturePacker.loadSparrowFormat("PlanetCute.xml")	
+	local atlas = TexturePacker.loadSparrowFormat("PlanetCute/PlanetCute.xml")	
 	local textures = atlas:getTextures("Character")
 	
 	--Create the displayContainer that will be clipped. 

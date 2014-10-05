@@ -36,7 +36,7 @@ function setup()
 	--All the resources of PlanetCute atlas will then be available as normal resources under the
 	--PlanetCute directory. If empty string is provided instead of "PlanetCute" all the resources
 	--became available in current working dir.
-	TextureManager.mountAtlas("PlanetCute",TexturePacker.loadSparrowFormat("PlanetCute.xml"))
+	TextureManager.mountAtlas("PlanetCute",TexturePacker.loadSparrowFormat("PlanetCute/PlanetCute.xml"))
     	
 	--We can now retrieve Character Boy.png without caring if it's a real texture or a
 	--atlas resource

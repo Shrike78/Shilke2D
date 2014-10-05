@@ -32,10 +32,13 @@ function setup()
 	--if not set, the default color is (0,0,0)
 	stage:setBackgroundColor(128,128,128)
 
-	--we load the atlas descriptor created with TexturePacker. The data was created with the
-	--sparrow format so we make use of the TexturePacker helper function. Helpers also for corona and 
-	--moai format exists.
-	local atlas = TexturePacker.loadSparrowFormat("PlanetCute.xml")
+	--we load the atlas descriptor created with TexturePacker. 
+	--choose one of the following to see how different format and features are supported as well
+	local atlas = TexturePacker.loadSparrowFormat("PlanetCute/PlanetCute.xml")
+	--local atlas = TexturePacker.loadSparrowFormat("PlanetCute/PlanetCute_rotated.xml")
+	--local atlas = TexturePacker.loadMoaiFormat("PlanetCute/PlanetCute.lua")
+	--local atlas = TexturePacker.loadMoaiFormat("PlanetCute/PlanetCute_rotated.lua")
+	
 	--we retrieve the subtexture that was originally Character Boy.png and that is now a subregion of
 	--the atlas texture
 	local boyTexture = atlas:getTexture("Character Boy.png") 
