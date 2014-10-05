@@ -101,7 +101,7 @@ end
 --@param name attribute key
 --@param default [optional] if the attribute doesn't exist returns it. default value is nil
 --@return int the value of the attribute as a int or nil 
-function XmlNode:getAttributeN(name, default)
+function XmlNode:getAttributeNumber(name, default)
 	local v = self:getAttribute(name)
 	if v then
 		return tonumber(v)
