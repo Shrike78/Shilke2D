@@ -10,14 +10,18 @@ of this descriptors.
 
 TexturePacker = {}
 
----Load an xml file and automatically calls parseSparrowFormat and returns a texture atlas
---@param xmlFileName the path of the Sparrow/Starling xml descriptor
---@return TextureAtlas
+--[[---
+Load an xml file and automatically calls parseSparrowFormat and returns a texture atlas.
+It expects to have the referred image in a relative path to xml file location 
+@param xmlFileName the path of the Sparrow/Starling xml descriptor
+@return TextureAtlas
+@return err nil or error string if loading failed
+--]]
 function TexturePacker.loadSparrowFormat(xmlFileName)
 	local dir = string.getFileDir(xmlFileName)
 	local atlasXml, err = Assets.getXml(xmlFileName)
 	if not atlasXml then
-		return err
+		return nil, err
 	end
 	return TexturePacker.parseSparrowFormat(atlasXml,dir)
 end
@@ -79,38 +83,23 @@ function TexturePacker.parseSparrowFormat(atlasXml, dir, texture)
     return atlas
 end
 
---[[
---TODO: implement logic for loading lua file, like for 'sparrow format', using 'return' ecc.
---function TexturePacker.loadMoaiFormat(luaFileName)
---end
 
---return {
-atlasDescriptor = {
-    texture = 'atlas.png',
-    frames = {
-                {
-                    name = "texture_1.png",
-                    spriteColorRect = { x = 0, y = 0, 
-                        width = 40, height = 40 },               
-                    uvRect = { u0 = 0.015625, v0 = 0.0078125, 
-                        u1 = 0.640625, v1 = 0.320312 },    
-                    spriteSourceSize = { width = 40, height = 40 },
-                    spriteTrimmed = false,
-                    textureRotated = false
-                },
-                {
-                    name = "texture_2.png",
-                    spriteColorRect = { x = 0, y = 0, 
-                        width = 40, height = 40 },
-                    uvRect = { u0 = 0.015625, v0 = 0.328125, 
-                        u1 = 0.640625, v1 = 0.640625 },
-                    spriteSourceSize = { width = 40, height = 40 },
-                    spriteTrimmed = false,
-                    textureRotated = false
-                },
-            }
-    }
-    --]]
+--[[---
+Load a lua file and automatically calls parseMoaiFormat and returns a texture atlas
+It expects to have the referred image in a relative path to xml file location 
+@param luaFileName the path of the MOAI lua descriptor
+@return TextureAtlas
+@return err nil or error string if loading failed
+--]]
+function TexturePacker.loadMoaiFormat(luaFileName)
+	local dir = string.getFileDir(luaFileName)
+	local atlasDescriptor, err = IO.dofile(luaFileName)
+	if not atlasDescriptor then
+		return nil, err
+	end
+	return TexturePacker.parseMoaiFormat(atlasDescriptor, dir)
+end
+
 
 --[[---
 Parser for the MOAI lua descriptor
@@ -134,19 +123,35 @@ function TexturePacker.parseMoaiFormat(descriptor, dir, texture)
 		texture = Assets.getTexture(dir .. imgName)
 	end
 	
-    local atlas = TextureAtlas(texture)
-	
-    for _,subTex in pairs(descriptor.frames) do
-        local x = subTex.uvRect.u0
-        local y = subTex.uvRect.v0
-        local w = subTex.uvRect.u1 - x
-        local h = subTex.uvRect.v1 - y
-        
-        --Sparrow/Starling work with (0,0) as top left
-        local region = Rect(x, y+h, w, h)
-        atlas:addRegion(subTex.name,region)
-    end
-    return atlas
+	local atlas = TextureAtlas(texture)
+
+	for _,subTex in pairs(descriptor.frames) do
+		local x = subTex.uvRect.u0
+		local y = subTex.uvRect.v0
+		local w = subTex.uvRect.u1 - x
+		local h = subTex.uvRect.v1 - y
+		local rotated = subTex.textureRotated
+		assert(not rotated, "parsing of rotated subtextures still not implemented")
+		local region = Rect(x, y, w, h)
+		atlas:addRegion(subTex.name, region)
+	end
+	return atlas
+end
+
+--[[---
+Load a lua file and automatically calls parseCoronaFormat and returns a texture atlas
+It expects to have the referred image in a relative path to xml file location 
+@param luaFileName the path of the Corona lua descriptor
+@return TextureAtlas
+@return err nil or error string if loading failed
+--]]
+function TexturePacker.loadCoronaFormat(luaFileName)
+	local dir = string.getFileDir(luaFileName)
+	local atlasDescriptor, err = IO.dofile(luaFileName)
+	if not atlasDescriptor then
+		return nil, err
+	end
+	return TexturePacker.parseCoronaFormat(atlasDescriptor, dir)
 end
 
 --[[---
