@@ -37,7 +37,7 @@ function setup()
 	--we load the atlas descriptor created with TexturePacker. The data was created with the
 	--sparrow format so we make use of the TexturePacker helper function. Helpers also for corona and 
 	--moai format exists.
-	local atlas = TexturePacker.loadSparrowFormat("PlanetCute.xml")
+	local atlas = TexturePacker.loadSparrowFormat("PlanetCute/PlanetCute.xml")
 	
 	--we retrieve the subtexture that was originally "Character Boy".png and that is now a subregion of
 	--the atlas texture

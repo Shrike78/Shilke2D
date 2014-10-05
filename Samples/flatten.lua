@@ -35,7 +35,7 @@ function setup()
 	shilke:showStats(true,true)
 		
 	--load the PlanetCute texture atlas
-	local atlas = TexturePacker.loadSparrowFormat("PlanetCute.xml")
+	local atlas = TexturePacker.loadSparrowFormat("PlanetCute/PlanetCute.xml")
 	
 	--retrieves all the textures contained into the atlas
 	local textures = atlas:getTextures()
