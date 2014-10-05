@@ -70,14 +70,14 @@ function TexturePacker.parseSparrowFormat(atlasXml, dir, texture)
 		--when loading a texture using TextureManager
         local name = subTex:getAttribute("name") .. extension
         --divide for width/height to have a [0..1] range
-        local x = subTex:getAttributeN("x") / texture.width
-        local y = subTex:getAttributeN("y") / texture.height
-        local w = subTex:getAttributeN("width") / texture.width
-        local h = subTex:getAttributeN("height") / texture.height
-        
+        local x = subTex:getAttributeNumber("x") / texture.width
+        local y = subTex:getAttributeNumber("y") / texture.height
+        local w = subTex:getAttributeNumber("width") / texture.width
+        local h = subTex:getAttributeNumber("height") / texture.height
+        local rotated = subTex:getAttributeBool("rotated", false)
         --Sparrow/Starling work with (0,0) as top left
         local region = Rect(x, y, w, h)
-        atlas:addRegion(name,region)
+        atlas:addRegion(name,region, rotated)
     end
 	
     return atlas
@@ -131,9 +131,8 @@ function TexturePacker.parseMoaiFormat(descriptor, dir, texture)
 		local w = subTex.uvRect.u1 - x
 		local h = subTex.uvRect.v1 - y
 		local rotated = subTex.textureRotated
-		assert(not rotated, "parsing of rotated subtextures still not implemented")
 		local region = Rect(x, y, w, h)
-		atlas:addRegion(subTex.name, region)
+		atlas:addRegion(subTex.name, region, rotated)
 	end
 	return atlas
 end
