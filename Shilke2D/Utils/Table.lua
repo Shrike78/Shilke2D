@@ -147,3 +147,13 @@ function table.extend(t1, t2)
 		t1[#t1+1] = v
 	end
 end
+
+--[[---
+Returns a random element from the provided table. 
+Works only with the array part of tables
+@param t the table with the element to choose
+@return element a random element of t
+--]]
+function table.random(t)
+	return t[math.random(#t)] 
+end
