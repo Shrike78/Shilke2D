@@ -70,11 +70,11 @@ function TexturePacker.parseSparrowFormat(atlasXml, dir, texture)
 		--when loading a texture using TextureManager
         local name = subTex:getAttribute("name") .. extension
         --divide for width/height to have a [0..1] range
-        local x = subTex:getAttributeNumber("x") / texture.width
-        local y = subTex:getAttributeNumber("y") / texture.height
-        local w = subTex:getAttributeNumber("width") / texture.width
-        local h = subTex:getAttributeNumber("height") / texture.height
-        local rotated = subTex:getAttributeBool("rotated", false)
+        local x = subTex:getAttributeAsNumber("x") / texture.width
+        local y = subTex:getAttributeAsNumber("y") / texture.height
+        local w = subTex:getAttributeAsNumber("width") / texture.width
+        local h = subTex:getAttributeAsNumber("height") / texture.height
+        local rotated = subTex:getAttributeAsBool("rotated", false)
         --Sparrow/Starling work with (0,0) as top left
         local region = Rect(x, y, w, h)
         atlas:addRegion(name,region, rotated)
