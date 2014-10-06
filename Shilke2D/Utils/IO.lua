@@ -1,93 +1,270 @@
  --[[---
-IO namespace offers functions to easily addressed fileSystem issues.
+IO namespace offers functions to easily address fileSystem issues.
+
+When an application is launched, the logical root filesystem is set at the main 
+executed lua module level.
+
+The application can read and write only under this filesystem, it's never allowed to 
+do things outside it's logical space (only iOS apps require that, but the behaviour
+is forced on all devices)
+
+IO module public interface allows to set a working directory relative to the root one and 
+to read / execute files inside the logical filesystem space.
 --]]
 
 IO = {}
 
----Absolute path dir. 
---It's initialized when Shilke2D is initialized and it's used to 
---handle relative path logic
+--[[---
+Absolute path dir. 
+It's initialized when Shilke2D is initialized and it's used to 
+handle relative path logic
+--]]
 IO.__baseDir = MOAIFileSystem.getWorkingDirectory()
 
----Store current workingDir, relative to base application path
-IO.__workingDir = ""
+---Stores current workingDir, relative to base application path
+IO.__workingDir = "/"
 
 --[[---
-Used to set the working dir. It's meant as a path starting 
-always from root application path
-@param folder string
+Returns the absolute app dir on the running device filesystem
+@return string
 --]]
-function IO.setWorkingDir(folder)
-	IO.__workingDir = ("/" .. folder):gsub("//","/")
-	local path = IO.__baseDir .. folder
-	MOAIFileSystem.setWorkingDirectory(path)
-end
-
----Returns the absolut app dir
---@return string
 function IO.getBaseDir()
 	return IO.__baseDir
 end
 
 --[[---
+Used to set the working dir. It's always meant as an absolute path starting 
+from root application path.
+@usage
+
+the following instruction have the exactly same result:
+IO.setWorkingDir('Assets')
+IO.setWorkingDir('Assets/')
+IO.setWorkingDir('/Assets')
+IO.setWorkingDir('/Assets/')
+
+@param folder string
+--]]
+function IO.setWorkingDir(folder)
+	IO.__workingDir = string.normalizePath("/" .. folder .. "/")
+	local path = IO.__baseDir .. folder
+	MOAIFileSystem.setWorkingDirectory(path)
+end
+
+--[[---
 Returns workingDir.
-if "asDevicePath" then return the path starting from device root 
-filesystem, else returns path from application root filesystem
-@param asDevicePath bool
+By default returns the working dir related to app root. 
+For inner usage it's possible to set a boolean parameter to retrieve the
+absolute device path
+@param asDevicePath[opt] bool, default false
 @return string
 --]]
 function IO.getWorkingDir(asDevicePath)
 	if asDevicePath == true then 
-		return IO.__baseDir .. IO.__workingDir
+		return IO.__baseDir .. IO.__workingDir:sub(2)
 	else
 		return IO.__workingDir
 	end
 end
 
+
 --[[---
 Converts a relative paht into an absolute one.
-if "asDevicePath" then return the path starting from device root 
+if 'asDevicePath' then return the path starting from device root 
 filesystem, else returns path from application root filesystem
 @param path string
-@param asDevicePath bool
+@param asDevicePath[opt] bool, default false.
 @return string
 --]]
 function IO.getAbsolutePath(path, asDevicePath)
-	local path = path:gsub("\\","/")
+	local path = string.normalizePath(path)
 	if not string.starts(path,"/") then
-		path = IO.__workingDir .. "/" .. path
+		path = IO.__workingDir .. path
 	end
-	if asDevicePath == true then 
-		path = IO.__baseDir .. path
+	if asDevicePath then 
+		path = IO.__baseDir .. path:sub(2)
 	end
-	return path:gsub("//","/")
+	return path
 end
 
----Returns raw data for every type of files
---@param fileName string
---@return file or nil if an error raises
---@return nil or error message if an error raises
-function IO.getFile(fileName)
-	local fn = fileName
-	if string.starts(fn,"/") then
-		fn = IO.__baseDir .. fn
+
+--[[---
+Checks if a given path is absolute or relative. It's also possible to check
+if it's a device absolute path or not
+@param path
+@param asDevicePath[opt]
+@return bool
+--]]
+function IO.isAbsolutePath(path, asDevicePath)
+	local path = string.normalizePath(path)
+	if not asDevicePath then
+		return string.starts(path, "/")
+	else
+		return string.starts(path, IO.__baseDir)
 	end
-    local file,err = io.open(fn,"r")
+end
+
+
+--[[---
+Returns raw data for every type of files
+@param fileName path to the file to be open, it can be either relative to the currently set
+working path, or absolute to the application root.
+@return file or nil if an error raises
+@return nil or error message if an error raises
+--]]
+function IO.getFile(fileName)
+	local fn = IO.getAbsolutePath(fileName, true)
+	local file,err = io.open(fn,"r")
 	local res = nil
-    if not err then
-        res = file:read("*all")
-        io.close(file)
-    end
+	if not err then
+		res = file:read("*all")
+		io.close(file)
+	end
 	return res,err
 end
 
----Allows to set a path for dofile (by default use MOAI WorkingDir
+--[[---
+Loads and runs a given file.
+@param fileName path to the file to be executed, it can be either relative to the currently set
+working path, or absolute to the application root.
+@return fileName() the result of the execution of the file
+--]]
 function IO.dofile(fileName)
-	local fn = fileName
-	if string.starts(fn,"/") then
-		fn = IO.__baseDir .. fn
+	local fn = IO.getAbsolutePath(fileName, true)
+	local chunck, err = loadfile(fn)
+	if not chunck then 
+		return nil, err 
 	end
-	local chunck,err = loadfile(fn)
-	if not chunck then return nil, err end
 	return chunck()
+end
+
+
+--[[---
+Checks if a given path is a file (not including directory)
+@param path the path to check
+@return bool check result
+--]]
+function IO.isFile(path)
+	local path = IO.getAbsolutePath(path, true)
+	return MOAIFileSystem.checkFileExists(path)
+end
+
+
+--[[---
+Checks if a given path is a directory
+@param path the path to check
+@return bool check result
+--]]
+function IO.isDirectory(path)
+	local path = IO.getAbsolutePath(path, true)
+	return MOAIFileSystem.checkPathExists(path)
+end
+
+--[[---
+Checks if a given path exist (being either a file or a directory) 
+@param path the path to check
+@return bool check result
+--]]
+function IO.exists(path)
+	return IO.isFile(path) or IO.isDirectory(path)
+end
+
+--[[---
+Copy a file or a folder
+@param src	string
+@param dst	string
+@return bool
+--]]
+function IO.copy(src, dst)
+	local src = IO.getAbsolutePath(src, true)
+	local dst = IO.getAbsolutePath(dst, true)
+	return MOAIFileSystem.copy(src, dst)
+end
+
+--[[---
+Renames a file or a folder
+@param src	string
+@param dst	string
+@return bool
+--]]
+function IO.move(src, dst)
+	local src = IO.getAbsolutePath(src, true)
+	local dst = IO.getAbsolutePath(dst, true)
+	return MOAIFileSystem.rename(src,dst)
+end
+
+
+--[[---
+Deletes a file
+@param path path to the file to delete
+@return bool success
+--]]
+function IO.deleteFile(path)
+	local path = IO.getAbsolutePath(path, true)
+	return MOAIFileSystem.deleteFile(path)
+end
+
+
+--[[---
+Deletes a folder. if recursive is true deletes all the subfolders, else it delets
+the directory only if empty
+@param path path to the directory to delete
+@param recursive recursive If true, the directory and all contents beneath it will be purged. 
+Otherwise, the directory will only be removed if empty.
+@return bool success
+--]]
+function IO.deleteDirectory(path, recursive)
+	local path = IO.getAbsolutePath(path, true)
+	return MOAIFileSystem.deleteDirectory(path, recursive)
+end
+
+
+--[[---
+Lists all the files contained in a directory.
+If path is not provided uses current working dir.
+@param path[opt] the path to list
+@return table list of file names or nil if the path is not valid
+--]]
+function IO.lsFiles(path)
+	local path = path
+	if path then
+		path = IO.getAbsolutePath(path, true)
+	end
+	return MOAIFileSystem.listFiles(path)
+end
+
+
+--[[---
+Lists all the sub directories contained in a directory.
+If path is not provided uses current working dir.
+@param path[opt] the path to list
+@return table list of directory names or nil if the path is not valid
+--]]
+function IO.lsDirectories(path)
+	local path = path
+	if path then
+		path = IO.getAbsolutePath(path, true)
+	end
+	return MOAIFileSystem.listDirectories(path)
+end
+
+
+--[[---
+Lists all the files and sub directories contained in a directory.
+If path is not provided uses current working dir.
+@param path[opt] the path to list
+@return table list of directory and file names or nil if the path is not valid
+--]]
+function IO.ls(path)
+	return table.extend(IO.lsDirectories(path), IO.lsFiles(path))
+end
+
+
+--[[---
+Creates a folder at 'path' if doesn't exist
+@param path the folder to create
+--]]
+function IO.affirmPath(path)
+	local path = IO.getAbsolutePath(path, true)
+	MOAIFileSystem.affirmPath(path)
 end
