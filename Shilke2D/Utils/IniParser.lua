@@ -196,6 +196,7 @@ function IniParser:set(section, key, value)
 		return false
 	end
 	items[key] = tostring(value)
+	return true
 end
 
 
