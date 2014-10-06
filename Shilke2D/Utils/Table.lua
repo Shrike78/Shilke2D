@@ -151,6 +151,17 @@ end
 
 
 --[[---
+Returns a random element from the provided table. 
+Works only with the array part of tables
+@param t the table with the element to choose
+@return element a random element of t
+--]]
+function table.random(t)
+	return t[math.random(#t)] 
+end
+
+
+--[[---
 "Sorted by key" table iterator 
 Extracted from http://www.lua.org/pil/19.3.html
 @param t the table to iterate
