@@ -257,17 +257,27 @@ end
 
 
 --[[---
-Dump the content to a string
-@return string
+Dump the content to a stringbuilder object
+@param sb a StringBuilder
 --]]
-function IniParser:dump()
-	local sb = StringBuilder()
+function IniParser:dump(sb)
 	for section, items in sortedpairs(self.ini) do
 		sb:writeln("[" .. section .. "]")
 		for k,v in sortedpairs(items) do
 			sb:writeln(k.."="..v)
 		end
 	end
+end
+
+
+--[[---
+Return a string with the IniParser content.
+Dump the content and flush it on the resulting string
+@return string
+--]]
+function IniParser:strDump()
+	local sb = StringBuilder()
+	self:dump(sb)
 	return sb:toString(true)
 end
 
@@ -282,7 +292,7 @@ function IniParser:write(fileName)
 	if not file then
 		return false, err
 	end
-	file:write(self:dump())
+	file:write(self:strDump())
 	io.close(file)
 	return true
 end
