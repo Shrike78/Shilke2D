@@ -106,6 +106,21 @@ end
 
 
 --[[---
+Opens a file (it wraps io.open)
+@param fileName path to the file to be open, it can be either relative to the currently set
+working path, or absolute to the application root.
+@param mode[opt] the openfile mode ('r','w','a','r+','w+'). default is 'r'
+@return file or nil if an error raises
+@return nil or error message if an error raises
+--]]
+function IO.open(fileName, mode)
+	local fn = IO.getAbsolutePath(fileName, true)
+	local mode = mode or 'r'
+	return io.open(fn, mode)
+end
+
+
+--[[---
 Returns raw data for every type of files
 @param fileName path to the file to be open, it can be either relative to the currently set
 working path, or absolute to the application root.
@@ -113,14 +128,13 @@ working path, or absolute to the application root.
 @return nil or error message if an error raises
 --]]
 function IO.getFile(fileName)
-	local fn = IO.getAbsolutePath(fileName, true)
-	local file,err = io.open(fn,"r")
-	local res = nil
-	if not err then
-		res = file:read("*all")
-		io.close(file)
+	local file, err = IO.open(fileName)
+	if not file then
+		return nil, err
 	end
-	return res,err
+	res = file:read("*all")
+	io.close(file)
+	return res
 end
 
 --[[---
