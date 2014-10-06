@@ -148,3 +148,33 @@ function table.extend(t1, t2)
 	end
 	return t1
 end
+
+
+--[[---
+"Sorted by key" table iterator 
+Extracted from http://www.lua.org/pil/19.3.html
+@param t the table to iterate
+@param comp[opt] the compare function (see table.sort). 
+by default uses alphabetical comparison
+--]]
+function sortedpairs(t, comp)
+	local a = {}    
+	for n in pairs(t) do
+		table.insert(a, n)
+	end
+	table.sort(a, comp)
+
+	-- iterator variable
+	local i = 0      
+	-- iterator function
+	local iter = function ()   
+		i = i + 1
+		if a[i] == nil then
+			return nil
+		else
+			return a[i], t[a[i]]
+		end
+	end
+	
+	return iter
+end
