@@ -150,30 +150,3 @@ function XmlParser.parseFile(xmlFileName)
 	return XmlParser.parseString(xmlText)
 end
 
-
---[[---
-Prints the content of a table obtained with XmlParser.parse
-@param xml the xml table
-@param sb a StringBuilder object
---]]
-function XmlParser.dump(xml, sb)
-	--local xml
-	if xml.name then 
-		sb:writeln(xml.name) 
-	end
-	if xml.value then
-		sb:writeln(xml.value)
-	end
-	if xml.attributes then
-		for i,v in pairs(xml.attributes) do
-			sb:writeln(i,v)
-		end
-	end
-	if xml.children then
-		for _,child in pairs(xml.children) do
-			if type(child) == 'table' then
-				XmlParser.dump(child,log)
-			end
-		end
-	end
-end

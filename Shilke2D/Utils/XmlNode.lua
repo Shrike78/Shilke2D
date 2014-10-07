@@ -231,19 +231,42 @@ end
 
 --[[---
 Dumps xmlnode content over a StringBuilder
-@param stringbuilder the StringBuilder o use to dump the content of the node
+@param sb a StringBuilder object
+@param tab the number of '\t' required to format the output
 --]]
-function XmlNode:dump(stringbuilder)
-    stringbuilder:writeln(self.name)
-    if self.value then 
-        stringbuilder:writeln(self.value)
-    end
-    for i,v in pairs(self.attributes) do
-        stringbuilder:writeln(i.." = "..v)
-    end
-    for _,xmlNode in pairs(self:getChildren()) do
-        xmlNode:dump(stringbuilder)
-    end
+function XmlNode:dump(sb, tab)
+	
+	local function addTab(sb, tab)
+		if tab>0 then
+			for i=0,tab-1,1 do
+				sb:write('\t')
+			end
+		end
+	end
+	
+	local tab = tab or 0
+	if tab > 0 then
+		sb:writeln()
+	end
+	addTab(sb,tab)
+	sb:write("<" .. self.name)
+	for k,v in pairs(self.attributes) do
+		sb:write(" " .. k .. '="' .. XmlParser.toXmlString(v) .. '"')
+	end
+	sb:write(">")
+	if self.value then
+		sb:write(XmlParser.toXmlString(self.value))
+	end
+	local bNewLine = false
+	for _,v in pairs(self.children) do
+		v:dump(sb, tab+1)
+		bNewLine = true
+	end
+	if bNewLine then
+		sb:writeln()
+		addTab(sb,tab)
+	end
+	sb:write("</" .. self.name .. ">")
 end
 
 
@@ -257,50 +280,19 @@ function XmlNode:strDump()
     return sb:toString(true)
 end
 
---[[
-XmlNode.__tostring = function(o) 
-    return o:strDump()
-end
---]]    
 
---[[
-function XmlNode:toStr(indent,tagValue)
-  local indent = indent or 0
-  local indentStr=""
-  for i = 1,indent do indentStr=indentStr.."  " end
-  local tableStr=""
-  
-  if base.type(var)=="table" then
-    local tag = var[0] or tagValue or base.type(var)
-    local s = indentStr.."<"..tag
-    for k,v in base.pairs(var) do -- attributes 
-      if base.type(k)=="string" then
-        if base.type(v)=="table" and k~="_M" then --  otherwise recursiveness imminent
-          tableStr = tableStr..str(v,indent+1,k)
-        else
-          s = s.." "..k.."=\""..encode(base.tostring(v)).."\""
-        end
-      end
-    end
-    if #var==0 and #tableStr==0 then
-      s = s.." />\n"
-    elseif #var==1 and base.type(var[1])~="table" and #tableStr==0 then -- single element
-      s = s..">"..encode(base.tostring(var[1])).."</"..tag..">\n"
-    else
-      s = s..">\n"
-      for k,v in base.ipairs(var) do -- elements
-        if base.type(v)=="string" then
-          s = s..indentStr.."  "..encode(v).." \n"
-        else
-          s = s..str(v,indent+1)
-        end
-      end
-      s=s..tableStr..indentStr.."</"..tag..">\n"
-    end
-    return s
-  else
-    local tag = base.type(var)
-    return indentStr.."<"..tag.."> "..encode(base.tostring(var)).." </"..tag..">\n"
-  end
-end
+--[[---
+Write the content to a file
+@param fileName the name of the file to write
+@return bool success
 --]]
+function XmlNode:write(fileName)
+	local file, err = IO.open(fileName,'w')
+	if not file then
+		return false, err
+	end
+	file:write('<?xml version="1.0" encoding="UTF-8"?>\n')
+	file:write(self:strDump())
+	io.close(file)
+	return true
+end
