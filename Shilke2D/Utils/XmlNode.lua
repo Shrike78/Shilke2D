@@ -76,10 +76,12 @@ end
 --[[---
 Adds a child to the current XmlNode
 @param child the XmlNode to attach as a child
+@return XmlNode return a reference to the added node
 --]]
 function XmlNode:addChild(child)
     table.insert(self.children,child)
 	child.parent = self
+	return child
 end
 
 
