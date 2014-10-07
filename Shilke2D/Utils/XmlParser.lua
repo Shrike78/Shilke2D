@@ -81,7 +81,7 @@ xml = {
 @param xmlText the xml to parse
 @return table a table containing all the xml infos
 --]]
-function XmlParser.parseXmlText(xmlText)
+function XmlParser.parseString(xmlText)
     local stack = {}
     local top = {name=nil,value=nil,attributes={},children={}}
     table.insert(stack, top)
@@ -116,11 +116,10 @@ function XmlParser.parseXmlText(xmlText)
             local toclose = table.remove(stack)  
             top = stack[#stack]
             if #stack < 1 then
-                error("XmlParser: nothing to close with "..label)
+                return nil, "XmlParser: nothing to close with "..label
             end
             if toclose.name ~= label then
-                error("XmlParser: trying to close "..
-                    toclose.name.." with "..label)
+                return nil, "XmlParser: trying to close ".. toclose.name.." with "..label
             end
             table.insert(top.children, toclose)
         end
@@ -132,7 +131,7 @@ function XmlParser.parseXmlText(xmlText)
             "")..XmlParser.fromXmlString(text)
     end
     if #stack > 1 then
-        error("XmlParser: unclosed "..stack[stack.n].name)
+        return nil, "XmlParser: unclosed "..stack[stack.n].name
     end
     return stack[1].children[1]
 end
@@ -143,12 +142,12 @@ loads a xmlfile and parses it
 @return table or nil if an error raises
 @return nil or error message if an error raises
 --]]
-function XmlParser.parseXmlFile(xmlFileName)
+function XmlParser.parseFile(xmlFileName)
 	local xmlText, err = IO.getFile(xmlFileName)
 	if not xmlText then
 		return nil,err
 	end
-	return XmlParser.parseXmlText(xmlText)
+	return XmlParser.parseString(xmlText)
 end
 
 

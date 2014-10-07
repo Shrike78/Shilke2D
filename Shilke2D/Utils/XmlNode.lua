@@ -7,6 +7,7 @@ It's also possible to add / remove children and attributes from a node.
 --]]
 XmlNode = class()
 
+
 ---Constructor.
 function XmlNode:init(name,attributes,value,children)
     self.name = name
@@ -39,39 +40,38 @@ end
 
 --[[---
 Builds an XmlNode starting from a string.
-Uses XmlParser.parseXmlText to easily load the string
+Uses XmlParser.parseString to easily load the string
 @param xml the xml string to use for creating the node structure
 @param parent[opt], if provided the new node is attached to the parent node
 @return XmlNode
 @return err nil or error if xml text provided was not valid
 --]]
 function XmlNode.fromString(xml, parent)
-    local luaXml, err = XmlParser.parseXmlText(xml)
+	local luaXml, err = XmlParser.parseString(xml)
 	if not luaXml then
 		return nil, err
 	end
-    local xmlNode = XmlNode.fromLuaXml(luaXml,parent)
-    return xmlNode
+	local xmlNode = XmlNode.fromLuaXml(luaXml,parent)
+	return xmlNode
 end
 
 
 --[[---
 Builds an XmlNode starting from a file.
-Uses XmlParser.parseXmlFuke to easily load the file
+Uses XmlParser.parseFile to easily load the file
 @param fileName the name of the xml file to parse
 @param parent[opt], if provided the new node is attached to the parent node
 @return XmlNode
 @return err nil or error if file was not correctly loaded
 --]]
 function XmlNode.fromFile(fileName, parent)
-    local luaXml, err = XmlParser.parseXmlFile(xml)
+	local luaXml, err = XmlParser.parseFile(fileName)
 	if not luaXml then
 		return nil, err
 	end
-    local xmlNode = XmlNode.fromLuaXml(luaXml, parent)
-    return xmlNode
+	local xmlNode = XmlNode.fromLuaXml(luaXml, parent)
+	return xmlNode
 end
-
 
 --[[---
 Adds a child to the current XmlNode
