@@ -236,19 +236,13 @@ Dumps xmlnode content over a StringBuilder
 --]]
 function XmlNode:dump(sb, tab)
 	
-	local function addTab(sb, tab)
-		if tab>0 then
-			for i=0,tab-1,1 do
-				sb:write('\t')
-			end
-		end
-	end
-	
 	local tab = tab or 0
 	if tab > 0 then
 		sb:writeln()
 	end
-	addTab(sb,tab)
+	for i=0,tab-1,1 do
+		sb:write('\t')
+	end
 	sb:write("<" .. self.name)
 	for k,v in pairs(self.attributes) do
 		sb:write(" " .. k .. '="' .. XmlParser.toXmlString(v) .. '"')
@@ -264,7 +258,9 @@ function XmlNode:dump(sb, tab)
 	end
 	if bNewLine then
 		sb:writeln()
-		addTab(sb,tab)
+		for i=0,tab-1,1 do
+			sb:write('\t')
+		end
 	end
 	sb:write("</" .. self.name .. ">")
 end
