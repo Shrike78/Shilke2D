@@ -138,22 +138,14 @@ end
 	Shilke2D.current = self
 	
 	--Stats management
-	self.stats = DisplayObjContainer()
+	self.stats = Stats()
 	self.stats:setHittable(true)
-		
-	self.info_stats = TextField(200,20, "")
-	local bg_stats = Quad(200,20)
-	bg_stats:setColor(Color(0,0,0))
-	self.stats:addChild(bg_stats)
-	self.stats:addChild(self.info_stats)
-	
-if __USE_SIMULATION_COORDS__ then	
-	self.stats:setPosition(self.w/2,self.h - 20)
-else
-	self.stats:setPosition(self.w/2, 20)
-end	
-	self.info_stats._prop:setAlignment(MOAITextBox.CENTER_JUSTIFY)
 	self._showStats = false
+	if __USE_SIMULATION_COORDS__ then
+		self.stats:setPosition(self.w/2, self.h - 20)
+	else
+		self.stats:setPosition(self.w/2, 20)
+	end
 	
 	if MOAIUntzSystem then
 		MOAIUntzSystem.initialize(soundSampleRate, soundFrames)
@@ -162,15 +154,6 @@ end
 	end
 end
 
-if not __JUGGLER_ON_SEPARATE_COROUTINE__ then
-	--[[---	
-	Make the main juggler running within the main loop or in a separated thread.
-	If false (default value) the juggler is updated in the mainLoop coroutine, before the update function call.
-	If true the juggler is updated on a separate coroutine executed before the mainLoop coroutine. 
-	To override define it before including Shilke2D files
-	--]]
-	__JUGGLER_ON_SEPARATE_COROUTINE__ = false
-end
 
 --[[---
 Start Shilke2D application execution.
@@ -196,16 +179,17 @@ function Shilke2D:start()
 			--manually set position because the stats object is not attached to 'stage' so 
 			-- hitTest logic cannot work properly
 			if self.stats and self._statsForceGarbage then
-				local x,y = touch.x - self.w/2, touch.y
-				if __USE_SIMULATION_COORDS__ then	
-					y = y - (self.h - 20)
-				else
-					y = y - 20
-				end	
-
+				local x,y = touch.x, touch.y
+				
+				--because stats is not attached to stage, must adjust position touch manually 
+				--in order to make a local coords hittest
+				x = x - self.stats:getPositionX()
+				y = y - self.stats:getPositionY()
+				
 				if self.stats:hitTest(x,y,nil,true) then
 					--if stats is hit collectgarbare and return
-					collectgarbage()
+					--collectgarbage()
+					MOAISim.forceGC()
 					return
 				else
 					target = self.stage:hitTest(touch.x,touch.y,nil,true)					
@@ -285,9 +269,7 @@ function Shilke2D:start()
 			end
 			update(elapsedTime)
 			if(self._showStats) then
-			    local fps = MOAISim.getPerformance()
-				local usage = MOAISim.getMemoryUsage()
-				self.info_stats:setText(string.format("%f - %d",fps,usage.total))
+				self.stats:update()
 			end
 		end
 	end
@@ -309,8 +291,11 @@ end
 ---Debug function that allows to show on screen average fps and memory consumption
 --@param show bool, show or hide the stats on screen. default is true
 --@param forceGarbageOnTouch bool. If stats are shown, if true force garbage collector on touch. default is false
-function Shilke2D:showStats(show,forceGarbageOnTouch)
-	self._showStats = show ~= nil and show or true
+function Shilke2D:showStats(show, forceGarbageOnTouch)
+	local show = not (show == false)
+	local forceGarbageOnTouch = forceGarbageOnTouch == true
+	
+	self._showStats = show 
 	self._statsForceGarbage = forceGarbageOnTouch
 	if show and #self._renderTable == 2 then
 		self._renderTable[3] = self.stats._renderTable

@@ -45,6 +45,17 @@ if __USE_MOAIJSONPARSER__ == nil then
 	__USE_MOAIJSONPARSER__ = true
 end
 
+
+if __JUGGLER_ON_SEPARATE_COROUTINE__ == nil then
+	--[[---	
+	By default the main juggler is updated in the mainLoop coroutine, before the update function call.
+	Setting this to true forces the main juggler to be updated on a separate coroutine executed 
+	before the mainLoop coroutine. 
+	--]]
+	__JUGGLER_ON_SEPARATE_COROUTINE__ = false
+end
+
+
 require("Shilke2D/Utils/ClassEx")
 require("Shilke2D/Utils/BitmapData")
 require("Shilke2D/Utils/Callbacks")
@@ -94,6 +105,8 @@ require("Shilke2D/Display/MovieClip")
 require("Shilke2D/Display/TextField")
 require("Shilke2D/Display/Button")
 require("Shilke2D/Display/DrawableObject")
+--included here because it requires DisplayObjContainer
+require("Shilke2D/Core/Stats")
 
 --Shilke2D/Texture
 require("Shilke2D/Texture/Texture")
