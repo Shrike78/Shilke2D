@@ -51,7 +51,7 @@ resets the builder
 --]]
 function StringBuilder:toString(bFlush)
     local s = table.concat(self.t)
-    local bFlush = bFlush or false
+    local bFlush = bFlush == true
     if bFlush then
         self:reset()
     end

@@ -26,7 +26,7 @@ IO.__workingDir = "/"
 
 --[[---
 Returns the absolute app dir on the running device filesystem
-@return string
+@treturn string
 --]]
 function IO.getBaseDir()
 	return IO.__baseDir
@@ -43,7 +43,7 @@ IO.setWorkingDir('Assets/')
 IO.setWorkingDir('/Assets')
 IO.setWorkingDir('/Assets/')
 
-@param folder string
+@tparam string folder
 --]]
 function IO.setWorkingDir(folder)
 	IO.__workingDir = string.normalizePath("/" .. folder .. "/")
@@ -56,8 +56,8 @@ Returns workingDir.
 By default returns the working dir related to app root. 
 For inner usage it's possible to set a boolean parameter to retrieve the
 absolute device path
-@param asDevicePath[opt] bool, default false
-@return string
+@tparam[opt=false] bool asDevicePath
+@treturn string
 --]]
 function IO.getWorkingDir(asDevicePath)
 	if asDevicePath == true then 
@@ -72,9 +72,9 @@ end
 Converts a relative paht into an absolute one.
 if 'asDevicePath' then return the path starting from device root 
 filesystem, else returns path from application root filesystem
-@param path string
-@param asDevicePath[opt] bool, default false.
-@return string
+@tparam string path 
+@tparam[opt=false] bool asDevicePath
+@treturn string
 --]]
 function IO.getAbsolutePath(path, asDevicePath)
 	local path = string.normalizePath(path)
@@ -91,9 +91,9 @@ end
 --[[---
 Checks if a given path is absolute or relative. It's also possible to check
 if it's a device absolute path or not
-@param path
-@param asDevicePath[opt]
-@return bool
+@tparam string path
+@tparam[opt=false] bool asDevicePath
+@treturn bool
 --]]
 function IO.isAbsolutePath(path, asDevicePath)
 	local path = string.normalizePath(path)
@@ -107,11 +107,12 @@ end
 
 --[[---
 Opens a file (it wraps io.open)
-@param fileName path to the file to be open, it can be either relative to the currently set
+@tparam string fileName path to the file to be open, it can be either relative to the currently set
 working path, or absolute to the application root.
-@param mode[opt] the openfile mode ('r','w','a','r+','w+'). default is 'r'
-@return file or nil if an error raises
-@return nil or error message if an error raises
+@tparam[opt='r'] string mode the openfile mode ('r','w','a','r+','w+'). default is 'r'
+@treturn[1] file
+@return[2] nil
+@treturn[2] string error message
 --]]
 function IO.open(fileName, mode)
 	local fn = IO.getAbsolutePath(fileName, true)
@@ -122,10 +123,11 @@ end
 
 --[[---
 Returns raw data for every type of files
-@param fileName path to the file to be open, it can be either relative to the currently set
+@tparam string fileName path to the file to be open, it can be either relative to the currently set
 working path, or absolute to the application root.
-@return file or nil if an error raises
-@return nil or error message if an error raises
+@return[1] filedata
+@return[2] nil
+@treturn[2] string error message
 --]]
 function IO.getFile(fileName)
 	local file, err = IO.open(fileName)
@@ -139,9 +141,11 @@ end
 
 --[[---
 Loads and runs a given file.
-@param fileName path to the file to be executed, it can be either relative to the currently set
+@tparam string fileName path to the file to be executed, it can be either relative to the currently set
 working path, or absolute to the application root.
-@return fileName() the result of the execution of the file
+@return[1] fileName() the result of the execution of the file
+@return[2] nil
+@treturn[2] string error message
 --]]
 function IO.dofile(fileName)
 	local fn = IO.getAbsolutePath(fileName, true)
@@ -155,8 +159,8 @@ end
 
 --[[---
 Checks if a given path is a file (not including directory)
-@param path the path to check
-@return bool check result
+@tparam string path the path to check
+@treturn bool
 --]]
 function IO.isFile(path)
 	local path = IO.getAbsolutePath(path, true)
@@ -166,8 +170,8 @@ end
 
 --[[---
 Checks if a given path is a directory
-@param path the path to check
-@return bool check result
+@tparam string path the path to check
+@treturn bool
 --]]
 function IO.isDirectory(path)
 	local path = IO.getAbsolutePath(path, true)
@@ -176,8 +180,8 @@ end
 
 --[[---
 Checks if a given path exist (being either a file or a directory) 
-@param path the path to check
-@return bool check result
+@tparam string path the path to check
+@treturn bool
 --]]
 function IO.exists(path)
 	return IO.isFile(path) or IO.isDirectory(path)
@@ -185,9 +189,9 @@ end
 
 --[[---
 Copy a file or a folder
-@param src	string
-@param dst	string
-@return bool
+@tparam string src	
+@tparam string dst
+@treturn bool
 --]]
 function IO.copy(src, dst)
 	local src = IO.getAbsolutePath(src, true)
@@ -197,9 +201,9 @@ end
 
 --[[---
 Renames a file or a folder
-@param src	string
-@param dst	string
-@return bool
+@tparam string src	
+@tparam string dst
+@treturn bool
 --]]
 function IO.move(src, dst)
 	local src = IO.getAbsolutePath(src, true)
@@ -210,8 +214,8 @@ end
 
 --[[---
 Deletes a file
-@param path path to the file to delete
-@return bool success
+@tparam string path path to the file to delete
+@treturn bool success
 --]]
 function IO.deleteFile(path)
 	local path = IO.getAbsolutePath(path, true)
@@ -222,13 +226,14 @@ end
 --[[---
 Deletes a folder. if recursive is true deletes all the subfolders, else it delets
 the directory only if empty
-@param path path to the directory to delete
-@param recursive recursive If true, the directory and all contents beneath it will be purged. 
+@tparam string path path to the directory to delete
+@tparam[opt=false] bool recursive If true, the directory and all contents beneath it will be purged. 
 Otherwise, the directory will only be removed if empty.
-@return bool success
+@treturn bool success
 --]]
 function IO.deleteDirectory(path, recursive)
 	local path = IO.getAbsolutePath(path, true)
+	local recursive = (recursive == true)
 	return MOAIFileSystem.deleteDirectory(path, recursive)
 end
 
@@ -236,8 +241,8 @@ end
 --[[---
 Lists all the files contained in a directory.
 If path is not provided uses current working dir.
-@param path[opt] the path to list
-@return table list of file names or nil if the path is not valid
+@tparam[opt=nil] string path the path to list
+@treturn {string} list of file names or nil if the path is not valid
 --]]
 function IO.lsFiles(path)
 	local path = path
@@ -251,8 +256,8 @@ end
 --[[---
 Lists all the sub directories contained in a directory.
 If path is not provided uses current working dir.
-@param path[opt] the path to list
-@return table list of directory names or nil if the path is not valid
+@tparam[opt=nil] string path the path to list
+@treturn {string} list of directory names or nil if the path is not valid
 --]]
 function IO.lsDirectories(path)
 	local path = path
@@ -266,8 +271,8 @@ end
 --[[---
 Lists all the files and sub directories contained in a directory.
 If path is not provided uses current working dir.
-@param path[opt] the path to list
-@return table list of directory and file names or nil if the path is not valid
+@tparam[opt=nil] string path the path to list
+@treturn {string} list of directory and file names or nil if the path is not valid
 --]]
 function IO.ls(path)
 	return table.extend(IO.lsDirectories(path), IO.lsFiles(path))
@@ -276,7 +281,7 @@ end
 
 --[[---
 Creates a folder at 'path' if doesn't exist
-@param path the folder to create
+@tparam string path the folder to create
 --]]
 function IO.affirmPath(path)
 	local path = IO.getAbsolutePath(path, true)

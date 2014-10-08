@@ -7,8 +7,8 @@ XmlParser = {}
 
 --[[---
 Converts a string value to an xml string
-@param value a generic string
-@return string an xml valid string
+@tparam string value a generic string
+@treturn string an xml valid string
 --]]
 function XmlParser.toXmlString(value)
     value = string.gsub (value, "&", "&amp;");        -- '&' -> "&amp;"
@@ -28,8 +28,8 @@ end
 
 --[[---
 Converts an xml string to a generic string value
-@param value an xml valid string
-@return string a generic string
+@tparam string value an xml valid string
+@treturn string a generic string
 --]]
 function XmlParser.fromXmlString(value)
     value = string.gsub(value, "&#x([%x]+)%;",
@@ -57,8 +57,8 @@ end
    
 --[[---
 Parses a string retrieving a list of arguments as pairs of key/val
-@param s a string
-@return table a list of key/value pairs
+@tparam string s
+@treturn table a list of key/value pairs
 --]]
 function XmlParser.parseArgs(s)
     local arg = {}
@@ -78,8 +78,8 @@ xml = {
 	attributes = {name = value},
 	children = { [...] }
 }
-@param xmlText the xml to parse
-@return table a table containing all the xml infos
+@tparam string xmlText the xml to parse
+@treturn table a table containing all the xml infos
 --]]
 function XmlParser.parseString(xmlText)
     local stack = {}
@@ -139,8 +139,9 @@ end
 
 --[[---
 loads a xmlfile and parses it
-@return table or nil if an error raises
-@return nil or error message if an error raises
+@treturn[1] table
+@return[2] nil
+@treturn[2] string error message
 --]]
 function XmlParser.parseFile(xmlFileName)
 	local xmlText, err = IO.getFile(xmlFileName)
