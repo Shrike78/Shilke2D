@@ -17,7 +17,6 @@ TextureAtlas = class()
 --enum internally used for region structure rapresentation
 local REGION_RECT 		= 1
 local REGION_ROTATION 	= 2
-local REGION_TEXTURE 	= 3
 
 --[[---
 Automatic creation of a tilest starting from a texture, where all 
@@ -33,28 +32,28 @@ prefix002
 prefix003
 
 @param texture can be a Texture or a path, in that case the texture 
-is loaded using Assets.getTexture function, using defaul cache logic
-@param regionWidth width of a single tile
-@param regionHeight height of single tile
-@param margin num of pixel on the boundary of the texture 
-@param spacing num of pixel between tiles
-@param prefix the prefix name to be applied to each subtexture
-@param padding number of ciphers to be used to enumerate subtextures
-@return TextureAtlas
+is loaded using Texure.fromFile function using default color transformation
+@tparam int regionWidth width of a single tile
+@tparam int regionHeight height of single tile
+@tparam[opt=0] int margin num of pixel on the boundary of the texture 
+@tparam[opt=0] int spacing num of pixel between tiles
+@tparam[opt="image_"] string prefix the prefix name to be applied to each subtexture
+@tparam[opt=0] int padding number of ciphers to be used to enumerate subtextures (->%00d
+@treturn TextureAtlas
 --]]
 function TextureAtlas.fromTexture(texture,regionWidth,regionHeight,
             margin,spacing,prefix,padding)
 	
-    local texture = type(texture) == "string" and Assets.getTexture(texture) or texture
+    local texture = type(texture) == "string" and Texture.fromFile(texture) or texture
 	
 	local atlas = TextureAtlas(texture)
 	
 	--default values
 	local margin = margin or 0
 	local spacing = spacing or 0
-	local padding = padding or "0"
+	local padding = padding or 0
 	local prefix = prefix or "image_"
-	local _format = prefix.."%0"..padding.."d"
+	local _format = prefix.."%0"..tostring(padding).."d"
    
     --remove margin left/right and add 1 spacing value, because
     --num of spacing is numOfTiles-1, so adding one spacing value
@@ -96,22 +95,11 @@ function TextureAtlas:init(texture)
 end
 
 --[[---
-Clear inner structs. By default leave untouched the created/handled textures
-but it's possible to specify if to dispose also subtetures and base texture
-@param disposeSubTextures[opt] boolean, default value is false
-@param disposeBaseTexture[opt] boolean, default value is false
+Clear inner structs. It's possible to specify if to dispose also the base texture
+@tparam[opt=false] bool disposeBaseTexture
 --]]
-function TextureAtlas:dispose(disposeSubTextures, disposeBaseTexture)
-	disposeSubTextures = not (disposeSubTextures == false)
-	disposeBaseTexture = not (disposeBaseTexture == false)
-	if(disposeSubTextures) then
-		for _,v in pairs(self.regions) do
-			local txt = v[REGION_TEXTURE]
-			if txt then
-				txt:dispose()
-			end
-		end
-	end
+function TextureAtlas:dispose(disposeBaseTexture)
+	disposeBaseTexture = disposeBaseTexture == true
 	if disposeBaseTexture then 
 		self.baseTexture:dispose()
 	end
@@ -123,9 +111,9 @@ end
 --[[---
 Add a new named region.
 Named regions are uv map rect, so x,y,w,h are in the range [0,1]
-@param name the name of the new region
-@param rect a rect with uvmap values [0,1]
-@param rotated (optional) if the texture is rotated, default is false
+@tparam string name the name of the new region
+@tparam Rect rect a rect with uvmap values [0,1]
+@tparam[opt=false] bool rotated if the region is 90° clockwise rotated
 --]]
 function TextureAtlas:addRegion(name,rect,rotated)
 	if self.regions[name] then
@@ -134,15 +122,14 @@ function TextureAtlas:addRegion(name,rect,rotated)
 	local newRegion = {}
 	newRegion[REGION_RECT] = rect
 	newRegion[REGION_ROTATION] = rotated == true
-	newRegion[REGION_TEXTURE] = nil
 	self.regions[name] = newRegion
 end
 
 --[[---
-Returns all the regions sorted by name, that begin with "prefix". 
-If no prefix is provided it returns all the regions
-@param prefix optional, prefix to select region names
-@return list of regions
+Returns all the regions sorted by name that begins with "prefix". 
+If no prefix is provided it returns all the regions.
+@tparam[opt=nil] string prefix prefix to filter region names
+@treturn {string}
 --]]
 function TextureAtlas:getSortedNames(prefix)
     local sortedRegions = {}
@@ -163,30 +150,30 @@ function TextureAtlas:getSortedNames(prefix)
 end
 
 --[[---
-Returns the number of textures with a name that starts with prefix.
-If no prefix is provided it returns the number of all the textures.
-@param prefix optional, prefix to select region/texture names
-@return number number of textures that match prefix
+Returns the number of textures/regions that begin with prefix.
+If no prefix is provided it returns the number of all textures.
+@tparam[opt=nil] string prefix prefix to filter region/texture names
+@treturn int number of matching textures/regions
 --]]
 function TextureAtlas:getNumOfTextures(prefix)
 	return #self:getSortedNames(prefix)
 end
 
----Returns a subtexture that wrap a specific named region
---@param name the name of the region to use to build the sub texture
---@return SubTexture. nil if the region name doesn't belong to current atlas
+
+--[[---
+Returns a subtexture that wrap a specific named region
+@tparam string name the name of the region to use to build the sub texture
+@treturn SubTexture.
+--]]
 function TextureAtlas:getTexture(name)
 	local txt = nil
 	local region = self.regions[name]
 	if region then
-		txt = region[REGION_TEXTURE]
-		if not txt then
-			txt = SubTexture(self.baseTexture, region[REGION_RECT], region[REGION_ROTATION])
-			region[REGION_TEXTURE] = txt
-		end
+		txt = SubTexture(self.baseTexture, region[REGION_RECT], region[REGION_ROTATION])
 	end
     return txt
 end
+
 
 --[[---
 Returns all the textures sorted by region name, that begin with "prefix". 

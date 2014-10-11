@@ -19,7 +19,7 @@ It expects to have the referred image in a relative path to xml file location
 --]]
 function TexturePacker.loadSparrowFormat(xmlFileName)
 	local dir = string.getFileDir(xmlFileName)
-	local atlasXml, err = Assets.getXml(xmlFileName)
+	local atlasXml, err = XmlNode.fromFile(xmlFileName)
 	if not atlasXml then
 		return nil, err
 	end
@@ -58,7 +58,7 @@ function TexturePacker.parseSparrowFormat(atlasXml, dir, texture)
 		if dir ~= "" then
 			dir = (dir .. "/"):gsub("//","/")
 		end
-		texture = Assets.getTexture(dir .. imgName)
+		texture = Texture.fromFile(dir .. imgName)
 	end
 
     local atlas = TextureAtlas(texture)
@@ -120,7 +120,7 @@ function TexturePacker.parseMoaiFormat(descriptor, dir, texture)
 			dir = (dir .. "/"):gsub("//","/")
 		end
 		local imgName = descriptor.texture
-		texture = Assets.getTexture(dir .. imgName)
+		texture = Texture.fromFile(dir .. imgName)
 	end
 	
 	local atlas = TextureAtlas(texture)
