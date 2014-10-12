@@ -247,15 +247,12 @@ end
 -- Setter and Getter
 
 ---Set visibility status of this object
---@param visible boolean value to set visible or hidden the displayObj
+--@tparam[opt=true] bool visible set visible or hidden the displayObj
 function DisplayObj:setVisible(visible)
+	local visible = not (visible == false)
 	if self._visible ~= visible then
 		self._visible = visible 
-		if visible then
-			self._prop:setCullMode(MOAIProp.CULL_NONE)
-		else
-			self._prop:setCullMode(MOAIProp.CULL_ALL)
-		end
+		self._prop:setVisible(visible)
 	end
 end
 
