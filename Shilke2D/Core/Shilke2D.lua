@@ -188,8 +188,12 @@ function Shilke2D:start()
 				
 				if self.stats:hitTest(x,y,nil,true) then
 					--if stats is hit collectgarbare and return
-					--collectgarbage()
-					MOAISim.forceGC()
+					--newer MOAI version have a forceGarbageCollection call
+					if MOAISim.forceGarbageCollection then
+						MOAISim.forceGarbageCollection()
+					else
+						collectgarbage()
+					end
 					return
 				else
 					target = self.stage:hitTest(touch.x,touch.y,nil,true)					
