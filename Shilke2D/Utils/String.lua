@@ -121,3 +121,13 @@ function string.getFileName(path,withExtension)
 		return match(path, "([^\\/]+)%..*$")
 	end
 end
+
+--[[---
+Convert a path string that can contains \,/,\\,// into a path with only /
+@param path the path to normalize
+@return string the normilized path
+--]]
+function string.normalizePath(path)
+	local res,_ = path:gsub("\\","/"):gsub("//","/")
+	return res
+end

@@ -19,7 +19,7 @@ It expects to have the referred image in a relative path to xml file location
 --]]
 function TexturePacker.loadSparrowFormat(xmlFileName)
 	local dir = string.getFileDir(xmlFileName)
-	local atlasXml, err = Assets.getXml(xmlFileName)
+	local atlasXml, err = XmlNode.fromFile(xmlFileName)
 	if not atlasXml then
 		return nil, err
 	end
@@ -58,7 +58,7 @@ function TexturePacker.parseSparrowFormat(atlasXml, dir, texture)
 		if dir ~= "" then
 			dir = (dir .. "/"):gsub("//","/")
 		end
-		texture = Assets.getTexture(dir .. imgName)
+		texture = Texture.fromFile(dir .. imgName)
 	end
 
     local atlas = TextureAtlas(texture)
@@ -70,11 +70,11 @@ function TexturePacker.parseSparrowFormat(atlasXml, dir, texture)
 		--when loading a texture using TextureManager
         local name = subTex:getAttribute("name") .. extension
         --divide for width/height to have a [0..1] range
-        local x = subTex:getAttributeNumber("x") / texture.width
-        local y = subTex:getAttributeNumber("y") / texture.height
-        local w = subTex:getAttributeNumber("width") / texture.width
-        local h = subTex:getAttributeNumber("height") / texture.height
-        local rotated = subTex:getAttributeBool("rotated", false)
+        local x = subTex:getAttributeAsNumber("x") / texture.width
+        local y = subTex:getAttributeAsNumber("y") / texture.height
+        local w = subTex:getAttributeAsNumber("width") / texture.width
+        local h = subTex:getAttributeAsNumber("height") / texture.height
+        local rotated = subTex:getAttributeAsBool("rotated", false)
         --Sparrow/Starling work with (0,0) as top left
         local region = Rect(x, y, w, h)
         atlas:addRegion(name,region, rotated)
@@ -120,7 +120,7 @@ function TexturePacker.parseMoaiFormat(descriptor, dir, texture)
 			dir = (dir .. "/"):gsub("//","/")
 		end
 		local imgName = descriptor.texture
-		texture = Assets.getTexture(dir .. imgName)
+		texture = Texture.fromFile(dir .. imgName)
 	end
 	
 	local atlas = TextureAtlas(texture)

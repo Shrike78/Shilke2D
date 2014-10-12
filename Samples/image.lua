@@ -34,7 +34,7 @@ function setup()
 
 	--create an Image, a static image object.
 	--By default the pivot is set in the center of the image
-	local moaiImg = Image(Assets.getTexture("moai.png"))
+	local moaiImg = Image(TextureManager.getTexture("moai.png"))
 	
 	--if not set, default position of a displyaObj is 0,0
 	--we put the image in the centre of the screen
@@ -50,12 +50,12 @@ function setup()
 	--by default image position is 0,0, so top left coord of the screen
 	--so we are placing the top left point of the img into the top left point of the screen
 	local pm2 = __USE_SIMULATION_COORDS__ and PivotMode.BOTTOM_LEFT or PivotMode.TOP_LEFT 
-	local moaiImg2 = Image(Assets.getTexture("moai.png"), pm2)
+	local moaiImg2 = Image(TextureManager.getTexture("moai.png"), pm2)
 	stage:addChild(moaiImg2)
 	
 	--This time we created an img with BOTTOM_RIGHT pivot
 	local pm3 = __USE_SIMULATION_COORDS__ and PivotMode.TOP_RIGHT or PivotMode.BOTTOM_RIGHT 
-	local moaiImg3 = Image(Assets.getTexture("moai.png"),pm3)
+	local moaiImg3 = Image(TextureManager.getTexture("moai.png"),pm3)
 	--we are placing the bottom right point of the img into the bottom right point of the screen
 	moaiImg3:setPosition(WIDTH,HEIGHT)
 	stage:addChild(moaiImg3)

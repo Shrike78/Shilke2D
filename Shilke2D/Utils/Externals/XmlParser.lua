@@ -1,9 +1,16 @@
----LUA only XmlParser, original code from Alexander Makeev
+--[[---
+LUA only XmlParser, original code from Alexander Makeev
+
+--]]
 
 XmlParser = {}
 
----Converts a string value to an xml string
-function XmlParser.ToXmlString(value)
+--[[---
+Converts a string value to an xml string
+@tparam string value a generic string
+@treturn string an xml valid string
+--]]
+function XmlParser.toXmlString(value)
     value = string.gsub (value, "&", "&amp;");        -- '&' -> "&amp;"
     value = string.gsub (value, "<", "&lt;");        -- '<' -> "&lt;"
     value = string.gsub (value, ">", "&gt;");        -- '>' -> "&gt;"
@@ -19,8 +26,12 @@ function XmlParser.ToXmlString(value)
     return value
 end
 
----Converts an xml string to a string value
-function XmlParser.FromXmlString(value)
+--[[---
+Converts an xml string to a generic string value
+@tparam string value an xml valid string
+@treturn string a generic string
+--]]
+function XmlParser.fromXmlString(value)
     value = string.gsub(value, "&#x([%x]+)%;",
         function(h) 
             return string.char(tonumber(h,16)) 
@@ -43,20 +54,36 @@ function XmlParser.FromXmlString(value)
     return value
 end
    
----Parses a string retrieving a list of arguments (couples of key=val)
-function XmlParser.ParseArgs(s)
+   
+--[[---
+Parses a string retrieving a list of arguments as pairs of key/val
+@tparam string s
+@treturn table a list of key/value pairs
+--]]
+function XmlParser.parseArgs(s)
     local arg = {}
     --handle space between arguments name, value and "="
 	string.gsub(s, "(%S+)[ ]*=[ ]*([\"'])(.-)%2", function (w, _, a)
-			arg[w] = XmlParser.FromXmlString(a)
+			arg[w] = XmlParser.fromXmlString(a)
         end)
     return arg
 end
 
----Parses a xml text and returns a lua table
-function XmlParser.ParseXmlText(xmlText)
+
+--[[---
+Parses a xml text and returns a lua table in the form of:
+xml = {
+	name = "name",
+	value = "text",
+	attributes = {name = value},
+	children = { [...] }
+}
+@tparam string xmlText the xml to parse
+@treturn table a table containing all the xml infos
+--]]
+function XmlParser.parseString(xmlText)
     local stack = {}
-    local top = {name=nil,value=nil,attributes={},childNodes={}}
+    local top = {name=nil,value=nil,attributes={},children={}}
     table.insert(stack, top)
     local ni,c,label,xarg, empty
     local i, j = 1, 1
@@ -70,17 +97,17 @@ function XmlParser.ParseXmlText(xmlText)
         if not string.find(text, "^%s*$") then
             --avoid comments and commands
             if not string.find(text, "^[ ]*[\t]*[\n]*<") then
-                top.value=(top.value or "")..XmlParser.FromXmlString(text)
+                top.value=(top.value or "")..XmlParser.fromXmlString(text)
             end  
         end
         if empty == "/" then  
             -- empty element tag
-            table.insert(top.childNodes, {name=label,value=nil,
-                attributes=XmlParser.ParseArgs(xarg),childNodes={}})
+            table.insert(top.children, {name=label,value=nil,
+                attributes=XmlParser.parseArgs(xarg),children={}})
         elseif c == "" then   
             -- start tag
             top = {name=label, value=nil, 
-                attributes=XmlParser.ParseArgs(xarg), childNodes={}}
+                attributes=XmlParser.parseArgs(xarg), children={}}
              -- new level   
             table.insert(stack, top)  
         else  
@@ -89,60 +116,38 @@ function XmlParser.ParseXmlText(xmlText)
             local toclose = table.remove(stack)  
             top = stack[#stack]
             if #stack < 1 then
-                error("XmlParser: nothing to close with "..label)
+                return nil, "XmlParser: nothing to close with "..label
             end
             if toclose.name ~= label then
-                error("XmlParser: trying to close "..
-                    toclose.name.." with "..label)
+                return nil, "XmlParser: trying to close ".. toclose.name.." with "..label
             end
-            table.insert(top.childNodes, toclose)
+            table.insert(top.children, toclose)
         end
         i = j+1
     end
     local text = string.sub(xmlText, i)
     if not string.find(text, "^%s*$") then
         stack[#stack].value=(stack[#stack].value or 
-            "")..XmlParser.FromXmlString(text)
+            "")..XmlParser.fromXmlString(text)
     end
     if #stack > 1 then
-        error("XmlParser: unclosed "..stack[stack.n].name)
+        return nil, "XmlParser: unclosed "..stack[stack.n].name
     end
-    return stack[1].childNodes[1]
+    return stack[1].children[1]
 end
 
----loads a xmlfile and parses it
---@return table or nil if an error raises
---@return nil or error message if an error raises
-function XmlParser.ParseXmlFile(xmlFileName)
-    local xmlText, err = IO.getFile(xmlFileName)
-    if (not err) then
-        return XmlParser.ParseXmlText(xmlText),nil
-    else
-        return nil,err
-    end
+
+--[[---
+loads a xmlfile and parses it
+@treturn[1] table
+@return[2] nil
+@treturn[2] string error message
+--]]
+function XmlParser.parseFile(xmlFileName)
+	local xmlText, err = IO.getFile(xmlFileName)
+	if not xmlText then
+		return nil,err
+	end
+	return XmlParser.parseString(xmlText)
 end
 
----prints the content of a table obtained with XmlParser.parse
---@param xml the xml table
---@param log a log object
-function XmlParser.dump(xml,log)
-    --local xml
-    if xml.name then 
-        log:writeln(xml.name) 
-    end
-    if xml.value then
-        log:writeln(xml.value)
-    end
-    if xml.attributes then
-        for i,v in pairs(xml.attributes) do
-            log:writeln(i,v)
-        end
-    end
-    if xml.childNodes then
-        for _,child in pairs(xml.childNodes) do
-            if type(child) == 'table' then
-                XmlParser.dump(child,log)
-            end
-        end
-    end
-end

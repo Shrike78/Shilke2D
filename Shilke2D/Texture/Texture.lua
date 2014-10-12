@@ -59,20 +59,23 @@ end
 
 
 --[[---
-Load an external file and create a texture. Transform options can be provided, where PREMULTIPLY_ALPHA
-is the default value. 
+Load an external file and create a texture. 
+ColorTransform options can be provided, where PREMULTIPLY_ALPHA is the default value. 
 If a texture is created with straight alpha, once the texture is assigned to a displayObj 
 (image or subclasses) the premultiplyAlpha value of the object should be changed accordingly.
 
-@param fileName the name of the image file to load
-@param transformOptions[opt] ColorTransform.NONE or a combination of ColorTransform.POW_TWO, 
-ColorTransform.QUANTIZE, ColorTransform.TRUECOLOR and ColorTransform.PREMULTIPLY_ALPHA. 
-Default value is ColorTransform.PREMULTIPLY_ALPHA.
-@return Texture
+@tparam string fileName the name of the image file to load
+@tparam[opt=ColorTransform.PREMULTIPLY_ALPHA] ColorTransform transformOptions
+@treturn[1] Texture
+@return[2] nil
+@treturn[2] string error message
 --]]
-function Texture.fromFileName(fileName, transformOptions)
-	local srcData = Assets.getRawImage(fileName, transformOptions)
-	return Texture(srcData)
+function Texture.fromFile(fileName, transformOptions)
+	local srcData, err = BitmapData.fromFile(fileName, transformOptions)
+	if not srcData then
+		return nil, err
+	end
+	return Texture.fromData(srcData)
 end
 
 --[[---

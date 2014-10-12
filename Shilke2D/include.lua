@@ -34,12 +34,35 @@ if __SHILKE2D_TWEEN__ == nil then
 end
 
 
+if __USE_MOAIJSONPARSER__ == nil then
+	--[[---
+	It's possible to use either native MOAIJsonParser or Shaun Brown lua 
+	Json parser module
+	
+	By default MOAI native parser is used.
+	Define __USE_MOAIJSONPARSER__ = false before include to disable MOAIJsonParser usage
+	--]]
+	__USE_MOAIJSONPARSER__ = true
+end
+
+
+if __JUGGLER_ON_SEPARATE_COROUTINE__ == nil then
+	--[[---	
+	By default the main juggler is updated in the mainLoop coroutine, before the update function call.
+	Setting this to true forces the main juggler to be updated on a separate coroutine executed 
+	before the mainLoop coroutine. 
+	--]]
+	__JUGGLER_ON_SEPARATE_COROUTINE__ = false
+end
+
 
 require("Shilke2D/Utils/ClassEx")
 require("Shilke2D/Utils/BitmapData")
 require("Shilke2D/Utils/Callbacks")
 require("Shilke2D/Utils/IO")
 require("Shilke2D/Utils/StringBuilder")
+require("Shilke2D/Utils/StringReader")
+require("Shilke2D/Utils/Json")
 require("Shilke2D/Utils/Log")
 require("Shilke2D/Utils/BitOp")
 require("Shilke2D/Utils/Math")
@@ -48,10 +71,8 @@ require("Shilke2D/Utils/Color")
 require("Shilke2D/Utils/Shape")
 require("Shilke2D/Utils/String")
 require("Shilke2D/Utils/Table")
-require("Shilke2D/Utils/XmlParser")
 require("Shilke2D/Utils/XmlNode")
 require("Shilke2D/Utils/IniParser")
-require("Shilke2D/Utils/IniFile")
 require("Shilke2D/Utils/CollisionKit")
 require("Shilke2D/Utils/Sound")
 require("Shilke2D/Utils/PerformanceTimer")
@@ -84,6 +105,8 @@ require("Shilke2D/Display/MovieClip")
 require("Shilke2D/Display/TextField")
 require("Shilke2D/Display/Button")
 require("Shilke2D/Display/DrawableObject")
+--included here because it requires DisplayObjContainer
+require("Shilke2D/Core/Stats")
 
 --Shilke2D/Texture
 require("Shilke2D/Texture/Texture")

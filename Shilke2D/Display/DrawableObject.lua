@@ -61,7 +61,7 @@ The following calls are valid:
 @param a alpha value [0,255] or nil
 --]]
 function DrawableObject:setPenColor(r,g,b,a)
-	local r,g,b,a = Color._paramConversion(r,g,b,a)
+	local r,g,b,a = Color._paramConversion(r,g,b,a,1)
 	local ignoreAlphaMode = forceStraightAlpha == true
 	if a~=1 and self:hasPremultipliedAlpha() then
 		r,g,b = r*a, g*a, b*a

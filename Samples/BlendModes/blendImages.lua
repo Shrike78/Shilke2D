@@ -33,7 +33,7 @@ function createSample(bkgLayer, fgLayer, bkgTexture, fgName, transformOptions, d
 	bkgImg:setScale(s,s)
 	bkgLayer:addChild(bkgImg)
 	
-	local fgTexture = Texture.fromFileName(fgName, transformOptions)
+	local fgTexture = Texture.fromFile(fgName, transformOptions)
 	local fgImg = Image(fgTexture, pivotMode)
 	fgImg:setPosition(posX, posY)
 	if not BitOp.testflag(transformOptions, ColorTransform.PREMULTIPLY_ALPHA) then
@@ -62,7 +62,7 @@ function setup()
 	stage:addChild(bkgLayer)
 	stage:addChild(fgLayer)
 	
-	local bkgTexture = Texture.fromFileName(bg_name)
+	local bkgTexture = Texture.fromFile(bg_name)
 
 	createSample(bkgLayer, fgLayer, bkgTexture, fg_name, ColorTransform.NONE,				
 		"ColorTransform.NONE",	PivotMode.TOP_LEFT, 	0, 0)
