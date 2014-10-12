@@ -43,6 +43,7 @@ function onKeyboardEvent(key, down)
 end
 
 --- Check the key status of a given key code
+--treturn bool
 function Shilke2D.isKeyPressed(key)
 	return MOAIInputMgr.device.keyboard:keyIsDown(key)
 end
@@ -53,7 +54,7 @@ Check the platform on which the application is running and return true if the pl
 It cheks the osBrand string with some predefined string, that are:
 
 OSX, Windows, iOS, Android
-@return true if brand è iOS o Android
+@treturn bool true if brand è iOS o Android
 --]]
 function Shilke2D.isMobile()
     local brand = MOAIEnvironment.osBrand
@@ -64,7 +65,7 @@ end
 
 --[[---
 -- Check if the application is running on desktop.
--- @return True in the case of desktop.
+-- @treturn bool true in the case of desktop.
 --]]
 function Shilke2D.isDesktop()
     return not Shilke2D.isMobile()
@@ -74,13 +75,13 @@ end
 Shilke2D must be created at the beginning of the application.
 The initialization of Shilke2D setup MOAI rendering system and untz audio system
 Stage, Juggler and log system are initialized here too.
-@param w logical width of the viewport
-@param h logical height of the viewport
-@param fps desired frame rate
-@param scaleX on screen viewport scale on x axe
-@param scaleY on screen viewport scale on y axe
-@param soundSampleRate audio system sample rate
-@param soundFrames audio system number of frames
+@tparam int w logical width of the viewport
+@tparam int h logical height of the viewport
+@tparam[opt=60] int fps desired frame rate
+@tparam[opt=1] number scaleX on screen viewport scale on x axe
+@tparam[opt=1] number scaleY on screen viewport scale on y axe
+@tparam[opt=44100] int soundSampleRate audio system sample rate
+@tparam[opt=8192] int soundFrames audio system number of frames
 --]]
 function Shilke2D:init(w,h,fps, scaleX,scaleY, soundSampleRate, soundFrames)
 
@@ -280,21 +281,27 @@ function Shilke2D:start()
 	)
 end
 
----Return the stage
+---Returns the stage
+--@treturn Stage
 function Shilke2D:getStage()
   return self.stage
 end
 
----Return the main juggler
--- other juggler can be created and added to the main juggler for automatic updates, 
--- or can be updated manually 
+--[[---
+Return the main juggler
+other juggler can be created and added to the main juggler for automatic updates, 
+or can be updated manually 
+@treturn Juggler
+--]]
 function Shilke2D:getJuggler()
 	return self.juggler
 end
 
----Debug function that allows to show on screen average fps and memory consumption
---@param show bool, show or hide the stats on screen. default is true
---@param forceGarbageOnTouch bool. If stats are shown, if true force garbage collector on touch. default is false
+--[[---
+Debug function that allows to show on screen average fps and memory consumption
+@tparam[opt=true] bool show show or hide the stats on screen
+@tparam[opt=false] bool forceGarbageOnTouch force garbage collector on stats touch event
+--]]
 function Shilke2D:showStats(show, forceGarbageOnTouch)
 	local show = not (show == false)
 	local forceGarbageOnTouch = forceGarbageOnTouch == true
