@@ -57,9 +57,6 @@ Inner event handling method to which touch and mouse events are redirected
 @param tapCount for multiTap touch event the idx value doesn't change but the tapCount increase each tap
 --]]
 function onEvent(eventType, idx, x, y, tapCount)
-	if __DEBUG_CALLBACKS__ then
-		require('mobdebug').on()
-	end
 	
 	local x, y = convertXY(x, y)
 	local touch = {}

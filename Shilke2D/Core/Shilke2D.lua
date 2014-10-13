@@ -121,10 +121,19 @@ end
 	-- create a directDrawLayer where it's possible to just draw rect, circles, lines ecc.
     local directDrawDeck = MOAIScriptDeck.new ()
 	if __DEBUG_CALLBACKS__ then
-		directDrawDeck:setDrawCallback ( function()
-					require('mobdebug').on()
-					onDirectDraw()
-				end)
+		directDrawDeck:setDrawCallback (function()
+					--[[
+					uses pcall to trap mobdebug absence error.
+					after first call the callback is set to onDirectDraw. Once set here the debug is valid for all 
+					the system callbacks, so for touch, keyboard, ecc.
+					--]]
+					pcall(function() 
+							require('mobdebug').on()
+						end
+					)
+					directDrawDeck:setDrawCallback(onDirectDraw)
+				end
+		)
 	else
 		directDrawDeck:setDrawCallback ( onDirectDraw )
 	end
@@ -229,14 +238,7 @@ function Shilke2D:start()
     end
 	
 	if(Shilke2D.isDesktop()) then
-		if __DEBUG_CALLBACKS__ then
-			MOAIInputMgr.device.keyboard:setCallback ( function(key, down)
-					require('mobdebug').on()
-					onKeyboardEvent(key, down)
-				end)
-		else
-			MOAIInputMgr.device.keyboard:setCallback ( onKeyboardEvent )
-		end
+		MOAIInputMgr.device.keyboard:setCallback ( onKeyboardEvent )
 	end
 	
 	if __JUGGLER_ON_SEPARATE_COROUTINE__ then
