@@ -9,11 +9,11 @@ Stats = class(DisplayObjContainer)
 function Stats:init()
 	DisplayObjContainer.init(self)
 	
-	local background = Quad(250,20)
+	local background = Quad(300,20)
 	background:setColor(Color(0,0,0))
 	self:addChild(background)
 	
-	self.info_stats = TextField(250,20, "")
+	self.info_stats = TextField(300,20, "")
 	self.info_stats:setAlignment(MOAITextBox.CENTER_JUSTIFY)
 	self:addChild(self.info_stats)
 end
