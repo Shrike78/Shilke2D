@@ -68,16 +68,10 @@ function Image:setTexture(texture)
 			self._prop:setDeck(nil)
 			self:setSize(0,0)
 		else
-		
-			--if first set (called by init) or texture switch between
-			--subtexture of the same texture atlas, an update is
-			--required only if the shape changes
-			local tw, th = texture:getSize()
-			local bUpdateGeometry = not self.texture or 
-				(self.width ~= tw) or (self.height ~= th)
 			self.texture = texture
 			self._prop:setDeck(texture:_getQuad())
-			if bUpdateGeometry then
+			local tw, th = texture:getSize()
+			if (self.width ~= tw) or (self.height ~= th) then
 				self:setSize(tw,th)
 			end
 		end
