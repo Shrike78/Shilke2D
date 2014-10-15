@@ -49,12 +49,13 @@ function Shilke2D.isKeyPressed(key)
 end
 
 --[[---
-Check the platform on which the application is running and return true if the platform is mobile
+Check the platform on which the application is running and return 
+true if the platform is mobile
 
 It cheks the osBrand string with some predefined string, that are:
 
 OSX, Windows, iOS, Android
-@treturn bool true if brand è iOS o Android
+@treturn bool true if brand is iOS o Android
 --]]
 function Shilke2D.isMobile()
     local brand = MOAIEnvironment.osBrand
@@ -64,8 +65,9 @@ function Shilke2D.isMobile()
 end
 
 --[[---
--- Check if the application is running on desktop.
--- @treturn bool true in the case of desktop.
+Check if the application is running on desktop. 
+Relies on isMobile result
+@treturn bool 
 --]]
 function Shilke2D.isDesktop()
     return not Shilke2D.isMobile()
