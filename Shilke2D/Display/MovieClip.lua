@@ -33,27 +33,28 @@ MovieClip = class(Image, IAnimatable)
 --@param fps the animation fps value. If nil, default is 12
 --@param pivotMode default value is CENTER
 function MovieClip:init(textures,fps,pivotMode)
-    --assert(textures)
-    Image.init(self,textures[1],pivotMode)
-    self.fps = fps or 12
-    self.animTime = 1 / self.fps
-    self.textures = textures
-    self.numFrames = #textures
-    self.currentFrame = 1
-    self.paused = false
-    self.playing = false
-    self.elapsedTime = 0
-    self.repeatCount = 1
+	--assert(textures)
+	Image.init(self,textures[1],pivotMode)
+	self.fps = fps or 12
+	self.animTime = 1 / self.fps
+	self.textures = textures
+	self.numFrames = #textures
+	self.currentFrame = 1
+	self.paused = false
+	self.playing = false
+	self.elapsedTime = 0
+	self.repeatCount = 1
+	self.eventCompleted = Event(Event.COMPLETED)
 end
 
 function MovieClip:dispose()
 	Image.dispose(self)
 	table.clear(self.textures)
-    self.paused = false
-    self.playing = false
-    self.currentFrame = 1
-    self.elapsedTime = 0
-    self.repeatCount = 1
+	self.paused = false
+	self.playing = false
+	self.currentFrame = 1
+	self.elapsedTime = 0
+	self.repeatCount = 1
 end
 
 --[[---
@@ -63,73 +64,73 @@ else set defaul pivotMode CENTER
 @return MovieClip
 --]]
 function MovieClip:clone(bClonePivot)
-    if not bClonePivot then
-        return MovieClip(self.textures,self.fps)
-    else
-        local obj = MovieClip(self.textures,self.fps,self._pivotMode)
-        if self._pivotMode == PivotMode.CUSTOM then
-            obj:setPivot(self:getPivot())
-        end
-        return obj
-    end
+	if not bClonePivot then
+		return MovieClip(self.textures,self.fps)
+	else
+		local obj = MovieClip(self.textures,self.fps,self._pivotMode)
+		if self._pivotMode == PivotMode.CUSTOM then
+			obj:setPivot(self:getPivot())
+		end
+		return obj
+	end
 end
 
 ---Returns the number of frames handled by the animation
 --@return number of frames
 function MovieClip:getNumFrames()
-    return self.numFrames
+	return self.numFrames
 end
 
 ---Returns the number of the current displayed frame
 ---@return current displayed frame
 function MovieClip:getCurrentFrame()
-    return self.currentFrame
+	return self.currentFrame
 end
 
 ---Starts the animation
 --@param startFrame the frame where to begin with the animation. Default is 1
 --@param repeatCount the number of iteration. Default is 1. repeatCount <= 0 means infinite loop.
 function MovieClip:play(startFrame, repeatCount)
-    if(startFrame and startFrame > 0 and 
-            startFrame <= self.numFrames) then
-        self.currentFrame = startFrame
-    else
-        self.currentFrame = 1
-    end
+	if(startFrame and startFrame > 0 and 
+		startFrame <= self.numFrames) then
+		self.currentFrame = startFrame
+	else
+		self.currentFrame = 1
+	end
 	if repeatCount then
 		self.repeatCount = repeatCount
 	end
-    self.paused = false
-    self.playing = true
-    self.elapsedTime = 0
-    self.currentCount = 0
-    self:setTexture(self.textures[self.currentFrame])
+	self.paused = false
+	self.playing = true
+	self.elapsedTime = 0
+	self.currentCount = 0
+	self:setTexture(self.textures[self.currentFrame])
 end
 
 ---Inverts the animation frame
 --can be done only when the animation is not playing, else does nothing
 function MovieClip:invertFrames()
-    if not self.playing then
-        self.textures = table.invert(self.textures)
-    end
+	if not self.playing then
+		self.textures = table.invert(self.textures)
+	end
 end
 
 ---Sets the repeatCount for this animation
 --@param repeatCount the number of iteration. repeatCount <= 0 means infinite loop.
 function MovieClip:setRepeatCount(repeatCount)
-    self.repeatCount = repeatCount
+	self.repeatCount = repeatCount
 end
 
 ---Gets the repeatCount for this animation
 --@return repeatCount. values <= 0 means infinite loop.
 function MovieClip:getRepeatCount()
-    return self.repeatCount
+	return self.repeatCount
 end
 
 ---Pause / unpause the animation in pause
 --@param enabled set / unset pause status. Has no effects if the animation is stopped.
 function MovieClip:setPause(enabled)
-    self.paused = bPause
+	self.paused = bPause
 end
 
 ---Get the pause status
@@ -140,37 +141,36 @@ end
 
 ---Stops the current animation and reset timing infos
 function MovieClip:stop()
-    self.paused = false
-    self.playing = false   
-    self.elapsedTime = 0
-    self.currentCount = 0
+	self.paused = false
+	self.playing = false   
+	self.elapsedTime = 0
+	self.currentCount = 0
 end
 
 ---IAnimatable interface implementation.
 --@param deltaTime millisec elapsed since last frame
 function MovieClip:advanceTime(deltaTime)
-    if self.playing and not self.paused then
-        self.elapsedTime = self.elapsedTime + deltaTime
-        if self.elapsedTime > self.animTime then
-            self.currentFrame = (self.currentFrame % 
-                self.numFrames) + 1
-                if self.currentFrame == 1 and 
-                        (self.currentCount < self.repeatCount or
-                        self.repeatCount <=0 ) then
-                            
-                    self.currentCount = self.currentCount + 1
-					
-		    self:dispatchEvent(Event(Event.COMPLETED))
-               
-                    if self.currentCount == self.repeatCount then
-                        self:stop()
-                    else
-                        self:setTexture(self.textures[self.currentFrame])
-                    end
-                else
-                    self:setTexture(self.textures[self.currentFrame])
-                end
-            self.elapsedTime = self.elapsedTime - self.animTime
-        end
-    end
+	if self.playing and not self.paused then
+		self.elapsedTime = self.elapsedTime + deltaTime
+		if self.elapsedTime > self.animTime then
+			self.currentFrame = (self.currentFrame % self.numFrames) + 1
+			if self.currentFrame == 1 and 
+					(self.currentCount < self.repeatCount or 
+					self.repeatCount <=0 ) then
+
+				self.currentCount = self.currentCount + 1
+
+				self:dispatchEvent(self.eventCompleted)
+
+				if self.currentCount == self.repeatCount then
+					self:stop()
+				else
+					self:setTexture(self.textures[self.currentFrame])
+				end
+			else
+				self:setTexture(self.textures[self.currentFrame])
+			end
+			self.elapsedTime = self.elapsedTime - self.animTime
+		end
+	end
 end
