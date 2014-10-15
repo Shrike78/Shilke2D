@@ -160,43 +160,48 @@ function Texture:getColor(x,y)
 end
 
 
+function Texture:_getQuad()
+	if not self._quad then
+		self._quad = self:_generateQuad()
+	end
+	return self._quad
+end
+
 --[[---
 Inner method. 
 Creates and caches a MOAIGfxQuad2D used and shared by Images to show the texture.
 If a texture is not binded to an Image the MOAIGfxQuad2D is never created
 @return MOAIGfxQuad2D
 --]]
-function Texture:_getQuad()
-    if not self._quad then
-        self._quad = MOAIGfxQuad2D.new()
-        self._quad:setTexture(self.textureData)
-        local r = self.region
-		if not self.rotated then
-if __USE_SIMULATION_COORDS__ then
-			self._quad:setUVRect(r.x, r.y + r.h, r.x + r.w, r.y )
-else
-			self._quad:setUVRect(r.x, r.y, r.x + r.w, r.y + r.h )
-end
+function Texture:_generateQuad()
+	local quad = MOAIGfxQuad2D.new()
+	quad:setTexture(self.textureData)
+	local r = self.region
+	if not self.rotated then
+		if __USE_SIMULATION_COORDS__ then
+			quad:setUVRect(r.x, r.y + r.h, r.x + r.w, r.y )
 		else
-if __USE_SIMULATION_COORDS__ then
-			self._quad:setUVQuad (	
+			quad:setUVRect(r.x, r.y, r.x + r.w, r.y + r.h )
+		end
+	else
+		if __USE_SIMULATION_COORDS__ then
+			quad:setUVQuad (	
 									r.x + r.w, r.y,
 									r.x + r.w, r.y + r.h,
 									r.x, r.y + r.h,
 									r.x, r.y
 							)
-else
-			self._quad:setUVQuad (	
+		else
+			quad:setUVQuad (	
 									r.x, r.y,
 									r.x, r.y + r.h,
 									r.x + r.w, r.y + r.h,
 									r.x + r.w, r.y
 							)
-end
 		end
-        self._quad:setRect(0, 0, self.width, self.height)
-    end
-    return self._quad
+	end
+	quad:setRect(0, 0, self.width, self.height)
+	return quad
 end
 
 
