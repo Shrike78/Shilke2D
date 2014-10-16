@@ -80,24 +80,20 @@ end
 
 --[[---
 Create a texture starting from raw data.
-It can be a filename, a MOAIImage, a MOAIImageTexture or a MOAIFrameBufferTexture
+@param data  MOAIImage (or a derived MOAIImageTexture), or a MOAIFrameBuffer
 --]]
 function Texture.fromData(data)
 	return Texture(data)
 end
 
----Constructor.
---Create a Texture starting from a MOAI object. 
---@param srcData can be a string (path) or a MOAIImageTexture or a MOAIImage
+--[[---
+Constructor.
+Create a Texture starting from a MOAI object. 
+@param srcData can be a MOAIImage (or a derived MOAIImageTexture), or a MOAIFrameBuffer
+--]]
 function Texture:init(srcData)
-	--Path to a png image
-    if type(srcData) == 'string' then
-		self.srcData = MOAIImage.new()
-		self.srcData:load(srcData)
-		self.textureData = MOAITexture.new()
-		self.textureData:load(self.srcData)
 	--invalidate is a specific "MOAIImageTexture" (userdata) method
-    elseif srcData.invalidate then
+    if srcData.invalidate then
 		self.srcData = srcData
 		self.textureData = srcData
 	--bleedRect is a specific "MOAIImage" (userdata) method
@@ -110,7 +106,7 @@ function Texture:init(srcData)
 		self.srcData = srcData
 		self.textureData = srcData
 	else
-		error("Texture accept image path, MOAIImage, MOAIImageTexture or MOAIFrameBufferTexture")
+		error("Texture accept MOAIImage, MOAIImageTexture or MOAIFrameBufferTexture")
     end
     
 	self.width, self.height = self.textureData:getSize()
@@ -128,37 +124,6 @@ function Texture:dispose()
 		self._quad = nil
 	end
 end
-
----Returns the base raw image. 
---@return MOAIImageTexture or MOAIImage
-function Texture:image()
-    return self.srcData
-end
-
---[[---
-Get rgba value of the pixel at x,y coord
-The function extends and wraps the original MOAIImage:getRGBA and use the same space, so 
-returns values in the range [0,1]
-@param x x coord of the pixel
-@param y y coord of the pixel
-@return r,g,b,a [0,1]
---]]
-function Texture:getRGBA(x,y)
-	return self.srcData:getRGBA(x,y)
-end
-
---[[---
-Get Color value of the pixel at x,y coord
-Color values are in the range [0,255]
-@param x x coord of the pixel
-@param y y coord of the pixel
-@return Color [0,1]
---]]
-function Texture:getColor(x,y)
-	local r,g,b,a = self.srcData:getRGBA(x,y)
-	return Color(r*255,g*255,b*255,a*255)
-end
-
 
 function Texture:_getQuad()
 	if not self._quad then
@@ -236,6 +201,39 @@ return texture size
 function Texture:getSize()
 	return self.width, self.height
 end
+
+
+
+---Returns the base raw image. 
+--@return MOAIImageTexture or MOAIImage
+function Texture:image()
+    return self.srcData
+end
+
+--[[---
+Get rgba value of the pixel at x,y coord
+The function extends and wraps the original MOAIImage:getRGBA and use the same space, so 
+returns values in the range [0,1]
+@param x x coord of the pixel
+@param y y coord of the pixel
+@return r,g,b,a [0,1]
+--]]
+function Texture:getRGBA(x,y)
+	return self.srcData:getRGBA(x,y)
+end
+
+--[[---
+Get Color value of the pixel at x,y coord
+Color values are in the range [0,255]
+@param x x coord of the pixel
+@param y y coord of the pixel
+@return Color [0,1]
+--]]
+function Texture:getColor(x,y)
+	local r,g,b,a = self.srcData:getRGBA(x,y)
+	return Color(r*255,g*255,b*255,a*255)
+end
+
 
 --[[---
 Pixel collision hitTest between 2 textures.
