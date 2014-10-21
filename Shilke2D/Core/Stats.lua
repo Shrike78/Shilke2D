@@ -18,18 +18,17 @@ function Stats:init()
 	self:addChild(self.info_stats)
 end
 
-
 --[[---
 Updates with the last frame informations
 --]]
 function Stats:update()	
 	local fps = math.floor(MOAISim.getPerformance())
-	local usage = MOAISim.getMemoryUsage()
-	local mtotal = usage.total/(1024*1024)
-	local mlua = usage.lua/(1024*1024)
-	local mtexture = usage.texture/(1024*1024)
-	--keep 1 that's the cost of drawing Stats object itself
+	local usage = MOAISim.getMemoryUsage("M")
+	
+	--minus 1, the cost of drawing Stats object itself
 	local drawcalls = MOAIRenderMgr.getPerformanceDrawCount() - 1
-	self.info_stats:setText(string.format("%d - %d - %.3f (%.3f, %.3f)", fps, drawcalls, mtotal, mlua, mtexture))
+	
+	self.info_stats:setText(string.format("%d - %d - %.3f (%.3f, %.3f)", fps, drawcalls, 
+			usage.total, usage.lua, usage.texture))
 end
 
