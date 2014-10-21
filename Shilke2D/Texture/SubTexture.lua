@@ -61,10 +61,4 @@ function SubTexture:getSrcData()
 	return self.parent.srcData
 end
 
-function SubTexture:releaseSrcData()
-	--should release supr parent src data or just do nothing?
-	--return self.parent:releaseSrcData()
-end
-
-
 

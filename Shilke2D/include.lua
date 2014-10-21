@@ -110,6 +110,7 @@ require("Shilke2D/Core/Stats")
 --Shilke2D/Texture
 require("Shilke2D/Texture/Texture")
 require("Shilke2D/Texture/SubTexture")
+require("Shilke2D/Texture/RenderTexture")
 require("Shilke2D/Texture/TextureAtlas")
 require("Shilke2D/Texture/BigTextureAtlas")
 require("Shilke2D/Texture/TexturePacker")

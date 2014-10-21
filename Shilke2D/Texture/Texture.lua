@@ -101,9 +101,7 @@ end
 
 ---When called textureData (MOAITexture) is released
 function Texture:dispose()
-	if self.textureData then
-		self.textureData:release()
-	end
+	self.textureData:release()
 	self.textureData = nil
 	self.region = nil
 	self.frame = nil
