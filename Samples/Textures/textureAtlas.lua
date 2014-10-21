@@ -34,10 +34,15 @@ function setup()
 
 	--we load the atlas descriptor created with TexturePacker. 
 	--choose one of the following to see how different format and features are supported as well
-	local atlas = TexturePacker.loadSparrowFormat("PlanetCute/PlanetCute.xml")
+	--local atlas = TexturePacker.loadSparrowFormat("PlanetCute/PlanetCute.xml")
 	--local atlas = TexturePacker.loadSparrowFormat("PlanetCute/PlanetCute_rotated.xml")
+	--local atlas = TexturePacker.loadSparrowFormat("PlanetCute/PlanetCute_trimmed.xml")
+	local atlas = TexturePacker.loadSparrowFormat("PlanetCute/PlanetCute_optimized.xml")
+	
 	--local atlas = TexturePacker.loadMoaiFormat("PlanetCute/PlanetCute.lua")
 	--local atlas = TexturePacker.loadMoaiFormat("PlanetCute/PlanetCute_rotated.lua")
+	--local atlas = TexturePacker.loadMoaiFormat("PlanetCute/PlanetCute_trimmed.lua")
+	--local atlas = TexturePacker.loadMoaiFormat("PlanetCute/PlanetCute_optimized.lua")
 	
 	--we retrieve the subtexture that was originally Character Boy.png and that is now a subregion of
 	--the atlas texture

@@ -117,12 +117,13 @@ function Image:hitTest(x,y,targetSpace,forTouch)
 		local r = self:getRect(__helperRect)
 		if r:containsPoint(_x,_y) then
 			if self.ppHitTest then
-				local a
-				if __USE_SIMULATION_COORDS__ then
-					_,_,_,a = self.texture:getRGBA(_x-r.x, -_y-r.y)
-				else
-					_,_,_,a = self.texture:getRGBA(_x-r.x, _y-r.y)
-				end
+				local img = self.texture:getSrcData()
+				assert(img, "pixel precise hitTest cannot be done if texture's srcData is nil")
+				--local _,_,_,a = self.texture:getRGBA(_x, _y)
+				local frame = self.texture.trimmed and  self.texture:getFrame() or nil
+				local _,_,_,a = BitmapData.getRegionRGBA(img, _x, _y, 
+					self.texture:getRegion(), self.texture.rotated, frame)
+				
 				if a > self.ppAlphaLevel then
 					return self
 				else

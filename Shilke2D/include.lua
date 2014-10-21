@@ -57,6 +57,7 @@ end
 
 
 require("Shilke2D/Utils/ClassEx")
+require("Shilke2D/Utils/Shape")
 require("Shilke2D/Utils/BitmapData")
 require("Shilke2D/Utils/Callbacks")
 require("Shilke2D/Utils/IO")
@@ -68,12 +69,10 @@ require("Shilke2D/Utils/BitOp")
 require("Shilke2D/Utils/Math")
 require("Shilke2D/Utils/Vector")
 require("Shilke2D/Utils/Color")
-require("Shilke2D/Utils/Shape")
 require("Shilke2D/Utils/String")
 require("Shilke2D/Utils/Table")
 require("Shilke2D/Utils/XmlNode")
 require("Shilke2D/Utils/IniParser")
-require("Shilke2D/Utils/CollisionKit")
 require("Shilke2D/Utils/Sound")
 require("Shilke2D/Utils/PerformanceTimer")
 

@@ -91,7 +91,22 @@ function update(elapsedTime)
 	--in this sample the position is retrieved by images just because both the images have pivot set as
 	--top_left. In a different situation the two position should be calculated displacing the imgs position
 	--by their pivot position
-	if boy.texture:hitTest(boy:getPosition_v2(),128, girl.texture,girl:getPosition_v2(),128) then
+	local btexture = boy.texture
+	local bimg = btexture:getSrcData()
+	local bregion = btexture:getRegion()
+	local brotated = btexture.rotated
+	local bframe = btexture.trimmed and btexture:getFrame() or nil
+	local bx,by = boy:getPosition()
+	
+	local gtexture = girl.texture
+	local gimg = gtexture:getSrcData()
+	local gregion = gtexture:getRegion()
+	local grotated = gtexture.rotated
+	local gframe = gtexture.trimmed and gtexture:getFrame() or nil
+	local gx,gy = girl:getPosition()
+	
+	if BitmapData.hitTestEx(bimg, bx, by, 128, gimg, gx, gy, 128, bregion, gregion, 
+			brotated, grotated, bframe, gframe) then
 		collisionInfo:setText("Collision = true")
 	else
 		collisionInfo:setText("Collision = false")
