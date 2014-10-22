@@ -32,51 +32,6 @@ TextureManager.__defaultCacheTexture = true
 TextureManager.__priorityMountPointFirst = true
 
 
-
---[[---
-local function used to retrieve a texture from one of the mounted atlases
-@tparam string fileName
-@tparam[opt=nil] ColorTransform transformOptions unused, declared just for compatibility
-@tparam[opt=__defaultCacheTexture] bool useCache
-@treturn SubTexture
---]]
-local function getAtlasTexture(fileName, transformOptions, useCache)
-	for mountDir,atlas in pairs(__atlasResources) do 
-		if string.starts(fileName, mountDir) then
-			local innerName = string.removePrefix(fileName, mountDir)
-			local txt = atlas:getTexture(innerName)
-			if txt then
-				if useCache then
-					__textureCacheAtlas[fileName] = txt
-				end
-				return txt
-			end
-		end
-	end
-	return nil
-end
-
-
---[[---
-local function used to retrieve a texture from one of the mounted atlases
-@tparam string fileName
-@tparam[opt=ColorTransform.PREMULTIPLY_ALPHA] ColorTransform transformOptions 
-@tparam[opt=__defaultCacheTexture] bool useCache
-@treturn Texture
---]]
-local function getPhysicalTexture(fileName, transformOptions, useCache)
-	local txt = Texture.fromFile(fileName, transformOptions)
-	if txt and useCache then
-		if not __textureCache[transformOptions] then
-			__textureCache[transformOptions] = {}
-		end
-		__textureCache[transformOptions][fileName] = txt
-	end
-	return txt
-end
-
-
-
 --[[---
 Mount a texture atlas as logica resource at a specific path.
 <ul>
@@ -143,6 +98,56 @@ function TextureManager.getMountedAtlas(mountDir)
 	return __atlasResources[mountDir]
 end
 
+
+--[[---
+local function used to retrieve a texture from one of the mounted atlases
+@tparam string fileName
+@tparam[opt=nil] ColorTransform transformOptions unused, declared just for compatibility
+@tparam[opt=__defaultCacheTexture] bool useCache
+@treturn SubTexture
+--]]
+local function getAtlasTexture(fileName, transformOptions, useCache)
+	if useCache and __textureCacheAtlas[fileName] then
+		return __textureCacheAtlas[fileName]
+	end
+	for mountDir,atlas in pairs(__atlasResources) do 
+		if string.starts(fileName, mountDir) then
+			local innerName = string.removePrefix(fileName, mountDir)
+			local txt = atlas:getTexture(innerName)
+			if txt then
+				if useCache then
+					__textureCacheAtlas[fileName] = txt
+				end
+				return txt
+			end
+		end
+	end
+	return nil
+end
+
+
+--[[---
+local function used to retrieve a texture from one of the mounted atlases
+@tparam string fileName
+@tparam[opt=ColorTransform.PREMULTIPLY_ALPHA] ColorTransform transformOptions 
+@tparam[opt=__defaultCacheTexture] bool useCache
+@treturn Texture
+--]]
+local function getPhysicalTexture(fileName, transformOptions, useCache)
+	if useCache and __textureCache[transformOptions] and __textureCache[transformOptions][fileName] then
+		return __textureCache[transformOptions][fileName]
+	end
+	local txt = Texture.fromFile(fileName, transformOptions)
+	if txt and useCache then
+		if not __textureCache[transformOptions] then
+			__textureCache[transformOptions] = {}
+		end
+		__textureCache[transformOptions][fileName] = txt
+	end
+	return txt
+end
+
+
 --[[---
 Returns a texture given a fileName. The texture can be a physical resource or a subtexture
 obtained from a texture atlas.
@@ -165,14 +170,6 @@ function TextureManager.getTexture(fileName, transformOptions, useCache)
 		useCache = TextureManager.__defaultCacheTexture
 	end
 
-	if useCache then
-		if __textureCacheAtlas[fileName] then
-			return __textureCacheAtlas[fileName]
-		elseif __textureCache[transformOptions] and __textureCache[transformOptions][fileName] then
-			return __textureCache[transformOptions][fileName]
-		end
-	end
-	
 	local getFunctions = TextureManager.__priorityMountPointFirst and 
 		{getAtlasTexture, 		getPhysicalTexture} or
 		{getPhysicalTexture, 	getAtlasTexture}	
