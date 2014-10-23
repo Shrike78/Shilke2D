@@ -15,6 +15,9 @@ and the vertices follow counter clockwise order.
 --basic math function calls
 local INV_255 = 1/255
 
+--default quad shader, created first time a quad is created
+local _quad_shader = nil
+
 Quad = class(BaseQuad)
 
 ---Quad are drawn using a pixel shader so it's necessary to have
@@ -42,6 +45,18 @@ function Quad:init(width,height,pivotMode)
 	self._prop:setDeck(self._mesh)
 end
 
+
+---override default quad shader
+--@tparam MOAIShader
+function Quad:setShader(shader)
+	if shader then
+		self._prop:setShader(shader)
+	else
+		self._prop:setShader(_quad_shader)
+	end
+end
+
+
 ---Inner method. It creates the quad mesh that will be displayed
 function Quad:_createMesh()
 		
@@ -56,20 +71,20 @@ function Quad:_createMesh()
 	self._mesh = MOAIMesh.new ()
 	self._mesh:setVertexBuffer ( self._vbo )
 	self._mesh:setPrimType ( MOAIMesh.GL_TRIANGLE_FAN )
+	if not _quad_shader then
+		_quad_shader = MOAIShader.new ()
+		local vsh = IO.getFile("/Shilke2D/Resources/quad.vsh")
+		local fsh = IO.getFile("/Shilke2D/Resources/quad.fsh")
+		_quad_shader:reserveUniforms(2)
+		_quad_shader:declareUniform(1, 'transform', MOAIShader.UNIFORM_WORLD_VIEW_PROJ )
+		_quad_shader:declareUniform(2, 'ucolor', MOAIShader.UNIFORM_PEN_COLOR )
 
-	local shader = MOAIShader.new ()
-	local vsh = IO.getFile("/Shilke2D/Resources/quad.vsh")
-	local fsh = IO.getFile("/Shilke2D/Resources/quad.fsh")
-
-	shader:reserveUniforms(2)
-	shader:declareUniform(1, 'transform', MOAIShader.UNIFORM_WORLD_VIEW_PROJ )
-	shader:declareUniform(2, 'ucolor', MOAIShader.UNIFORM_PEN_COLOR )
-
-	shader:setVertexAttribute ( 1, 'position' )
-	shader:setVertexAttribute ( 2, 'color' )
-	shader:load ( vsh, fsh )
-
-	self._mesh:setShader(shader)
+		_quad_shader:setVertexAttribute ( 1, 'position' )
+		_quad_shader:setVertexAttribute ( 2, 'color' )
+		_quad_shader:load ( vsh, fsh )
+	end
+	
+	self._mesh:setShader(_quad_shader)
 end
 
 ---Inner methods. 
