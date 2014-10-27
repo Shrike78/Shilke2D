@@ -95,7 +95,7 @@ function Texture:init(srcData, frame)
 	self.rotated = false
 	self.trimmed = frame ~= nil
 	self.region = Rect(0,0,self.textureData:getSize())
-	self.frame = frame or self.region
+	self.frame = frame and frame:clone() or self.region
 end
 
 
