@@ -41,11 +41,12 @@ NB: in Starling format subtexture's names are without original image extension.
 By design choice, the name of each subtexture once loaded append as extension the 
 extension of the atlas resource.
 
-@param atlasXml the xml with the atlas descriptor in Sparrow/Starling format
-@param dir by default texture resources are loaded from working directory. 
+@tparam XmlNode atlasXml the xml with the atlas descriptor in Sparrow/Starling format
+@tparam[opt=nil] string dir by default texture resources are loaded from working directory. 
 If dir is provided it load the image referred by atlasXml from dir
-@param texture it's possible to provide an already created texture to the method,
+@tparam[opt=nil] Texture texture it's possible to provide an already created texture to the method,
 avoiding the load (or even for using an alternative image)
+@treturn TextureAtlas
 --]]
 function TexturePacker.parseSparrowFormat(atlasXml, dir, texture)
 	

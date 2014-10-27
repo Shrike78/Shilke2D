@@ -93,6 +93,12 @@ function TextureAtlas:init(texture)
     self.regions = {}
 end
 
+---returns the base texture on wich the atlas is built
+--@treturn Texture
+function TextureAtlas:getBaseTexture()
+	return self.baseTexture
+end
+
 --[[---
 Clear inner structs. It's possible to specify if to dispose also the base texture
 @tparam[opt=false] bool disposeBaseTexture
