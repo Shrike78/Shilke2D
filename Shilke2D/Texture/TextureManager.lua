@@ -1,39 +1,98 @@
 --[[---
-TextureManager allows to mount a texture atlas as a logical resource path.
-That means that calling TextureManager.getTexture() makes transparent the load
-of a real texture or of a subtexture of a texture atlas.
+Texture Manager is an helper namespace to work with textures.
 
-That allows to create code that doesn't depend on how data is packed.
+It's a sort of file system wrapper for textures: it allows to register
+textures and mount atlases as virtual directories.
 
-That's usefull moving from development/debug to release, where textures of a specific
-path may be packed only for release version but the code for loading assets can be left 
-unchanged, except for the initialization mount phase.
-
-TextureManager also allows to optionally cache the loaded textures. Default behaviour is 
-to always cache resources but it can be changed for application execution changing the 
-__defaultCacheTexture attribute of texture manager.
+All the required textures are cached in order to share memory and reduce 
+load time.
 --]]
 TextureManager = {}
 
----used to store all the mounted textureAtlases
-local __atlasResources = {}
+local __textures = {}
+local __atlases  = {}
+local __atlasesCache = {}
 
----used to cache the textures loaded from filesystem. dictionary of dictionary (sorted for
---'colorTransform' value
-local __textureCache = {}
----used to cache the textures stored into the TextureAtlases
-local __textureCacheAtlas = {}
-
----default behaviour for caching. change it to invert default behavior for the application
-TextureManager.__defaultCacheTexture = true
-
----default behaviour for getTexture priority search: default is firt check virtual mount points, 
---then physical paths. Set to false to invert the behaviour
-TextureManager.__priorityMountPointFirst = true
+--[[---
+Clear inner structs.
+@tparam[opt=true] bool disposeTextures if true all the cached textures are also
+disposed
+@tparam[opt=true] bool disposeAtlases if true all the mounted atlases are also
+disposed
+--]]
+function TextureManager.clear(disposeTextures, disposeAtlases)
+	local disposeTextures 	= disposeTextures ~= false
+	local disposeAtlases 	= disposeAtlases ~= false
+	
+	if disposeTextures then
+		for _,t in pairs(__textures) do
+			t:dispose()
+		end
+	end
+	if disposeAtlases then
+		for _,atlas in pairs(__atlases) do
+			atlas:dispose()
+		end
+	end
+	table.clear(__textures)
+	table.clear(__atlases)
+	table.clear(__atlasesCache)
+end
 
 
 --[[---
-Mount a texture atlas as logica resource at a specific path.
+Register a texture with a given name
+@function TextureManager.addTexture
+@tparam string name the name (path) used to register the texture
+@tparam Texture texture
+@treturn bool success
+--]]
+
+
+--[[---
+Register a texture with a given name
+@tparam string name the name (path) used to register the texture
+@tparam string texture filename of the texture to load
+@tparam[opt=ColorTransform.PREMULTIPLY_ALPHA] ColorTransform transformOptions
+@treturn bool success
+--]]
+function TextureManager.addTexture(name, texture, transformOptions)
+	local registerdName = IO.getAbsolutePath(name)
+	if not __textures[registerdName] then
+		local texture = texture
+		if type(texture) == 'string' then
+			texture = Texture.fromFile(texture, transformOptions)
+		end
+		__textures[registerdName] = texture
+		return true
+	end
+	return false
+end
+
+
+--[[---
+remove a given texture from cache
+@tparam string name the name of the texture to remove. it doesn't work on
+atlas textures
+@tparam[opt=true] bool if the removed texture must be disposed
+@treturn bool success
+--]]
+function TextureManager.removeTexture(name, dispose)
+	local txt = __textures[name]
+	local dispose = dispose ~= false
+	if txt then
+		__textures[name] = nil
+		if txt and dispose then
+			txt:dispose()
+		end
+		return true
+	end
+	return false
+end
+
+
+--[[---
+Mounts a texture atlas as logical resource at a specific path.
 <ul>
 <li>It's possible to mount the same atlas at different paths</li>
 <li>It's possible to override a physical path with mount points</li>
@@ -46,10 +105,10 @@ Mount a texture atlas as logica resource at a specific path.
 function TextureManager.mountAtlas(mountDir, atlas)
 	local mountDir = IO.getAbsolutePath(mountDir)
 	mountDir = (mountDir .. "/"):gsub("//","/")
-	if __atlasResources[mountDir] then
+	if __atlases[mountDir] then
 		return false
 	end
-	__atlasResources[mountDir] = atlas
+	__atlases[mountDir] = atlas
 	return true		
 end
 
@@ -63,13 +122,14 @@ function TextureManager.unmountAtlas(mountDir, dispose)
 	local mountDir = IO.getAbsolutePath(mountDir)
 	local dispose = dispose == true
 	mountDir = (mountDir .. "/"):gsub("//","/") 
-	local atlas = __atlasResources[mountDir]
+	local atlas = __atlases[mountDir]
 	if atlas then
-		for _,textureName in atlas:getSortedNames() do
-			local cacheName = mountDir .. textureName
-			self:removeCachedTexture(cacheName,ColorTransform.NONE,dispose)
+		__atlases[mountDir] = nil
+		for k,_ in pairs(__atlasesCache) do
+			if string.starts(k, mountDir) then
+				__atlasesCache[k] = nil
+			end
 		end
-		__atlasResources[mountDir] = nil
 		return true
 	end
 	return false
@@ -82,7 +142,7 @@ returns a list of all the mounted dirs
 --]]
 function TextureManager.getMountedDirs()
 	local res = {}
-	for k,_ in pairs(__atlasResources) do
+	for k,_ in pairs(__atlases) do
 		res[#res+1] = k
 	end
 	return res
@@ -95,139 +155,49 @@ returns the atlas mounted at specific mountDir
 @treturn TextureAtlas
 --]]
 function TextureManager.getMountedAtlas(mountDir)
-	return __atlasResources[mountDir]
+	return __atlases[mountDir]
 end
 
 
 --[[---
-local function used to retrieve a texture from one of the mounted atlases
-@tparam string fileName
-@tparam[opt=nil] ColorTransform transformOptions unused, declared just for compatibility
-@tparam[opt=__defaultCacheTexture] bool useCache
-@treturn SubTexture
---]]
-local function getAtlasTexture(fileName, transformOptions, useCache)
-	if useCache and __textureCacheAtlas[fileName] then
-		return __textureCacheAtlas[fileName]
-	end
-	for mountDir,atlas in pairs(__atlasResources) do 
-		if string.starts(fileName, mountDir) then
-			local innerName = string.removePrefix(fileName, mountDir)
-			local txt = atlas:getTexture(innerName)
-			if txt then
-				if useCache then
-					__textureCacheAtlas[fileName] = txt
-				end
-				return txt
-			end
-		end
-	end
-	return nil
-end
-
-
---[[---
-local function used to retrieve a texture from one of the mounted atlases
-@tparam string fileName
-@tparam[opt=ColorTransform.PREMULTIPLY_ALPHA] ColorTransform transformOptions 
-@tparam[opt=__defaultCacheTexture] bool useCache
-@treturn Texture
---]]
-local function getPhysicalTexture(fileName, transformOptions, useCache)
-	if useCache and __textureCache[transformOptions] and __textureCache[transformOptions][fileName] then
-		return __textureCache[transformOptions][fileName]
-	end
-	local txt = Texture.fromFile(fileName, transformOptions)
-	if txt and useCache then
-		if not __textureCache[transformOptions] then
-			__textureCache[transformOptions] = {}
-		end
-		__textureCache[transformOptions][fileName] = txt
-	end
-	return txt
-end
-
-
---[[---
-Returns a texture given a fileName. The texture can be a physical resource or a subtexture
-obtained from a texture atlas.
-Textures not stored in mounted atlas are loaded through Assets.getTexture
-@tparam string fileName name of the texture to be retrieved
-@tparam[opt=ColorTransform.PREMULTIPLY_ALPHA] ColorTransform transformOptions If the texture is
-packed in a atlas the parameter is unused
-@tparam[opt=__defaultCacheTexture] bool useCache if cache is used, already retrieved textures are
-stored in cache dictionaries, indexed by name and ColorTransform
+Returns a texture based on name. If the texture is not registered
+it can load and automatically register as new resource
+@tparam string name the name of the texure to return
+@tparam[opt=true] bool addIfAbsent if the name is not registered, 
+if addIfAbsent is true the texture is loaded and registerd, else return nil
 @treturn[1] Texture
 @return[2] nil
 @treturn[2] string error message
 --]]
-function TextureManager.getTexture(fileName, transformOptions, useCache)
-	
-	local fileName = IO.getAbsolutePath(fileName)
-	local transformOptions = transformOptions or ColorTransform.PREMULTIPLY_ALPHA
-	
-	if useCache == nil then
-		useCache = TextureManager.__defaultCacheTexture
-	end
-
-	local getFunctions = TextureManager.__priorityMountPointFirst and 
-		{getAtlasTexture, 		getPhysicalTexture} or
-		{getPhysicalTexture, 	getAtlasTexture}	
-	
-	local txt = getFunctions[1](fileName, transformOptions, useCache)
+function TextureManager.getTexture(name, addIfAbsent)
+	local fileName = IO.getAbsolutePath(name)
+	local addIfAbsent = addIfAbsent~=false
+	local err = nil
+	--check if one of the cached textures
+	local txt = __textures[fileName]
+	--check in atlas cache 
 	if not txt then
-		txt = getFunctions[2](fileName, transformOptions, useCache)
+		txt = __atlasesCache[fileName]
 	end
-	return txt
-end
-
-
---[[---
-Remove a texture from the cache and return it
-@tparam string textureFileName
-@tparam[opt=ColorTransform.PREMULTIPLY_ALPHA] ColorTransform transformOptions If the texture is
-packed in a atlas the parameter is unused
-@tparam[opt=false] bool dispose
-@treturn Texture
---]]
-function TextureManager.removeCachedTexture(textureFileName, transformOptions, dispose)
-	local cacheName = IO.getAbsolutePath(textureFileName)
-	local transformOptions = transformOptions or ColorTransform.PREMULTIPLY_ALPHA
-	local dispose = dispose == true
-	if __textureCacheAtlas[cacheName] then 
-		if dispose then
-			__textureCacheAtlas[cacheName]:dispose()
-		end
-		__textureCacheAtlas[cacheName] = nil
-		return true
-	elseif __textureCache[transformOptions] and __textureCache[transformOptions][cacheName] then
-		if dispose then
-			__textureCache[transformOptions][cacheName]:dispose()
-		end
-		__textureCache[transformOptions][cacheName] = nil
-		return true
-	end
-	return false
-end
-
---[[---
-Clears the whole texture cache.
-@tparam[opt=false] bool dispose if the textures must be disposed or not when released from cache
---]]
-function TextureManager.clearCache(dispose)
-	local dispose = dispose == true
-	if dispose then
-		for _,v in pairs(__textureCacheAtlas) do
-			v:dispose()
-		end
-		for  _,options in pairs(__textureCache) do
-			for _,v in pairs(options) do
-				v:dispose()
+	--check in all the atlases 
+	if not txt then
+		for mountDir,atlas in pairs(__atlases) do 
+			if string.starts(fileName, mountDir) then
+				local innerName = string.removePrefix(fileName, mountDir)
+				txt = atlas:getTexture(innerName)
+				__atlasesCache[fileName] = txt
+				break
 			end
 		end
 	end
-	table.clear(__textureCacheAtlas)
-	table.clear(__textureCache)
+	--if not already registered and addIfAbsent is true, 
+	--loads a new texture with default transformOptions
+	if not txt and addIfAbsent then
+		txt, err = Texture.fromFile(fileName)
+		__textures[fileName] = txt
+	end
+	return txt, err
 end
+
 
 
