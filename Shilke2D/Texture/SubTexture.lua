@@ -27,7 +27,7 @@ The regions can be 90° clockwise rotated.
 @tparam Texture parentTexture the src texture from which the subtexture is created
 @tparam Rect region the region that defines the sub texture
 @tparam[opt=false] bool rotated If true the region is 90° clockwise rotated
-@tparam[opt=region] frame if the src image has been trimmed when packed in a atlas, frame
+@tparam[opt=region] Rect frame if the src image has been trimmed when packed in a atlas, frame
 must be provided to correctly identify real texture size / rect
 --]]
 function SubTexture:init(parentTexture, region, rotated, frame)
