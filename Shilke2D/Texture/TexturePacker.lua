@@ -53,6 +53,7 @@ function TexturePacker.parseSparrowFormat(atlasXml, dir, texture)
 	local imgName = atlasXml:getAttribute("imagePath")
 	local extension = "." .. string.getFileExtension(imgName)
 	local texture = texture	
+	local bTextureOwner = false
 	
 	if not texture then
 		local dir = dir or ""
@@ -60,9 +61,10 @@ function TexturePacker.parseSparrowFormat(atlasXml, dir, texture)
 			dir = (dir .. "/"):gsub("//","/")
 		end
 		texture = Texture.fromFile(dir .. imgName)
+		bTextureOwner = true
 	end
 
-    local atlas = TextureAtlas(texture)
+    local atlas = TextureAtlas(texture, bTextureOwner)
                
     for _,subTex in pairs(atlasXml:getChildren("SubTexture")) do
 		--add extension to file name (meant to be the same of atlas img file because 
@@ -127,6 +129,8 @@ avoiding the load (or even for using an alternative image)
 function TexturePacker.parseMoaiFormat(descriptor, dir, texture)
     
 	local texture = texture
+	local bTextureOwner = false
+	
 	if not texture then
 		local dir = dir or ""
 		if dir ~= "" then
@@ -134,9 +138,10 @@ function TexturePacker.parseMoaiFormat(descriptor, dir, texture)
 		end
 		local imgName = descriptor.texture
 		texture = Texture.fromFile(dir .. imgName)
+		bTextureOwner = true
 	end
 	
-	local atlas = TextureAtlas(texture)
+	local atlas = TextureAtlas(texture, bTextureOwner)
 
 	for _,subTex in pairs(descriptor.frames) do
 	
@@ -165,45 +170,6 @@ function TexturePacker.parseMoaiFormat(descriptor, dir, texture)
 			frame = Rect(frameX,frameY,frameW,frameH)
 		end
 		atlas:addRegion(subTex.name, region, rotated, frame)
-	end
-	return atlas
-end
-
---[[---
-Load a lua file and automatically calls parseCoronaFormat and returns a texture atlas
-It expects to have the referred image in a relative path to xml file location 
-@param luaFileName the path of the Corona lua descriptor
-@return TextureAtlas
-@return err nil or error string if loading failed
---]]
-function TexturePacker.loadCoronaFormat(luaFileName)
-	local dir = string.getFileDir(luaFileName)
-	local atlasDescriptor, err = IO.dofile(luaFileName)
-	if not atlasDescriptor then
-		return nil, err
-	end
-	return TexturePacker.parseCoronaFormat(atlasDescriptor, dir)
-end
-
---[[---
-Parser for the Corona lua descriptor
-The descriptor must be a lua table with Corona texture packer export info
-
-@param descriptor the lua table with the atlas descriptor in Corona format
-@param texture it's necessary to provide an already created texture to the method
---]]
-function TexturePacker.parseCoronaFormat(descriptor,texture)
-	local atlas = TextureAtlas(texture)
-	for _,subTex in pairs(descriptor.frames) do
-		local x = subTex.textureRect.x
-		local y = subTex.textureRect.y
-		local w = subTex.textureRect.width
-		local h = subTex.textureRect.height
-
-		local region = Rect(x, y, w, h)
-		local rotated = false
-		local frame = nil
-		atlas:addRegion(subTex.name, region, rotated,frame)
 	end
 	return atlas
 end

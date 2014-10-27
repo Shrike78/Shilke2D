@@ -17,7 +17,8 @@ TextureAtlas = class()
 --enum internally used for region structure rapresentation
 local REGION_RECT 		= 1
 local REGION_ROTATION 	= 2
-local REGION_FRAME 		= 3
+local REGION_FRAME 	= 3
+local REGION_TEXTURE	= 4
 
 --[[---
 Automatic creation of a tilest starting from a texture, where all 
@@ -45,9 +46,15 @@ is loaded using Texure.fromFile function using default color transformation
 function TextureAtlas.fromTexture(texture,regionWidth,regionHeight,
             margin,spacing,prefix,padding)
 	
-    local texture = type(texture) == "string" and Texture.fromFile(texture) or texture
+    local texture = texture
+	local bTextureOwner = false
 	
-	local atlas = TextureAtlas(texture)
+	if type(texture) == "string" then
+		texture = Texture.fromFile(texture)
+		bTextureOwner = true
+	end
+	
+	local atlas = TextureAtlas(texture, bTextureOwner)
 	
 	--default values
 	local margin = margin or 0
@@ -88,8 +95,12 @@ function TextureAtlas.fromTexture(texture,regionWidth,regionHeight,
 end
 
 ---A texture atlas is always built over a texture
-function TextureAtlas:init(texture)
+--@tparam Texture texture the base texture of the atlas.
+--@tparam[opt=false] bool bTextureOwner if the atlas own the provided texture, 
+--it disposes the texture on atlas disposing
+function TextureAtlas:init(texture, bTextureOwner)
     self.baseTexture = texture
+	self.bTextureOwner = bTextureOwner==true
     self.regions = {}
 end
 
@@ -100,15 +111,24 @@ function TextureAtlas:getBaseTexture()
 end
 
 --[[---
-Clear inner structs. It's possible to specify if to dispose also the base texture
-@tparam[opt=false] bool disposeBaseTexture
+Clear inner structs. and dispose all the created subtextures, so take care
+of not having subtextures in use after disposing it.
+If the atlas owns the baseTexture it also disposes it, and anyway it's possible
+to force the disposal of the baseTexture with an optional parameter
+@tparam[opt=false] bool forceDisposeBaseTexture if true, the base texture is
+disposed even if the atlas is not the owner of the texture
 --]]
-function TextureAtlas:dispose(disposeBaseTexture)
-	disposeBaseTexture = disposeBaseTexture == true
-	if disposeBaseTexture then 
+function TextureAtlas:dispose(forceDisposeBaseTexture)
+	local forceDisposeBaseTexture = forceDisposeBaseTexture==true
+	if self.bTextureOwner or forceDisposeBaseTexture then 
 		self.baseTexture:dispose()
 	end
 	self.baseTexture = nil
+	for _,r in pairs(self.regions) do
+		if r[REGION_TEXTURE] then
+			r:dispose()
+		end
+	end
 	table.clear(self.regions)
 end
 
@@ -126,9 +146,10 @@ function TextureAtlas:addRegion(name,rect,rotated,frame)
 		error("region "..region.." already added to Atlas")
 	end
 	local newRegion = {}
-	newRegion[REGION_RECT] = rect
-	newRegion[REGION_ROTATION] = rotated == true
-	newRegion[REGION_FRAME] = frame
+	newRegion[REGION_RECT] 	= rect
+	newRegion[REGION_ROTATION]	= rotated == true
+	newRegion[REGION_FRAME] 	= frame
+	newRegion[REGION_TEXTURE] 	= nil
 	self.regions[name] = newRegion
 end
 
@@ -176,7 +197,11 @@ function TextureAtlas:getTexture(name)
 	local txt = nil
 	local region = self.regions[name]
 	if region then
+		txt = region[REGION_TEXTURE]
+		if not txt then
 			txt = Texture.fromTexture(self.baseTexture, region[REGION_RECT], region[REGION_ROTATION], region[REGION_FRAME])
+			region[REGION_TEXTURE] = txt
+		end
 	end
     return txt
 end
