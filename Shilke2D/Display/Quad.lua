@@ -47,7 +47,7 @@ end
 
 
 ---override default quad shader
---@tparam MOAIShader
+--@tparam MOAIShader shader
 function Quad:setShader(shader)
 	if shader then
 		self._prop:setShader(shader)
