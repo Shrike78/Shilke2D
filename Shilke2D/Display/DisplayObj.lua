@@ -368,10 +368,10 @@ end
 Defines if alpha value has to be used as straight or premultiplied.
 When the value change the blendMode is reset to NORMAL preset 
 (whith blend factors depending on alpha mode)
-@param bUse default is true
+@tparam[opt=true] bool bUse
 --]]
 function DisplayObj:setPremultipliedAlpha(bUse)
-	local bPremultipliedAlpha = not (bUse == false)
+	local bPremultipliedAlpha = bUse ~= false
 	if self._premultipliedAlpha ~= bPremultipliedAlpha then 
 		self._premultipliedAlpha = bPremultipliedAlpha
 		self:_updateColor()
