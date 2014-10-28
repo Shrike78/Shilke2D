@@ -95,14 +95,14 @@ function update(elapsedTime)
 	local bimg = btexture:getSrcData()
 	local bregion = btexture:getRegion()
 	local brotated = btexture.rotated
-	local bframe = btexture.trimmed and btexture:getFrame() or nil
+	local bframe = btexture:getFrame()
 	local bx,by = boy:getPosition()
 	
 	local gtexture = girl.texture
 	local gimg = gtexture:getSrcData()
 	local gregion = gtexture:getRegion()
 	local grotated = gtexture.rotated
-	local gframe = gtexture.trimmed and gtexture:getFrame() or nil
+	local gframe = gtexture:getFrame()
 	local gx,gy = girl:getPosition()
 	
 	if BitmapData.hitTestEx(bimg, bx, by, 128, gimg, gx, gy, 128, bregion, gregion, 

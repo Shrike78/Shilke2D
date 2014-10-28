@@ -96,7 +96,7 @@ function onSpriteTouched(e)
 		--check if the target exists: the sender notifies moving events the start inside it even if the 
 		--move ending point is outside it, and so the target it's different or nil.
 		--If it exists and it's the same currently "dragged" by Shilke, then translate it
-		if target and target ==	Shilke2D.current:getDraggedObj(touch) then
+		if target and target == Shilke2D.current:getDraggedObj(touch) then
 			--Global Translate allows to translate an obj based on stage coordinates.
 			target:globalTranslate(touch.deltaX,touch.deltaY)
 		end
