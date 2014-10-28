@@ -1,41 +1,42 @@
 --[[---
-A RenderTexture is a dynamic texture onto which you can draw a display object.
+A RenderTexture is a dynamic texture onto which it's possible to draw a display object.
 
 After creating a render texture, just call a draw* methods to render a display object 
 directly onto the texture.
 
-The RenderTexure is created with a specific width / height, so the rendering will be limited to 
-a rectangle of (0,0,width,height).
+The RenderTexure is created with a specific width / height, so the rendering will be 
+limited to a rectangle of (0,0,width,height).
 
-The displayObj to be rendered will keep it local geometrical and color properties when rendered.
+The displayObj to be rendered will keep it local geometrical and color properties when 
+rendered.
 
-i.e. if an image wiht PivotMode.CENTER, placed in 0,0, not rotated and not scaled is rendered, 
-the resulting texture will shown just a part of the texture (which one depends by choosed coordinate 
-system) 
+i.e. if an image wiht PivotMode.CENTER, placed in 0,0, not rotated and not scaled 
+is rendered, the resulting texture will shown just a part of the texture (which one 
+depends on which Shilke2D coordinate system is used) 
 
 Draw Methods:
 
 - drawObject(object, callback): most common method, used to draw a generic display obj
 
-- drawDynamicObject(object, callback): used to update each frame the texture. Can be used with animated
-objects.
+- drawDynamicObject(object, callback): used to update each frame the texture. 
+Can (should) be used with animated objects.
 
-- drawRenderTable(object, bUpdate, callback): can be used with a generic MOAI rendertable. bUpdate param
-let choose to render only first frame or to have a continuous update.
+- drawRenderTable(object, bUpdate, callback): can be used with a generic MOAI rendertable. 
+bUpdate param let choose to render only first frame or to have a continuous update.
 
 --]]
 
 
 --[[---
 Returns a RenderTexture of a given displayObj.
-@param displayObj the displayObj that must be rendered on the newly created texture. The provided displayObj
-must have no parent
-@param requireSrcData optional boolean value. If local image is required for getColor / hitTest logic
-set it to true. default value is false
-@param callback optional callback function called after the render to texture has been completed. 
-If requireSrcData is true then the callback is called after the srcData is acquired
-@treturn RenderTexture the returned texture can be used istantly (i.e. to create an Image) even if 
-the render to texture will happen next frame
+@tparam DisplayObj displayObj the displayObj that must be rendered on the newly created 
+texture. The provided displayObj must have no parent
+@tparam[opt=false] bool requireSrcData If a local image is required set it to true.
+@tparam[opt=nil] function callback function called after the render to texture has 
+been completed. If requireSrcData is true then the callback is called after the 
+srcData is acquired
+@treturn RenderTexture the returned texture can be used istantly 
+(i.e. to create an Image) even if the render to texture will happen next frame
 --]]
 function Texture.fromDisplayObj(displayObj, requireSrcData, callback)
 	assert(displayObj:getParent() == nil)
@@ -58,7 +59,7 @@ Constructor. Create a frameBuffer of size(width,height)
 @tparam int height
 @tparam[opt=nil] Rect frame
 --]]
-function RenderTexture:init(width,height, frame)
+function RenderTexture:init(width,height,frame)
 	assert(width<=Texture.MAX_WIDTH, width .. " not allowed, max is" .. Texture.MAX_WIDTH)
 	assert(height<=Texture.MAX_HEIGHT, height .. " not allowed, max is" .. Texture.MAX_HEIGHT)
 	
@@ -75,7 +76,7 @@ function RenderTexture:init(width,height, frame)
 
 	self.rotated = false
 	self.trimmed = frame ~= nil
-	self.region = Rect(0,0,	self.textureData:getSize())
+	self.region = Rect(0,0, self.textureData:getSize())
 	self.frame = frame or self.region
 end
 
@@ -125,9 +126,7 @@ function RenderTexture:_createFrameBuffer(width,height)
 	self.textureData, self.layer = frameBuffer, layer
 end
 
---[[---
-Inner method. Destroy the frameBuffer, clear the layer and release all the structures
---]]
+---Inner method. Destroy the frameBuffer, clear the layer and release all the structures
 function RenderTexture:_destroyFrameBuffer()
 	assert( self.textureData, "_createFrameBuffer has never been called")
 	self:_removeFrameBuffer()
@@ -140,7 +139,6 @@ end
 --Used to add the wrapped frameBuffer to the Shilke2D render frameBuffer table
 function RenderTexture:_addFrameBuffer()
 	if table.find(Shilke2D.__frameBufferTables, self.textureData) == 0 then
-		--print("add framebuffer")
 		table.insert(Shilke2D.__frameBufferTables, self.textureData)
 		MOAIRenderMgr.setBufferTable(Shilke2D.__frameBufferTables)
 	end
@@ -151,7 +149,6 @@ end
 --Used to remove the wrapped frameBuffer from the Shilke2D render frameBuffer table
 function RenderTexture:_removeFrameBuffer()
 	if table.removeObj(Shilke2D.__frameBufferTables, self.textureData) then
-		--print("remove framebuffer")
 		MOAIRenderMgr.setBufferTable(Shilke2D.__frameBufferTables)
 	end
 end
@@ -168,9 +165,10 @@ end
 
 --[[---
 Draw a DisplayObj onto the wrapped frameBuffer. The render to texture is done every frame,
-so it should be used only with an animated displayObj and in very particular situation (i.e. if 
-a shader must be used over a generic displayObject animation)
-If a callback is provided that will be called after the first render to texture is completed.
+so it should be used only with an animated displayObj and in very particular 
+situation (i.e. if a shader must be used over a generic displayObject animation)
+If a callback is provided that will be called after the first render to texture is 
+completed.
 @param displayObj
 @param callback
 --]]
@@ -179,9 +177,10 @@ function RenderTexture:drawDynamicObject(displayObj, callback)
 end
 
 --[[---
-Draw a valid MOAI rendertable onty the wrapped frameBuffer. if bUpdate is true the render to texture
-is done every frame, else just the first one.
-If a callback is provided that will be called after the first render to texture is completed.
+Draw a valid MOAI rendertable onty the wrapped frameBuffer. 
+If bUpdate is true the render to texture is done every frame, else just the first one.
+If a callback is provided that will be called after the first render to texture 
+is completed.
 @param renderTable
 @tparam boolean continuousUpdate if true the render to texture is done every frame
 @param callback
@@ -206,31 +205,24 @@ end
 
 --[[---
 Asynchronously grabs the next frame of the wrapped framebuffer. The frame is then returned 
-to the caller throug a callback. The frame can be returned as a Texture (default behaviour) or as
-a raw MOAIImage data (if bRawData is true).
+to the caller throug a callback as a raw MOAIImage data.
 
 The call forces also an update of the wrapped frameBuffer (if continuousUpdate was false)and 
 requires the rendertable provided in draw method to be still available. If a change has occurred 
 in the rendertable the texture will be changed accordingly
 
-@param callback a function of type callFunc(sender, texture) or callFunc(sender, MOAIImage) 
-if bRawData is set. The callback receive as param the newly generated Texture / MOAIImage.
-@param bRawData optional, default false. By default grabNextFrame generates a Texture. If true it 
-returns a raw MOAIImage data
+@tparam function callback a function of type callFunc(sender, MOAIImage)
+@tparam[opt=nil] MOAIImage dstImage if provided, the frameBuffer is grabbed over it,
+else a new MOAIImage is created
 --]]
-function RenderTexture:grabNextFrame(callback, bRawData)
+function RenderTexture:grabNextFrame(callback, dstImage)
 	assert(is_function(callback), "a callback function must be provided")
-	local fbSrcData = MOAIImage.new()
+	local fbSrcData = dstImage or MOAIImage.new()
 	local cbFunc = function()
 		if not self.continuousUpdate then
 			self:_removeFrameBuffer()
 		end
-		if bRawData then
-			callback(self, fbSrcData)
-		else
-			local t = Texture.fromData(fbSrcData)
-			callback(self, t)
-		end
+		callback(self, fbSrcData)
 	end
 	if not self.continuousUpdate then
 		self:_addFrameBuffer()
@@ -245,12 +237,13 @@ That can be usefull if the RenderTexture must be used for pixel precision collis
 if a per pixel color information is required. It's possible to provide a callback that will
 be called after frame grab. 
 
-The call forces also an update of the wrapped frameBuffer (if continuousUpdate was false)and 
-requires the rendertable provided in draw method to be still available. If a change has occurred 
-in the rendertable the texture will be changed accordingly.
+The call forces also an update of the wrapped frameBuffer (if continuousUpdate was false)
+and requires the rendertable provided in draw method to be still available. If a change 
+has occurred in the rendertable the texture will be changed accordingly.
 
-@param callback optional callback function in the form of callback(sender)
+It's possible to register a callback to be notified of sync completion.
 
+@tparam[opt=nil] function callback callback function in the form of callback(sender)
 --]]
 function RenderTexture:syncSrcData(callback)
 	local cbFunc = function(sender, srcData)
@@ -259,7 +252,8 @@ function RenderTexture:syncSrcData(callback)
 			callback(sender)
 		end
 	end
-	self:grabNextFrame(cbFunc, true)
+	--if srcData is nil, it's created by grabNextFrame call
+	self:grabNextFrame(cbFunc, self.srcData)
 end
 
 
