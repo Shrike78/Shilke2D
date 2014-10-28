@@ -414,19 +414,24 @@ function DisplayObj:getAlpha()
    return self._color[4] * 255
 end
 
+--[[---
+Set obj color.
+@function DisplayObj:setColor
+@tparam Color color
+--]]
 
 --[[---
 Set obj color.
-The following calls are valid:
-- setColor(r,g,b)
-- setColor(r,g,b,a)
-- setColor("#FFFFFF")
-- setColor("#FFFFFFFF")
-- setColor(Color)
-@param r red value [0,255] or a Color or hex string
-@param g green value [0,255] or nil
-@param b blue value [0,255] or nil
-@param a alpha value [0,255] or nil
+@function DisplayObj:setColor
+@tparam string hex hex string color
+--]]
+
+--[[---
+Set obj color.
+@tparam int r (0,255)
+@tparam int g (0,255)
+@tparam int b (0,255)
+@tparam[opt=255] int a (0,255)
 --]]
 function DisplayObj:setColor(r,g,b,a)
 	local c = self._color

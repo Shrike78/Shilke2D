@@ -39,10 +39,10 @@ premultiplied alpha mode
 Wraps MOAIGfxDevice.setPenColor, handling Shilke2D Color object and 
 premultiplied alpha mode
 @function Graphics.setPenColor
-@tparam int r [0..255]
-@tparam int g [0..255]
-@tparam int b [0..255]
-@tparam[opt=255] int a
+@tparam int r (0,255)
+@tparam int g (0,255)
+@tparam int b (0,255)
+@tparam[opt=255] int a (0,255)
 --]]
 function Graphics.setPenColor(r,g,b,a)
 	local r,g,b,a = Color._paramConversion(r,g,b,a,1)

@@ -39,8 +39,8 @@ function Stage:_createProp()
 end
 
 ---Debug function. Used to show bounding box while rendering.
---@param showOrientedBounds boolean. if nil is set to true
---@param showAABounds boolean. if nil is set to false
+--@tparam[opt=true] bool showOrientedBounds
+--@tparam[opt=false] bool showAABounds boolean
 function Stage:showDebugLines(showOrientedBounds,showAABounds)
 	self._showOrientedBounds = showOrientedBounds ~= nil and showOrientedBounds or true
 	self._showAABounds = showAABounds ~= nil and showAABounds or false
@@ -59,10 +59,10 @@ end
 Inner method.
 With moai 1.4 clearColor function has been moved to frameBuffer and removed from GfxDevice.
 The call checks which method is available and make the proper moai call.
-@param r red component [0..1]
-@param g green component [0..1]
-@param b blue component [0..1]
-@param a alpha component [0..1]
+@tparam number r (0,1)
+@tparam number g (0,1)
+@tparam number b (0,1)
+@tparam number a (0,1)
 --]]
 local function __setClearColor(r,g,b,a)
 	if MOAIGfxDevice.getFrameBuffer then
@@ -74,10 +74,22 @@ end
 
 --[[---
 Set background color.
-@param r int[0..255] or Color or hex string
-@param g int[0..255] or nil
-@param b int[0..255] or nil
-@param a int[0..255] or nil
+@function Stage:setBackgroundColor
+@tparam Color color
+--]]
+
+--[[---
+Set background color.
+@function Stage:setBackgroundColor
+@tparam string hex hex string color
+--]]
+
+--[[---
+Set background color.
+@tparam int r (0,255)
+@tparam int g (0,255)
+@tparam int b (0,255)
+@tparam[opt=255] int a (0,255)
 --]]
 function Stage:setBackgroundColor(r,g,b,a)
 	local r,g,b,a = Color._paramConversion(r,g,b,a,1)
@@ -87,7 +99,7 @@ end
 
 --[[---
 Get background color.
-@return Color currently set background color
+@treturn Color
 --]]
 function Stage:getBackgroundColor()
 	return Color.fromNormalizedValues(unpack(self._bkgColor))

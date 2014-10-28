@@ -203,17 +203,23 @@ function Quad:getVertexAlpha(v)
 end
 
 --[[---
-Override base method. It calls _updateVertexBuffer
-The following calls are valid:
-- setColor(r,g,b)
-- setColor(r,g,b,a)
-- setColor("#FFFFFF")
-- setColor("#FFFFFFFF")
-- setColor(Color)
-@param r red value [0,255] or a Color or hex string
-@param g green value [0,255] or nil
-@param b blue value [0,255] or nil
-@param a alpha value [0,255] or nil
+Set obj color.
+@function Quad:setColor
+@tparam Color color
+--]]
+
+--[[---
+Set obj color.
+@function Quad:setColor
+@tparam string hex hex string color
+--]]
+
+--[[---
+Set obj color.
+@tparam int r (0,255)
+@tparam int g (0,255)
+@tparam int b (0,255)
+@tparam[opt=255] int a (0,255)
 --]]
 function Quad:setColor(r,g,b,a)
 	local r,g,b,a = Color._paramConversion(r,g,b,a,self._colors[1][4])	
@@ -234,18 +240,27 @@ function Quad:getColor()
 end
 
 --[[---
-Set color of a single vertex
-The following calls are valid:
-- setVertexColor(v,r,g,b)
-- setVertexColor(v,r,g,b,a)
-- setVertexColor(v,"#FFFFFF")
-- setVertexColor(v,"#FFFFFFFF")
-- setVertexColor(v,Color)
-@param v index of the vertex [1,4]
-@param r red value [0,255] or a Color
-@param g green value [0,255] or nil
-@param b blue value [0,255] or nil
-@param a alpha value [0,255] or nil
+Set vertex color.
+@function Quad:setVertexColor
+@tparam int v vertex index (1,4)
+@tparam Color color
+--]]
+
+--[[---
+Set vertex color.
+@function Quad:setVertexColor
+@tparam int v vertex index (1,4)
+@tparam string hex hex string color
+--]]
+
+--[[---
+Set vertex color.
+@function Quad:setVertexColor
+@tparam int v vertex index (1,4)
+@tparam int r (0,255)
+@tparam int g (0,255)
+@tparam int b (0,255)
+@tparam[opt=255] int a (0,255)
 --]]
 function Quad:setVertexColor(v,r,g,b,a) 
 	local c = self._colors[v]
