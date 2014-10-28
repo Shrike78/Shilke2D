@@ -14,6 +14,19 @@ Texture.MAX_WIDTH = 4096
 ---Max height of Texture object
 Texture.MAX_HEIGHT = 4096
 
+---GL_LINEAR filter
+Texture.GL_LINEAR 					= MOAITexture.GL_LINEAR
+---GL_LINEAR_MIPMAP_LINEAR filter
+Texture.GL_LINEAR_MIPMAP_LINEAR 	= MOAITexture.GL_LINEAR_MIPMAP_LINEAR
+---GL_LINEAR_MIPMAP_NEAREST filter
+Texture.GL_LINEAR_MIPMAP_NEAREST	= MOAITexture.GL_LINEAR_MIPMAP_NEAREST
+---GL_NEAREST filter
+Texture.GL_NEAREST					= MOAITexture.GL_NEAREST
+---GL_NEAREST_MIPMAP_LINEAR filter
+Texture.GL_NEAREST_MIPMAP_LINEAR	= MOAITexture.GL_NEAREST_MIPMAP_LINEAR
+---GL_NEAREST_MIPMAP_NEAREST filter
+Texture.GL_NEAREST_MIPMAP_NEAREST	= MOAITexture.GL_NEAREST_MIPMAP_NEAREST
+
 --[[---
 Creates an empty, transparent texture of specific width and height
 @tparam int width texture width
@@ -109,14 +122,35 @@ function Texture:dispose()
 	self._quad = nil
 end
 
+--[[---
+Returns srcData (the image on wich the texture was built) if available
+@treturn MOAIImage
+--]]
 function Texture:getSrcData()
 	return self.srcData
 end
 
+---release the srcData object if available (to save cpu memory if not needed)
 function Texture:releaseSrcData()
 	self.srcData = nil
 end
 
+--[[---
+Set default filtering mode for texture, choosing between 
+<ul>
+<li>Texture.GL_LINEAR</li>
+<li>Texture.GL_LINEAR_MIPMAP_LINEAR</li> 
+<li>Texture.GL_LINEAR_MIPMAP_NEAREST</li> 
+<li>Texture.GL_NEAREST</li>
+<li>Texture.GL_NEAREST_MIPMAP_LINEAR</li>
+<li>Texture.GL_NEAREST_MIPMAP_NEAREST</li>
+</ul>
+@param min
+@param[opt=min] mag 
+--]]
+function Texture:setFilter(min, mag)
+	self.textureData:setFilter(min, mag)
+end
 
 --[[---
 Returns the width of the texture in pixels
