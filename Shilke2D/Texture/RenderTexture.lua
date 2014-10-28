@@ -50,6 +50,34 @@ function Texture.fromDisplayObj(displayObj, requireSrcData, callback)
 	return rt
 end
 
+--[[---
+Returns a RenderTexture of a given draw function.
+@tparam function drawFunc a function that define a set of Graphics calls, resulting
+in a vectorial draw 
+@tparam int width
+@tparam int height
+@tparam[opt=false] bool requireSrcData If a local image is required set it to true.
+@tparam[opt=nil] function callback function called after the render to texture has 
+been completed. If requireSrcData is true then the callback is called after the 
+srcData is acquired
+@treturn RenderTexture the returned texture can be used istantly 
+(i.e. to create an Image) even if the render to texture will happen next frame
+--]]
+function Texture.fromDrawFunction(drawFunc, width, height, requireSrcData, callback)
+	--create a local drawable object used as 'helper' for the draw function.
+	--the funciton relies on Texture.fromDisplayObj 
+	local obj = DrawableObject()
+	obj.getRect = function(o,r)
+		local res = r or Rect()
+		res:set(0,0,width,height)
+		return res
+	end
+	obj._innerDraw = function(o)
+		drawFunc()
+	end
+	return Texture.fromDisplayObj(obj, requireSrcData, callback)
+end
+
 
 RenderTexture = class(Texture)
 
