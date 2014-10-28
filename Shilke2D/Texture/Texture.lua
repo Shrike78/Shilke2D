@@ -172,89 +172,86 @@ function Texture:getRegionUV(resultRect)
 	res.y, res.h = res.y / h, res.h / h
 	return res
 end
-
---definition of local helper function names
-local _region2rect, _region2quad = nil, nil
-
-if __USE_SIMULATION_COORDS__ then
-	--[[---
-	if the texture is not rotated a region is mapped as a rect, with
-	y coords varying based on Shilke2D coordinate space
-	@tparam Rect r the region to transform
-	@treturn int x
-	@treturn int y
-	@treturn int w
-	@treturn int h
-	--]]
-	_region2rect = function(r)
-		return r.x, r.y + r.h, r.x + r.w, r.y
-	end
-
-	--[[
-	if the texture is rotated a region is mapped as a quad, with
-	y coords varying based on Shilke2D coordinate space
-	@tparam Rect r the region to transform
-	@treturn int x1
-	@treturn int y1
-	@treturn int x2
-	@treturn int y2
-	@treturn int x3
-	@treturn int y3
-	@treturn int x4
-	@treturn int y4
-	--]]
-	_region2quad = function(r)
-		return	r.x + r.w, r.y,
-				r.x + r.w, r.y + r.h,
-				r.x, r.y + r.h,
-				r.x, r.y
-	end
 	
-	function Texture:_getQuadRect(quad)
-		local rw, rh
-		if self.rotated then
-			rw,rh = self.region.h, self.region.w
-		else
-			rw,rh = self.region.w, self.region.h
-		end
+
+--[[---
+Returns the rect to be set into MOAI quad (either a single quad or an indexed quaddeck)
+@treturn int x
+@treturn int y
+@treturn int w
+@treturn int h
+--]]
+function Texture:_getQuadRect()
+	local rw, rh
+	if self.rotated then
+		rw,rh = self.region.h, self.region.w
+	else
+		rw,rh = self.region.w, self.region.h
+	end
+	if __USE_SIMULATION_COORDS__ then
 		return 	self.frame.x, 
 				self.frame.h - (self.frame.y + rh), 
 				self.frame.x + rw,
 				self.frame.h - self.frame.y 
-	end
-	
-else -- not __USE_SIMULATION_COORDS__
-	
-	_region2rect = function(r)
-		return r.x, r.y, r.x + r.w, r.y + r.h
-	end
-
-	_region2quad = function(r)
-		return	r.x, r.y,
-				r.x, r.y + r.h,
-				r.x + r.w, r.y + r.h,
-				r.x + r.w, r.y
-	end
-
-	function Texture:_getQuadRect(quad)
-		local rw, rh
-		if self.rotated then
-			rw,rh = self.region.h, self.region.w
-		else
-			rw,rh = self.region.w, self.region.h
-		end
+	else -- not __USE_SIMULATION_COORDS__
 		return 	self.frame.x, 
 				self.frame.y, 
 				self.frame.x + rw, 
 				self.frame.y + rh
 	end
-	
 end
+
+--[[---
+if the texture is not rotated a region is mapped as a rect, with
+y coords varying based on Shilke2D coordinate space
+@tparam Rect r the region to transform
+@treturn int x
+@treturn int y
+@treturn int w
+@treturn int h
+--]]
+local function _region2rect(r)
+	if __USE_SIMULATION_COORDS__ then
+		return r.x, r.y + r.h, r.x + r.w, r.y
+	else -- not __USE_SIMULATION_COORDS__
+		return r.x, r.y, r.x + r.w, r.y + r.h
+	end
+end
+
+--[[
+if the texture is rotated a region is mapped as a quad, with
+y coords varying based on Shilke2D coordinate space
+@tparam Rect r the region to transform
+@treturn int x1
+@treturn int y1
+@treturn int x2
+@treturn int y2
+@treturn int x3
+@treturn int y3
+@treturn int x4
+@treturn int y4
+--]]
+local function _region2quad(r)
+	if __USE_SIMULATION_COORDS__ then
+		return	r.x + r.w, r.y,
+				r.x + r.w, r.y + r.h,
+				r.x, r.y + r.h,
+				r.x, r.y
+	else -- not __USE_SIMULATION_COORDS__
+		return	r.x, r.y,
+				r.x, r.y + r.h,
+				r.x + r.w, r.y + r.h,
+				r.x + r.w, r.y
+	end
+end
+
 
 local __helperRect = Rect()
 
 --[[---
-Inner method. Called internally to correctly map texture uv
+Called to correctly map texture uv over quad. It can be used either for a single 
+quad (like for texture quad generation) or for an indexed quaddeck (i.e. to build
+shared texture sets from outside, or custom displayobject)
 @param quad the external MOAIGfxQuad2D or MOAIGfxQuadDeck2D structure to be filled
 @int[opt=nil] index if quad is a MOAIGfxQuadDeck2D a index of the quad/texture inside 
 the quadDeck must be provided
