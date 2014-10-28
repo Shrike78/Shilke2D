@@ -17,6 +17,31 @@ pen handling
 --]]
 DrawableObject = class(DisplayObj)
 
+
+--[[---
+Create a DrawableObj starting from a draw function and a rect definition
+@tparam function drawFunc the function used to draw
+@tparam int width
+@tparam int height
+@tparam[opt=0] int x
+@tparam[opt=0] int y
+@treturn DrawableObject
+--]]
+function DrawableObject.fromDrawFunction(drawFunc, width, height, x, y)
+	local obj = DrawableObject()
+	local x = x or 0
+	local y = y or 0
+	obj.getRect = function(o,r)
+		local res = r or Rect()
+		res:set(x,y,width,height)
+		return res
+	end
+	obj._innerDraw = function(o)
+		drawFunc()
+	end
+	return obj
+end
+
 ---constructor
 function DrawableObject:init()
 	DisplayObj.init(self)
@@ -48,25 +73,19 @@ function DrawableObject:setVisible(visible)
 end
 
 --[[---
-Wraps the MOAIGfxDevice.setPenColor call handleing alpha mode (premultiplied or straight alpha)
-The following calls are valid:
-- setColor(r,g,b)
-- setColor(r,g,b,a)
-- setColor("#FFFFFF")
-- setColor("#FFFFFFFF")
-- setColor(Color)
+Calls the Graphics.setPenColor forcing to use the alpha mode
+accordingly to displayObj configuration. After it restores original
+alpha mode
 @param r red value [0,255] or a Color or hex string
 @param g green value [0,255] or nil
 @param b blue value [0,255] or nil
 @param a alpha value [0,255] or nil
 --]]
 function DrawableObject:setPenColor(r,g,b,a)
-	local r,g,b,a = Color._paramConversion(r,g,b,a,1)
-	local ignoreAlphaMode = forceStraightAlpha == true
-	if a~=1 and self:hasPremultipliedAlpha() then
-		r,g,b = r*a, g*a, b*a
-	end
-	MOAIGfxDevice.setPenColor(r,g,b,a)
+	local pmaEnabled = Graphics.hasPremultipliedAlpha()
+	Graphics.setPremultipliedAlpha(self:hasPremultipliedAlpha())
+	Graphics.setPenColor(r,g,b,a)
+	Graphics.setPremultipliedAlpha(pmaEnabled)
 end
 
 --[[---

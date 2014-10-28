@@ -9,13 +9,13 @@ local _pmaModeOn = true
 
 ---check if the premultiplied alpha mode is enabled
 --@treturn bool
-function Graphics.isPmaEnabled()
+function Graphics.hasPremultipliedAlpha()
 	return _pmaModeOn
 end
 
 ---enable/disable premuplitplied alpha mode
 --@tparam[opt=true] bool enabled
-function Graphics.enablePmaMode(enabled)
+function Graphics.setPremultipliedAlpha(enabled)
 	local enabled = enabled ~= false
 	_pmaModeOn = enabled
 end
