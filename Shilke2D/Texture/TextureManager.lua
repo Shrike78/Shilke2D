@@ -74,7 +74,7 @@ end
 remove a given texture from cache
 @tparam string name the name of the texture to remove. it doesn't work on
 atlas textures
-@tparam[opt=true] bool if the removed texture must be disposed
+@tparam[opt=true] bool dispose if the removed texture must be disposed
 @treturn bool success
 --]]
 function TextureManager.removeTexture(name, dispose)
