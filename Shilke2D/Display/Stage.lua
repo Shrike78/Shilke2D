@@ -29,7 +29,7 @@ function Stage:init(viewport)
 
     self._debugProp = MOAIProp.new ()
     self._debugProp:setDeck ( self._debugDeck )
-    self._bkgColor = Color(0,0,0,1)
+    self._bkgColor = {0,0,0,1}
     self._rt = {self._renderTable}
 end
 
@@ -74,22 +74,15 @@ end
 
 --[[---
 Set background color.
-@param r red component [0..255] or Color
-@param g green component [0..255] or nil
-@param b blue component [0..255] or nil
+@param r int[0..255] or Color or hex string
+@param g int[0..255] or nil
+@param b int[0..255] or nil
+@param a int[0..255] or nil
 --]]
-function Stage:setBackgroundColor(r,g,b)
-	if class_type(r) == Color then
-		__setClearColor(r:unpack_normalized())
-		self._bkgColor.r = r.r
-		self._bkgColor.g = r.g
-		self._bkgColor.b = r.b
-	else
-		__setClearColor(r/255,g/255,b/255,1)
-		self._bkgColor.r = r
-		self._bkgColor.g = g
-		self._bkgColor.b = b
-	end
+function Stage:setBackgroundColor(r,g,b,a)
+	local r,g,b,a = Color._paramConversion(r,g,b,a,1)
+	self._bkgColor = {r,g,b,a}
+	__setClearColor(r,g,b,a)
 end
 
 --[[---
@@ -97,7 +90,7 @@ Get background color.
 @return Color currently set background color
 --]]
 function Stage:getBackgroundColor()
-	return self._bkgColor
+	return Color.fromNormalizedValues(unpack(self._bkgColor))
 end
 
 
