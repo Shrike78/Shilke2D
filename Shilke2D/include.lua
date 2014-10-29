@@ -104,7 +104,7 @@ require("Shilke2D/Display/Image")
 require("Shilke2D/Display/MovieClip")
 require("Shilke2D/Display/TextField")
 require("Shilke2D/Display/Button")
-require("Shilke2D/Display/DrawableObject")
+require("Shilke2D/Display/DrawableObj")
 --included here because it requires DisplayObjContainer
 require("Shilke2D/Core/Stats")
 
