@@ -66,7 +66,7 @@ srcData is acquired
 function Texture.fromDrawFunction(drawFunc, width, height, requireSrcData, callback)
 	--create a local drawable object used as 'helper' for the draw function.
 	--the funciton relies on Texture.fromDisplayObj 
-	local obj = DrawableObject.fromDrawFunction(drawFunc, width, height)
+	local obj = DrawableObj.fromDrawFunction(drawFunc, width, height)
 	return Texture.fromDisplayObj(obj, requireSrcData, callback)
 end
 

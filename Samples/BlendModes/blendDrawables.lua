@@ -14,10 +14,10 @@ local infoTxt
 local fgLayer
 
 
-local QuadDrawObj = class(DrawableObject)
+local QuadDrawObj = class(DrawableObj)
 
 function QuadDrawObj:init(w,h,color)
-	DrawableObject.init(self)
+	DrawableObj.init(self)
 	self._w = w
 	self._h = h
 	self._c = color
