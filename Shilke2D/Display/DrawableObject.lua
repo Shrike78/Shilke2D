@@ -45,15 +45,12 @@ end
 ---constructor
 function DrawableObject:init()
 	DisplayObj.init(self)
-
 	self._scriptDeck = MOAIScriptDeck.new()
 	self._prop:setDeck(self._scriptDeck)
-	self._visibleFunc = function() 
+	self._scriptDeck:setDrawCallback( function()
 			self:_innerDraw() 
 		end
-
-	-- by default the object is visible
-	self._scriptDeck:setDrawCallback( self._visibleFunc	)
+	)
 end
 
 --[[---
