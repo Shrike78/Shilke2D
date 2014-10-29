@@ -52,6 +52,10 @@ end
 
 ---seek animation of color value. it accepts only Color, not rgb
 function DisplayObjTweener.seekColor(obj,c,time,transition)
+	--c could be a named color, so an automatic color conversion is provided
+	if type(c) == 'number' then
+		c = Color.fromInt(c)
+	end
 	return DisplayObjTweener.seekProp(obj,obj.setColor,obj.getColor,c,time,transition)
 end
 
@@ -61,6 +65,10 @@ end
 --@param time duration of the animation
 --@param transition type of transition. default is LINEAR
 function DisplayObjTweener.moveColor(obj,c,time,transition)
+	--c could be a named color, so an automatic color conversion is provided
+	if type(c) == 'number' then
+		c = Color.fromInt(c)
+	end
 	return DisplayObjTweener.moveProp(obj,obj.setColor,obj.getColor,c,time,transition)
 end
 
