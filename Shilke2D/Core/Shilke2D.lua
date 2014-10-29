@@ -133,6 +133,7 @@ end
 							require('mobdebug').on()
 						end
 					)
+					onDirectDraw()
 					directDrawDeck:setDrawCallback(onDirectDraw)
 				end
 		)
