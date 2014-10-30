@@ -202,27 +202,16 @@ function Quad:getVertexAlpha(v)
    return self._colors[v][4]*255
 end
 
---[[---
-Set obj color.
-@function Quad:setColor
-@tparam Color color
---]]
 
 --[[---
 Set obj color.
-@function Quad:setColor
-@tparam string hex hex string color
---]]
-
---[[---
-Set obj color.
-@tparam int r (0,255)
-@tparam int g (0,255)
-@tparam int b (0,255)
-@tparam[opt=255] int a (0,255)
+@param r (0,255) value or Color object or hex string or int32 color
+@param g (0,255) value or nil
+@param b (0,255) value or nil
+@param a[opt=nil] (0,255) value or nil
 --]]
 function Quad:setColor(r,g,b,a)
-	local r,g,b,a = Color._paramConversion(r,g,b,a,self._colors[1][4])	
+	local r,g,b,a = Color._toNormalizedRGBA(r,g,b,a)	
 	for i = 1,4 do
 		self._colors[i][1] = r
 		self._colors[i][2] = g
@@ -241,30 +230,15 @@ end
 
 --[[---
 Set vertex color.
-@function Quad:setVertexColor
 @tparam int v vertex index (1,4)
-@tparam Color color
---]]
-
---[[---
-Set vertex color.
-@function Quad:setVertexColor
-@tparam int v vertex index (1,4)
-@tparam string hex hex string color
---]]
-
---[[---
-Set vertex color.
-@function Quad:setVertexColor
-@tparam int v vertex index (1,4)
-@tparam int r (0,255)
-@tparam int g (0,255)
-@tparam int b (0,255)
-@tparam[opt=255] int a (0,255)
+@param r (0,255) value or Color object or hex string or int32 color
+@param g (0,255) value or nil
+@param b (0,255) value or nil
+@param a[opt=nil] (0,255) value or nil
 --]]
 function Quad:setVertexColor(v,r,g,b,a) 
 	local c = self._colors[v]
-	c[1], c[2], c[3], c[4] = Color._paramConversion(r,g,b,a,c[4])
+	c[1], c[2], c[3], c[4] = Color._toNormalizedRGBA(r,g,b,a)
 	self:_updateVertexBuffer()
 end
 

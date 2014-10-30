@@ -6,7 +6,7 @@ ColorTransform =
 	NONE				= 0,							--no transformation
 	POW_TWO 			= MOAIImage.POW_TWO, 			--image is forced to be pow two sized 
 	QUANTIZE 			= MOAIImage.QUANTIZE, 			--reduce the number of used colors
-	TRUECOLOR 			= MOAIImage.TRUECOLOR, 		--convert indexed to truecolor images
+	TRUECOLOR 			= MOAIImage.TRUECOLOR, 			--convert indexed to truecolor images
 	PREMULTIPLY_ALPHA	= MOAIImage.PREMULTIPLY_ALPHA,	--r,g,b values are premultiplied by alpha value
 	TRANSPARENT_BLACK	= 16,							--transparent pixels are set to black r,g,b (straight alpha)
 	TRANSPARENT_WHITE	= 32							--transparent pixels are set to white r,g,b (straight alpha)
@@ -20,13 +20,14 @@ BitmapData = {}
 --[[---
 transform the transparent pixels of a MOAIImage forcing the r,g,b components to a given value
 @tparam MOAIImage img the img to transform
-@param r a [0..255] value or a Color or hex string
-@param g a [0..255] or nil
-@param b a [0..255] or nil
+@param r (0,255) value or Color object or hex string or int32 color
+@param g (0,255) value or nil
+@param b (0,255) value or nil
+@param a[opt=nil] (0,255) value or nil
 @treturn MOAIImage a reference to the image itself
 --]]
 function BitmapData.setTransparentColor(img, r, g, b)
-	local r,g,b,a = Color._paramConversion(r,g,b)
+	local r,g,b,a = Color._toNormalizedRGBA(r,g,b)
 	local w,h = img:getSize()
 	for x = 1,w,1 do
 		for y = 1,h,1 do

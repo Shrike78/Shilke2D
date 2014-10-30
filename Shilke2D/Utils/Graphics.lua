@@ -20,32 +20,16 @@ function Graphics.setPremultipliedAlpha(enabled)
 	_pmaModeOn = enabled
 end
 
-
 --[[---
 Wraps MOAIGfxDevice.setPenColor, handling Shilke2D Color object and 
 premultiplied alpha mode
-@function Graphics.setPenColor
-@tparam Color color
---]]
-
---[[---
-Wraps MOAIGfxDevice.setPenColor, handling Shilke2D Color object and 
-premultiplied alpha mode
-@function Graphics.setPenColor
-@tparam string hex hex string color
---]]
-
---[[---
-Wraps MOAIGfxDevice.setPenColor, handling Shilke2D Color object and 
-premultiplied alpha mode
-@function Graphics.setPenColor
-@tparam int r (0,255)
-@tparam int g (0,255)
-@tparam int b (0,255)
-@tparam[opt=255] int a (0,255)
+@param r (0,255) value or Color object or hex string or int32 color
+@param g (0,255) value or nil
+@param b (0,255) value or nil
+@param a[opt=nil] (0,255) value or nil
 --]]
 function Graphics.setPenColor(r,g,b,a)
-	local r,g,b,a = Color._paramConversion(r,g,b,a,1)
+	local r,g,b,a = Color._toNormalizedRGBA(r,g,b,a)
 	if _pmaModeOn and a ~= 1 then
 		r, g, b = r*a, g*a, b*a
 	end

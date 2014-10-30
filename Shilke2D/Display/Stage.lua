@@ -72,27 +72,16 @@ local function __setClearColor(r,g,b,a)
 	end
 end
 
---[[---
-Set background color.
-@function Stage:setBackgroundColor
-@tparam Color color
---]]
 
 --[[---
 Set background color.
-@function Stage:setBackgroundColor
-@tparam string hex hex string color
---]]
-
---[[---
-Set background color.
-@tparam int r (0,255)
-@tparam int g (0,255)
-@tparam int b (0,255)
-@tparam[opt=255] int a (0,255)
+@param r (0,255) value or Color object or hex string or int32 color
+@param g (0,255) value or nil
+@param b (0,255) value or nil
+@param a[opt=nil] (0,255) value or nil
 --]]
 function Stage:setBackgroundColor(r,g,b,a)
-	local r,g,b,a = Color._paramConversion(r,g,b,a,1)
+	local r,g,b,a = Color._toNormalizedRGBA(r,g,b,a)
 	self._bkgColor = {r,g,b,a}
 	__setClearColor(r,g,b,a)
 end

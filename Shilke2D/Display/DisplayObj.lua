@@ -414,28 +414,17 @@ function DisplayObj:getAlpha()
    return self._color[4] * 255
 end
 
---[[---
-Set obj color.
-@function DisplayObj:setColor
-@tparam Color color
---]]
 
---[[---
+--[[
 Set obj color.
-@function DisplayObj:setColor
-@tparam string hex hex string color
---]]
-
---[[---
-Set obj color.
-@tparam int r (0,255)
-@tparam int g (0,255)
-@tparam int b (0,255)
-@tparam[opt=255] int a (0,255)
+@param r (0,255) value or Color object or hex string or int32 color
+@param g (0,255) value or nil
+@param b (0,255) value or nil
+@param a[opt=nil] (0,255) value or nil
 --]]
 function DisplayObj:setColor(r,g,b,a)
 	local c = self._color
-	c[1], c[2], c[3], c[4] = Color._paramConversion(r,g,b,a,c[4])
+	c[1], c[2], c[3], c[4] = Color._toNormalizedRGBA(r,g,b,a)
 	self:_updateColor()
 end
 

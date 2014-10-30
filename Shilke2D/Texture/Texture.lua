@@ -44,17 +44,17 @@ end
 Creates a texture of specific width and height and color
 @tparam int width texture width
 @tparam int height texture height
-@tparam int r red value [0,255] or a Color
-@tparam int g green value [0,255] or nil
-@tparam int b blue value [0,255] or nil
-@tparam int a alpha value [0,255] or nil
+@param r (0,255) value or Color object or hex string or int32 color
+@param g (0,255) value or nil
+@param b (0,255) value or nil
+@param a[opt=nil] (0,255) value or nil
 @treturn Texture a texture filled with the given color
 --]]
 function Texture.fromColor(width, height, r, g, b, a)
 	assert(width<=Texture.MAX_WIDTH and height <= Texture.MAX_HEIGHT)
 	local img = MOAIImage.new()
 	img:init(width,height)
-	local r,g,b,a = Color._paramConversion(r,g,b,a,1)
+	local r,g,b,a = Color._toNormalizedRGBA(r,g,b,a)
 	img:fillRect (0,0,width,height,r,g,b,a)
     return Texture(img)
 end
