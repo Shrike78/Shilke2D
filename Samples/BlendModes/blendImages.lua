@@ -23,7 +23,7 @@ local fgLayer
 local bg_name 		= "flamingobg.jpg"
 local fg_name 		= "flamingos.png"
 
-function createSample(bkgLayer, fgLayer, bkgTexture, fgName, transformOptions, description, pivotMode, posX, posY)
+function createSample(bkgLayer, fgLayer, bkgTexture, fgTexture, pma, description, pivotMode, posX, posY)
 	
 	--scale objects
 	local s = .8
@@ -33,13 +33,9 @@ function createSample(bkgLayer, fgLayer, bkgTexture, fgName, transformOptions, d
 	bkgImg:setScale(s,s)
 	bkgLayer:addChild(bkgImg)
 	
-	local fgTexture = Texture.fromFile(fgName, transformOptions)
 	local fgImg = Image(fgTexture, pivotMode)
 	fgImg:setPosition(posX, posY)
-	if not BitOp.testflag(transformOptions, ColorTransform.PREMULTIPLY_ALPHA) then
-		--change Image premultipliedAlpha value accordingly to texture load options
-		fgImg:setPremultipliedAlpha(false)
-	end
+	fgImg:setPremultipliedAlpha(pma)
 	fgImg:setScale(s,s)
 	fgLayer:addChild(fgImg)
 	
@@ -63,18 +59,24 @@ function setup()
 	stage:addChild(fgLayer)
 	
 	local bkgTexture = Texture.fromFile(bg_name)
-
-	createSample(bkgLayer, fgLayer, bkgTexture, fg_name, ColorTransform.NONE,				
-		"ColorTransform.NONE",	PivotMode.TOP_LEFT, 	0, 0)
+	local fgImage = BitmapData.fromFile(fg_name, ColorTransform.NONE)
 	
-	createSample(bkgLayer, fgLayer, bkgTexture, fg_name, ColorTransform.TRANSPARENT_BLACK,	
-		"ColorTransform.TRANSPARENT_BLACK",	PivotMode.TOP_RIGHT, 	WIDTH, 0)
+	createSample(bkgLayer, fgLayer, bkgTexture, Texture(fgImage), false, "default", 
+		PivotMode.TOP_LEFT, 0, 0)
 	
-	createSample(bkgLayer, fgLayer, bkgTexture, fg_name, ColorTransform.TRANSPARENT_WHITE,	
-		"ColorTransform.TRANSPARENT_WHITE",	PivotMode.BOTTOM_LEFT, 0, HEIGHT)
+	BitmapData.setTransparentColor(fgImage, Color.BLACK)
 	
-	createSample(bkgLayer, fgLayer, bkgTexture, fg_name, ColorTransform.PREMULTIPLY_ALPHA,	
-		"ColorTransform.PREMULTIPLY_ALPHA",	PivotMode.BOTTOM_RIGHT,WIDTH, HEIGHT)
+	createSample(bkgLayer, fgLayer, bkgTexture, Texture(fgImage), false, "black transparent pixels", 
+		PivotMode.TOP_RIGHT, WIDTH, 0)
+	
+	BitmapData.setTransparentColor(fgImage, Color.WHITE)
+	createSample(bkgLayer, fgLayer, bkgTexture, Texture(fgImage), false, "white transparent pixels", 
+		PivotMode.BOTTOM_LEFT, 0, HEIGHT)
+	
+	
+	BitmapData.premultiplyAlpha(fgImage)
+	createSample(bkgLayer, fgLayer, bkgTexture, Texture(fgImage), true, 
+		"Premultiplied alpha",	PivotMode.BOTTOM_RIGHT,WIDTH, HEIGHT)
 	
 	
 	infoTxt = TextField(500, 30, "Press A/Z to switch blend mode: " .. blendModes[blendModeIdx], nil, 20, PivotMode.CENTER)
