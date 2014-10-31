@@ -82,7 +82,8 @@ Set background color.
 --]]
 function Stage:setBackgroundColor(r,g,b,a)
 	local r,g,b,a = Color._toNormalizedRGBA(r,g,b,a)
-	self._bkgColor = {r,g,b,a}
+	local c = self._bkgColor
+	c[1],c[2],c[3],c[4] = r,g,b,a
 	__setClearColor(r,g,b,a)
 end
 
