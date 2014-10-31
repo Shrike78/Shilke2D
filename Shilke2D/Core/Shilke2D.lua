@@ -129,10 +129,7 @@ end
 					after first call the callback is set to onDirectDraw. Once set here the debug is valid for all 
 					the system callbacks, so for touch, keyboard, ecc.
 					--]]
-					pcall(function() 
-							require('mobdebug').on()
-						end
-					)
+					pcall(function() require('mobdebug').on() end )
 					onDirectDraw()
 					directDrawDeck:setDrawCallback(onDirectDraw)
 				end

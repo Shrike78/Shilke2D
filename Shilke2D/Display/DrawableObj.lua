@@ -47,10 +47,17 @@ function DrawableObj:init()
 	DisplayObj.init(self)
 	self._scriptDeck = MOAIScriptDeck.new()
 	self._prop:setDeck(self._scriptDeck)
-	self._scriptDeck:setDrawCallback( function()
-			self:_innerDraw() 
-		end
-	)
+	local cbFunc = function() self:_innerDraw() end
+	if __DEBUG_CALLBACKS__ then
+		self._scriptDeck:setDrawCallback( function()
+				pcall(function() require('mobdebug').on() end )
+				self:_innerDraw() 
+				self._scriptDeck:setDrawCallback( cbFunc )
+			end
+		)
+	else
+		self._scriptDeck:setDrawCallback( cbFunc )
+	end
 end
 
 --[[---
@@ -73,7 +80,7 @@ end
 Calls the Graphics.setPenColor forcing to use the alpha mode
 accordingly to displayObj configuration. After it restores original
 alpha mode
-@param r red value [0,255] or a Color or hex string
+@param r red value [0,255] or a Color or hex string or int32 color
 @param g green value [0,255] or nil
 @param b blue value [0,255] or nil
 @param a alpha value [0,255] or nil
