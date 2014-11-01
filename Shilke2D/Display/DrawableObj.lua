@@ -86,10 +86,13 @@ alpha mode
 @param a alpha value [0,255] or nil
 --]]
 function DrawableObj:setPenColor(r,g,b,a)
-	local pmaEnabled = Graphics.hasPremultipliedAlpha()
-	Graphics.setPremultipliedAlpha(self:hasPremultipliedAlpha())
-	Graphics.setPenColor(r,g,b,a)
-	Graphics.setPremultipliedAlpha(pmaEnabled)
+	--use a direct implementation avoiding to rely on Graphics
+	--more performant and anyway detatched from global Graphics setup
+	local r,g,b,a = Color._toNormalizedRGBA(r,g,b,a)
+	if self._premultipliedAlpha and a ~= 1 then
+		r,g,b = r*a, g*a, b*a
+	end
+	MOAIGfxDevice.setPenColor(r,g,b,a)
 end
 
 --[[---
