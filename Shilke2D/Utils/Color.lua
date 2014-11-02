@@ -35,12 +35,26 @@ local INV_255 = 1/255
 local INV_256 = 1/256
 
 ---Constructor.
---@tparam[opt=255] int r
---@tparam[opt=255] int g
---@tparam[opt=255] int b
+--@param[opt=0] r or Color, or int32 or hex string
+--@tparam[opt=0] int g
+--@tparam[opt=0] int b
 --@tparam[opt=255] int a
 function Color:init(r,g,b,a)
-	self.r, self.g, self.b, self.a = Color._toRGBA(r, g, b, a)
+	if not r then
+		self.r, self.g, self.b, self.a = 0,0,0,255
+	else
+		self.r, self.g, self.b, self.a = Color._toRGBA(r, g, b, a)
+	end
+end
+
+--@param int r or Color, or int32 or hex string
+--@tparam int g
+--@tparam int b
+--@tparam[opt=255] int a
+--@treturn Color self
+function Color:set(r,g,b,a)
+	self.r, self.g, self.b, self.a = Color._toRGBA(r,g,b,a)
+	return self
 end
 
 ---Returns the 4 components
@@ -87,7 +101,7 @@ end
 
 --[[---
 subtract r,g,b,a channels of two colors
-@treturn Color c1+c2
+@treturn Color c1-c2
 --]]
 function Color.__sub(c1,c2)
 	--can result in a 'negative' color. accepted only to support particular algebrical operation, like for tweening.
@@ -135,6 +149,57 @@ function Color.__div(c,d)
 	)
 end
 
+--[[---
+sum r,g,b,a channels to current color
+@param r int(0,255) or int32 or hex string or Color
+@param g int(0,255) or nil
+@param b int(0,255) or nil
+@param[opt=255] a int(0,255) or nil
+@treturn Color self + (r,g,b,a)
+--]]
+function Color:add(r,g,b,a)
+	local r,g,b,a = Color._toRGBA(r,g,b,a)
+	self.r, self.g, self.b, self.a = self.r + r, self.g + g, self.b + b, self.a + a
+	return self
+end
+
+
+--[[---
+subtracts r,g,b,a channels from current color
+@param r int(0,255) or int32 or hex string or Color
+@param g int(0,255) or nil
+@param b int(0,255) or nil
+@param[opt=255] a int(0,255) or nil
+@treturn Color self - (r,g,b,a)
+--]]
+function Color:sub(r,g,b,a)
+	local r,g,b,a = Color._toRGBA(r,g,b,a)
+	self.r, self.g, self.b, self.a = self.r - r, self.g - g, self.b - b, self.a - a
+	return self
+end
+
+
+--[[---
+divides r,g,b,a channels of current color for a number
+@tparam number d
+@treturn Color self / d
+--]]
+function Color:div(d)
+	self.r, self.g, self.b, self.a = self.r/d, self.g/d, self.b/d, self.a/d
+	return self
+end
+
+
+--[[---
+multiplies r,g,b,a channels of current color for a number
+@tparam number m
+@treturn Color self * m
+--]]
+function Color:mult(m)
+	self.r, self.g, self.b, self.a = self.r*m, self.g*m, self.b*m, self.a*m
+	return self
+end
+
 ---the == operation
 function Color.__eq(c1,c2)
 	return c1.r == c2.r and c1.g == c2.g and c1.b == c2.b and c1.a == c2.a
@@ -149,14 +214,20 @@ end
 --@tparam Color c1 
 --@tparam Color c2
 --@tparam number w blend factor (0,1)
+--@tparam[opt=nil] Color rc return color. if provided it's filled with the blend
+--result and returned
 --@treturn Color c1*a + c2*(1-a)
-function Color.blend(c1, c2, w)
-	return Color(	
-					c1.r * w + c2.r * (1-w),
-					c1.g * w + c2.g * (1-w),
-					c1.b * w + c2.b * (1-w),
-					c1.a * w + c2.a * (1-w)
-				)
+function Color.blend(c1, c2, w, rc)
+	local r = c1.r * w + c2.r * (1-w)
+	local g = c1.g * w + c2.g * (1-w)
+	local b = c1.b * w + c2.b * (1-w)
+	local a = c1.a * w + c2.a * (1-w)	
+	if rc then
+		rc.r, rc.g, rc.b, rc.a = r,g,b,a
+		return rc
+	else
+		return Color(r,g,b,a)
+	end
 end
 
 --[[---
@@ -169,9 +240,7 @@ color space conversion
 @treturn int b (0,255)
 --]]
 function Color.hsv2rgb(h, s, v)
-
     -- h, s, v is allowed having values between [0 ... 1].
-
     h = 6 * h
     local i = floor(h - 0.000001)
     local f = h - i
