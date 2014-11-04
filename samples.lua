@@ -1,6 +1,6 @@
 --uncomment a single line to see a sample on a specific topic
 
---require("Samples/image")
+require("Samples/image")
 --require("Samples/movieclip")
 --require("Samples/debugLines")
 --require("Samples/anim")
@@ -14,6 +14,7 @@
 --require("Samples/FileSystem/xmlfiles")
 --require("Samples/FileSystem/jsonfiles")
 --require("Samples/Textures/dragndrop")
+--require("Samples/Textures/starfield")
 --require("Samples/Textures/textureAtlas")
 --require("Samples/Textures/textureHitTest")
 --require("Samples/Textures/textureManager")
