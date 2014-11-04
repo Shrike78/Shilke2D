@@ -21,7 +21,6 @@ transform the transparent pixels of a MOAIImage forcing the r,g,b components to 
 @param r (0,255) value or Color object or hex string or int32 color
 @param g (0,255) value or nil
 @param b (0,255) value or nil
-@param a[opt=nil] (0,255) value or nil
 @treturn MOAIImage a reference to the image itself
 --]]
 function BitmapData.setTransparentColor(img, r, g, b)
