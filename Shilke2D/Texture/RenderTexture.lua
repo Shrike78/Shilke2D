@@ -64,10 +64,10 @@ srcData is acquired
 (i.e. to create an Image) even if the render to texture will happen next frame
 --]]
 function Texture.fromDrawFunction(drawFunc, width, height, requireSrcData, callback)
-	--create a local drawable object used as 'helper' for the draw function.
-	--the funciton relies on Texture.fromDisplayObj 
-	local obj = DrawableObj.fromDrawFunction(drawFunc, width, height)
-	return Texture.fromDisplayObj(obj, requireSrcData, callback)
+	--Creates a local DrawableObj subclass, then uses an instance of this class with
+	--Texture.fromDisplayObj 
+	local T = DrawableObj.fromDrawFunction(drawFunc, width, height)
+	return Texture.fromDisplayObj(T(), requireSrcData, callback)
 end
 
 
