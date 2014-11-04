@@ -31,7 +31,7 @@ end
 
 function QuadDrawObj:_innerDraw()
 	self:setPenColor(self._c)
-	MOAIDraw.fillRect(0,0,self._w,self._h)
+	Graphics.fillRect(0,0,self._w,self._h)
 end
 
 function createSample(bkgLayer, fgLayer, color, pma, description, pivotMode, posX, posY)

@@ -19,27 +19,33 @@ DrawableObj = class(DisplayObj)
 
 
 --[[---
-Create a DrawableObj starting from a draw function and a rect definition
+Create a DrawableObj subclass starting from a draw function and a rect definition
 @tparam function drawFunc the function used to draw
 @tparam int width
 @tparam int height
 @tparam[opt=0] int x
 @tparam[opt=0] int y
-@treturn DrawableObj
+@treturn class class(DrawableObj)
 --]]
 function DrawableObj.fromDrawFunction(drawFunc, width, height, x, y)
-	local obj = DrawableObj()
 	local x = x or 0
 	local y = y or 0
-	obj.getRect = function(o,r)
+	local T = class(DrawableObj)
+	function T:init()
+		DrawableObj.init(self)
+	end
+	function T:getRect(r)
 		local res = r or Rect()
-		res:set(x,y,width,height)
+		res.x = x
+		res.y = y
+		res.w = width
+		res.h = height 
 		return res
 	end
-	obj._innerDraw = function(o)
+	function T:_innerDraw()
 		drawFunc()
 	end
-	return obj
+	return T
 end
 
 ---constructor
