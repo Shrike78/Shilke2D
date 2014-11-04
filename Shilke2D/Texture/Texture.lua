@@ -235,27 +235,11 @@ function Texture:_getQuadRect()
 	end
 end
 
---[[---
-if the texture is not rotated a region is mapped as a rect, with
-y coords varying based on Shilke2D coordinate space
-@tparam Rect r the region to transform
-@treturn int x
-@treturn int y
-@treturn int w
-@treturn int h
---]]
-local function _region2rect(r)
-	if __USE_SIMULATION_COORDS__ then
-		return r.x, r.y + r.h, r.x + r.w, r.y
-	else -- not __USE_SIMULATION_COORDS__
-		return r.x, r.y, r.x + r.w, r.y + r.h
-	end
-end
 
 --[[
-if the texture is rotated a region is mapped as a quad, with
-y coords varying based on Shilke2D coordinate space
+Returns region unwrapped as quad coordinates
 @tparam Rect r the region to transform
+@tparam bool rotated if the region is rotated
 @treturn int x1
 @treturn int y1
 @treturn int x2
@@ -265,20 +249,41 @@ y coords varying based on Shilke2D coordinate space
 @treturn int x4
 @treturn int y4
 --]]
-local function _region2quad(r)
-	if __USE_SIMULATION_COORDS__ then
-		return	r.x + r.w, r.y,
-				r.x + r.w, r.y + r.h,
-				r.x, r.y + r.h,
-				r.x, r.y
-	else -- not __USE_SIMULATION_COORDS__
-		return	r.x, r.y,
-				r.x, r.y + r.h,
-				r.x + r.w, r.y + r.h,
-				r.x + r.w, r.y
+local _region2quad
+if __USE_SIMULATION_COORDS__ then
+	
+	_region2quad = function(r, rotated)
+		if rotated then
+			return	r.x + r.w, r.y,
+					r.x + r.w, r.y + r.h,
+					r.x, r.y + r.h,
+					r.x, r.y
+		else
+			return 	r.x, r.y, 
+					r.x + r.w, r.y,
+					r.x + r.w, r.y + r.h, 
+					r.x, r.y + r.h
+		end
 	end
-end
+	
+else -- not __USE_SIMULATION_COORDS__
+	
+	_region2quad = function(r, rotated)
+		if rotated then
+			return	r.x, r.y,
+					r.x, r.y + r.h,
+					r.x + r.w, r.y + r.h,
+					r.x + r.w, r.y
+		else
+			return 	r.x, r.y + r.h,	
+					r.x + r.w, r.y + r.h,
+					r.x + r.w, r.y,
+					r.x, r.y
+		end
+	end
 
+end
+	
 
 local __helperRect = Rect()
 
@@ -292,18 +297,11 @@ the quadDeck must be provided
 --]]
 function Texture:_fillQuadUV(quad, index)
 	local r = self:getRegionUV(__helperRect)
-	local params, func = nil, nil
-	if self.rotated then
-		params = {_region2quad(r)}
-		func = quad.setUVQuad
-	else
-		params = {_region2rect(r)}
-		func = quad.setUVRect
-	end
 	if index ~= nil then
-		table.insert(params, 1, index)
+		quad:setUVQuad(index, _region2quad(r, self.rotated))
+	else
+		quad:setUVQuad(_region2quad(r, self.rotated))
 	end
-	func(quad, unpack(params))
 end
 
 
