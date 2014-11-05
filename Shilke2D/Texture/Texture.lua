@@ -295,13 +295,9 @@ shared texture sets from outside, or custom displayobject)
 @int[opt=nil] index if quad is a MOAIGfxQuadDeck2D a index of the quad/texture inside 
 the quadDeck must be provided
 --]]
-function Texture:_fillQuadUV(quad, index)
+function Texture:_getQuadUV()
 	local r = self:getRegionUV(__helperRect)
-	if index ~= nil then
-		quad:setUVQuad(index, _region2quad(r, self.rotated))
-	else
-		quad:setUVQuad(_region2quad(r, self.rotated))
-	end
+	return _region2quad(r, self.rotated)
 end
 
 
@@ -315,7 +311,7 @@ function Texture:_generateQuad()
 	local quad = MOAIGfxQuad2D.new()
 	quad:setTexture(self.textureData)
 	quad:setRect(self:_getQuadRect())
-	self:_fillQuadUV(quad)
+	quad:setUVQuad(self:_getQuadUV())
 	return quad
 end
 
