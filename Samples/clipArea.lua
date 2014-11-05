@@ -34,7 +34,9 @@ function setup()
 	shilke:showStats(true,true)
 		
 	--Set a "moai.png" image as background at full screen
-	local moaiImg = Image(Assets.getTexture("moai.png"))
+	local moaiTxt = Assets.getTexture("moai.png")
+	moaiTxt:setFilter(Texture.GL_LINEAR)
+	local moaiImg = Image(moaiTxt)
 	moaiImg:setScale(WIDTH / moaiImg:getWidth(), HEIGHT / moaiImg:getHeight())
 	moaiImg:setPosition(WIDTH/2, HEIGHT/2)
 	stage:addChild(moaiImg)
