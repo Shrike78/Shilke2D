@@ -544,6 +544,10 @@ function DisplayObj:translate(x,y)
     self._prop:addLoc(x,y,0)
 end
 
+--used to force rotation to be clock wise in both coordinate systems
+local __rmult = 1
+if __USE_SIMULATION_COORDS__ then __rmult = -1 end
+
 --[[---
 Set rotation value.
 Rotation is expressed in radians and is applied clock wise.
@@ -553,13 +557,13 @@ function DisplayObj:setRotation(r)
     --move into range [-180 deg, +180 deg]
     while (r < -PI) do r = r + PI2 end
     while (r >  PI) do r = r - PI2 end
-    self._prop:setAttr(MOAITransform.ATTR_Z_ROT,DEG(r))
+    self._prop:setAttr(MOAITransform.ATTR_Z_ROT,DEG(r)*__rmult)
 end
 
 ---Get rotation value
 --@treturn number r [-math.pi, math.pi]
-function DisplayObj:getRotation()   
-	return RAD(self._prop:getAttr(MOAITransform.ATTR_Z_ROT))
+function DisplayObj:getRotation()
+	return RAD(self._prop:getAttr(MOAITransform.ATTR_Z_ROT)*__rmult)
 end
 
 ---Set scale
