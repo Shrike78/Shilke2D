@@ -14,12 +14,6 @@ texture that share a prefix in the name.
 
 TextureAtlas = class()
 
---enum internally used for region structure rapresentation
-local REGION_RECT 		= 1
-local REGION_ROTATION 	= 2
-local REGION_FRAME 	= 3
-local REGION_TEXTURE	= 4
-
 --[[---
 Automatic creation of a tilest starting from a texture, where all 
 the regions have the same size, are packed sequentially and have
@@ -125,32 +119,32 @@ function TextureAtlas:dispose(forceDisposeBaseTexture)
 	end
 	self.baseTexture = nil
 	for _,r in pairs(self.regions) do
-		if r[REGION_TEXTURE] then
-			r:dispose()
-		end
+		r:dispose()
 	end
 	table.clear(self.regions)
 end
 
+--[[---
+Add a new named region.
+Named regions are uv map rect, so x,y,w,h are in the range [0,1]
+@function TextureAtlas:addRegion
+@tparam string name the name of the new region
+@tparam BitmapRegion region
+--]]
 
 --[[---
 Add a new named region.
 Named regions are uv map rect, so x,y,w,h are in the range [0,1]
 @tparam string name the name of the new region
-@tparam Rect rect a rect with uvmap values [0,1]
+@tparam Rect region a rect over the base texture
 @tparam[opt=false] bool rotated if the region is 90° clockwise rotated
 @param frame (optional) if the texture is trimmed frame must be provided
 --]]
-function TextureAtlas:addRegion(name,rect,rotated,frame)
+function TextureAtlas:addRegion(name,region,rotated,frame)
 	if self.regions[name] then
 		error("region "..region.." already added to Atlas")
 	end
-	local newRegion = {}
-	newRegion[REGION_RECT] 	= rect
-	newRegion[REGION_ROTATION]	= rotated == true
-	newRegion[REGION_FRAME] 	= frame
-	newRegion[REGION_TEXTURE] 	= nil
-	self.regions[name] = newRegion
+	self.regions[name] = Texture.fromTexture(self.baseTexture,region,rotated,frame)
 end
 
 --[[---
@@ -194,16 +188,7 @@ Returns a subtexture that wrap a specific named region
 @treturn SubTexture.
 --]]
 function TextureAtlas:getTexture(name)
-	local txt = nil
-	local region = self.regions[name]
-	if region then
-		txt = region[REGION_TEXTURE]
-		if not txt then
-			txt = Texture.fromTexture(self.baseTexture, region[REGION_RECT], region[REGION_ROTATION], region[REGION_FRAME])
-			region[REGION_TEXTURE] = txt
-		end
-	end
-    return txt
+	return self.regions[name]
 end
 
 
@@ -215,9 +200,7 @@ If no prefix is provided it returns all the textures.
 --]]
 function TextureAtlas:getTextures(prefix) 
     local textures = {}
-	
     local sortedRegions = self:getSortedNames(prefix)
- 
     for i,v in ipairs(sortedRegions) do
         table.insert(textures, self:getTexture(v))
     end
