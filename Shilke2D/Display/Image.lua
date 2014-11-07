@@ -141,13 +141,7 @@ function Image:hitTest(x,y,targetSpace,forTouch)
 				local rw = self.ppHitTest.w / self._width
 				local rh = self.ppHitTest.h / self._height
 				_x, _y = _x * rw, _y * rh
-				local a
-				if bmpRegion then
-					_,_,_,a = BitmapData.getRegionRGBA(img, _x, _y, bmpRegion)
-				else
-					_,_,_,a = img:getRGBA(_x, _y)
-				end
-				
+				local _,_,_,a = BitmapData.getRGBA(img, _x, _y, bmpRegion)
 				if a > alphaLevel then
 					return self
 				else

@@ -50,9 +50,7 @@ function BitmapRegion:init(region, rotated, frame)
 	self.rotated = rotated == true
 	if frame then
 		self.frame = frame:clone()
-		self.trimmed = frame.x ~= 0 or frame.y ~= 0 or 
-			(self.rotated and (frame.h ~= region.w or frame.w ~= region.h)) or 
-			(not self.rotated and (frame.w ~= region.w or frame.h ~= region.h))
+		self.trimmed = (frame.w*frame.h ~= region.w*region.h)
 	else
 		self.trimmed = false
 		if self.rotated then

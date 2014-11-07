@@ -106,7 +106,7 @@ if __USE_SIMULATION_COORDS__ then
 		local rotated = bmpRegion.rotated
 		local frame = bmpRegion.frame
 		
-		if bmpRegion.trimmed and (frame.w*frame.h ~= region.w*region.h) then
+		if bmpRegion.trimmed then
 			local rh,rw
 			if rotated then
 				rh,rw = region.w, region.h
@@ -140,7 +140,7 @@ else --__USE_SIMULATION_COORDS__
 		local rotated = bmpRegion.rotated
 		local frame = bmpRegion.frame
 		
-		if bmpRegion.trimmed and (frame.w*frame.h ~= region.w*region.h) then
+		if bmpRegion.trimmed then
 			local rh,rw
 			if rotated then
 				rh,rw = region.w, region.h
@@ -180,18 +180,13 @@ optional x,y params
 @int[opt=0] y
 --]]	
 function BitmapData.copyRegion(dst, src, bmpRegion, x, y)
-	local region = bmpRegion.region
-	local rotated = bmpRegion.rotated
-	local frame = bmpRegion.frame
 	
-	--default value for frame x,y
-	local framex, framey = 0,0
-	if bmpRegion.trimmed then
-		framex, framey = frame.x, frame.y
-	end
+	local region = bmpRegion.region
+	local framex, framey = bmpRegion.frame.x, bmpRegion.frame.y
+	
 	local x = x or 0
 	local y = y or 0
-	if not rotated then
+	if not bmpRegion.rotated then
 		dst:copyBits(	src, 
 						region.x, region.y,
 						framex + x, framey + y, 
@@ -218,78 +213,55 @@ Create a new image as a copy of a packed image
 @treturn MOAIImage
 --]]	
 function BitmapData.cloneRegion(src, bmpRegion)
-	
-	local region = bmpRegion.region
-	local rotated = bmpRegion.rotated
-	local frame = bmpRegion.frame
-	
 	local dst = MOAIImage.new()
-	local w,h
-	if bmpRegion.trimmed then
-		w,h = frame.w, frame.h
-	elseif rotated then
-		w,h = region.h, region.w
-	else
-		w,h = region.w, region.h
-	end
+	local w,h = bmpRegion:getSize()
 	dst:init(w, h, src:getFormat())
-	BitmapData.copyRegion(dst, src, region, rotated, frame)
+	BitmapData.copyRegion(dst, src, bmpRegion)
 	return dst
 end
 
 --[[---
-Get a pixel value as 32bit integer from a region image
-
-@function getRegionColor32
+Get a pixel value as 32bit integer. 
 @int x
 @int y
-@tparam BitmapRegion bmpRegion
+@tparam[opt=nil] BitmapRegion bmpRegion
 @treturn number
 --]]	
-function BitmapData.getRegionColor32(img, x, y, bmpRegion)
+function BitmapData.getColor32(img, x, y, bmpRegion)
+	if not bmpRegion then
+		return img:getColor32(x,y)
+	end
 	return __getColor(img, x, y, bmpRegion, img.getColor32, defColor32)
 end
 	
 --[[---
-Get a pixel value as r,g,b,a values from a region image
-
-@function getRegionRGBA
+Get a pixel value as r,g,b,a values
 @int x
 @int y
-@tparam BitmapRegion bmpRegion
+@tparam[opt=nil] BitmapRegion bmpRegion
 @treturn number r [0..1]
 @treturn number g [0..1]
 @treturn number b [0..1]
 @treturn number a [0..1]
 --]]	
-function BitmapData.getRegionRGBA(img, x, y, bmpRegion)
+function BitmapData.getRGBA(img, x, y, bmpRegion)
+	if not bmpRegion then
+		return img:getRGBA(x,y)
+	end
 	return __getColor(img, x, y, bmpRegion, img.getRGBA, defRGBA)
 end
 	
 --[[---
-Get a pixel value as Color from a region image
-
-@function getRegionColor
+Get a pixel value as Color
 @int x
 @int y
-@tparam BitmapRegion bmpRegion
+@tparam[opt=nil] BitmapRegion bmpRegion
 @treturn Color
 --]]	
-function BitmapData.getRegionColor(img, x, y, bmpRegion)
-	return Color.fromNormalizedValues(BitmapData.getRegionRGBA(img, x, y, bmpRegion))
+function BitmapData.getColor(img, x, y, bmpRegion)
+	return Color.fromNormalizedValues(BitmapData.getRGBA(img, x, y, bmpRegion))
 end
-
---[[---
-Get a pixel value as Color.
-@function getColor
-@int x
-@int y
-@treturn Color
---]]	
-function BitmapData.getColor(img, x, y)
-	return Color.fromNormalizedValues(img:getRGBA(x, y))
-end
-			
+	
 					
 --[[---
 Checks pixel perfect overlap of two images.
