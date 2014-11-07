@@ -150,92 +150,57 @@ end
 
 -- Private methods
 
-if __USE_SIMULATION_COORDS__ then
-
-	--[[---
-	Inner method. 
-	Returns region unwrapped as MOAIGfxQuad rect coordinates
-	@treturn int x1
-	@treturn int y1
-	@treturn int x2
-	@treturn int y2
-	--]]
-	function Texture:_getQuadRect()
-		local rw, rh
-		if self.rotated then
-			rw,rh = self.region.h, self.region.w
-		else
-			rw,rh = self.region.w, self.region.h
-		end
-		return 	self.frame.x, 
-				self.frame.h - (self.frame.y + rh), 
-				self.frame.x + rw,
-				self.frame.h - self.frame.y 
+--[[---
+Inner method. 
+Returns region unwrapped as MOAIGfxQuad rect coordinates
+@treturn int x1
+@treturn int y1
+@treturn int x2
+@treturn int y2
+--]]
+function Texture:_getQuadRect()
+	local rw, rh = self.region.w, self.region.h
+	if self.rotated then
+		rw,rh = rh,rw 
 	end
-
-	
-	--[[---
-	Inner method. 
-	Returns region unwrapped as MOAIGfxQuad UV coordinates
-	@treturn int u1
-	@treturn int v1
-	@treturn int u2
-	@treturn int v2
-	@treturn int u3
-	@treturn int v3
-	@treturn int u4
-	@treturn int v4
-	--]]
-	function Texture:_getQuadUV()
-		local srcw, srch = self.textureData:getSize()
-		local x, w = self.region.x / srcw, self.region.w / srcw
-		local y, h = self.region.y / srch, self.region.h / srch
-		if self.rotated then
-			return	x+w	, y,
-					x+w	, y+h,
-					x	, y+h,
-					x	, y
-		else
-			return 	x	, y, 
-					x+w	, y,
-					x+w	, y+h, 
-					x	, y+h
-		end
+	local x0,y0,x1,y1 = self.frame.x, self.frame.y, self.frame.x + rw, self.frame.y + rh
+	if __USE_SIMULATION_COORDS__ then
+		local frameh = self.frame.h
+		y0,y1 = frameh-y1, frameh-y0
 	end
-
-else -- not __USE_SIMULATION_COORDS__
-
-	function Texture:_getQuadRect()
-		local rw, rh
-		if self.rotated then
-			rw,rh = self.region.h, self.region.w
-		else
-			rw,rh = self.region.w, self.region.h
-		end
-		return 	self.frame.x, 
-				self.frame.y, 
-				self.frame.x + rw, 
-				self.frame.y + rh
-	end
-	
-	function Texture:_getQuadUV()
-		local srcw, srch = self.textureData:getSize()
-		local x, w = self.region.x / srcw, self.region.w / srcw
-		local y, h = self.region.y / srch, self.region.h / srch
-		if self.rotated then
-			return	x	, y,
-					x	, y+h,
-					x+w	, y+h,
-					x+w	, y
-		else
-			return 	x	, y+h,	
-					x+w	, y+h,
-					x+w	, y,
-					x	, y
-		end
-	end
-
+	return 	x0,y0,x1,y1
 end
+
+--[[---
+Inner method. 
+Returns region unwrapped as MOAIGfxQuad UV coordinates
+@treturn int u1
+@treturn int v1
+@treturn int u2
+@treturn int v2
+@treturn int u3
+@treturn int v3
+@treturn int u4
+@treturn int v4
+--]]
+function Texture:_getQuadUV()
+	local srcw, srch = self.textureData:getSize()
+	local x0, w = self.region.x / srcw, self.region.w / srcw
+	local y0, h = self.region.y / srch, self.region.h / srch
+	local x1,y1 = x0+w,y0+h
+	if self.rotated then
+		if __USE_SIMULATION_COORDS__ then
+			x0,x1 = x1,x0
+		end
+		return x0,y0, x0,y1, x1,y1, x1,y0
+	else
+		if __USE_SIMULATION_COORDS__ then
+			y0,y1 = y1,y0
+		end
+		return x0,y1, x1,y1, x1,y0, x0,y0
+	end
+end
+
 
 --[[---
 Inner method. 
