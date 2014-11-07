@@ -5,10 +5,18 @@ It's not possible to create subtextures of subtextures.
 
 --[[---
 Returns a subtexture of the given texture, based on region definition
+@function Texture.fromTexture
 @param texture the texture from wich obtain a subtexture
-@param region a rect that defines the subtexture, coords are expressed in pixel
-@param rotated boolean (optional). if true the region is rotated of 90° clockwise
-@param frame rect (optional). Defines a subtexture with a trimmed region. x,y 
+@tparam BitmapRegion region the region that defines the sub texture
+@treturn SubTexture
+--]]
+
+--[[---
+Returns a subtexture of the given texture, based on region definition
+@tparam Texture texture the texture from wich obtain a subtexture
+@tparam Rect region a rect that defines the subtexture, coords are expressed in pixel
+@tparam bool[opt=false] rotated if true the region is rotated of 90° clockwise
+@tparam[opt=nil] Rect frame defines a subtexture with a trimmed region. x,y 
 indicates the offset of the mapping rect while w,h are real sprite width and height. 
 @treturn SubTexture
 --]]

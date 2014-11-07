@@ -29,26 +29,15 @@ prefix003
 
 @param texture can be a Texture or a path, in that case the texture 
 is loaded using Texure.fromFile function using default color transformation
-@tparam int regionWidth width of a single tile
-@tparam int regionHeight height of single tile
+@tparam int w width of a single tile
+@tparam int h height of single tile
 @tparam[opt=0] int margin num of pixel on the boundary of the texture 
 @tparam[opt=0] int spacing num of pixel between tiles
 @tparam[opt="image_"] string prefix the prefix name to be applied to each subtexture
 @tparam[opt=0] int padding number of ciphers to be used to enumerate subtextures (->%00d
 @treturn TextureAtlas
 --]]
-function TextureAtlas.fromTexture(texture,regionWidth,regionHeight,
-            margin,spacing,prefix,padding)
-	
-    local texture = texture
-	local bTextureOwner = false
-	
-	if type(texture) == "string" then
-		texture = Texture.fromFile(texture)
-		bTextureOwner = true
-	end
-	
-	local atlas = TextureAtlas(texture, bTextureOwner)
+function TextureAtlas.fromTexture(texture,w,h,margin,spacing,prefix,padding)
 	
 	--default values
 	local margin = margin or 0
@@ -56,30 +45,33 @@ function TextureAtlas.fromTexture(texture,regionWidth,regionHeight,
 	local padding = padding or 0
 	local prefix = prefix or "image_"
 	local _format = prefix.."%0"..tostring(padding).."d"
-   
+    local texture = texture
+	local bTextureOwner = false
+	if type(texture) == "string" then
+		texture = Texture.fromFile(texture)
+		bTextureOwner = true
+	end
+	
+	local atlas = TextureAtlas(texture, bTextureOwner)
+	
+	local tw, th = texture:getSize()
     --remove margin left/right and add 1 spacing value, because
     --num of spacing is numOfTiles-1, so adding one spacing value
     --allows to divide for (regionAidth+spacing) to find out
     --exact num of tiles
-	local numX = (texture:getWidth() - margin*2 + spacing) / 
-        (regionWidth+spacing)
-        
-	local numY = (texture:getHeight() - margin*2 + spacing) / 
-        (regionHeight+spacing)
-    
-	local w = regionWidth
-	local h = regionHeight
-	local sw = spacing
-	local sh = spacing
-	local mw = margin
-	local mh = margin
-    
+	local numX = (tw - margin*2 + spacing) / (w+spacing)
+	local numY = (th - margin*2 + spacing) / (h+spacing)
+	--same spacing / margin fot both directions
+	local sw, sh = spacing, spacing
+	local mw, mh = margin, margin
+    local region = Rect()
+	
     local counter = 1
     for j = 1,numY do
         for i = 1,numX do
             --each region start after one margin plus n*(tile+spacing)
-            local region = Rect(mw+(i-1)*(w+sw),mh+(numY-j)*(h+sh),w,h)
-			region.y = texture:getHeight() - (region.y + region.h) 
+            region:set(mw+(i-1)*(w+sw), mh+(numY-j)*(h+sh), w, h)
+			region.y = th - (region.y + region.h) 
             local frameName = string.format(_format,counter)
             atlas:addRegion(frameName,region)
             counter = counter + 1
