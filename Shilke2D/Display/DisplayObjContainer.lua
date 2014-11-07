@@ -546,7 +546,7 @@ function DisplayObjContainer:createFrameBufferImage(bUpdate,width,height)
 		self:destroyFrameBufferImage()
 	end
 	
-	local r = (width and height) and nil or self:getRect(self._parent,__helperRect)
+	local r = (width and height) and nil or self:getRect(__helperRect)
 	
 	local width = width or r.w + r.x 
 	local height = height or r.h + r.y
