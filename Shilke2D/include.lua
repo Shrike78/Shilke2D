@@ -58,6 +58,7 @@ end
 
 require("Shilke2D/Utils/ClassEx")
 require("Shilke2D/Utils/Shape")
+require("Shilke2D/Utils/BitmapRegion")
 require("Shilke2D/Utils/BitmapData")
 require("Shilke2D/Utils/Callbacks")
 require("Shilke2D/Utils/IO")

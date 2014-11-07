@@ -16,6 +16,7 @@ IO.setWorkingDir("Assets")
 
 -- declared here because visible also in the update() function
 local boy,girl,collisionInfo
+local planetCuteImg
 
 --Setup is called once at the beginning of the application, just after Shilke2D initialization phase
 --here everything should be set up for the following execution
@@ -31,12 +32,13 @@ function setup()
 	local juggler = shilke.juggler 
 	
 	--show as overlay fps and memory allocation
-	shilke:showStats(true)
-		
+	shilke:showStats(true,true)
+	
+	planetCuteImg = BitmapData.fromFile("PlanetCute/PlanetCute.png")
 	--we load the atlas descriptor created with TexturePacker. The data was created with the
 	--sparrow format so we make use of the TexturePacker helper function. Helpers also for corona and 
 	--moai format exists.
-	local atlas = TexturePacker.loadSparrowFormat("PlanetCute/PlanetCute.xml")
+	local atlas = TexturePacker.loadSparrowFormat("PlanetCute/PlanetCute.xml", Texture(planetCuteImg))
 	
 	--we retrieve the subtexture that was originally "Character Boy".png and that is now a subregion of
 	--the atlas texture
@@ -47,7 +49,7 @@ function setup()
 	--we add an event listener for the 'touch' event.
 	boy:addEventListener(Event.TOUCH,onSpriteTouched)
 	--we set a pixel precision hit test for the image with an alpha treshold of 128 to identify transparent pixels
-	boy:setPixelPreciseHitTest(true,128)
+	boy:enablePixelPreciseHitTest(128, planetCuteImg, boyTexture)
 	stage:addChild(boy)
 
 	--we retrieve the subtexture that was originally "Character Cat Girl".png and that is now a subregion of
@@ -59,7 +61,7 @@ function setup()
 	girl:setPosition(3*WIDTH/4,2*HEIGHT/4)
 	girl:addEventListener(Event.TOUCH,onSpriteTouched)
 	--we set a pixel precision hit test for the image with an alpha treshold of 128 to identify transparent pixels
-	girl:setPixelPreciseHitTest(true,128)
+	girl:enablePixelPreciseHitTest(128, planetCuteImg, girlTexture)
 	stage:addChild(girl)
 	
 	local info = TextField(WIDTH-40, 300,
@@ -91,22 +93,10 @@ function update(elapsedTime)
 	--in this sample the position is retrieved by images just because both the images have pivot set as
 	--top_left. In a different situation the two position should be calculated displacing the imgs position
 	--by their pivot position
-	local btexture = boy.texture
-	local bimg = btexture:getSrcData()
-	local bregion = btexture:getRegion()
-	local brotated = btexture.rotated
-	local bframe = btexture:getFrame()
 	local bx,by = boy:getPosition()
-	
-	local gtexture = girl.texture
-	local gimg = gtexture:getSrcData()
-	local gregion = gtexture:getRegion()
-	local grotated = gtexture.rotated
-	local gframe = gtexture:getFrame()
 	local gx,gy = girl:getPosition()
 	
-	if BitmapData.hitTestEx(bimg, bx, by, 128, gimg, gx, gy, 128, bregion, gregion, 
-			brotated, grotated, bframe, gframe) then
+	if BitmapData.hitTestEx(planetCuteImg, bx, by, 128, planetCuteImg, gx, gy, 128, boy:getTexture(), girl:getTexture()) then
 		collisionInfo:setText("Collision = true")
 	else
 		collisionInfo:setText("Collision = false")

@@ -3,11 +3,13 @@ A texture stores the information that represents an image. It cannot
 be added to the display list directly; instead it has to be mapped 
 into a display object, that is the class "Image".
 
-A Texture is a GPU bitmap object that can be diplayed o screen but cannot be modified at runtime.
+Texture derives from BitmapRegion and it's a region of a GPU bitmap object 
+that can be diplayed on screen but cannot be modified at runtime.
+
 It's created loading into GPU memory a CPU Bitmap.
 --]]
 
-Texture = class()
+Texture = class(BitmapRegion)
 
 ---Max widht of Texture object
 Texture.MAX_WIDTH = 4096
@@ -90,50 +92,29 @@ Create a Texture starting from a MOAI object.
 function Texture:init(srcData, frame)
 	--invalidate is a specific "MOAIImageTexture" (userdata) method
     if srcData.invalidate then
-		self.srcData = srcData
 		self.textureData = srcData
 	--bleedRect is a specific "MOAIImage" (userdata) method
     elseif srcData.bleedRect then
-		self.srcData = srcData
 		self.textureData = MOAITexture.new()
-		self.textureData:load(self.srcData)
+		self.textureData:load(srcData)
 	--getRenderTable is a specific "MOAIFrameBufferTexture" (userdata) method
     elseif srcData.getRenderTable then
-		self.srcData = srcData
 		self.textureData = srcData
 	else
 		error("Texture accept MOAIImage, MOAIImageTexture or MOAIFrameBufferTexture")
     end
-	
-	self.rotated = false
-	self.trimmed = frame ~= nil
-	self.region = Rect(0,0,self.textureData:getSize())
-	self.frame = frame and frame:clone() or self.region
+	BitmapRegion.init(self, Rect(0,0,self.textureData:getSize()), false, frame)
 end
 
 
 ---When called textureData (MOAITexture) is released
 function Texture:dispose()
+	BitmapRegion.dispose(self)
 	self.textureData:release()
 	self.textureData = nil
-	self.region = nil
-	self.frame = nil
-	self.srcData = nil
 	self._quad = nil
 end
 
---[[---
-Returns srcData (the image on wich the texture was built) if available
-@treturn MOAIImage
---]]
-function Texture:getSrcData()
-	return self.srcData
-end
-
----release the srcData object if available (to save cpu memory if not needed)
-function Texture:releaseSrcData()
-	self.srcData = nil
-end
 
 --[[---
 Set default filtering mode for texture, choosing between 
@@ -152,47 +133,6 @@ function Texture:setFilter(min, mag)
 	self.textureData:setFilter(min, mag)
 end
 
---[[---
-Returns the width of the texture in pixels
-@treturn int width
---]]
-function Texture:getWidth()
-	return self.frame.w
-end
-
---[[---
-Returns the height of the texture in pixels
-@treturn int height
---]]
-function Texture:getHeight()
-	return self.frame.h
-end
-
---[[---
-Returns the size of the texture in pixels
-@treturn int width
-@treturn int height
---]]
-function Texture:getSize()
-	return self.frame.w, self.frame.h
-end
-
---[[---
-Returns the region as pixel rect over srcdata. It doesn't take care of the rotated flag
-@tparam[opt=nil] Rect resultRect if provided is filled and returned
-@treturn Rect
---]]
-function Texture:getRegion(resultRect)
-	local res = resultRect or Rect()
-	res:copy(self.region)
-	return res
-end
-
-function Texture:getFrame(resultRect)
-	local res = resultRect or Rect()
-	res:copy(self.frame)
-	return res
-end
 
 --[[---
 Returns the region as uv rect over srcdata. It doesn't take care of the rotated flag
@@ -206,112 +146,108 @@ function Texture:getRegionUV(resultRect)
 	res.y, res.h = res.y / h, res.h / h
 	return res
 end
-	
 
---[[---
-Returns the rect to be set into MOAI quad (either a single quad or an indexed quaddeck)
-@treturn int x
-@treturn int y
-@treturn int w
-@treturn int h
---]]
-function Texture:_getQuadRect()
-	local rw, rh
-	if self.rotated then
-		rw,rh = self.region.h, self.region.w
-	else
-		rw,rh = self.region.w, self.region.h
-	end
-	if __USE_SIMULATION_COORDS__ then
+
+-- Private methods
+
+if __USE_SIMULATION_COORDS__ then
+
+	--[[---
+	Inner method. 
+	Returns region unwrapped as MOAIGfxQuad rect coordinates
+	@treturn int x1
+	@treturn int y1
+	@treturn int x2
+	@treturn int y2
+	--]]
+	function Texture:_getQuadRect()
+		local rw, rh
+		if self.rotated then
+			rw,rh = self.region.h, self.region.w
+		else
+			rw,rh = self.region.w, self.region.h
+		end
 		return 	self.frame.x, 
 				self.frame.h - (self.frame.y + rh), 
 				self.frame.x + rw,
 				self.frame.h - self.frame.y 
-	else -- not __USE_SIMULATION_COORDS__
+	end
+
+	
+	--[[---
+	Inner method. 
+	Returns region unwrapped as MOAIGfxQuad UV coordinates
+	@treturn int u1
+	@treturn int v1
+	@treturn int u2
+	@treturn int v2
+	@treturn int u3
+	@treturn int v3
+	@treturn int u4
+	@treturn int v4
+	--]]
+	function Texture:_getQuadUV()
+		local srcw, srch = self.textureData:getSize()
+		local x, w = self.region.x / srcw, self.region.w / srcw
+		local y, h = self.region.y / srch, self.region.h / srch
+		if self.rotated then
+			return	x+w	, y,
+					x+w	, y+h,
+					x	, y+h,
+					x	, y
+		else
+			return 	x	, y, 
+					x+w	, y,
+					x+w	, y+h, 
+					x	, y+h
+		end
+	end
+
+else -- not __USE_SIMULATION_COORDS__
+
+	function Texture:_getQuadRect()
+		local rw, rh
+		if self.rotated then
+			rw,rh = self.region.h, self.region.w
+		else
+			rw,rh = self.region.w, self.region.h
+		end
 		return 	self.frame.x, 
 				self.frame.y, 
 				self.frame.x + rw, 
 				self.frame.y + rh
 	end
-end
-
-
---[[
-Returns region unwrapped as quad coordinates
-@tparam Rect r the region to transform
-@tparam bool rotated if the region is rotated
-@treturn int x1
-@treturn int y1
-@treturn int x2
-@treturn int y2
-@treturn int x3
-@treturn int y3
-@treturn int x4
-@treturn int y4
---]]
-local _region2quad
-if __USE_SIMULATION_COORDS__ then
 	
-	_region2quad = function(r, rotated)
-		if rotated then
-			return	r.x + r.w, r.y,
-					r.x + r.w, r.y + r.h,
-					r.x, r.y + r.h,
-					r.x, r.y
+	function Texture:_getQuadUV()
+		local srcw, srch = self.textureData:getSize()
+		local x, w = self.region.x / srcw, self.region.w / srcw
+		local y, h = self.region.y / srch, self.region.h / srch
+		if self.rotated then
+			return	x	, y,
+					x	, y+h,
+					x+w	, y+h,
+					x+w	, y
 		else
-			return 	r.x, r.y, 
-					r.x + r.w, r.y,
-					r.x + r.w, r.y + r.h, 
-					r.x, r.y + r.h
-		end
-	end
-	
-else -- not __USE_SIMULATION_COORDS__
-	
-	_region2quad = function(r, rotated)
-		if rotated then
-			return	r.x, r.y,
-					r.x, r.y + r.h,
-					r.x + r.w, r.y + r.h,
-					r.x + r.w, r.y
-		else
-			return 	r.x, r.y + r.h,	
-					r.x + r.w, r.y + r.h,
-					r.x + r.w, r.y,
-					r.x, r.y
+			return 	x	, y+h,	
+					x+w	, y+h,
+					x+w	, y,
+					x	, y
 		end
 	end
 
 end
-	
-
-local __helperRect = Rect()
-
---[[---
-Called to correctly map texture uv over quad. It can be used either for a single 
-quad (like for texture quad generation) or for an indexed quaddeck (i.e. to build
-shared texture sets from outside, or custom displayobject)
-@param quad the external MOAIGfxQuad2D or MOAIGfxQuadDeck2D structure to be filled
-@int[opt=nil] index if quad is a MOAIGfxQuadDeck2D a index of the quad/texture inside 
-the quadDeck must be provided
---]]
-function Texture:_getQuadUV()
-	local r = self:getRegionUV(__helperRect)
-	return _region2quad(r, self.rotated)
-end
-
 
 --[[---
 Inner method. 
 Creates and caches a MOAIGfxQuad2D used and shared by Images to show the texture.
 If a texture is not binded to an Image the MOAIGfxQuad2D is never created
-@return MOAIGfxQuad2D
+@treturn MOAIGfxQuad2D
 --]]
 function Texture:_generateQuad()
 	local quad = MOAIGfxQuad2D.new()
 	quad:setTexture(self.textureData)
 	quad:setRect(self:_getQuadRect())
-	quad:setUVQuad(self:_getQuadUV())
+	quad:setUVQuad(self:_getQuadUV(self.textureData))
 	return quad
 end
 
@@ -319,7 +255,7 @@ end
 Inner method. 
 Creates and caches a MOAIGfxQuad2D used and shared by Images to show the texture.
 If a texture is not binded to an Image the MOAIGfxQuad2D is never created
-@return MOAIGfxQuad2D
+@treturn MOAIGfxQuad2D
 --]]
 function Texture:_getQuad()
 	if not self._quad then

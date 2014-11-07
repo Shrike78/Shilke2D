@@ -24,6 +24,15 @@ SubTexture = class(Texture)
 Constructor.
 A sub texture is created as sub region of another texture.
 The regions can be 90° clockwise rotated. 
+@function SubTexture:init
+@tparam Texture parentTexture the src texture from which the subtexture is created
+@tparam BitmapRegion region the region that defines the sub texture
+--]]
+
+--[[---
+Constructor.
+A sub texture is created as sub region of another texture.
+The regions can be 90° clockwise rotated. 
 @tparam Texture parentTexture the src texture from which the subtexture is created
 @tparam Rect region the region that defines the sub texture
 @tparam[opt=false] bool rotated If true the region is 90° clockwise rotated
@@ -33,32 +42,15 @@ must be provided to correctly identify real texture size / rect
 function SubTexture:init(parentTexture, region, rotated, frame)
     self.parent = parentTexture
     self.textureData = self.parent.textureData
-	self.region = region:clone()
-	self.rotated = (rotated == true)
-	if frame then
-		self.trimmed = true
-		self.frame = frame:clone()
-	else
-		self.trimmed = false
-		if self.rotated then
-			self.frame = Rect(0, 0, self.region.h, self.region.w)
-		else
-			self.frame = Rect(0, 0, self.region.w, self.region.h)
-		end
-	end
+	BitmapRegion.init(self, region, rotated, frame)
 end
 
 ---Dispose doesn't release textureData but release every reference to textureData.
 function SubTexture:dispose()
+	BitmapRegion.dispose(self)
 	self.parent = nil
 	self.textureData = nil
-	self.region = nil
-	self.frame = nil
 	self._quad = nil
-end
-
-function SubTexture:getSrcData()
-	return self.parent.srcData
 end
 
 

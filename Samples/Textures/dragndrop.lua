@@ -34,10 +34,11 @@ function setup()
 	--show debug lines. by default only oriented bboxes
 	stage:showDebugLines()
 	
+	local planetCuteImg = BitmapData.fromFile("PlanetCute/PlanetCute.png")
 	--we load the atlas descriptor created with TexturePacker. The data was created with the
 	--sparrow format so we make use of the TexturePacker helper function. Helpers also for corona and 
 	--moai format exists.
-	local atlas = TexturePacker.loadSparrowFormat("PlanetCute/PlanetCute.xml")
+	local atlas = TexturePacker.loadSparrowFormat("PlanetCute/PlanetCute.xml", Texture(planetCuteImg))
 	
 	--we retrieve the subtexture that was originally "Character Boy".png and that is now a subregion of
 	--the atlas texture
@@ -59,7 +60,7 @@ function setup()
 	girl:setPosition(2*WIDTH/3,2*HEIGHT/3)
 	girl:setRotation(math.pi/3)
 	--we force the hitTest to be computed as pixel precise
-	girl:setPixelPreciseHitTest(true)
+	girl:enablePixelPreciseHitTest(0, planetCuteImg, girlTexture)
 	girl:addEventListener(Event.TOUCH,onSpriteTouched)
 	stage:addChild(girl)
 	

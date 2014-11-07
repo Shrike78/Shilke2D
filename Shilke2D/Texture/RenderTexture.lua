@@ -31,22 +31,15 @@ bUpdate param let choose to render only first frame or to have a continuous upda
 Returns a RenderTexture of a given displayObj.
 @tparam DisplayObj displayObj the displayObj that must be rendered on the newly created 
 texture. The provided displayObj must have no parent
-@tparam[opt=false] bool requireSrcData If a local image is required set it to true.
 @tparam[opt=nil] function callback function called after the render to texture has 
-been completed. If requireSrcData is true then the callback is called after the 
-srcData is acquired
+been completed
 @treturn RenderTexture the returned texture can be used istantly 
 (i.e. to create an Image) even if the render to texture will happen next frame
 --]]
-function Texture.fromDisplayObj(displayObj, requireSrcData, callback)
+function Texture.fromDisplayObj(displayObj, callback)
 	assert(displayObj:getParent() == nil)
 	local rt = RenderTexture(displayObj:getSize())
-	if not requireSrcData then
-		rt:drawObject(displayObj, callback)
-	else
-		rt:drawObject(displayObj)
-		rt:syncSrcData(callback)
-	end
+	rt:drawObject(displayObj, callback)
 	return rt
 end
 
@@ -56,18 +49,16 @@ Returns a RenderTexture of a given draw function.
 in a vectorial draw 
 @tparam int width
 @tparam int height
-@tparam[opt=false] bool requireSrcData If a local image is required set it to true.
 @tparam[opt=nil] function callback function called after the render to texture has 
-been completed. If requireSrcData is true then the callback is called after the 
-srcData is acquired
+been completed.
 @treturn RenderTexture the returned texture can be used istantly 
 (i.e. to create an Image) even if the render to texture will happen next frame
 --]]
-function Texture.fromDrawFunction(drawFunc, width, height, requireSrcData, callback)
+function Texture.fromDrawFunction(drawFunc, width, height, callback)
 	--Creates a local DrawableObj subclass, then uses an instance of this class with
 	--Texture.fromDisplayObj 
 	local T = DrawableObj.fromDrawFunction(drawFunc, width, height)
-	return Texture.fromDisplayObj(T(), requireSrcData, callback)
+	return Texture.fromDisplayObj(T(), callback)
 end
 
 
@@ -86,32 +77,26 @@ function RenderTexture:init(width,height,frame)
 	local width = math.min(width, Texture.MAX_WIDTH)
 	local height = math.min(height, Texture.MAX_HEIGHT)
 	
-	self.srcData = nil
 	self.textureData, self.layer = nil,nil
 	self:_createFrameBuffer(width, height)
 	
 	self.scriptDeck = MOAIScriptDeck.new()
 	self.scriptProp = MOAIProp.new()
 	self.scriptProp:setDeck(self.scriptDeck)
-
-	self.rotated = false
-	self.trimmed = frame ~= nil
-	self.region = Rect(0,0, self.textureData:getSize())
-	self.frame = frame or self.region
+	
+	BitmapRegion.init(self, Rect(0,0, self.textureData:getSize()),false, frame)
 end
 
 --[[---
 clear all the structures and relase the frameBuffer
 --]]
 function RenderTexture:dispose()
+	BitmapRegion.dispose(self)
 	self:_destroyFrameBuffer()
 	self.textureData:release()
 	self.textureData = nil
 	self.scriptProp = nil
 	self.scriptDeck = nil
-	self.srcData = nil
-	self.region = nil
-	self.frame = nil
 end
 
 --[[---
@@ -248,32 +233,6 @@ function RenderTexture:grabNextFrame(callback, dstImage)
 		self:_addFrameBuffer()
 	end
 	self.textureData:grabNextFrame(fbSrcData, cbFunc)
-end
-
-
---[[---
-This method force to grab the next frame of the wrapped frameBuffer and use it as srcData. 
-That can be usefull if the RenderTexture must be used for pixel precision collision test or
-if a per pixel color information is required. It's possible to provide a callback that will
-be called after frame grab. 
-
-The call forces also an update of the wrapped frameBuffer (if continuousUpdate was false)
-and requires the rendertable provided in draw method to be still available. If a change 
-has occurred in the rendertable the texture will be changed accordingly.
-
-It's possible to register a callback to be notified of sync completion.
-
-@tparam[opt=nil] function callback callback function in the form of callback(sender)
---]]
-function RenderTexture:syncSrcData(callback)
-	local cbFunc = function(sender, srcData)
-		self.srcData = srcData
-		if callback then
-			callback(sender)
-		end
-	end
-	--if srcData is nil, it's created by grabNextFrame call
-	self:grabNextFrame(cbFunc, self.srcData)
 end
 
 

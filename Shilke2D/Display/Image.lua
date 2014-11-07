@@ -1,7 +1,6 @@
 --[[--- 
-An Image is the Shilke2D equivalent of Flash's Bitmap class. 
-Instead of BitmapData, Shilke2D uses textures to represent the 
-pixels of an image.
+An Image is a 2d quad with a mapped texture.
+It's possible to see Image and Texture as equivalent of flash's Bitmap / BitmapData.
 --]]
 
 Image = class(BaseQuad)
@@ -20,16 +19,15 @@ function Image:init(texture, pivotMode)
 		BaseQuad.init(self,0,0,pivotMode)
 		self.texture = nil
 	end
-	self.ppHitTest = false
-	self.ppAlphaLevel = 0
+	self.ppHitTest = nil
 end
 
+
+---clear inner structs
 function Image:dispose()
 	BaseQuad.dispose(self)
 	self.texture = nil
 end
-
--- public methods
 
 --[[---
 Return a new Image that shares the same texture
@@ -62,7 +60,6 @@ texture atlas.
 --]]
 function Image:setTexture(texture)
     if self.texture ~= texture then
-		
 		if not texture then
 			self.texture = nil
 			self._prop:setDeck(nil)
@@ -85,15 +82,36 @@ function Image:getTexture()
 end
 
 
----For images is possible to force the hitTest to be pixel precise on texture pixels
---@param enabled boolean enable/disable pixelPrecise hitTest
---@param alphaLevel if prixelPrecise hitTest is enabled this value define the alpha treshold to consider
---pixel transparent. Default value is 0
-function Image:setPixelPreciseHitTest(enabled,alphaLevel)
-	self.ppHitTest = enabled
-	if enabled then
-		self.ppAlphaLevel = alphaLevel ~= nil and alphaLevel/255 or 0
+--[[---
+For images is possible to force the hitTest to be pixel precise on texture pixels
+Usually an image of the same size of the wrapped texture should be provide, but
+it's also possible to provide an image of different size (usually smaller to reduce 
+used memory)
+@tparam int alphaLevel alpha treshold to consider a pixel as invisible pixel
+@tparam MOAIImage image
+@tparam[opt=nil] BitmapRegion bmpRegion
+--]]
+function Image:enablePixelPreciseHitTest(alphaLevel, image, bmpRegion)
+	local alphaLevel = alphaLevel or 0
+	local _w,_h
+	if bmpRegion then
+		_w,_h = bmpRegion:getSize()
+	else
+		_w,_h = image:getSize()
 	end
+	self.ppHitTest = 
+	{
+		alphaLevel = alphaLevel/255,
+		image = image,
+		bitmapRegion = bmpRegion,
+		w = _w,
+		h = _h
+	}
+end
+
+---Disable the pixel precision hit test 
+function Image:disablePixelPreciseHitTest()
+	self.ppHitTest = nil
 end
 
 --[[---
@@ -117,14 +135,20 @@ function Image:hitTest(x,y,targetSpace,forTouch)
 		local r = self:getRect(__helperRect)
 		if r:containsPoint(_x,_y) then
 			if self.ppHitTest then
-				local img = self.texture:getSrcData()
-				assert(img, "pixel precise hitTest cannot be done if texture's srcData is nil")
-				--local _,_,_,a = self.texture:getRGBA(_x, _y)
-				local frame = self.texture.trimmed and  self.texture:getFrame() or nil
-				local _,_,_,a = BitmapData.getRegionRGBA(img, _x, _y, 
-					self.texture:getRegion(), self.texture.rotated, frame)
+				local img = self.ppHitTest.image
+				local bmpRegion = self.ppHitTest.bitmapRegion
+				local alphaLevel = self.ppHitTest.alphaLevel
+				local rw = self.ppHitTest.w / self._width
+				local rh = self.ppHitTest.h / self._height
+				_x, _y = _x * rw, _y * rh
+				local a
+				if bmpRegion then
+					_,_,_,a = BitmapData.getRegionRGBA(img, _x, _y, bmpRegion)
+				else
+					_,_,_,a = img:getRGBA(_x, _y)
+				end
 				
-				if a > self.ppAlphaLevel then
+				if a > alphaLevel then
 					return self
 				else
 					return nil

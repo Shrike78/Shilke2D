@@ -14,16 +14,18 @@ TexturePacker = {}
 Load an xml file and automatically calls parseSparrowFormat and returns a texture atlas.
 It expects to have the referred image in a relative path to xml file location 
 @param xmlFileName the path of the Sparrow/Starling xml descriptor
+@tparam[opt=nil] Texture texture it's possible to provide an already created texture to the method,
+avoiding the load (or even for using an alternative image)
 @return TextureAtlas
 @return err nil or error string if loading failed
 --]]
-function TexturePacker.loadSparrowFormat(xmlFileName)
+function TexturePacker.loadSparrowFormat(xmlFileName,texture)
 	local dir = string.getFileDir(xmlFileName)
 	local atlasXml, err = XmlNode.fromFile(xmlFileName)
 	if not atlasXml then
 		return nil, err
 	end
-	return TexturePacker.parseSparrowFormat(atlasXml,dir)
+	return TexturePacker.parseSparrowFormat(atlasXml,dir,texture)
 end
 
 --[[---
@@ -98,21 +100,22 @@ function TexturePacker.parseSparrowFormat(atlasXml, dir, texture)
     return atlas
 end
 
-
 --[[---
 Load a lua file and automatically calls parseMoaiFormat and returns a texture atlas
 It expects to have the referred image in a relative path to xml file location 
 @param luaFileName the path of the MOAI lua descriptor
+@tparam[opt=nil] Texture texture it's possible to provide an already created texture to the method,
+avoiding the load (or even for using an alternative image)
 @return TextureAtlas
 @return err nil or error string if loading failed
 --]]
-function TexturePacker.loadMoaiFormat(luaFileName)
+function TexturePacker.loadMoaiFormat(luaFileName,texture)
 	local dir = string.getFileDir(luaFileName)
 	local atlasDescriptor, err = IO.dofile(luaFileName)
 	if not atlasDescriptor then
 		return nil, err
 	end
-	return TexturePacker.parseMoaiFormat(atlasDescriptor, dir)
+	return TexturePacker.parseMoaiFormat(atlasDescriptor, dir, texture)
 end
 
 
@@ -121,9 +124,9 @@ Parser for the MOAI lua descriptor
 The descriptor must be a lua table with MOAI texture packer export info
 
 @param descriptor the lua table with the atlas descriptor in MOAI format
-@param dir by default texture resources are loaded from working directory. 
-If dir is provided it load the image referred by atlasXml from dir
-@param texture it's possible to provide an already created texture to the method,
+@tparam[opt=nil] string dir by default texture resources are loaded from working directory. 
+If dir is provided it load the image referred by descriptor from dir
+@tparam[opt=nil] Texture texture it's possible to provide an already created texture to the method,
 avoiding the load (or even for using an alternative image)
 --]]
 function TexturePacker.parseMoaiFormat(descriptor, dir, texture)

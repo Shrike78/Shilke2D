@@ -100,8 +100,13 @@ local __helperRect = Rect()
 
 if __USE_SIMULATION_COORDS__ then
 	
-	__getColor = function(srcData, x, y, region, rotated, frame, colorFunc, defColorFunc)
-		if frame and (frame.w*frame.h ~= region.w*region.h) then
+	__getColor = function(srcData, x, y, bmpRegion, colorFunc, defColorFunc)
+		
+		local region = bmpRegion.region
+		local rotated = bmpRegion.rotated
+		local frame = bmpRegion.frame
+		
+		if bmpRegion.trimmed and (frame.w*frame.h ~= region.w*region.h) then
 			local rh,rw
 			if rotated then
 				rh,rw = region.w, region.h
@@ -129,8 +134,13 @@ if __USE_SIMULATION_COORDS__ then
 		
 else --__USE_SIMULATION_COORDS__
 	
-	__getColor = function(srcData, x, y, region, rotated, frame, colorFunc, defColorFunc)
-		if frame and (frame.w*frame.h ~= region.w*region.h) then
+	__getColor = function(srcData, x, y, bmpRegion, colorFunc, defColorFunc)
+		
+		local region = bmpRegion.region
+		local rotated = bmpRegion.rotated
+		local frame = bmpRegion.frame
+		
+		if bmpRegion.trimmed and (frame.w*frame.h ~= region.w*region.h) then
 			local rh,rw
 			if rotated then
 				rh,rw = region.w, region.h
@@ -165,16 +175,18 @@ optional x,y params
 
 @function copyRegion
 @tparam MOAIImage srcData
-@tparam Rect region
-@bool[opt=false] rotated
-@tparam[opt=nil] Rect frame
+@tparam BitmapRegion bmpRegion
 @int[opt=0] x
 @int[opt=0] y
 --]]	
-function BitmapData.copyRegion(dst, src, region, rotated, frame, x, y)
+function BitmapData.copyRegion(dst, src, bmpRegion, x, y)
+	local region = bmpRegion.region
+	local rotated = bmpRegion.rotated
+	local frame = bmpRegion.frame
+	
 	--default value for frame x,y
 	local framex, framey = 0,0
-	if frame then
+	if bmpRegion.trimmed then
 		framex, framey = frame.x, frame.y
 	end
 	local x = x or 0
@@ -202,15 +214,18 @@ end
 Create a new image as a copy of a packed image
 
 @function cloneRegion
-@tparam Rect region
-@bool[opt=false] rotated
-@tparam[opt=nil] Rect frame
+@tparam BitmapRegion bmpRegion
 @treturn MOAIImage
 --]]	
-function BitmapData.cloneRegion(src, region, rotated, frame)
+function BitmapData.cloneRegion(src, bmpRegion)
+	
+	local region = bmpRegion.region
+	local rotated = bmpRegion.rotated
+	local frame = bmpRegion.frame
+	
 	local dst = MOAIImage.new()
 	local w,h
-	if frame then
+	if bmpRegion.trimmed then
 		w,h = frame.w, frame.h
 	elseif rotated then
 		w,h = region.h, region.w
@@ -228,13 +243,11 @@ Get a pixel value as 32bit integer from a region image
 @function getRegionColor32
 @int x
 @int y
-@tparam Rect region
-@bool[opt=false] rotated
-@tparam[opt=nil] Rect frame
+@tparam BitmapRegion bmpRegion
 @treturn number
 --]]	
-function BitmapData.getRegionColor32(img, x, y, region, rotated, frame)
-	return __getColor(img, x, y, region, rotated, frame, img.getColor32, defColor32)
+function BitmapData.getRegionColor32(img, x, y, bmpRegion)
+	return __getColor(img, x, y, bmpRegion, img.getColor32, defColor32)
 end
 	
 --[[---
@@ -243,16 +256,14 @@ Get a pixel value as r,g,b,a values from a region image
 @function getRegionRGBA
 @int x
 @int y
-@tparam Rect region
-@bool[opt=false] rotated
-@tparam[opt] Rect frame
+@tparam BitmapRegion bmpRegion
 @treturn number r [0..1]
 @treturn number g [0..1]
 @treturn number b [0..1]
 @treturn number a [0..1]
 --]]	
-function BitmapData.getRegionRGBA(img, x, y, region, rotated, frame)
-	return __getColor(img, x, y, region, rotated, frame, img.getRGBA, defRGBA)
+function BitmapData.getRegionRGBA(img, x, y, bmpRegion)
+	return __getColor(img, x, y, bmpRegion, img.getRGBA, defRGBA)
 end
 	
 --[[---
@@ -261,13 +272,11 @@ Get a pixel value as Color from a region image
 @function getRegionColor
 @int x
 @int y
-@tparam Rect region
-@bool[opt=false] region
-@tparam[opt] Rect frame
+@tparam BitmapRegion bmpRegion
 @treturn Color
 --]]	
-function BitmapData.getRegionColor(img, x, y, region, rotated, frame)
-	return Color.fromNormalizedValues(BitmapData.getRegionRGBA(img, x, y, region, rotated, frame))
+function BitmapData.getRegionColor(img, x, y, bmpRegion)
+	return Color.fromNormalizedValues(BitmapData.getRegionRGBA(img, x, y, bmpRegion))
 end
 
 --[[---
@@ -382,17 +391,21 @@ can be the top or the bottom left point
 @number x2 top/bottom left position x coord of image2
 @number y2 top/bottom left position y coord of image2
 @int a2 [0..255] alpha treshold to consider image2 pixel transparent
-@tparam Rect reg1 define a sub region over image1 (position and size)
-@tparam Rect reg2 define a sub region over image2 (position and size)
-@bool[opt=false] rot1 if true reg1 must be considered rotated 90* anticlock wise
-@bool[opt=false] rot2 if true reg2 must be considered rotated 90* anticlock wise
-@tparam[opt] Rect frame1
-@tparam[opt] Rect frame2
+@tparam BitmapRegion bmpRegion1
+@tparam BitmapRegion bmpRegion2
 @treturn boolean
 --]]
-function BitmapData.hitTestEx(i1,x1,y1,a1,i2,x2,y2,a2,reg1,reg2,rot1,rot2,frame1,frame2)
+function BitmapData.hitTestEx(i1,x1,y1,a1,i2,x2,y2,a2, bmpRegion1, bmpRegion2)
 	
-	if frame1 then
+	local reg1 = bmpRegion1.region
+	local rot1 = bmpRegion1.rotated
+	local frame1 = bmpRegion1.frame
+	
+	local reg2 = bmpRegion2.region
+	local rot2 = bmpRegion2.rotated
+	local frame2 = bmpRegion2.frame
+
+	if bmpRegion1.trimmed then
 		x1 = x1+frame1.x
 		if not __USE_SIMULATION_COORDS__ then
 			y1 = y1+frame1.y
@@ -401,7 +414,7 @@ function BitmapData.hitTestEx(i1,x1,y1,a1,i2,x2,y2,a2,reg1,reg2,rot1,rot2,frame1
 			y1 = y1 + (frame1.h - rh - frame1.y)
 		end
 	end
-	if frame2 then
+	if bmpRegion2.trimmed then
 		x2 = x2+frame2.x
 		if not __USE_SIMULATION_COORDS__ then
 			y2 = y2+frame2.y
