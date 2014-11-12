@@ -19,7 +19,6 @@ end
 --[[---
 Adds a new atlas
 @tparam ITextureAtlas atlas the atlas to be added
-@tparam[opt=true] bool ownership
 @treturn bool success. Doesn't add the same atlas twice
 --]]
 function TextureAtlasComposer:addAtlas(atlas)
