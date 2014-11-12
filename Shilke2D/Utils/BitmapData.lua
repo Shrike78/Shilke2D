@@ -61,7 +61,7 @@ Load a raw image. It's possible to specify a color transformation on load, with 
 default value.
 If straight alpha is used configure accordingly the alpha mode of the displayObjects that are going to use
 the loaded image.
-@tparam string fileName the name of the raw image to load
+@string fileName the name of the raw image to load
 @tparam[opt=ColorTransform.PREMULTIPLY_ALPHA] ColorTransform transformOptions 
 @treturn[1] MOAIImage
 @return[2] nil
@@ -210,7 +210,7 @@ Create a new image as a copy of a packed image
 Resulting image is not rotated and not packed but can be optionally framed
 @tparam MOAImage src
 @tparam BitmapRegion bmpRegion
-@tparam[opt=false] bool keepFrame
+@bool[opt=false] keepFrame
 @treturn MOAIImage
 @treturn BitmapRegion nil if keepFrame is false
 --]]	
@@ -241,8 +241,8 @@ end
 --[[---
 Get a pixel value as 32bit integer. 
 @tparam MOAImage img
-@tparam int x
-@tparam int y
+@int x
+@int y
 @tparam[opt=nil] BitmapRegion bmpRegion
 @treturn number
 --]]	
@@ -256,8 +256,8 @@ end
 --[[---
 Get a pixel value as r,g,b,a values
 @tparam MOAImage img
-@tparam int x
-@tparam int y
+@int x
+@int y
 @tparam[opt=nil] BitmapRegion bmpRegion
 @treturn number r [0..1]
 @treturn number g [0..1]
@@ -274,8 +274,8 @@ end
 --[[---
 Get a pixel value as Color
 @tparam MOAImage img
-@tparam int x
-@tparam int y
+@int x
+@int y
 @tparam[opt=nil] BitmapRegion bmpRegion
 @treturn Color
 --]]	
@@ -297,15 +297,19 @@ can be the top or the bottom left point
 @number x2 top/bottom left position x coord of image2
 @number y2 top/bottom left position y coord of image2
 @int a2 [0..255] alpha treshold to consider image2 pixel transparent
+@int[opt=1] step the precision of the test. higher values produce faster but less accurate results
+i.e.: if opt == 2 only a quarter of the overlapping pixels are tested
 @treturn boolean
 --]]
-function BitmapData.hitTest(i1,x1,y1,a1,i2,x2,y2,a2)
+function BitmapData.hitTest(i1,x1,y1,a1,i2,x2,y2,a2,step)
 	
 	local w1,h1 = i1:getSize()
 	local w2,h2 = i2:getSize()
 	
 	local r1 = Rect(x1,y1,w1,h1)
 	local r2 = Rect(x2,y2,w2,h2)
+	
+	local step = step or 1
 	
 	--check for rect intersection
 	if not r1:intersects(r2) then 
@@ -340,8 +344,8 @@ function BitmapData.hitTest(i1,x1,y1,a1,i2,x2,y2,a2)
 	if r1.w == 0 or r1.h == 0 then return false end
 	
 	if not __USE_SIMULATION_COORDS__ then	
-		for i = 1,r1.w do
-			for j = 1,r1.h do
+		for i = 1,r1.w,step do
+			for j = 1,r1.h,step do
 				local _,_,_,a = i1:getRGBA(r1.x + i, r1.y + j)
 				if a > a1 then
 					_,_,_,a = i2:getRGBA(r2.x + i, r2.y + j)
@@ -355,8 +359,8 @@ function BitmapData.hitTest(i1,x1,y1,a1,i2,x2,y2,a2)
 		r1.y = h1 - r1.y
 		r2.y = h2 - r2.y
 		
-		for i = 1,r1.w do
-			for j = 1,r1.h do
+		for i = 1,r1.w,step do
+			for j = 1,r1.h,step do
 				local _,_,_,a = i1:getRGBA(r1.x + i, r1.y -j)
 				if a > a1 then
 					_,_,_,a = i2:getRGBA(r2.x + i, r2.y - j)
@@ -386,15 +390,18 @@ can be the top or the bottom left point
 @int a2 [0..255] alpha treshold to consider image2 pixel transparent
 @tparam[opt=nil] BitmapRegion bmpRegion1
 @tparam[opt=nil] BitmapRegion bmpRegion2
+@int[opt=1] step the precision of the test. higher values produce faster but less accurate results
+i.e.: if opt == 2 only a quarter of the overlapping pixels are tested
 @treturn boolean
 --]]
-function BitmapData.hitTestEx(i1,x1,y1,a1,i2,x2,y2,a2, bmpRegion1, bmpRegion2)
+function BitmapData.hitTestEx(i1,x1,y1,a1,i2,x2,y2,a2, bmpRegion1, bmpRegion2, step)
 	
 	if not bmpRegion1 and not bmpRegion2 then
-		return BitmapData.hitTest(i1,x1,y1,a1,i2,x2,y2,a2)
+		return BitmapData.hitTest(i1,x1,y1,a1,i2,x2,y2,a2,step)
 	end
 	
 	local reg1, rot1, frame1, trimmed1, reg2, rot2, frame2, trimmed2
+	local step = step or 1
 	
 	if bmpRegion1 then
 		reg1 = bmpRegion1.region
@@ -495,8 +502,8 @@ function BitmapData.hitTestEx(i1,x1,y1,a1,i2,x2,y2,a2, bmpRegion1, bmpRegion2)
 		if not rot1 and not rot2 then
 			local _x1,_y1 = (o1x + r1.x), (o1y + r1.y)
 			local _x2,_y2 = (o2x + r2.x), (o2y + r2.y)
-			for i = 1,r1.w do
-				for j = 1,r1.h do
+			for i = 1,r1.w,step do
+				for j = 1,r1.h,step do
 					local _,_,_,a = i1:getRGBA(_x1 + i, _y1 + j)
 					if a > a1 then
 						_,_,_,a = i2:getRGBA(_x2 + i, _y2 + j)
@@ -509,8 +516,8 @@ function BitmapData.hitTestEx(i1,x1,y1,a1,i2,x2,y2,a2, bmpRegion1, bmpRegion2)
 		elseif not rot1 and rot2 then
 			local _x1,_y1 = (o1x + r1.x), (o1y + r1.y)
 			local _x2,_y2 = (o2x + h2 - r2.y), (o2y + r2.x)
-			for i = 1,r1.w do
-				for j = 1,r1.h do
+			for i = 1,r1.w,step do
+				for j = 1,r1.h,step do
 					local _,_,_,a = i1:getRGBA(_x1 + i, _y1 + j)
 					if a > a1 then
 						_,_,_,a = i2:getRGBA(_x2 - j, _y2 + i)
@@ -523,8 +530,8 @@ function BitmapData.hitTestEx(i1,x1,y1,a1,i2,x2,y2,a2, bmpRegion1, bmpRegion2)
 		elseif rot1 and not rot2 then
 			local _x1,_y1 = (o1x + h1 - r1.y), (o1y + r1.x)
 			local _x2,_y2 = (o2x + r2.x), (o2y + r2.y)
-			for i = 1,r1.w do
-				for j = 1,r1.h do
+			for i = 1,r1.w,step do
+				for j = 1,r1.h,step do
 					local _,_,_,a = i1:getRGBA(_x1 - j, _y1 + i)
 					if a > a1 then
 						_,_,_,a = i2:getRGBA(_x2 + i, _y2 + j)
@@ -537,8 +544,8 @@ function BitmapData.hitTestEx(i1,x1,y1,a1,i2,x2,y2,a2, bmpRegion1, bmpRegion2)
 		elseif rot1 and rot2 then
 			local _x1,_y1 = (o1x + h1 - r1.y), (o1y + r1.x)
 			local _x2,_y2 = (o2x + h2 - r2.y), (o2y + r2.x)
-			for i = 1,r1.w do
-				for j = 1,r1.h do
+			for i = 1,r1.w,step do
+				for j = 1,r1.h,step do
 					local _,_,_,a = i1:getRGBA(_x1 - j, _y1 + i)
 					if a > a1 then
 						_,_,_,a = i2:getRGBA(_x2 - j, _y2 + i)
@@ -553,8 +560,8 @@ function BitmapData.hitTestEx(i1,x1,y1,a1,i2,x2,y2,a2, bmpRegion1, bmpRegion2)
 		if not rot1 and not rot2 then
 			local _x1,_y1 = (o1x + r1.x), (o1y + h1 - r1.y)
 			local _x2,_y2 = (o2x + r2.x), (o2y + h2 - r2.y)
-			for i = 1,r1.w do
-				for j = 1,r1.h do
+			for i = 1,r1.w,step do
+				for j = 1,r1.h,step do
 					local _,_,_,a = i1:getRGBA(_x1 + i, _y1 -j)
 					if a > a1 then
 						_,_,_,a = i2:getRGBA(_x2 + i, _y2 - j)
@@ -567,8 +574,8 @@ function BitmapData.hitTestEx(i1,x1,y1,a1,i2,x2,y2,a2, bmpRegion1, bmpRegion2)
 		elseif not rot1 and rot2 then
 			local _x1,_y1 = (o1x + r1.x), (o1y + h1 - r1.y)
 			local _x2,_y2 = (o2x + r2.y), (o2y + r2.x)
-			for i = 1,r1.w do
-				for j = 1,r1.h do
+			for i = 1,r1.w,step do
+				for j = 1,r1.h,step do
 					local _,_,_,a = i1:getRGBA(_x1 + i, _y1 -j)
 					if a > a1 then
 						_,_,_,a = i2:getRGBA(_x2 + j, _y2 + i)
@@ -581,8 +588,8 @@ function BitmapData.hitTestEx(i1,x1,y1,a1,i2,x2,y2,a2, bmpRegion1, bmpRegion2)
 		elseif rot1 and not rot2 then
 			local _x1,_y1 = (o1x + r1.y), (o1y + r1.x)
 			local _x2,_y2 = (o2x + r2.x), (o2y + h2 - r2.y)
-			for i = 1,r1.w do
-				for j = 1,r1.h do
+			for i = 1,r1.w,step do
+				for j = 1,r1.h,step do
 					local _,_,_,a = i1:getRGBA(_x1 + j, _y1 + i)
 					if a > a1 then
 						_,_,_,a = i2:getRGBA(_x2 + i, _y2 - j)
@@ -595,8 +602,8 @@ function BitmapData.hitTestEx(i1,x1,y1,a1,i2,x2,y2,a2, bmpRegion1, bmpRegion2)
 		elseif rot1 and rot2 then
 			local _x1,_y1 = (o1x + r1.y), (o1y + r1.x)
 			local _x2,_y2 = (o2x + r2.y), (o2y + r2.x)
-			for i = 1,r1.w do
-				for j = 1,r1.h do
+			for i = 1,r1.w,step do
+				for j = 1,r1.h,step do
 					local _,_,_,a = i1:getRGBA(_x1 + j, _y1 + i)
 					if a > a1 then
 						_,_,_,a = i2:getRGBA(_x2 + j, _y2 + i)
