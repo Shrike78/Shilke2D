@@ -11,7 +11,6 @@ TextureManager = {}
 
 local __textures = {}
 local __atlases  = {}
-local __atlasesCache = {}
 
 --[[---
 Clear inner structs.
@@ -36,7 +35,6 @@ function TextureManager.clear(disposeTextures, disposeAtlases)
 	end
 	table.clear(__textures)
 	table.clear(__atlases)
-	table.clear(__atlasesCache)
 end
 
 
@@ -47,7 +45,6 @@ Register a texture with a given name
 @tparam Texture texture
 @treturn bool success
 --]]
-
 
 --[[---
 Register a texture with a given name
@@ -74,20 +71,14 @@ end
 remove a given texture from cache
 @tparam string name the name of the texture to remove. it doesn't work on
 atlas textures
-@tparam[opt=true] bool dispose if the removed texture must be disposed
-@treturn bool success
+@treturn Texture nil if the provided name was not registered
 --]]
-function TextureManager.removeTexture(name, dispose)
+function TextureManager.removeTexture(name)
 	local txt = __textures[name]
-	local dispose = dispose ~= false
 	if txt then
 		__textures[name] = nil
-		if txt and dispose then
-			txt:dispose()
-		end
-		return true
 	end
-	return false
+	return txt
 end
 
 
@@ -99,7 +90,7 @@ Mounts a texture atlas as logical resource at a specific path.
 <li>Only one atlas can be mount at one mount point</li>
 </ul>
 @tparam string mountDir the path where to mount the atlas
-@tparam TextureAtlas atlas the texture atlas to be mounted
+@tparam ITextureAtlas atlas the texture atlas to be mounted
 @treturn bool success
 --]]
 function TextureManager.mountAtlas(mountDir, atlas)
@@ -115,24 +106,16 @@ end
 --[[---
 Unmount an atlas from given path
 @tparam string mountDir the path where to unmount the atlas
-@tparam[opt=false] bool dispose if to dispose or not the released textures
-@treturn bool success
+@treturn ITextureAtlas the removed atlas (nil if the provided mountDir was not valid)
 --]]
-function TextureManager.unmountAtlas(mountDir, dispose)
+function TextureManager.unmountAtlas(mountDir)
 	local mountDir = IO.getAbsolutePath(mountDir)
-	local dispose = dispose == true
 	mountDir = (mountDir .. "/"):gsub("//","/") 
 	local atlas = __atlases[mountDir]
 	if atlas then
 		__atlases[mountDir] = nil
-		for k,_ in pairs(__atlasesCache) do
-			if string.starts(k, mountDir) then
-				__atlasesCache[k] = nil
-			end
-		end
-		return true
 	end
-	return false
+	return atlas
 end
 
 
@@ -163,38 +146,35 @@ end
 Returns a texture based on name. If the texture is not registered
 it can load and automatically register as new resource
 @tparam string name the name of the texure to return
-@tparam[opt=true] bool addIfAbsent if the name is not registered, 
-if addIfAbsent is true the texture is loaded and registerd, else return nil
+@tparam[opt=true] bool autoRegister if the name is not registered and
+autoRegister is true, the texture is loaded and registered, else returns nil
 @treturn[1] Texture
 @return[2] nil
 @treturn[2] string error message
 --]]
-function TextureManager.getTexture(name, addIfAbsent)
+function TextureManager.getTexture(name, autoRegister)
 	local fileName = IO.getAbsolutePath(name)
-	local addIfAbsent = addIfAbsent~=false
+	local autoRegister = autoRegister~=false
 	local err = nil
 	--check if one of the cached textures
 	local txt = __textures[fileName]
-	--check in atlas cache 
-	if not txt then
-		txt = __atlasesCache[fileName]
-	end
 	--check in all the atlases 
 	if not txt then
 		for mountDir,atlas in pairs(__atlases) do 
 			if string.starts(fileName, mountDir) then
 				local innerName = string.removePrefix(fileName, mountDir)
 				txt = atlas:getTexture(innerName)
-				__atlasesCache[fileName] = txt
 				break
 			end
 		end
 	end
 	--if not already registered and addIfAbsent is true, 
 	--loads a new texture with default transformOptions
-	if not txt and addIfAbsent then
+	if not txt and autoRegister then
 		txt, err = Texture.fromFile(fileName)
-		__textures[fileName] = txt
+		if txt then
+			__textures[fileName] = txt
+		end
 	end
 	return txt, err
 end

@@ -1,6 +1,6 @@
 --[[---
 A texture atlas is a collection of many smaller textures in one big 
-image. This class is used to access textures from such an atlas. 
+texture. This class is used to access textures from such an atlas. 
 
 Using a texture atlas for your textures solves two problems: avoid 
 frequent texture switches and reduce memory consuption
@@ -12,7 +12,7 @@ possible to query for single named texure, or for a group of sorted
 texture that share a prefix in the name.
 --]]
 
-TextureAtlas = class()
+TextureAtlas = class(nil, ITextureAtlas)
 
 --[[---
 Automatic creation of a tilest starting from a texture, where all 
@@ -46,13 +46,11 @@ function TextureAtlas.fromTexture(texture,w,h,margin,spacing,prefix,padding)
 	local prefix = prefix or "image_"
 	local _format = prefix.."%0"..tostring(padding).."d"
     local texture = texture
-	local bTextureOwner = false
 	if type(texture) == "string" then
 		texture = Texture.fromFile(texture)
-		bTextureOwner = true
 	end
 	
-	local atlas = TextureAtlas(texture, bTextureOwner)
+	local atlas = TextureAtlas(texture)
 	
 	local tw, th = texture:getSize()
     --remove margin left/right and add 1 spacing value, because
@@ -80,45 +78,38 @@ function TextureAtlas.fromTexture(texture,w,h,margin,spacing,prefix,padding)
     return atlas
 end
 
----A texture atlas is always built over a texture
---@tparam Texture texture the base texture of the atlas.
---@tparam[opt=false] bool bTextureOwner if the atlas own the provided texture, 
---it disposes the texture on atlas disposing
-function TextureAtlas:init(texture, bTextureOwner)
+--[[---
+A texture atlas is always built over a texture
+@tparam Texture texture the base texture of the atlas.
+--]]
+function TextureAtlas:init(texture)
     self.baseTexture = texture
-	self.bTextureOwner = bTextureOwner==true
     self.regions = {}
 end
 
----returns the base texture on wich the atlas is built
---@treturn Texture
+
+--[[---
+Clears inner structs and disposes the base texture and all the created subtextures, 
+so take care of not having textures in use after disposing it.
+--]]
+function TextureAtlas:dispose()
+	self.baseTexture:dispose()
+	self.baseTexture = nil
+	self:clearRegions()
+end
+
+
+--[[---
+returns the base texture on wich the atlas is built
+@treturn Texture
+--]]
 function TextureAtlas:getBaseTexture()
 	return self.baseTexture
 end
 
---[[---
-Clear inner structs. and dispose all the created subtextures, so take care
-of not having subtextures in use after disposing it.
-If the atlas owns the baseTexture it also disposes it, and anyway it's possible
-to force the disposal of the baseTexture with an optional parameter
-@tparam[opt=false] bool forceDisposeBaseTexture if true, the base texture is
-disposed even if the atlas is not the owner of the texture
---]]
-function TextureAtlas:dispose(forceDisposeBaseTexture)
-	local forceDisposeBaseTexture = forceDisposeBaseTexture==true
-	if self.bTextureOwner or forceDisposeBaseTexture then 
-		self.baseTexture:dispose()
-	end
-	self.baseTexture = nil
-	for _,r in pairs(self.regions) do
-		r:dispose()
-	end
-	table.clear(self.regions)
-end
 
 --[[---
 Add a new named region.
-Named regions are uv map rect, so x,y,w,h are in the range [0,1]
 @function TextureAtlas:addRegion
 @tparam string name the name of the new region
 @tparam BitmapRegion region
@@ -126,21 +117,45 @@ Named regions are uv map rect, so x,y,w,h are in the range [0,1]
 
 --[[---
 Add a new named region.
-Named regions are uv map rect, so x,y,w,h are in the range [0,1]
 @tparam string name the name of the new region
 @tparam Rect region a rect over the base texture
 @tparam[opt=false] bool rotated if the region is 90° clockwise rotated
 @param frame (optional) if the texture is trimmed frame must be provided
+@treturn bool success doesn't add the same named region twice
 --]]
 function TextureAtlas:addRegion(name,region,rotated,frame)
 	if self.regions[name] then
-		error("region "..region.." already added to Atlas")
+		return false
 	end
 	self.regions[name] = Texture.fromTexture(self.baseTexture,region,rotated,frame)
+	return true
 end
 
 --[[---
-Returns all the regions sorted by name that begins with "prefix". 
+Remove a region from the texture atlas. The related subtexure is disposed
+@tparam string name
+@treturn bool success
+--]]
+function TextureAtlas:removeRegion(name)
+	local t = self.regions[name]
+	if not t then
+		return false
+	end
+	t:dispose()
+	self.regions[name] = nil
+	return true
+end
+
+---Removes and disposes all the created subtextures.
+function TextureAtlas:clearRegions()
+	for _,r in pairs(self.regions) do
+		r:dispose()
+	end
+	table.clear(self.regions)
+end
+
+--[[---
+Returns all the regions sorted by name that begins with a given prefix. 
 If no prefix is provided it returns all the regions.
 @tparam[opt=nil] string prefix prefix to filter region names
 @treturn {string}
@@ -163,16 +178,6 @@ function TextureAtlas:getSortedNames(prefix)
 	return sortedRegions
 end
 
---[[---
-Returns the number of textures/regions that begin with prefix.
-If no prefix is provided it returns the number of all textures.
-@tparam[opt=nil] string prefix prefix to filter region/texture names
-@treturn int number of matching textures/regions
---]]
-function TextureAtlas:getNumOfTextures(prefix)
-	return #self:getSortedNames(prefix)
-end
-
 
 --[[---
 Returns a subtexture that wrap a specific named region
@@ -183,18 +188,3 @@ function TextureAtlas:getTexture(name)
 	return self.regions[name]
 end
 
-
---[[---
-Returns all the textures sorted by region name, that begin with "prefix". 
-If no prefix is provided it returns all the textures.
-@param prefix optional, prefix to select region names
-@return list of textures
---]]
-function TextureAtlas:getTextures(prefix) 
-    local textures = {}
-    local sortedRegions = self:getSortedNames(prefix)
-    for i,v in ipairs(sortedRegions) do
-        table.insert(textures, self:getTexture(v))
-    end
-    return textures  
-end

@@ -55,7 +55,6 @@ function TexturePacker.parseSparrowFormat(atlasXml, dir, texture)
 	local imgName = atlasXml:getAttribute("imagePath")
 	local extension = "." .. string.getFileExtension(imgName)
 	local texture = texture	
-	local bTextureOwner = false
 	
 	if not texture then
 		local dir = dir or ""
@@ -63,10 +62,9 @@ function TexturePacker.parseSparrowFormat(atlasXml, dir, texture)
 			dir = (dir .. "/"):gsub("//","/")
 		end
 		texture = Texture.fromFile(dir .. imgName)
-		bTextureOwner = true
 	end
 
-    local atlas = TextureAtlas(texture, bTextureOwner)
+    local atlas = TextureAtlas(texture)
                
     for _,subTex in pairs(atlasXml:getChildren("SubTexture")) do
 		--add extension to file name (meant to be the same of atlas img file because 
@@ -132,7 +130,6 @@ avoiding the load (or even for using an alternative image)
 function TexturePacker.parseMoaiFormat(descriptor, dir, texture)
     
 	local texture = texture
-	local bTextureOwner = false
 	
 	if not texture then
 		local dir = dir or ""
@@ -141,10 +138,9 @@ function TexturePacker.parseMoaiFormat(descriptor, dir, texture)
 		end
 		local imgName = descriptor.texture
 		texture = Texture.fromFile(dir .. imgName)
-		bTextureOwner = true
 	end
 	
-	local atlas = TextureAtlas(texture, bTextureOwner)
+	local atlas = TextureAtlas(texture)
 
 	for _,subTex in pairs(descriptor.frames) do
 	
