@@ -173,8 +173,8 @@ Copy from srcData a packed image content.
 It's also possible to define a copy offset using<br>
 optional x,y params
 
-@function copyRegion
-@tparam MOAIImage srcData
+@tparam MOAIImage dst
+@tparam MOAIImage src
 @tparam BitmapRegion bmpRegion
 @int[opt=0] x
 @int[opt=0] y
@@ -207,23 +207,42 @@ end
 
 --[[---
 Create a new image as a copy of a packed image
-
-@function cloneRegion
+Resulting image is not rotated and not packed but can be optionally framed
+@tparam MOAImage src
 @tparam BitmapRegion bmpRegion
+@tparam[opt=false] bool keepFrame
 @treturn MOAIImage
+@treturn BitmapRegion nil if keepFrame is false
 --]]	
-function BitmapData.cloneRegion(src, bmpRegion)
+function BitmapData.cloneRegion(src, bmpRegion, keepFrame)
 	local dst = MOAIImage.new()
-	local w,h = bmpRegion:getSize()
-	dst:init(w, h, src:getFormat())
-	BitmapData.copyRegion(dst, src, bmpRegion)
-	return dst
+	local region = nil
+	--keep frame true force the creation of a new image not rotated but framed, so
+	--with a resulting region with the same frame value of the provided bmpRegion
+	if keepFrame then
+		--the resulting texture has the size of the inner unrated region
+		local w,h = bmpRegion.region.w, bmpRegion.region.h
+		if bmpRegion.rotated then
+			w,h = h,w
+		end
+		dst:init(w, h, src:getFormat())
+		--the copyRegion is called without frame informations
+		BitmapData.copyRegion(dst, src, BitmapRegion(bmpRegion.region, bmpRegion.rotated))
+		--the returned region has only frame information
+		region = BitmapRegion(Rect(0,0,w,h), false, bmpRegion.frame)
+	else
+		local w,h = bmpRegion:getSize()
+		dst:init(w, h, src:getFormat())
+		BitmapData.copyRegion(dst, src, bmpRegion)
+	end
+	return dst, region
 end
 
 --[[---
 Get a pixel value as 32bit integer. 
-@int x
-@int y
+@tparam MOAImage img
+@tparam int x
+@tparam int y
 @tparam[opt=nil] BitmapRegion bmpRegion
 @treturn number
 --]]	
@@ -236,8 +255,9 @@ end
 	
 --[[---
 Get a pixel value as r,g,b,a values
-@int x
-@int y
+@tparam MOAImage img
+@tparam int x
+@tparam int y
 @tparam[opt=nil] BitmapRegion bmpRegion
 @treturn number r [0..1]
 @treturn number g [0..1]
@@ -253,8 +273,9 @@ end
 	
 --[[---
 Get a pixel value as Color
-@int x
-@int y
+@tparam MOAImage img
+@tparam int x
+@tparam int y
 @tparam[opt=nil] BitmapRegion bmpRegion
 @treturn Color
 --]]	
@@ -363,21 +384,33 @@ can be the top or the bottom left point
 @number x2 top/bottom left position x coord of image2
 @number y2 top/bottom left position y coord of image2
 @int a2 [0..255] alpha treshold to consider image2 pixel transparent
-@tparam BitmapRegion bmpRegion1
-@tparam BitmapRegion bmpRegion2
+@tparam[opt=nil] BitmapRegion bmpRegion1
+@tparam[opt=nil] BitmapRegion bmpRegion2
 @treturn boolean
 --]]
 function BitmapData.hitTestEx(i1,x1,y1,a1,i2,x2,y2,a2, bmpRegion1, bmpRegion2)
 	
-	local reg1 = bmpRegion1.region
-	local rot1 = bmpRegion1.rotated
-	local frame1 = bmpRegion1.frame
+	if not bmpRegion1 and not bmpRegion2 then
+		return BitmapData.hitTest(i1,x1,y1,a1,i2,x2,y2,a2)
+	end
 	
-	local reg2 = bmpRegion2.region
-	local rot2 = bmpRegion2.rotated
-	local frame2 = bmpRegion2.frame
-
-	if bmpRegion1.trimmed then
+	local reg1, rot1, frame1, trimmed1, reg2, rot2, frame2, trimmed2
+	
+	if bmpRegion1 then
+		reg1 = bmpRegion1.region
+		rot1 = bmpRegion1.rotated
+		frame1 = bmpRegion1.frame
+		trimmed1 = bmpRegion1.trimmed
+	end
+	
+	if bmpRegion2 then
+		reg2 = bmpRegion2.region
+		rot2 = bmpRegion2.rotated
+		frame2 = bmpRegion2.frame
+		trimmed2 = bmpRegion2.trimmed
+	end
+	
+	if trimmed1 then
 		x1 = x1+frame1.x
 		if not __USE_SIMULATION_COORDS__ then
 			y1 = y1+frame1.y
@@ -386,7 +419,8 @@ function BitmapData.hitTestEx(i1,x1,y1,a1,i2,x2,y2,a2, bmpRegion1, bmpRegion2)
 			y1 = y1 + (frame1.h - rh - frame1.y)
 		end
 	end
-	if bmpRegion2.trimmed then
+	
+	if trimmed2 then
 		x2 = x2+frame2.x
 		if not __USE_SIMULATION_COORDS__ then
 			y2 = y2+frame2.y
