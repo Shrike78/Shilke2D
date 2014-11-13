@@ -14,11 +14,13 @@ require("Shilke2D/include")
 local WIDTH,HEIGHT = 1024, 680
 local FPS = 60
 
-local NUMBER_OF_STARS = 100
 
+--number of star to show on screen
+local NUMBER_OF_STARS = 100
+--draw a star of a given size (STAR_RADIUS variable)
 local STAR_RADIUS = 32
 
---draw a star of a given size (STAR_RADIUS variable)
+--function used for render to texture of a single star
 function drawStar()
 	for i = 1,6 do
 		Graphics.setPenColor(240,245,255,i*10)
@@ -29,10 +31,13 @@ function drawStar()
 end
 
 
+--Setup is called once at the beginning of the application, just after Shilke2D initialization.
 function setup()
 
 	local shilke = Shilke2D.current
-	
+	--Stage is the base displayObjContainer of the scene. Everything must be connected to the
+	--stage to be displayed. The stage is a particular displayObjContainer because it can't be 
+	--geometrically transformed.
 	local stage = shilke.stage 
 	
 	--create a sky background using a quad, darker on top and brighter on bottom
@@ -62,8 +67,7 @@ function setup()
 		star:setPosition(x,y)
 		star:setScale(s/(size*ratio),s/(size*ratio))
 		star:setAlpha(a)
-		stage:addChild(star)
-		
+		stage:addChild(star)		
 	end
 end
 
