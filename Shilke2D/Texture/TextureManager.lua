@@ -180,4 +180,54 @@ function TextureManager.getTexture(name, autoRegister)
 end
 
 
+--[[---
+Returns all the registered textures that matches the given prefix, sorted alphabetically. 
+If no prefix is provided it returns all the registered texture names.
+@string[opt=nil] prefix
+@treturn {string} sorted names
+--]]
+function TextureManager.getRegisteredNames(prefix)
+	if prefix then
+		prefix = IO.getAbsolutePath(prefix)
+	end
+	local res = {}
+	for k,_ in pairs(__textures) do
+		if not prefix or string.starts(k, prefix) then
+			res[#res+1] = k
+		end
+	end
+	
+	for k,v in pairs(__atlases) do
+		local names = nil
+		if not prefix or string.starts(k, prefix) then
+			names = v:getSortedNames()
+		elseif string.starts(prefix, k) then
+			local prefix = prefix:sub(k:len()+1)
+			names = v:getSortedNames(prefix)
+		end
+		if names then
+			for _,name in ipairs(names) do
+				res[#res+1] = k .. name
+			end
+		end
+	end
+	table.sort(res)
+	return res
+end
+
+
+--[[---
+Returns all the registered textures that matches the given prefix, sorted alphabetically.
+If no prefix is provided returns all the registered textures.
+@string[opt=nil] prefix
+@treturn {Texture}
+--]]
+function TextureManager.getTextures(prefix)
+	local regionNames = TextureManager.getRegisteredNames(prefix)
+	local res = {}
+	for _,name in ipairs(regionNames) do
+		res[#res+1] = TextureManager.getTexture(name)
+	end
+	return res
+end
 
