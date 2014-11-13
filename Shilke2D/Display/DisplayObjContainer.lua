@@ -217,7 +217,7 @@ end
 Remove an obj from children list.
 if the object is not a child do nothing
 @param obj the obj to be removed
-@param dispose if to dispose after removal
+@bool[opt=false] dispose if to dispose after removal
 @return the obj if removed, nil if the obj is not a child
 --]]
 function DisplayObjContainer:removeChild(obj,dispose)
@@ -259,7 +259,7 @@ end
 
 ---Remove a child at a given position
 --@param index the position of the obj to be removed
---@param dispose boolean, if to dispose the obj after removal
+--@bool[opt=false] dispose boolean, if to dispose the obj after removal
 --@return the obj if the index is valid or nil
 function DisplayObjContainer:removeChildAt(index,dispose)
     local obj = self._displayObjs[index]
