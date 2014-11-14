@@ -35,18 +35,22 @@ is loaded using Texure.fromFile function using default color transformation
 @tparam[opt=0] int spacing num of pixel between tiles
 @tparam[opt="image_"] string prefix the prefix name to be applied to each subtexture
 @tparam[opt=0] int padding number of ciphers to be used to enumerate subtextures (->%00d
+@tparam[opt=".png"] string ext extension to be applied to each subtexture. If texture is 
+proived as filename it override this value using the same extension of source image
 @treturn TextureAtlas
 --]]
-function TextureAtlas.fromTexture(texture,w,h,margin,spacing,prefix,padding)
+function TextureAtlas.fromTexture(texture,w,h,margin,spacing,prefix,padding, ext)
 	
 	--default values
 	local margin = margin or 0
 	local spacing = spacing or 0
 	local padding = padding or 0
 	local prefix = prefix or "image_"
-	local _format = prefix.."%0"..tostring(padding).."d"
+	local _format = prefix.."%0"..tostring(padding).."d%s"
+	local ext = ext or ".png"
     local texture = texture
 	if type(texture) == "string" then
+		ext = "." .. string.getFileExtension(texture)
 		texture = Texture.fromFile(texture)
 	end
 	
@@ -70,7 +74,7 @@ function TextureAtlas.fromTexture(texture,w,h,margin,spacing,prefix,padding)
             --each region start after one margin plus n*(tile+spacing)
             region:set(mw+(i-1)*(w+sw), mh+(numY-j)*(h+sh), w, h)
 			region.y = th - (region.y + region.h) 
-            local frameName = string.format(_format,counter)
+            local frameName = string.format(_format,counter,ext)
             atlas:addRegion(frameName,region)
             counter = counter + 1
         end
