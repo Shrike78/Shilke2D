@@ -1,5 +1,4 @@
 
-
 --include Shilke2D lib
 require("Shilke2D/include")
 
@@ -15,34 +14,47 @@ function setup()
 	
     local shilke = Shilke2D.current
 	
-	--Stage is the base displayObjContainer of the scene. Everything need to be connected to the
-	--stage to be displayed. The stage is a particular displayObjContainer because it can't be 
-	--geometrically transformed.
+	--Stage is the base DisplayObjContainer of the scene. Everything need to be connected to the
+	--stage to be displayed.
 	local stage = shilke.stage 
 	
-	--if not set, the default color is (0,0,0)
 	stage:setBackgroundColor(128,128,128)
 	
-	--PlanetCute atlas is mounted at workingDir/"PlanetCute", that means "/Assets/PlanetCute"
+	--PlanetCute atlas is mounted at workingDir/"PlanetCute" (=> "/Assets/PlanetCute").
 	--All the resources of PlanetCute atlas will then be available as normal resources under the
-	--PlanetCute directory. If empty string is provided instead of "PlanetCute" all the resources
-	--became available in current working dir.
-	TextureManager.mountAtlas("PlanetCute", TexturePacker.loadSparrowFormat("PlanetCute/PlanetCute.xml"))
-    	
-	--We can now retrieve Character Boy.png without caring if it's a real texture or a
-	--atlas resource
+	--virtually mounted PlanetCute directory.
+	TextureManager.mountAtlas("PlanetCute", TexturePacker.loadSparrowFormat("PlanetCute/PlanetCute_optimized.xml"))
+	
+	--numbers atlas is mounted as workingDir/"numbers" (=> "/Assets/numbers").
+	--All the resources of numbers atlas will then be available as normal resources under the
+	--virtually mounted numbers directory.
+    TextureManager.mountAtlas("Numbers", TextureAtlas.fromTexture("numbers.png",32,32,0,0,"Number_",2))
+	
+	--It's now possible to get "Character Boy.png" texture as it was a real texture
 	local boyTexture = TextureManager.getTexture("PlanetCute/Character Boy.png") 
 	local boyImg = Image(boyTexture)
-	boyImg:setPosition(WIDTH/3,HEIGHT/2)
+	boyImg:setPosition(WIDTH/4,HEIGHT/2)
+	
+	--It's now possible to get "numbers_01.png" texture as it was a real texture	
+	local numberTexture = TextureManager.getTexture("Numbers/Number_01.png") 
+	local numberImg = Image(numberTexture)
+	numberImg:setPosition(2*WIDTH/4,HEIGHT/2)
 	
 	--moai.png is a real texture and can be retrieved by TextureManager.
-	--TextureManager redirects to Assets the load of the texure
-	local moaiTexture = TextureManager.getTexture("moai.png") 
+	--getTexture by default automatically registers unregistered textures.
+	--It's also possible to register a texture with a custom name and path
+	--using TextureManager.addTexture()
+	local moaiTexture = TextureManager.getTexture("Moai.png") 
 	local moaiImg = Image(moaiTexture)
-	moaiImg:setPosition(2*WIDTH/3,HEIGHT/2)
+	moaiImg:setPosition(3*WIDTH/4,HEIGHT/2)
 	
-	stage:addChild(boyImg)
+	for _,name in ipairs(TextureManager.getRegisteredNames()) do
+		print(name)
+	end
 	stage:addChild(moaiImg)
+	stage:addChild(boyImg)
+	stage:addChild(numberImg)
+
 end
 
 
