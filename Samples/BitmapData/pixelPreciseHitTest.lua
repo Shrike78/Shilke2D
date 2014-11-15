@@ -41,7 +41,7 @@ function onSpriteTouched(e)
 	local touch = e.touch
 	local sender = e.sender
 	local target = e.target
-	print(touch.state, sender, target)
+	
 	if touch.state == Touch.BEGAN then
 		--force to red to show that is currently 'attached'
 		target:setColor(255,0,0)
