@@ -546,11 +546,14 @@ function DisplayObjContainer:createFrameBufferImage(bUpdate,width,height)
 		self:destroyFrameBufferImage()
 	end
 	
-	local r = (width and height) and nil or self:getRect(__helperRect)
+	local width, height = width, height 
 	
-	local width = width or r.w + r.x 
-	local height = height or r.h + r.y
-	
+	if  not (width and height) then
+		local r = self:getRect(__helperRect)
+		width = r.w + r.x 
+		height = r.h + r.y
+	end
+		
 	--remove the parent of the children objs props
 	for _,o in ipairs(self._displayObjs) do
 		if not bUpdate then
@@ -559,7 +562,6 @@ function DisplayObjContainer:createFrameBufferImage(bUpdate,width,height)
 		o._prop:clearAttrLink(MOAITransform.INHERIT_TRANSFORM)
 		o._prop:forceUpdate()
 	end
-	
 	
 	local renderTexture = RenderTexture(width, height)
 	renderTexture:drawRenderTable(self._objRenderTable, bUpdate)
