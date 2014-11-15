@@ -35,29 +35,7 @@ local FPS = 60
 --the working dir of the application
 IO.setWorkingDir("Assets/PlanetCute")
 
-
---Handler for touch events
-function onSpriteTouched(e)
-	local touch = e.touch
-	local sender = e.sender
-	local target = e.target
-	
-	if touch.state == Touch.BEGAN then
-		--force to red to show that is currently 'attached'
-		target:setColor(255,0,0)
-	
-	--if touch state is ENDED or CANCELLED, reset color
-	elseif touch.state ~= Touch.MOVING then
-		sender:setColor(255,255,255)
-	
-	--if target sender differs, it means that the event was sent due to a moving event
-	--from inside an object (sender) to outside the object (so the target is nil), so
-	--reset the color of the sender
-	elseif target ~= sender then
-		sender:setColor(255,255,255)
-	end
-end
-
+local boyImg, girlImg
 
 --Setup is called once at the beginning of the application, just after Shilke2D initialization phase
 --here everything should be set up for the following execution
@@ -86,7 +64,7 @@ function setup()
 	--Retrieve "Character Boy.png" subtexture
 	local boyTxt = atlas:getTexture("Character Boy.png") 
 	--Create an Image on boyTxt width default pivot (center position)
-	local boyImg = Image(boyTxt)
+	boyImg = Image(boyTxt)
 	boyImg:setPosition(WIDTH/3,2*HEIGHT/3)
 	--Register an event listener for the touch event.
 	boyImg:addEventListener(Event.TOUCH,onSpriteTouched)
@@ -95,7 +73,7 @@ function setup()
 	--Retrieve "Character Cat Girl.png" subtexture
 	local girlTxt = atlas:getTexture("Character Cat Girl.png") 
 	--Create an Image on girlTxt width default pivot (center position)
-	local girlImg = Image(girlTxt)
+	girlImg = Image(girlTxt)
 	girlImg:setPosition(2*WIDTH/3,2*HEIGHT/3)
 	
 	girlImg:addEventListener(Event.TOUCH,onSpriteTouched)
@@ -121,18 +99,41 @@ function setup()
 		PivotMode.TOP_LEFT)
 	info:setPosition(20,40)
 	
-	function updateImages(e)
-		if e.touch.state == Touch.BEGAN then
-			boyImg:setScale(math.random()*2,math.random()*2)
-			boyImg:setRotation(math.random(-math.pi, math.pi))
-			girlImg:setScale(math.random()*2,math.random()*2)
-			girlImg:setRotation(math.random()*2*math.pi)
-		end
-	end
-	info:addEventListener(Event.TOUCH, updateImages)
+	info:addEventListener(Event.TOUCH, onInfoTouched)
 	stage:addChild(info)
 end
 
+
+function onInfoTouched(e)
+	if e.touch.state == Touch.BEGAN then
+		boyImg:setScale(math.random()*2,math.random()*2)
+		boyImg:setRotation(math.random(-math.pi, math.pi))
+		girlImg:setScale(math.random()*2,math.random()*2)
+		girlImg:setRotation(math.random()*2*math.pi)
+	end
+end
+
+--Handler for touch events
+function onSpriteTouched(e)
+	local touch = e.touch
+	local sender = e.sender
+	local target = e.target
+	
+	if touch.state == Touch.BEGAN then
+		--force to red to show that is currently 'attached'
+		target:setColor(255,0,0)
+	
+	--if touch state is ENDED or CANCELLED, reset color
+	elseif touch.state ~= Touch.MOVING then
+		sender:setColor(255,255,255)
+	
+	--if target sender differs, it means that the event was sent due to a moving event
+	--from inside an object (sender) to outside the object (so the target is nil), so
+	--reset the color of the sender
+	elseif target ~= sender then
+		sender:setColor(255,255,255)
+	end
+end
 
 
 --shilke2D initialization. it requires width, height and fps. Optional a scale value for x / y.
