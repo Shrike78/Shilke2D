@@ -72,7 +72,7 @@ function setup()
 	stage:addChild(girlImg)
 	
 	--setting framed to false would lead to higher memory usage (larger bitmaps) and
-	--worste performances (more pixel to test)
+	--worst performances (more pixel to test)
 	local framed = true
 	--Create two smaller framed MOAIImages and release larger planetCuteBmp
 	local boyBmp, boyFrame = BitmapData.cloneRegion(planetCuteBmp, boyTxt, framed)
@@ -106,13 +106,14 @@ function update(elapsedTime)
 	local bx,by = boyImg:getPosition()
 	local gx,gy = girlImg:getPosition()
 	local bCollision = false
+	--get the required infos directly from images
 	local _, boyBmp, boyRegion = boyImg:getPixelHitTestParams()
 	local _, girlBmp, girlRegion = boyImg:getPixelHitTestParams()
 	--the method accepts a position and an alpha treshold for the first texture and a second texture with
 	--its position and alpha level.
 	bCollision = BitmapData.hitTestEx(boyBmp, bx, by, ALPHALEVEL, girlBmp, gx, gy, ALPHALEVEL, boyFrame, girlFrame, 2)
 	hitTestText = "hitTest"
-	
+	--update test result message
 	collisionInfo:setText("hitTest = " .. tostring(bCollision))
 end
 
@@ -129,16 +130,18 @@ function onSpriteTouched(e)
 		Shilke2D.current:startDrag(touch,target)
 		--force to red to show that is currently 'attached'
 		target:setColor(255,128,128)
+		
 	elseif touch.state == Touch.MOVING then
 		--check if the target exists: the sender notifies moving events the start inside it even if the 
 		--move ending point is outside it, and so the target it's different or nil.
-		--If it exists and it's the same currently "dragged" by Shilke, then translate it
+		--If it exists and it's the same currently "dragged" by Shilke2D, then translate it
 		if target and target == Shilke2D.current:getDraggedObj(touch) then
 			--Global Translate allows to translate an obj based on stage coordinates.
 			target:globalTranslate(touch.deltaX,touch.deltaY)
 		end
+	
 	else
-		--reset to neutral color
+		--end of Touch event, reset to neutral color
 		target:setColor(255,255,255)
 	end
 end
