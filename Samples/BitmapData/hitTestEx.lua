@@ -1,6 +1,8 @@
 --[[
 The sample shows the usage of BitmapData hitTest/hitTestEx.
 
+To better show collisions the viewport is scaled by a factor 2 in both directions.
+
 This functions allow to make a per pixel hit test of two MOAIImages 
 (the extended version support also BitampRegions) given their relative
 position and a minimum alpha level (per image) used to identify transparent 
