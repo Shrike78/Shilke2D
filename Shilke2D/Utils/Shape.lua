@@ -168,17 +168,18 @@ end
 --@treturn Rect. if the intersection is nil it returns a defaul 
 ---Rect with each component at 0
 function Rect:intersection(r2, helperRect)
-	local res = nil
-    if int_rect2rect(self,r2) then
-		res = helperRect or Rect()
-        res.x = math.max(r2.x,self.x)
-        res.y = math.max(r2.y,self.y)
-        local x2 = math.min(r2.x + r2.w,self.x + self.w)
-        local y2 = math.min(r2.y + r2.h,self.y + self.h)
-        res.w = x2 - res.x
-        res.h = y2 - res.y
-    end
-    return  res
+	res = helperRect or Rect()
+	if int_rect2rect(self,r2) then
+		res.x = math.max(r2.x,self.x)
+		res.y = math.max(r2.y,self.y)
+		local x2 = math.min(r2.x + r2.w,self.x + self.w)
+		local y2 = math.min(r2.y + r2.h,self.y + self.h)
+		res.w = x2 - res.x
+		res.h = y2 - res.y
+	else
+		res:set(0,0,0,0)
+	end
+	return  res
 end
 
 ---Wraps the MOAIDraw.drawRect call
