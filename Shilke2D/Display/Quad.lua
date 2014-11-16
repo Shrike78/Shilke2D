@@ -15,6 +15,9 @@ and the vertices follow counter clockwise order.
 --basic math function calls
 local INV_255 = 1/255
 
+--default quad shader, created first time a quad is created
+local _quad_shader = nil
+
 Quad = class(BaseQuad)
 
 ---Quad are drawn using a pixel shader so it's necessary to have
@@ -42,6 +45,18 @@ function Quad:init(width,height,pivotMode)
 	self._prop:setDeck(self._mesh)
 end
 
+
+---override default quad shader
+--@tparam MOAIShader shader
+function Quad:setShader(shader)
+	if shader then
+		self._prop:setShader(shader)
+	else
+		self._prop:setShader(_quad_shader)
+	end
+end
+
+
 ---Inner method. It creates the quad mesh that will be displayed
 function Quad:_createMesh()
 		
@@ -56,20 +71,20 @@ function Quad:_createMesh()
 	self._mesh = MOAIMesh.new ()
 	self._mesh:setVertexBuffer ( self._vbo )
 	self._mesh:setPrimType ( MOAIMesh.GL_TRIANGLE_FAN )
+	if not _quad_shader then
+		_quad_shader = MOAIShader.new ()
+		local vsh = IO.getFile("/Shilke2D/Resources/quad.vsh")
+		local fsh = IO.getFile("/Shilke2D/Resources/quad.fsh")
+		_quad_shader:reserveUniforms(2)
+		_quad_shader:declareUniform(1, 'transform', MOAIShader.UNIFORM_WORLD_VIEW_PROJ )
+		_quad_shader:declareUniform(2, 'ucolor', MOAIShader.UNIFORM_PEN_COLOR )
 
-	local shader = MOAIShader.new ()
-	local vsh = IO.getFile("/Shilke2D/Resources/quad.vsh")
-	local fsh = IO.getFile("/Shilke2D/Resources/quad.fsh")
-
-	shader:reserveUniforms(2)
-	shader:declareUniform(1, 'transform', MOAIShader.UNIFORM_WORLD_VIEW_PROJ )
-	shader:declareUniform(2, 'ucolor', MOAIShader.UNIFORM_PEN_COLOR )
-
-	shader:setVertexAttribute ( 1, 'position' )
-	shader:setVertexAttribute ( 2, 'color' )
-	shader:load ( vsh, fsh )
-
-	self._mesh:setShader(shader)
+		_quad_shader:setVertexAttribute ( 1, 'position' )
+		_quad_shader:setVertexAttribute ( 2, 'color' )
+		_quad_shader:load ( vsh, fsh )
+	end
+	
+	self._mesh:setShader(_quad_shader)
 end
 
 ---Inner methods. 
@@ -187,21 +202,16 @@ function Quad:getVertexAlpha(v)
    return self._colors[v][4]*255
 end
 
+
 --[[---
-Override base method. It calls _updateVertexBuffer
-The following calls are valid:
-- setColor(r,g,b)
-- setColor(r,g,b,a)
-- setColor("#FFFFFF")
-- setColor("#FFFFFFFF")
-- setColor(Color)
-@param r red value [0,255] or a Color or hex string
-@param g green value [0,255] or nil
-@param b blue value [0,255] or nil
-@param a alpha value [0,255] or nil
+Set obj color.
+@param r (0,255) value or Color object or hex string or int32 color
+@param g (0,255) value or nil
+@param b (0,255) value or nil
+@param a[opt=nil] (0,255) value or nil
 --]]
 function Quad:setColor(r,g,b,a)
-	local r,g,b,a = Color._paramConversion(r,g,b,a,self._colors[1][4])	
+	local r,g,b,a = Color._toNormalizedRGBA(r,g,b,a)	
 	for i = 1,4 do
 		self._colors[i][1] = r
 		self._colors[i][2] = g
@@ -219,22 +229,16 @@ function Quad:getColor()
 end
 
 --[[---
-Set color of a single vertex
-The following calls are valid:
-- setVertexColor(v,r,g,b)
-- setVertexColor(v,r,g,b,a)
-- setVertexColor(v,"#FFFFFF")
-- setVertexColor(v,"#FFFFFFFF")
-- setVertexColor(v,Color)
-@param v index of the vertex [1,4]
-@param r red value [0,255] or a Color
-@param g green value [0,255] or nil
-@param b blue value [0,255] or nil
-@param a alpha value [0,255] or nil
+Set vertex color.
+@tparam int v vertex index (1,4)
+@param r (0,255) value or Color object or hex string or int32 color
+@param g (0,255) value or nil
+@param b (0,255) value or nil
+@param a[opt=nil] (0,255) value or nil
 --]]
 function Quad:setVertexColor(v,r,g,b,a) 
 	local c = self._colors[v]
-	c[1], c[2], c[3], c[4] = Color._paramConversion(r,g,b,a,c[4])
+	c[1], c[2], c[3], c[4] = Color._toNormalizedRGBA(r,g,b,a)
 	self:_updateVertexBuffer()
 end
 

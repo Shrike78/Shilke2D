@@ -29,7 +29,7 @@ function Stage:init(viewport)
 
     self._debugProp = MOAIProp.new ()
     self._debugProp:setDeck ( self._debugDeck )
-    self._bkgColor = Color(0,0,0,1)
+    self._bkgColor = {0,0,0,1}
     self._rt = {self._renderTable}
 end
 
@@ -39,8 +39,8 @@ function Stage:_createProp()
 end
 
 ---Debug function. Used to show bounding box while rendering.
---@param showOrientedBounds boolean. if nil is set to true
---@param showAABounds boolean. if nil is set to false
+--@tparam[opt=true] bool showOrientedBounds
+--@tparam[opt=false] bool showAABounds boolean
 function Stage:showDebugLines(showOrientedBounds,showAABounds)
 	self._showOrientedBounds = showOrientedBounds ~= nil and showOrientedBounds or true
 	self._showAABounds = showAABounds ~= nil and showAABounds or false
@@ -59,10 +59,10 @@ end
 Inner method.
 With moai 1.4 clearColor function has been moved to frameBuffer and removed from GfxDevice.
 The call checks which method is available and make the proper moai call.
-@param r red component [0..1]
-@param g green component [0..1]
-@param b blue component [0..1]
-@param a alpha component [0..1]
+@tparam number r (0,1)
+@tparam number g (0,1)
+@tparam number b (0,1)
+@tparam number a (0,1)
 --]]
 local function __setClearColor(r,g,b,a)
 	if MOAIGfxDevice.getFrameBuffer then
@@ -72,32 +72,27 @@ local function __setClearColor(r,g,b,a)
 	end
 end
 
+
 --[[---
 Set background color.
-@param r red component [0..255] or Color
-@param g green component [0..255] or nil
-@param b blue component [0..255] or nil
+@param r (0,255) value or Color object or hex string or int32 color
+@param g (0,255) value or nil
+@param b (0,255) value or nil
+@param a[opt=nil] (0,255) value or nil
 --]]
-function Stage:setBackgroundColor(r,g,b)
-	if class_type(r) == Color then
-		__setClearColor(r:unpack_normalized())
-		self._bkgColor.r = r.r
-		self._bkgColor.g = r.g
-		self._bkgColor.b = r.b
-	else
-		__setClearColor(r/255,g/255,b/255,1)
-		self._bkgColor.r = r
-		self._bkgColor.g = g
-		self._bkgColor.b = b
-	end
+function Stage:setBackgroundColor(r,g,b,a)
+	local r,g,b,a = Color._toNormalizedRGBA(r,g,b,a)
+	local c = self._bkgColor
+	c[1],c[2],c[3],c[4] = r,g,b,a
+	__setClearColor(r,g,b,a)
 end
 
 --[[---
 Get background color.
-@return Color currently set background color
+@treturn Color
 --]]
 function Stage:getBackgroundColor()
-	return self._bkgColor
+	return Color.fromNormalizedValues(unpack(self._bkgColor))
 end
 
 

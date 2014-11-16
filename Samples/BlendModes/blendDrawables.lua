@@ -14,10 +14,10 @@ local infoTxt
 local fgLayer
 
 
-local QuadDrawObj = class(DrawableObject)
+local QuadDrawObj = class(DrawableObj)
 
 function QuadDrawObj:init(w,h,color)
-	DrawableObject.init(self)
+	DrawableObj.init(self)
 	self._w = w
 	self._h = h
 	self._c = color
@@ -31,7 +31,7 @@ end
 
 function QuadDrawObj:_innerDraw()
 	self:setPenColor(self._c)
-	MOAIDraw.fillRect(0,0,self._w,self._h)
+	Graphics.fillRect(0,0,self._w,self._h)
 end
 
 function createSample(bkgLayer, fgLayer, color, pma, description, pivotMode, posX, posY)

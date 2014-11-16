@@ -14,16 +14,18 @@ TexturePacker = {}
 Load an xml file and automatically calls parseSparrowFormat and returns a texture atlas.
 It expects to have the referred image in a relative path to xml file location 
 @param xmlFileName the path of the Sparrow/Starling xml descriptor
+@tparam[opt=nil] Texture texture it's possible to provide an already created texture to the method,
+avoiding the load (or even for using an alternative image)
 @return TextureAtlas
 @return err nil or error string if loading failed
 --]]
-function TexturePacker.loadSparrowFormat(xmlFileName)
+function TexturePacker.loadSparrowFormat(xmlFileName,texture)
 	local dir = string.getFileDir(xmlFileName)
 	local atlasXml, err = XmlNode.fromFile(xmlFileName)
 	if not atlasXml then
 		return nil, err
 	end
-	return TexturePacker.parseSparrowFormat(atlasXml,dir)
+	return TexturePacker.parseSparrowFormat(atlasXml,dir,texture)
 end
 
 --[[---
@@ -41,11 +43,12 @@ NB: in Starling format subtexture's names are without original image extension.
 By design choice, the name of each subtexture once loaded append as extension the 
 extension of the atlas resource.
 
-@param atlasXml the xml with the atlas descriptor in Sparrow/Starling format
-@param dir by default texture resources are loaded from working directory. 
+@tparam XmlNode atlasXml the xml with the atlas descriptor in Sparrow/Starling format
+@tparam[opt=nil] string dir by default texture resources are loaded from working directory. 
 If dir is provided it load the image referred by atlasXml from dir
-@param texture it's possible to provide an already created texture to the method,
+@tparam[opt=nil] Texture texture it's possible to provide an already created texture to the method,
 avoiding the load (or even for using an alternative image)
+@treturn TextureAtlas
 --]]
 function TexturePacker.parseSparrowFormat(atlasXml, dir, texture)
 	
@@ -69,35 +72,48 @@ function TexturePacker.parseSparrowFormat(atlasXml, dir, texture)
 		--be aligned to all the other atlas format and moreover to be transparent
 		--when loading a texture using TextureManager
         local name = subTex:getAttribute("name") .. extension
-        --divide for width/height to have a [0..1] range
-        local x = subTex:getAttributeAsNumber("x") / texture.width
-        local y = subTex:getAttributeAsNumber("y") / texture.height
-        local w = subTex:getAttributeAsNumber("width") / texture.width
-        local h = subTex:getAttributeAsNumber("height") / texture.height
-        local rotated = subTex:getAttributeAsBool("rotated", false)
-        --Sparrow/Starling work with (0,0) as top left
+	    local rotated = subTex:getAttributeAsBool("rotated") ~= nil
+        local trimmed = subTex:getAttribute("frameX") ~= nil
+		
+        local x = subTex:getAttributeAsNumber("x")
+        local y = subTex:getAttributeAsNumber("y")
+        local w = subTex:getAttributeAsNumber("width")
+        local h = subTex:getAttributeAsNumber("height")
+		--Sparrow/Starling work with (0,0) as top left
         local region = Rect(x, y, w, h)
-        atlas:addRegion(name,region, rotated)
+		
+		local frame = nil
+		if trimmed then
+			--sparrow format uses inverse logic for frameX, frameY
+			local frameX = -subTex:getAttributeAsNumber("frameX")
+			local frameY = -subTex:getAttributeAsNumber("frameY")
+			local frameW = subTex:getAttributeAsNumber("frameWidth")
+			local frameH = subTex:getAttributeAsNumber("frameHeight")
+			frame = Rect(frameX,frameY,frameW,frameH)
+        end
+		
+        atlas:addRegion(name,region,rotated,frame)
     end
 	
     return atlas
 end
 
-
 --[[---
 Load a lua file and automatically calls parseMoaiFormat and returns a texture atlas
 It expects to have the referred image in a relative path to xml file location 
 @param luaFileName the path of the MOAI lua descriptor
+@tparam[opt=nil] Texture texture it's possible to provide an already created texture to the method,
+avoiding the load (or even for using an alternative image)
 @return TextureAtlas
 @return err nil or error string if loading failed
 --]]
-function TexturePacker.loadMoaiFormat(luaFileName)
+function TexturePacker.loadMoaiFormat(luaFileName,texture)
 	local dir = string.getFileDir(luaFileName)
 	local atlasDescriptor, err = IO.dofile(luaFileName)
 	if not atlasDescriptor then
 		return nil, err
 	end
-	return TexturePacker.parseMoaiFormat(atlasDescriptor, dir)
+	return TexturePacker.parseMoaiFormat(atlasDescriptor, dir, texture)
 end
 
 
@@ -106,14 +122,15 @@ Parser for the MOAI lua descriptor
 The descriptor must be a lua table with MOAI texture packer export info
 
 @param descriptor the lua table with the atlas descriptor in MOAI format
-@param dir by default texture resources are loaded from working directory. 
-If dir is provided it load the image referred by atlasXml from dir
-@param texture it's possible to provide an already created texture to the method,
+@tparam[opt=nil] string dir by default texture resources are loaded from working directory. 
+If dir is provided it load the image referred by descriptor from dir
+@tparam[opt=nil] Texture texture it's possible to provide an already created texture to the method,
 avoiding the load (or even for using an alternative image)
 --]]
 function TexturePacker.parseMoaiFormat(descriptor, dir, texture)
     
 	local texture = texture
+	
 	if not texture then
 		local dir = dir or ""
 		if dir ~= "" then
@@ -126,51 +143,32 @@ function TexturePacker.parseMoaiFormat(descriptor, dir, texture)
 	local atlas = TextureAtlas(texture)
 
 	for _,subTex in pairs(descriptor.frames) do
-		local x = subTex.uvRect.u0
-		local y = subTex.uvRect.v0
-		local w = subTex.uvRect.u1 - x
-		local h = subTex.uvRect.v1 - y
+	
 		local rotated = subTex.textureRotated
+		local trimmed = subTex.spriteTrimmed
+		
+		local w,h
+		if not rotated then
+			w = subTex.spriteColorRect.width
+			h = subTex.spriteColorRect.height
+		else
+			h = subTex.spriteColorRect.width
+			w = subTex.spriteColorRect.height
+		end
+		local x = subTex.uvRect.u0 * w / (subTex.uvRect.u1 - subTex.uvRect.u0)
+		local y = subTex.uvRect.v0 * h / (subTex.uvRect.v1 - subTex.uvRect.v0)
+		
 		local region = Rect(x, y, w, h)
-		atlas:addRegion(subTex.name, region, rotated)
+		
+		local frame = nil
+		if trimmed then
+			local frameX = subTex.spriteColorRect.x
+			local frameY = subTex.spriteColorRect.y
+			local frameW = subTex.spriteSourceSize.width
+			local frameH = subTex.spriteSourceSize.height
+			frame = Rect(frameX,frameY,frameW,frameH)
+		end
+		atlas:addRegion(subTex.name, region, rotated, frame)
 	end
 	return atlas
-end
-
---[[---
-Load a lua file and automatically calls parseCoronaFormat and returns a texture atlas
-It expects to have the referred image in a relative path to xml file location 
-@param luaFileName the path of the Corona lua descriptor
-@return TextureAtlas
-@return err nil or error string if loading failed
---]]
-function TexturePacker.loadCoronaFormat(luaFileName)
-	local dir = string.getFileDir(luaFileName)
-	local atlasDescriptor, err = IO.dofile(luaFileName)
-	if not atlasDescriptor then
-		return nil, err
-	end
-	return TexturePacker.parseCoronaFormat(atlasDescriptor, dir)
-end
-
---[[---
-Parser for the Corona lua descriptor
-The descriptor must be a lua table with Corona texture packer export info
-
-@param descriptor the lua table with the atlas descriptor in Corona format
-@param texture it's necessary to provide an already created texture to the method
---]]
-function TexturePacker.parseCoronaFormat(descriptor,texture)
-	local atlas = TextureAtlas(texture)
-    for _,subTex in pairs(descriptor.frames) do
-        local x = subTex.textureRect.x / texture.width
-        local y = subTex.textureRect.y / texture.height
-        local w = subTex.textureRect.width / texture.width
-        local h = subTex.textureRect.height / texture.height
-        
-        --Sparrow/Starling work with (0,0) as top left
-        local region = Rect(x, y, w, h)
-        atlas:addRegion(subTex.name,region)
-    end
-    return atlas
 end

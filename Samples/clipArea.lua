@@ -1,9 +1,16 @@
+--[[
+DisplayObjContainers uses RenderTexture in "continuous update" mode to 
+support clip areas.
+
+A clip area is defined as a rectangle over the display obj container, 
+and it's obtained rendering each frame the container content over a
+rendertexture of clip area size, and displaying an image in place of
+container content.
+
+--]]
+
 -- uncomment to debug touch and keyboard callbacks. works with Mobdebug
 --__DEBUG_CALLBACKS__ = true
-
---By default (0,0) is topleft point and y is from top to bottom. Defining this allows to 
---set (0,0) as bottomleft point and having y from bottom to top.
---__USE_SIMULATION_COORDS__ = true
 
 --include Shilke2D lib
 require("Shilke2D/include")
@@ -33,8 +40,10 @@ function setup()
 	--show as overlay fps and memory allocation
 	shilke:showStats(true,true)
 		
-	--Set a "moai.png" image as background at full screen
-	local moaiImg = Image(Assets.getTexture("moai.png"))
+	--Set a "moai.png" image as background, scaled to fit full screen
+	local moaiTxt = Texture.fromFile("moai.png")
+	moaiTxt:setFilter(Texture.GL_LINEAR)
+	local moaiImg = Image(moaiTxt)
 	moaiImg:setScale(WIDTH / moaiImg:getWidth(), HEIGHT / moaiImg:getHeight())
 	moaiImg:setPosition(WIDTH/2, HEIGHT/2)
 	stage:addChild(moaiImg)
@@ -44,7 +53,8 @@ function setup()
 	local textures = atlas:getTextures("Character")
 	
 	--Create the displayContainer that will be clipped. 
-	--It's centered with the middle point of clip area in center of screen adn rotated of 45°
+	--It's centered with the middle point of clip area in center of screen and rotated of 45°
+	--so to better show the clip result
 	display = DisplayObjContainer()
 	display:setPivot(clipW/2,clipH/2)
 	display:setPosition(WIDTH/2,HEIGHT/2)
@@ -85,10 +95,6 @@ function setup()
 	--to be called for every touch.
 	stage:setTouchable(false)
 	
-end
-
---update is called once per frame and allows to logically update status of objects
-function update(elapsedTime)
 end
 
 

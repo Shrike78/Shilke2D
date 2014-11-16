@@ -57,6 +57,8 @@ end
 
 
 require("Shilke2D/Utils/ClassEx")
+require("Shilke2D/Utils/Shape")
+require("Shilke2D/Utils/BitmapRegion")
 require("Shilke2D/Utils/BitmapData")
 require("Shilke2D/Utils/Callbacks")
 require("Shilke2D/Utils/IO")
@@ -68,12 +70,11 @@ require("Shilke2D/Utils/BitOp")
 require("Shilke2D/Utils/Math")
 require("Shilke2D/Utils/Vector")
 require("Shilke2D/Utils/Color")
-require("Shilke2D/Utils/Shape")
+require("Shilke2D/Utils/Graphics")
 require("Shilke2D/Utils/String")
 require("Shilke2D/Utils/Table")
 require("Shilke2D/Utils/XmlNode")
 require("Shilke2D/Utils/IniParser")
-require("Shilke2D/Utils/CollisionKit")
 require("Shilke2D/Utils/Sound")
 require("Shilke2D/Utils/PerformanceTimer")
 
@@ -104,15 +105,17 @@ require("Shilke2D/Display/Image")
 require("Shilke2D/Display/MovieClip")
 require("Shilke2D/Display/TextField")
 require("Shilke2D/Display/Button")
-require("Shilke2D/Display/DrawableObject")
+require("Shilke2D/Display/DrawableObj")
 --included here because it requires DisplayObjContainer
 require("Shilke2D/Core/Stats")
 
 --Shilke2D/Texture
 require("Shilke2D/Texture/Texture")
 require("Shilke2D/Texture/SubTexture")
+require("Shilke2D/Texture/RenderTexture")
+require("Shilke2D/Texture/ITextureAtlas")
 require("Shilke2D/Texture/TextureAtlas")
-require("Shilke2D/Texture/BigTextureAtlas")
+require("Shilke2D/Texture/TextureAtlasComposer")
 require("Shilke2D/Texture/TexturePacker")
 require("Shilke2D/Texture/TextureManager")
 

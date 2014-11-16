@@ -217,7 +217,7 @@ end
 Remove an obj from children list.
 if the object is not a child do nothing
 @param obj the obj to be removed
-@param dispose if to dispose after removal
+@bool[opt=false] dispose if to dispose after removal
 @return the obj if removed, nil if the obj is not a child
 --]]
 function DisplayObjContainer:removeChild(obj,dispose)
@@ -259,7 +259,7 @@ end
 
 ---Remove a child at a given position
 --@param index the position of the obj to be removed
---@param dispose boolean, if to dispose the obj after removal
+--@bool[opt=false] dispose boolean, if to dispose the obj after removal
 --@return the obj if the index is valid or nil
 function DisplayObjContainer:removeChildAt(index,dispose)
     local obj = self._displayObjs[index]
@@ -546,86 +546,43 @@ function DisplayObjContainer:createFrameBufferImage(bUpdate,width,height)
 		self:destroyFrameBufferImage()
 	end
 	
-	local r = (width and height) and nil or self:getRect(self._parent,__helperRect)
+	local width, height = width, height 
 	
-	local width = width or r.w + r.x 
-	local height = height or r.h + r.y
-	
-	local MAX_TEXTURE_WIDTH = 2048
-	local MAX_TEXTURE_HEIGHT = MAX_TEXTURE_WIDTH
-	
-	width = math.min(width,MAX_TEXTURE_WIDTH)
-	height = math.min(height,MAX_TEXTURE_HEIGHT)
-	
-	--1) create a new viewport with current displayObjContainer width / height
-	local viewport = MOAIViewport.new()
-	if __USE_SIMULATION_COORDS__ then
-		viewport:setScale(width, -height)
-		viewport:setSize(width, height)
-		viewport:setOffset(-1, 1)
-	else
-		viewport:setScale(width, height)
-		viewport:setSize(width, height)
-		viewport:setOffset(-1, -1)
+	if  not (width and height) then
+		local r = self:getRect(__helperRect)
+		width = r.w + r.x 
+		height = r.h + r.y
 	end
-	
-	--2) create a new layer for viewport and 'subscene' management
-	local layer = MOAILayer.new()
-	layer:setViewport(viewport)
-	
-	--3)remove the parent of the children objs props
+		
+	--remove the parent of the children objs props
 	for _,o in ipairs(self._displayObjs) do
-		o._prop:setParent(nil)
+		if not bUpdate then
+			o._prop:clearAttrLink(MOAIColor.INHERIT_COLOR)
+		end
+		o._prop:clearAttrLink(MOAITransform.INHERIT_TRANSFORM)
 		o._prop:forceUpdate()
 	end
 	
-	--4) create the framebuffer with its specific rendertable
-	local frameBuffer = MOAIFrameBufferTexture.new ()
+	local renderTexture = RenderTexture(width, height)
+	renderTexture:drawRenderTable(self._objRenderTable, bUpdate)
 	
-	if not bUpdate then
-	--4a)Flatten the displayObj to a single img that logic is very similar to a 
-	--Teture.fromDisplayObj() logic... and it's similar to starling 'flatten'
-	--After the first frame the frameBuffer is removed from rendermgr buffer table
-	--so no more updated. Moreover the display render list of the container is not updated
-	--and that means that from now on an optimzed img will be rendered instead of a whole 
-	--displaylist
-		local sd = MOAIScriptDeck.new()
-		local sdp = MOAIProp.new()
-		sdp:setDeck(sd)
-		sd:setDrawCallback(function()
-				table.removeObj(Shilke2D.__frameBufferTables,frameBuffer)
-				MOAIRenderMgr.setBufferTable (Shilke2D.__frameBufferTables)
-			end
-		)
-		frameBuffer:setRenderTable ({layer,self._objRenderTable,sdp})
-	else
-	--4b)If the call is instead meant for a 'scissor' extended logic or for an image for shaders
-	--then the frameBuffer will be updated each frame
-		frameBuffer:setRenderTable ({layer,self._objRenderTable})
-	end
-	frameBuffer:init( width, height )
-	--the clear color is set to transparent color
-	frameBuffer:setClearColor ( 0, 0, 0, 0 )
-	
-	--5)update global __frameBufferTables and enable rendering of this frameBuffer
-	table.insert(Shilke2D.__frameBufferTables,frameBuffer)
-	MOAIRenderMgr.setBufferTable (Shilke2D.__frameBufferTables)
-	
-	--6)Create an image with correct coorindate system to handle onscreen rendering
+	-- Create an image with correct coorindate system to handle onscreen rendering
 	local pivotMode = __USE_SIMULATION_COORDS__ == true and PivotMode.BOTTOM_LEFT	or PivotMode.TOP_LEFT 
-	local frameBufferImg = Image(Texture(frameBuffer),pivotMode)
+	local frameBufferImg = Image(renderTexture, pivotMode)
 	
-	--6)bind this new image (just as prop) to the current layer
-	frameBufferImg._prop:setParent(self._prop)
+	-- bind this new image (just as prop) to the current layer
+	if not bUpdate then
+		frameBufferImg._prop:setAttrLink(MOAIColor.INHERIT_COLOR, self._prop, MOAIColor.COLOR_TRAIT)	
+	end
+	frameBufferImg._prop:setAttrLink(MOAITransform.INHERIT_TRANSFORM, self._prop, MOAITransform.TRANSFORM_TRAIT)	
 	frameBufferImg._prop:forceUpdate()
-		
-	--7)replace the img to the renderTable
+	
+	-- replace the img to the renderTable
 	if self._renderTable[2] then
 		self._renderTable[2] = frameBufferImg._prop
 	end
 	
 	self._frameBufferData = {
-		layer = layer,
 		frameBufferImg = frameBufferImg,
 		isFlattened = not bUpdate
 	}
@@ -641,25 +598,22 @@ function DisplayObjContainer:destroyFrameBufferImage()
 		if self._renderTable[2] then
 			self._renderTable[2] = self._objRenderTable
 		end
+	
+		local bFlattened = self._frameBufferData.isFlattened
 		
 		for _,o in ipairs(self._displayObjs) do
-			o._prop:setParent(nil)
-			o._prop:setParent(self._prop)
+			if bFlattened then
+				o._prop:setAttrLink(MOAIColor.INHERIT_COLOR, self._prop, MOAIColor.COLOR_TRAIT)
+			end
+			o._prop:setAttrLink(MOAITransform.INHERIT_TRANSFORM, self._prop, MOAITransform.TRANSFORM_TRAIT)
 			o._prop:forceUpdate()
 		end
 		
-		local layer 			= self._frameBufferData.layer
 		local frameBufferImg 	= self._frameBufferData.frameBufferImg
 		local frameBufferTxt 	= frameBufferImg.texture
-		local frameBuffer 		= frameBufferTxt.srcData
 	
-		local fb = table.removeObj(Shilke2D.__frameBufferTables, frameBuffer)
-		MOAIRenderMgr.setBufferTable (Shilke2D.__frameBufferTables)
-		
-		frameBuffer:setRenderTable(nil)
 		frameBufferImg:dispose()
 		frameBufferTxt:dispose()
-		layer:clear()
 		
 		self._frameBufferData = nil
 	end

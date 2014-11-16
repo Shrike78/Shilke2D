@@ -163,12 +163,14 @@ function Rect:intersects(s2)
 end
 
 ---Returns the intersection area between two rects
---@param r2 the second rect
---@return Rect. if the intersection is nil it returns a defaul 
+--@tparam Rect r2 the second rect
+--@tparam[opt=nil] Rect helperRect if provided is filled and used as return object
+--@treturn Rect. if the intersection is nil it returns a defaul 
 ---Rect with each component at 0
-function Rect:intersection(r2)
-    res = Rect()
+function Rect:intersection(r2, helperRect)
+	local res = nil
     if int_rect2rect(self,r2) then
+		res = helperRect or Rect()
         res.x = math.max(r2.x,self.x)
         res.y = math.max(r2.y,self.y)
         local x2 = math.min(r2.x + r2.w,self.x + self.w)

@@ -52,7 +52,7 @@ end
 
 ---seek animation of color value. it accepts only Color, not rgb
 function DisplayObjTweener.seekColor(obj,c,time,transition)
-	return DisplayObjTweener.seekProp(obj,obj.setColor,obj.getColor,c,time,transition)
+	return DisplayObjTweener.seekProp(obj,obj.setColor,obj.getColor,Color(c),time,transition)
 end
 
 ---move animation of color value. it accepts only Color, not rgb
@@ -61,7 +61,7 @@ end
 --@param time duration of the animation
 --@param transition type of transition. default is LINEAR
 function DisplayObjTweener.moveColor(obj,c,time,transition)
-	return DisplayObjTweener.moveProp(obj,obj.setColor,obj.getColor,c,time,transition)
+	return DisplayObjTweener.moveProp(obj,obj.setColor,obj.getColor,Color(c),time,transition)
 end
 
 

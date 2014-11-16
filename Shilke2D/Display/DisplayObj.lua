@@ -126,9 +126,6 @@ function DisplayObj:init()
 	self._useMultiplyColor = self.__defaultUseMultiplyColor
 	self._premultipliedAlpha = self.__defaultHasPremultipliedAlpha
 	
-	self._blendEquation = BlendEquation.GL_FUNC_ADD
-	self._blendSrcFactor = BlendFactor.GL_ONE
-	self._blendDstFactor = BlendFactor.GL_ONE_MINUS_SRC_ALPHA
 	if not self._premultipliedAlpha then
 		self:setBlendMode(BlendMode.NORMAL)
 	end
@@ -150,7 +147,8 @@ end
 
 ---create a MOAI prop that the current DisplayObj is going to wrap.
 --Generic displayObjs create generic MOAIProps. If a specific prop is needed
---just override this method for specific DisplayObj class. 
+--just override this method for specific DisplayObj class.
+--@treturn MOAIProp
 function DisplayObj:_createProp()
     return MOAIProp.new()
 end
@@ -174,19 +172,20 @@ function DisplayObj:dbgInfo(recursive)
 end
 
 ---It's possible (but optional) to set a name to a display obj.
---@param name the name of the object. Can be nil
+--@tparam string name the name of the object. Can be nil
 function DisplayObj:setName(name)
     self._name = name
 end
 
 ---Get the name of the current obj.
---return name (string) or nil if a name has not been set
+--@treturn string or nil if a name has not been set
 function DisplayObj:getName()
     return self._name
 end
 
 ---Internal method.
 --Called by a DisplayObjContainer when the DisplayObj is added as child
+--@tparam DisplayObjContainer parent if nil the obj is detached from any parent 
 function DisplayObj:_setParent(parent)
     --assert(not parent or parent:is_a(DisplayObjContainer))
     
@@ -209,12 +208,6 @@ function DisplayObj:_setParent(parent)
 	self._prop:forceUpdate()
 end
 
----Return the parent DisplayObjContainer
---return parent displayObjContainer or nil if not attached to any container
-function DisplayObj:getParent()
-    return self._parent
-end
-
 ---Remove a displayObject from the parent container
 function DisplayObj:removeFromParent()
     if self._parent then
@@ -222,9 +215,15 @@ function DisplayObj:removeFromParent()
     end
 end
 
+---Return the parent DisplayObjContainer
+--treturn DisplayObjContainer or nil if not attached to any container
+function DisplayObj:getParent()
+    return self._parent
+end
+
 ---Return the top most displayObjContainer in the display tree.
 --For all the displayed object the root is Stage
---@return root displayObject container or nil if the object has not parent
+--@treturn DisplayObjContainer displayObject container or nil if the object has not parent
 function DisplayObj:getRoot()
     local root = self
     while(root._parent) do
@@ -234,14 +233,13 @@ function DisplayObj:getRoot()
 end
 
 ---If the displayList containing the object is attached to the stage, return the stage, else nil
---@return the stage or nil if the obj has not the stage as ancestor
+--@treturn Stage nil if the obj has not the stage as ancestor
 function DisplayObj:getStage()
-    local root = self:getRoot()
-    if root:is_a(Stage) then
-        return root
-    else
-        return nil
-    end
+	local root = self:getRoot()
+	if root:is_a(Stage) then
+		return root
+	end
+	return nil
 end
 
 -- Setter and Getter
@@ -249,7 +247,7 @@ end
 ---Set visibility status of this object
 --@tparam[opt=true] bool visible set visible or hidden the displayObj
 function DisplayObj:setVisible(visible)
-	local visible = not (visible == false)
+	local visible = visible ~= false
 	if self._visible ~= visible then
 		self._visible = visible 
 		self._prop:setVisible(visible)
@@ -257,7 +255,7 @@ function DisplayObj:setVisible(visible)
 end
 
 ---Get visibility status of the displayObj
---@return bool
+--@treturn bool
 function DisplayObj:isVisible()
    return self._visible
 end
@@ -268,14 +266,14 @@ Objects by default are touchable, this method is mainly use to remove touchable 
 If objects or whole part of displayList doesn't need touch event handling is better to remove set 
 this to false to increase performance. If a container is not touchable all its children are not 
 tested too
-@param touchable boolean value to enable / disable touchable status
+@tparam[opt=true] bool touchable enable / disable touchable status
 --]]
 function DisplayObj:setTouchable(touchable)
-    self._touchable = touchable
+    self._touchable = (touchable ~= false)
 end
 
 ---Get touchable status of the object
---@return bool
+--@treturn bool
 function DisplayObj:isTouchable()
    return self._touchable
 end
@@ -329,10 +327,11 @@ This value is obtained multiplying the obj color by the parent multiplyColor val
 function DisplayObj:_getMultipliedColor()
 	local mc = self._multiplyColor
 	local prop = self._prop
-	local r = mc[1] * prop:getAttr(MOAIColor.ATTR_R_COL)  
-	local g = mc[2] * prop:getAttr(MOAIColor.ATTR_G_COL)  
-	local b = mc[3] * prop:getAttr(MOAIColor.ATTR_B_COL)  
-	local a = mc[4] * prop:getAttr(MOAIColor.ATTR_A_COL)  
+	local c = self._color
+	local r = mc[1] * c[1]  
+	local g = mc[2] * c[2]  
+	local b = mc[3] * c[3]  
+	local a = mc[4] * c[4]  
     return r,g,b,a
 end
 
@@ -345,33 +344,22 @@ registerd name)
 @param dstFactor BlendFactor or nil
 --]]
 function DisplayObj:setBlendMode(blendEquation, srcFactor, dstFactor)
+	local blendEquation, srcFactor, dstFactor = blendEquation, srcFactor, dstFactor
 	if type(blendEquation) == "string" then
 		blendEquation, srcFactor, dstFactor = BlendMode.getParams(blendEquation, self._premultipliedAlpha)
 	end
-	self._blendEquation = blendEquation
-	self._blendSrcFactor, self._blendDstFactor = srcFactor, dstFactor
-	self._prop:setBlendEquation(self._blendEquation)
-	self._prop:setBlendMode(self._blendSrcFactor, self._blendDstFactor)
-end
-
---[[---
-return current blend mode in terms of blend equation and blend factors
-@return BlendEquation the currently set blend equation
-@return BlendFactor the currentrly set src blend factor
-@return BlendFactor the currentrly set dst blend factor
---]]
-function DisplayObj:getBlendMode()
-	return self._blendEquation, self._blendSrcFactor, self._blendDstFactor
+	self._prop:setBlendEquation(blendEquation)
+	self._prop:setBlendMode(srcFactor, dstFactor)
 end
 
 --[[---
 Defines if alpha value has to be used as straight or premultiplied.
 When the value change the blendMode is reset to NORMAL preset 
 (whith blend factors depending on alpha mode)
-@param bUse default is true
+@tparam[opt=true] bool bUse
 --]]
 function DisplayObj:setPremultipliedAlpha(bUse)
-	local bPremultipliedAlpha = not (bUse == false)
+	local bPremultipliedAlpha = bUse ~= false
 	if self._premultipliedAlpha ~= bPremultipliedAlpha then 
 		self._premultipliedAlpha = bPremultipliedAlpha
 		self:_updateColor()
@@ -380,7 +368,7 @@ function DisplayObj:setPremultipliedAlpha(bUse)
 end
 
 ---Returns if alpha is used as straight or premultiplied
---@return bool
+--@treturn bool
 function DisplayObj:hasPremultipliedAlpha()
 	return self._premultipliedAlpha
 end
@@ -392,11 +380,11 @@ Need to be called every time color or alpha information change
 --]]
 function DisplayObj:_updateColor()
 	local c = self._color
-	if self._premultipliedAlpha then
-		local a = c[4]
+	local a = c[4]
+	if self._premultipliedAlpha and a ~= 1 then
 		self._prop:setColor(c[1]*a,c[2]*a,c[3]*a,a)
 	else
-		self._prop:setColor(c[1],c[2],c[3],c[4])
+		self._prop:setColor(c[1],c[2],c[3],a)
 	end
 end
 
@@ -415,22 +403,16 @@ function DisplayObj:getAlpha()
 end
 
 
---[[---
+--[[
 Set obj color.
-The following calls are valid:
-- setColor(r,g,b)
-- setColor(r,g,b,a)
-- setColor("#FFFFFF")
-- setColor("#FFFFFFFF")
-- setColor(Color)
-@param r red value [0,255] or a Color or hex string
-@param g green value [0,255] or nil
-@param b blue value [0,255] or nil
-@param a alpha value [0,255] or nil
+@param r (0,255) value or Color object or hex string or int32 color
+@param g (0,255) value or nil
+@param b (0,255) value or nil
+@param a[opt=nil] (0,255) value or nil
 --]]
 function DisplayObj:setColor(r,g,b,a)
 	local c = self._color
-	c[1], c[2], c[3], c[4] = Color._paramConversion(r,g,b,a,c[4])
+	c[1], c[2], c[3], c[4] = Color._toNormalizedRGBA(r,g,b,a)
 	self:_updateColor()
 end
 
@@ -504,120 +486,134 @@ usefull in different situation (like tweening)
 --]]
 
 ---Set object position
+--@tparam number x
+--@tparam number y
 function DisplayObj:setPosition(x,y)
     self._prop:setLoc(x,y,0)
 end
 
 ---Get object position
---@return x
---@return y
+--@treturn number x
+--@treturn number y
 function DisplayObj:getPosition()
     local x,y = self._prop:getLoc()
     return x,y
 end
 
 ---Set object position using a vec2
---@param v vec2(x,y)
+--@tparam vec2 v
 function DisplayObj:setPosition_v2(v)
     self._prop:setLoc(v.x,v.y,0)
 end
 
 ---Get object position using a vec2
---@return vec2(x,y)
+--@treturn vec2
 function DisplayObj:getPosition_v2()
 	local x,y = self._prop:getLoc()
     return vec2(x,y)
 end
 
 ---Set x position
+--@tparam number x
 function DisplayObj:setPositionX(x)
     self._prop:setAttr(MOAITransform.ATTR_X_LOC,x)
 end
 
 ---Get x position
---@return x
+--@treturn number x
 function DisplayObj:getPositionX()
     return self._prop:getAttr(MOAITransform.ATTR_X_LOC)
 end
 
 ---Set y position
+--@tparam number y
 function DisplayObj:setPositionY(y)
     self._prop:setAttr(MOAITransform.ATTR_Y_LOC,y)
 end
 
 ---Get y position
---@return y
+--@treturn number y
 function DisplayObj:getPositionY()
     return self._prop:getAttr(MOAITransform.ATTR_Y_LOC)
 end 
 
 ---Move the obj by x,y units
+--@tparam number x
+--@tparam number y
 function DisplayObj:translate(x,y)
     self._prop:addLoc(x,y,0)
 end
 
+--used to force rotation to be clock wise in both coordinate systems
+local __rmult = 1
+if __USE_SIMULATION_COORDS__ then __rmult = -1 end
+
 --[[---
 Set rotation value.
 Rotation is expressed in radians and is applied clock wise.
-@param r radians
+@tparam number r radians
 --]]
 function DisplayObj:setRotation(r)
     --move into range [-180 deg, +180 deg]
     while (r < -PI) do r = r + PI2 end
     while (r >  PI) do r = r - PI2 end
-    self._prop:setAttr(MOAITransform.ATTR_Z_ROT,DEG(r))
+    self._prop:setAttr(MOAITransform.ATTR_Z_ROT,DEG(r)*__rmult)
 end
 
 ---Get rotation value
---@return r [-math.pi, math.pi]
-function DisplayObj:getRotation()   
-	return RAD(self._prop:getAttr(MOAITransform.ATTR_Z_ROT))
+--@treturn number r [-math.pi, math.pi]
+function DisplayObj:getRotation()
+	return RAD(self._prop:getAttr(MOAITransform.ATTR_Z_ROT)*__rmult)
 end
 
 ---Set scale
+--@tparam number x
+--@tparam number y
 function DisplayObj:setScale(x,y)
     self._prop:setScl(x,y)
 end
 
 ---Get scale value
---@return x
---@return y
+--@treturn number x
+--@treturn number y
 function DisplayObj:getScale()
     local x,y = self._prop:getScl()
     return x,y
 end
 
 ---Set scale using vec2
---@param v vec2(x,y)
+--@tparam vec2 v
 function DisplayObj:setScale_v2(v)
     self._prop:setScl(v.x,v.y)
 end
 
 ---Get scale using vec2
---@return  v vec2(x,y)
+--@treturn vec2 v
 function DisplayObj:getScale_v2()
     local x,y = self._prop:getScl()
     return vec2(x,y)
 end
 
 ---Set scale x value
+--@tparam number s
 function DisplayObj:setScaleX(s)
     self._prop:setAttr(MOAITransform.ATTR_X_SCL,s)
 end
 
 ---Get scale x value
---@return x
+--@treturn number
 function DisplayObj:getScaleX()
     return self._prop:getAttr(MOAITransform.ATTR_X_SCL)
 end
 
 ---Set scale y value
+--@tparam number s
 function DisplayObj:setScaleY(s)
     self._prop:setAttr(MOAITransform.ATTR_Y_SCL,s)
 end
 
 ---Get scale y value
---@return y
+--@treturn number
 function DisplayObj:getScaleY()
     return self._prop:getAttr(MOAITransform.ATTR_Y_SCL)
 end

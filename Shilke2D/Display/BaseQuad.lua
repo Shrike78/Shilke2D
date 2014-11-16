@@ -1,14 +1,14 @@
 --[[---
 BaseQuad is a displayObj, base class for all the displayObject that can be rapresented by a quad 
-(so Quad, Image, Movieclip and so on)
+of fixed size (so Quad, Image, Movieclip and so on)
 
-Is not a real 'renderable' because has no MOAIDeck binded to the main prop, it can be considered 
+It's not a real 'renderable' because has no MOAIDeck binded to the main prop, it can be considered 
 as a middle class that has no meeaning to be instantiated by itself.
 
 BaseQuad allows different pivotMode. Default PivotMode is PivotMode.CENTER               
 --]]
 
----PivotMode function
+---Pivot Modes
 PivotMode = 
 {
 	CUSTOM 			= 1,
@@ -23,71 +23,53 @@ PivotMode =
 	TOP_RIGHT 		= 10
 }
 
-
 BaseQuad = class(DisplayObj)
 
---[[
-The pivot can be custom (by calling setPivot/setPivotX,Y) or
-fixed (center,top_left,bottom_left)
-to handle fixed pivot, each time a geometric change happens
-there must be a call to a specific function that reset the pivot, 
-depending on the new shape of the object.
---]]
-function BaseQuad:_doNothing()
+--pivotModeMultipliers are constant pairs of width/height multipliers used to set
+--pivot based on required pivotmode
+local __pivotModeMultipliers
+-- based on coordinate system, a specific pivot mode can be considered as 'optimized' because
+-- the pivot is always forced to 0,0 (so it doesn't really change when size changes)
+local __optimizedPivotMode
+
+if __USE_SIMULATION_COORDS__ then
+	
+	__optimizedPivotMode = PivotMode.BOTTOM_LEFT
+	
+	__pivotModeMultipliers = {
+		nil,	--"CUSTOM"
+
+		{0,0},	--"BOTTOM_LEFT"
+		{.5,0},	--"BOTTOM_CENTER"
+		{1,0},	--"BOTTOM_RIGHT"
+
+		{0,.5},	--"CENTER_LEFT"
+		{.5,.5},--"CENTER"
+		{1,.5},	--"CENTER_RIGHT"
+
+		{0,1},	--"TOP_LEFT"
+		{.5,1},	--"TOP_CENTER"
+		{1,1}	--"TOP_RIGHT"
+	}
+else
+	__optimizedPivotMode = PivotMode.TOP_LEFT
+	
+	__pivotModeMultipliers = {
+		nil,	--"CUSTOM"
+
+		{0,1},	--"BOTTOM_LEFT"
+		{.5,1},	--"BOTTOM_CENTER"
+		{1,1},	--"BOTTOM_RIGHT"
+
+		{0,.5},	--"CENTER_LEFT"
+		{.5,.5},--"CENTER"
+		{1,.5},	--"CENTER_RIGHT"
+
+		{0,0},	--"TOP_LEFT"
+		{.5,0},	--"TOP_CENTER"
+		{1,0}	--"TOP_RIGHT"
+	}
 end
-
-function BaseQuad:_pivotModeBL()
-   DisplayObj.setPivot(self, 0, __USE_SIMULATION_COORDS__ and 0 or self._height)
-end
-
-function BaseQuad:_pivotModeBC()
-   DisplayObj.setPivot(self, self._width*0.5, __USE_SIMULATION_COORDS__ and 0 or self._height)
-end
-
-function BaseQuad:_pivotModeBR()
-   DisplayObj.setPivot(self, self._width, __USE_SIMULATION_COORDS__ and 0 or self._height)
-end
-
-function BaseQuad:_pivotModeCL()
-	DisplayObj.setPivot(self, 0, self._height*0.5)
-end
-
-function BaseQuad:_pivotModeC()
-	DisplayObj.setPivot(self,self._width*0.5, self._height*0.5)
-end
-
-function BaseQuad:_pivotModeCR()
-	DisplayObj.setPivot(self, self._width, self._height*0.5)
-end
-
-function BaseQuad:_pivotModeTL()
-	DisplayObj.setPivot(self, 0, __USE_SIMULATION_COORDS__ and self._height or 0)
-end
-
-function BaseQuad:_pivotModeTC()
-	DisplayObj.setPivot(self, self._width*0.5, __USE_SIMULATION_COORDS__ and self._height or 0)
-end
-
-function BaseQuad:_pivotModeTR()
-	DisplayObj.setPivot(self, self._width, __USE_SIMULATION_COORDS__ and self._height or 0)
-end
-
---ordered by PivotMode enum values
-BaseQuad.__pivotModeFunctions = {
-	BaseQuad._doNothing,	--"CUSTOM"
-
-	BaseQuad._pivotModeBL,	--"BOTTOM_LEFT"
-	BaseQuad._pivotModeBC,	--"BOTTOM_CENTER"
-	BaseQuad._pivotModeBR,	--"BOTTOM_RIGHT"
-
-	BaseQuad._pivotModeCL,	--"CENTER_LEFT"
-	BaseQuad._pivotModeC,	--"CENTER"
-	BaseQuad._pivotModeCR,	--"CENTER_RIGHT"
-
-	BaseQuad._pivotModeTL,	--"TOP_LEFT"
-	BaseQuad._pivotModeTC,	--"TOP_CENTER"
-	BaseQuad._pivotModeTR	--"TOP_RIGHT"
-}
 
 ---Initialization.
 --@param width widht of the quad
@@ -101,44 +83,50 @@ function BaseQuad:init(width,height,pivotMode)
 	self:setPivotMode(pivotMode)
 end
 
----Set the size of the object.
---If pivotMode is not custom then it recalculate pivot depending on pivotMode logic / function
---@param width widht of the quad
---@param height height of the quad
-function BaseQuad:setSize(width,height)
-	self._width = width
-	self._height = height
-	BaseQuad.__pivotModeFunctions[self._pivotMode](self)
-end
-
 function BaseQuad:getSize(targetSpace)
 	if not targetSpace or targetSpace == self then
 		return self._width, self._height
-	else
-		return DisplayObj.getSize(self, targetSpace)
 	end
+	return DisplayObj.getSize(self, targetSpace)
 end
 
 function BaseQuad:getWidth(targetSpace)
 	if not targetSpace or targetSpace == self then
 		return self._width
-	else
-		return DisplayObj.getWidth(self, targetSpace)
 	end
+	return DisplayObj.getWidth(self, targetSpace)
 end
 
 function BaseQuad:getHeight(targetSpace)
 	if not targetSpace or targetSpace == self then
 		return self._height
-	else
-		return DisplayObj.getHeight(self, targetSpace)
 	end
+	return DisplayObj.getHeight(self, targetSpace)
+end
+
+---Set the size of the object.
+--If a specific pivot mode is set, the pivot is adjusted based on new size
+--@param width widht of the quad
+--@param height height of the quad
+function BaseQuad:setSize(width,height)
+	self._width = width
+	self._height = height
+	if self._pivotMode == __optimizedPivotMode or self._pivotMode == PivotMode.CUSTOM then
+		return
+	end
+	local multipliers = __pivotModeMultipliers[self._pivotMode]
+	self._prop:setPiv(multipliers[1] * width, multipliers[2] * height,0)
 end
 
 ---Set the pivotMode object.
+--@tparam PivotMode pivotMode
 function BaseQuad:setPivotMode(pivotMode)
     self._pivotMode = pivotMode
-    BaseQuad.__pivotModeFunctions[pivotMode](self)
+	if pivotMode == PivotMode.CUSTOM then
+		return
+	end
+	local multipliers = __pivotModeMultipliers[self._pivotMode]
+	self._prop:setPiv(multipliers[1] * self._width, multipliers[2] * self._height,0)
 end
 
 ---Returns current pivotMode.
@@ -154,9 +142,7 @@ A CUSTOM pivot point is not recalculated when object size changes
 @param y pivot y coordinate
 --]]
 function BaseQuad:setPivot(x,y)
-	if self._pivotMode ~= PivotMode.CUSTOM then
-		self:setPivotMode(PivotMode.CUSTOM)
-	end
+	self._pivotMode = PivotMode.CUSTOM
 	self._prop:setPiv(x,y,0)
 end
 
@@ -166,9 +152,7 @@ A CUSTOM pivot point is not recalculated when object size changes
 @param x pivot x coordinate
 --]]
 function BaseQuad:setPivotX(x)
-	if self._pivotMode ~= PivotMode.CUSTOM then
-		self:setPivotMode(PivotMode.CUSTOM)
-	end
+	self._pivotMode = PivotMode.CUSTOM
 	self._prop:setAttr(MOAITransform.ATTR_X_PIV, x)    
 end
 
@@ -178,9 +162,7 @@ A CUSTOM pivot point is not recalculated when object size changes
 @param y pivot y coordinate
 --]]
 function BaseQuad:setPivotY(y)
-	if self._pivotMode ~= PivotMode.CUSTOM then
-		self:setPivotMode(PivotMode.CUSTOM)
-	end
+	self._pivotMode = PivotMode.CUSTOM
 	self._prop:setAttr(MOAITransform.ATTR_Y_PIV, y)
 end
 

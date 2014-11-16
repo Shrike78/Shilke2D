@@ -1,13 +1,13 @@
 --[[---
 Color class.
 
-Shilke2D uses colors in a [0..255] space, while MOAI in a [0..1]. It's assumed everywhere that a 
-color is in a Shilke2D [0..255] space, so the unpack_normalized is used whenever a color must be provided
+Shilke2D uses colors in a (0,255) space, while MOAI in a (0,1). It's assumed everywhere that a 
+color is in a Shilke2D (0,255) space, so the unpack_normalized is used whenever a color must be provided
 to MOAI interface. The call returns each color component divided by 255
 
 There is no real assumption about the values of rgba components, they can be 
 also negative. Algebrical operators between colors are defined and can produced meaningless colors, 
-with component values outside the [0..255] range. Algebrical operator are meant to support color animations 
+with component values outside the (0,255) range. Algebrical operator are meant to support color animations 
 by tweening and should never be used explicitely.
 
 A set of predefined named colors is also provided. All the color are fully opaque(alpha is 255).
@@ -35,45 +35,50 @@ local INV_255 = 1/255
 local INV_256 = 1/256
 
 ---Constructor.
---@param r number or nil. default value is 255
---@param g number or nil. default value is 255
---@param b number or nil. default value is 255
---@param a number or nil. default value is 255
+--@param[opt=0] r or Color, or int32 or hex string
+--@tparam[opt=0] int g
+--@tparam[opt=0] int b
+--@tparam[opt=255] int a
 function Color:init(r,g,b,a)
-	self.r = r or 255
-	self.g = g or 255
-	self.b = b or 255
-	self.a = a or 255
+	if not r then
+		self.r, self.g, self.b, self.a = 0,0,0,255
+	else
+		self.r, self.g, self.b, self.a = Color._toRGBA(r, g, b, a)
+	end
+end
+
+--@param int r or Color, or int32 or hex string
+--@tparam int g
+--@tparam int b
+--@tparam[opt=255] int a
+--@treturn Color self
+function Color:set(r,g,b,a)
+	self.r, self.g, self.b, self.a = Color._toRGBA(r,g,b,a)
+	return self
 end
 
 ---Returns the 4 components
---@param clamp if values need to be clamped in [0..255]. Optional, default is false
---@return r number
---@return g number
---@return b number
---@return a number
-function Color:unpack(clamp)
-	local r,g,b,a = self.r, self.g, self.b, self.a
-	if clamp then
-		r,g,b,a = clamp(r,0,255), clamp(g,0,255), clamp(b,0,255), clamp(a,0,255)
-	end
-	return r,g,b,a
+--@treturn number r (0,255)
+--@treturn number g (0,255)
+--@treturn number b (0,255)
+--@treturn number a (0,255)
+function Color:unpack()
+	return self.r, self.g, self.b, self.a
 end
 	
 ---Returns the 4 components normalized
---@param clamp if values need to be clamped in [0..1]. Optional, default is false
---@return r number [0..1]
---@return g number [0..1]
---@return b number [0..1]
---@return a number [0..1]
-function Color:unpack_normalized(clamp)
-	local r,g,b,a = self:unpack(clamp)
+--@treturn number r (0,1)
+--@treturn number g (0,1)
+--@treturn number b (0,1)
+--@treturn number a (0,1)
+function Color:unpack_normalized()
+	local r,g,b,a = self:unpack()
 	r,g,b,a = r * INV_255, g * INV_255, b * INV_255, a * INV_255
 	return r,g,b,a
 end
 
----Force the components values to be clamped between [0..255]. They could be out of range
---after algebrical operations
+---Force the components values to be clamped between (0,255). 
+--They could be out of range after algebrical operations
 function Color:clamp()
 	self.r = clamp(self.r,0,255)
 	self.g = clamp(self.g,0,255)
@@ -83,9 +88,7 @@ end
 
 --[[---
 sum r,g,b,a channels of two colors
-@param c1 Color
-@param c2 Color
-@return Color c1+c2
+@treturn Color c1+c2
 --]]
 function Color.__add(c1,c2)
 	return Color(
@@ -96,8 +99,12 @@ function Color.__add(c1,c2)
 		)
 end
 
----subtract r,g,b,a channels of two colors
+--[[---
+subtract r,g,b,a channels of two colors
+@treturn Color c1-c2
+--]]
 function Color.__sub(c1,c2)
+	--can result in a 'negative' color. accepted only to support particular algebrical operation, like for tweening.
 	return Color(
 			c1.r - c2.r,
 			c1.g - c2.g,
@@ -106,7 +113,11 @@ function Color.__sub(c1,c2)
 		)
 end
 
----multiply r,g,b,a channels of a color by a number
+--[[---
+multiply r,g,b,a channels of a color by a number
+__mul accept number multiplier either as left or right operator
+@treturn Color c1 * m
+--]]
 function Color.__mul(c1,c2)
 	if type(c1) == "number" then
 		return Color(
@@ -128,6 +139,7 @@ function Color.__mul(c1,c2)
 end
 
 ---divide r,g,b,a components of a color by a number
+--@treturn Color c/d
 function Color.__div(c,d)
 	return Color(
 		c.r/d, 
@@ -135,6 +147,57 @@ function Color.__div(c,d)
 		c.b/d,
 		c.a/d
 	)
+end
+
+--[[---
+sum r,g,b,a channels to current color
+@param r int(0,255) or int32 or hex string or Color
+@param g int(0,255) or nil
+@param b int(0,255) or nil
+@param[opt=255] a int(0,255) or nil
+@treturn Color self + (r,g,b,a)
+--]]
+function Color:add(r,g,b,a)
+	local r,g,b,a = Color._toRGBA(r,g,b,a)
+	self.r, self.g, self.b, self.a = self.r + r, self.g + g, self.b + b, self.a + a
+	return self
+end
+
+
+--[[---
+subtracts r,g,b,a channels from current color
+@param r int(0,255) or int32 or hex string or Color
+@param g int(0,255) or nil
+@param b int(0,255) or nil
+@param[opt=255] a int(0,255) or nil
+@treturn Color self - (r,g,b,a)
+--]]
+function Color:sub(r,g,b,a)
+	local r,g,b,a = Color._toRGBA(r,g,b,a)
+	self.r, self.g, self.b, self.a = self.r - r, self.g - g, self.b - b, self.a - a
+	return self
+end
+
+
+--[[---
+divides r,g,b,a channels of current color for a number
+@tparam number d
+@treturn Color self / d
+--]]
+function Color:div(d)
+	self.r, self.g, self.b, self.a = self.r/d, self.g/d, self.b/d, self.a/d
+	return self
+end
+
+
+--[[---
+multiplies r,g,b,a channels of current color for a number
+@tparam number m
+@treturn Color self * m
+--]]
+function Color:mult(m)
+	self.r, self.g, self.b, self.a = self.r*m, self.g*m, self.b*m, self.a*m
+	return self
 end
 
 ---the == operation
@@ -148,24 +211,36 @@ function Color:__tostring()
 end
 
 ---blend 2 colors
---@param c1 first Color
---@param c2 second Color
---@param a blend factor
---@return Color c1*a + c2*(1-a)
-function Color.blend(c1, c2, a)
-	assert(a>0 and a<1,"blend factor must be in [0..1]")
-	return Color(c1.r * a + c2.r * (1-a),
-				 c1.g * a + c2.g * (1-a),
-				 c1.b * a + c2.b * (1-a),
-				 c1.a * a + c2.a * (1-a)
-				)
+--@tparam Color c1 
+--@tparam Color c2
+--@tparam number w blend factor (0,1)
+--@tparam[opt=nil] Color rc return color. if provided it's filled with the blend
+--result and returned
+--@treturn Color c1*a + c2*(1-a)
+function Color.blend(c1, c2, w, rc)
+	local r = c1.r * w + c2.r * (1-w)
+	local g = c1.g * w + c2.g * (1-w)
+	local b = c1.b * w + c2.b * (1-w)
+	local a = c1.a * w + c2.a * (1-w)	
+	if rc then
+		rc.r, rc.g, rc.b, rc.a = r,g,b,a
+		return rc
+	else
+		return Color(r,g,b,a)
+	end
 end
 
----color space conversion
+--[[---
+color space conversion
+@tparam number h (0,1)
+@tparam number s (0,1)
+@tparam number v (0,1)
+@treturn int r (0,255)
+@treturn int g (0,255)
+@treturn int b (0,255)
+--]]
 function Color.hsv2rgb(h, s, v)
-
     -- h, s, v is allowed having values between [0 ... 1].
-
     h = 6 * h
     local i = floor(h - 0.000001)
     local f = h - i
@@ -191,12 +266,13 @@ function Color.hsv2rgb(h, s, v)
 end
 
 ---Pack an r,g,b,a set of values to a single int value
---@param r [0,255]
---@param g [0,255]
---@param b [0,255]
---@param a [0,255]
---@return int
+--@tparam int r (0,255)
+--@tparam int g (0,255)
+--@tparam int b (0,255)
+--@tparam[opt=255] int a (0,255)
+--@treturn int
 function Color.rgba2int(r,g,b,a)
+	local a = a or 255
 	local r = floor(r)
 	local g = floor(g)
 	local b = floor(b)
@@ -205,11 +281,11 @@ function Color.rgba2int(r,g,b,a)
 end
 
 ---Unpack an int value to a set of r,g,b,a values
---@param c value to be unpack
---@return r [0,255]
---@return g [0,255]
---@return b [0,255]
---@return a [0,255]
+--@tparam int c value to be unpack
+--@treturn int r (0,255)
+--@treturn int g (0,255)
+--@treturn int b (0,255)
+--@treturn int a (0,255)
 function Color.int2rgba(c)
 	local b = c % 256
 	c = c * INV_256
@@ -221,22 +297,16 @@ function Color.int2rgba(c)
 	return floor(r), floor(g), floor(b), floor(a)
 end
 
----Create a color starting from an int value, using int2rgba conversion
---@param c
---@return Color
-function Color.fromInt(c)
-	return Color(Color.int2rgba(c))
-end
 
 --[[---
-convert an hex color string (that can start or not with #) to r,g,b,a [0..255] values 
-@param hex string defining color
-@return r [0..255]
-@return g [0..255]
-@return b [0..255]
-@return a [0..255] if the hex string doesn't contains alpha info it returns 255
+convert an hex color string (that can start or not with #) to r,g,b,a (0,255) values 
+@tparam string hex string defining color
+@treturn int r (0,255)
+@treturn int g (0,255)
+@treturn int b (0,255)
+@treturn int a v if the hex string doesn't contains alpha info it returns 255
 --]]
-function Color.hex2rgba(hex)
+function Color.hexstr2rgba(hex)
     hex = hex:gsub("#","")
 	local l = hex:len()
 	if l == 6 then
@@ -252,21 +322,29 @@ end
 
 
 --[[---
-Create a Color starting from an hex string using hex2rgba conversion
-@param hex string defining color
-@return Color
+convert an r,g,b color set into an hex color string
+@tparam int r (0,255)
+@tparam int g (0,255)
+@tparam int b (0,255)
+@tparam[opt=nil] int a (0,255)
+@treturn string hex string in format #rrggbb or #rrggbbaa
 --]]
-function Color.fromHex(hex)
-	return Color(Color.hex2rgba(hex))
+function Color.rgba2hexstr(r,g,b,a)
+	if a then 
+		return string.format('#%02x%02x%02x%02x',r,g,b,a)
+	else
+		return string.format('#%02x%02x%02x',r,g,b)
+	end
 end
 
+
 --[[---
-create a Color given r,g,b,a as float 0..1 values
-@param r [0..1]
-@param g [0..1]
-@param b [0..1]
-@param a [0..1]
-@return Color 
+create a Color given r,g,b,a as float (0,1) values
+@tparam number r (0,1)
+@tparam number g (0,1)
+@tparam number b (0,1)
+@tparam number a (0,1)
+@treturn Color 
 --]]
 function Color.fromNormalizedValues(r,g,b,a)
 	return Color(
@@ -279,189 +357,360 @@ end
 
 
 --[[---
-Utility function used by functions that want to accept color expressed either as
-Color object or as [0..255] rgb or rgba values or as hex string. 
+Utility function. 
+It accepts as input a color expressed in all supported formats:
 
-It' possible to provide also a "default alpha value" to be used as return value with 
-the r,g,b [0..255] configuration in case of nil alpha. 
+- (0,255) rgb or rgba values
+- int32 color value) and returns the 
+- hex string 
+- Color object
 
-@param r [0..255] value or Color object or hex string
-@param g [0..255] value or nil
-@param b [0..255] value or nil
-@param a[opt] [0..255] value or nil
-@param da[opt] [0..255] default alpha value.
-@return _r [0..1]
-@return _g [0..1]
-@return _b [0..1]
-@return _a [0..1] (or provided default alpha value)
+and returns the (0,255) r,g,b,a values
+
+@param r (0,255) value or Color object or hex string or int32 color
+@param g (0,255) value or nil
+@param b (0,255) value or nil
+@param a[opt=nil] (0,255) value or nil
+@return r (0,255)
+@return g (0,255)
+@return b (0,255)
+@return a (0,255)
 --]]
-function Color._paramConversion(r,g,b,a,da)
-	local _r,_g,_b,_a
+function Color._toRGBA(r, g, b, a)
 	local t = class_type(r)
-	if t == Color then
-		_r,_g,_b,_a = r:unpack_normalized()
-	elseif t == 'number' then
-		_r = r * INV_255
-		_g = g * INV_255
-		_b = b * INV_255
-		_a = a and (a * INV_255) or da
+	if t == 'number' then
+		if g then
+			return r, g, b, (a or 255)
+		else
+			return Color.int2rgba(r)
+		end
+	elseif t == Color then
+		return r:unpack()
 	elseif t == 'string' then
-		_r, _g, _b, _a = Color.hex2rgba(r)
-		_r = _r * INV_255
-		_g = _g * INV_255
-		_b = _b * INV_255
-		_a = _a * INV_255
-	else
-		error("no suitable conversion of this parameters")
+		return Color.hexstr2rgba(r)
 	end
-	return _r,_g,_b,_a
+	error("no suitable conversion of this parameters")
 end
 
---list of predefined named colors
-Color.ALICEBLUE			= Color(240,248,255) --- (240,248,255)
-Color.ANTIQUEWHITE			= Color(250,235,215) --- (250,235,215)
-Color.AQUA					= Color(0,255,255) --- (0,255,255)
-Color.AQUAMARINE			= Color(127,255,212) --- (127,255,212)
-Color.AZURE					= Color(240,255,255) --- (240,255,255)
-Color.BEIGE					= Color(245,245,220) --- (245,245,220)
-Color.BISQUE				= Color(255,228,196) --- (255,228,196)
-Color.BLACK					= Color(0,0,0) --- (0,0,0)
-Color.BLANCHEDALMOND		= Color(255,235,205) --- (255,235,205)
-Color.BLUE					= Color(0,0,255) --- (0,0,255)
-Color.BLUEVIOLET			= Color(138,43,226) --- (138,43,226)
-Color.BROWN					= Color(165,42,42) --- (165,42,42)
-Color.BURLYWOOD			= Color(222,184,135) --- (222,184,135)
-Color.CADETBLUE			= Color(95,158,160) --- (95,158,160)
-Color.CHARTREUSE			= Color(127,255,0) --- (127,255,0)
-Color.CHOCOLATE			= Color(210,105,30) --- (210,105,30)
-Color.CORAL					= Color(255,127,80) --- (255,127,80)
-Color.CORNFLOWERBLUE		= Color(100,149,237) --- (100,149,237)
-Color.CORNSILK				= Color(255,248,220) --- (255,248,220)
-Color.CRIMSON				= Color(220,20,60) --- (220,20,60)
-Color.CYAN					= Color(0,255,255) --- (0,255,255)
-Color.DARKBLUE				= Color(0,0,139) --- (0,0,139)
-Color.DARKCYAN				= Color(0,139,139) --- (0,139,139)
-Color.DARKGOLDENROD		= Color(184,134,11) --- (184,134,11)
-Color.DARKGRAY				= Color(169,169,169) --- (169,169,169)
-Color.DARKGREY				= Color(169,169,169) --- (169,169,169)
-Color.DARKGREEN			= Color(0,100,0) --- (0,100,0)
-Color.DARKKHAKI			= Color(189,183,107) --- (189,183,107)
-Color.DARKMAGENTA			= Color(139,0,139) --- (139,0,139)
-Color.DARKOLIVEGREEN		= Color(85,107,47) --- (85,107,47)
-Color.DARKORANGE			= Color(255,140,0) --- (255,140,0)
-Color.DARKORCHID			= Color(153,50,204) --- (153,50,204)
-Color.DARKRED				= Color(139,0,0) --- (139,0,0)
-Color.DARKSALMON			= Color(233,150,122) --- (233,150,122)
-Color.DARKSEAGREEN			= Color(143,188,143) --- (143,188,143)
-Color.DARKSLATEBLUE		= Color(72,61,139) --- (72,61,139)
-Color.DARKSLATEGRAY		= Color(47,79,79) --- (47,79,79)
-Color.DARKSLATEGREY		= Color(47,79,79) --- (47,79,79)
-Color.DARKTURQUOISE		= Color(0,206,209) --- (0,206,209)
-Color.DARKVIOLET			= Color(148,0,211) --- (148,0,211)
-Color.DEEPPINK				= Color(255,20,147) --- (255,20,147)
-Color.DEEPSKYBLUE			= Color(0,191,255) --- (0,191,255)
-Color.DIMGRAY				= Color(105,105,105) --- (105,105,105)
-Color.DIMGREY				= Color(105,105,105) --- (105,105,105)
-Color.DODGERBLUE			= Color(30,144,255) --- (30,144,255)
-Color.FIREBRICK			= Color(178,34,34) --- (178,34,34)
-Color.FLORALWHITE			= Color(255,250,240) --- (255,250,240)
-Color.FORESTGREEN			= Color(34,139,34) --- (34,139,34)
-Color.FUCHSIA				= Color(255,0,255) --- (255,0,255)
-Color.GAINSBORO			= Color(220,220,220) --- (220,220,220)
-Color.GHOSTWHITE			= Color(248,248,255) --- (248,248,255)
-Color.GOLD					= Color(255,215,0) --- (255,215,0)
-Color.GOLDENROD			= Color(218,165,32) --- (218,165,32)
-Color.GRAY					= Color(128,128,128) --- (128,128,128)
-Color.GREY					= Color(128,128,128) --- (128,128,128)
-Color.GREEN					= Color(0,128,0) --- (0,128,0)
-Color.GREENYELLOW			= Color(173,255,47) --- (173,255,47)
-Color.HONEYDEW				= Color(240,255,240) --- (240,255,240)
-Color.HOTPINK				= Color(255,105,180) --- (255,105,180)
-Color.INDIANRED			= Color(205,92,92) --- (205,92,92)
-Color.INDIGO				= Color(75,0,130) --- (75,0,130)
-Color.IVORY					= Color(255,255,240) --- (255,255,240)
-Color.KHAKI					= Color(240,230,140) --- (240,230,140)
-Color.LAVENDER				= Color(230,230,250) --- (230,230,250)
-Color.LAVENDERBLUSH		= Color(255,240,245) --- (255,240,245)
-Color.LAWNGREEN			= Color(124,252,0) --- (124,252,0)
-Color.LEMONCHIFFON			= Color(255,250,205) --- (255,250,205)
-Color.LIGHTBLUE			= Color(173,216,230) --- (173,216,230)
-Color.LIGHTCORAL			= Color(240,128,128) --- (240,128,128)
-Color.LIGHTCYAN			= Color(224,255,255) --- (224,255,255)
-Color.LIGHTGOLDENRODYELLOW	= Color(250,250,210) --- (250,250,210)
-Color.LIGHTGRAY			= Color(211,211,211) --- (211,211,211)
-Color.LIGHTGREY			= Color(211,211,211) --- (211,211,211)
-Color.LIGHTGREEN			= Color(144,238,144) --- (144,238,144)
-Color.LIGHTPINK			= Color(255,182,193) --- (255,182,193)
-Color.LIGHTSALMON			= Color(255,160,122) --- (255,160,122)
-Color.LIGHTSEAGREEN		= Color(32,178,170) --- (32,178,170)
-Color.LIGHTSKYBLUE			= Color(135,206,250) --- (135,206,250)
-Color.LIGHTSLATEGRAY		= Color(119,136,153) --- (119,136,153)
-Color.LIGHTSLATEGREY		= Color(119,136,153) --- (119,136,153)
-Color.LIGHTSTEELBLUE		= Color(176,196,222) --- (176,196,222)
-Color.LIGHTYELLOW			= Color(255,255,224) --- (255,255,224)
-Color.LIME					= Color(0,255,0) --- (0,255,0)
-Color.LIMEGREEN			= Color(50,205,50) --- (50,205,50)
-Color.LINEN					= Color(250,240,230) --- (250,240,230)
-Color.MAGENTA				= Color(255,0,255) --- (255,0,255)
-Color.MAROON				= Color(128,0,0) --- (128,0,0)
-Color.MEDIUMAQUAMARINE		= Color(102,205,170) --- (102,205,170)
-Color.MEDIUMBLUE			= Color(0,0,205) --- (0,0,205)
-Color.MEDIUMORCHID			= Color(186,85,211) --- (186,85,211)
-Color.MEDIUMPURPLE			= Color(147,112,219) --- (147,112,219)
-Color.MEDIUMSEAGREEN		= Color(60,179,113) --- (60,179,113)
-Color.MEDIUMSLATEBLUE		= Color(123,104,238) --- (123,104,238)
-Color.MEDIUMSPRINGGREEN	= Color(0,250,154) --- (0,250,154)
-Color.MEDIUMTURQUOISE		= Color(72,209,204) --- (72,209,204)
-Color.MEDIUMVIOLETRED		= Color(199,21,133) --- (199,21,133)
-Color.MIDNIGHTBLUE			= Color(25,25,112) --- (25,25,112)
-Color.MINTCREAM			= Color(245,255,250) --- (245,255,250)
-Color.MISTYROSE			= Color(255,228,225) --- (255,228,225)
-Color.MOCCASIN				= Color(255,228,181) --- (255,228,181)
-Color.NAVAJOWHITE			= Color(255,222,173) --- (255,222,173)
-Color.NAVY					= Color(0,0,128) --- (0,0,128)
-Color.OLDLACE				= Color(253,245,230) --- (253,245,230)
-Color.OLIVE					= Color(128,128,0) --- (128,128,0)
-Color.OLIVEDRAB			= Color(107,142,35) --- (107,142,35)
-Color.ORANGE				= Color(255,165,0) --- (255,165,0)
-Color.ORANGERED			= Color(255,69,0) --- (255,69,0)
-Color.ORCHID				= Color(218,112,214) --- (218,112,214)
-Color.PALEGOLDENROD		= Color(238,232,170) --- (238,232,170)
-Color.PALEGREEN			= Color(152,251,152) --- (152,251,152)
-Color.PALETURQUOISE		= Color(175,238,238) --- (175,238,238)
-Color.PALEVIOLETRED		= Color(219,112,147) --- (219,112,147)
-Color.PAPAYAWHIP			= Color(255,239,213) --- (255,239,213)
-Color.PEACHPUFF			= Color(255,218,185) --- (255,218,185)
-Color.PERU					= Color(205,133,63) --- (205,133,63)
-Color.PINK					= Color(255,192,203) --- (255,192,203)
-Color.PLUM					= Color(221,160,221) --- (221,160,221)
-Color.POWDERBLUE			= Color(176,224,230) --- (176,224,230)
-Color.PURPLE				= Color(128,0,128) --- (128,0,128)
-Color.RED					= Color(255,0,0) --- (255,0,0)
-Color.ROSYBROWN			= Color(188,143,143) --- (188,143,143)
-Color.ROYALBLUE			= Color(65,105,225) --- (65,105,225)
-Color.SADDLEBROWN			= Color(139,69,19) --- (139,69,19)
-Color.SALMON				= Color(250,128,114) --- (250,128,114)
-Color.SANDYBROWN			= Color(244,164,96) --- (244,164,96)
-Color.SEAGREEN				= Color(46,139,87) --- (46,139,87)
-Color.SEASHELL				= Color(255,245,238) --- (255,245,238)
-Color.SIENNA				= Color(160,82,45) --- (160,82,45)
-Color.SILVER				= Color(192,192,192) --- (192,192,192)
-Color.SKYBLUE				= Color(135,206,235) --- (135,206,235)
-Color.SLATEBLUE			= Color(106,90,205) --- (106,90,205)
-Color.SLATEGRAY			= Color(112,128,144) --- (112,128,144)
-Color.SLATEGREY			= Color(112,128,144) --- (112,128,144)
-Color.SNOW					= Color(255,250,250) --- (255,250,250)
-Color.SPRINGGREEN			= Color(0,255,127) --- (0,255,127)
-Color.STEELBLUE			= Color(70,130,180) --- (70,130,180)
-Color.TAN					= Color(210,180,140) --- (210,180,140)
-Color.TEAL					= Color(0,128,128) --- (0,128,128)
-Color.THISTLE				= Color(216,191,216) --- (216,191,216)
-Color.TOMATO				= Color(255,99,71) --- (255,99,71)
-Color.TURQUOISE			= Color(64,224,208) --- (64,224,208)
-Color.VIOLET				= Color(238,130,238) --- (238,130,238)
-Color.WHEAT					= Color(245,222,179) --- (245,222,179)
-Color.WHITE					= Color(255,255,255) --- (255,255,255)
-Color.WHITESMOKE			= Color(245,245,245) --- (245,245,245)
-Color.YELLOW				= Color(255,255,0) --- (255,255,0)
-Color.YELLOWGREEN			= Color(154,205,50) --- (154,205,50)
+
+--[[---
+Utility function. 
+It accepts as input a color expressed in all supported formats:
+
+- (0,255) rgb or rgba values
+- int32 color value) and returns the 
+- hex string 
+- Color object
+
+and returns the normalized (0,1) r,g,b,a values
+
+@param r (0,255) value or Color object or hex string or int32 color
+@param g (0,255) value or nil
+@param b (0,255) value or nil
+@param a[opt=nil] (0,255) value or nil
+@return r (0,1)
+@return g (0,1)
+@return b (0,1)
+@return a (0,1)
+--]]		   
+function Color._toNormalizedRGBA(r,g,b,a)
+	local _r,_g,_b,_a = Color._toRGBA(r,g,b,a)
+	return _r * INV_255, _g * INV_255, _b * INV_255, _a * INV_255			
+end
+
+
+
+--- (240,248,255)
+Color.ALICEBLUE				= Color.rgba2int(240,248,255)	
+--- (250,235,215)
+Color.ANTIQUEWHITE			= Color.rgba2int(250,235,215)	
+--- (0,255,255)
+Color.AQUA					= Color.rgba2int(0,255,255)	
+--- (127,255,212)
+Color.AQUAMARINE			= Color.rgba2int(127,255,212)	
+--- (240,255,255)
+Color.AZURE					= Color.rgba2int(240,255,255)	
+--- (245,245,220)
+Color.BEIGE					= Color.rgba2int(245,245,220)	
+--- (255,228,196)
+Color.BISQUE				= Color.rgba2int(255,228,196)	
+--- (0,0,0)
+Color.BLACK					= Color.rgba2int(0,0,0)		
+--- (255,235,205)
+Color.BLANCHEDALMOND		= Color.rgba2int(255,235,205)	
+--- (0,0,255)
+Color.BLUE					= Color.rgba2int(0,0,255)		
+--- (138,43,226)
+Color.BLUEVIOLET			= Color.rgba2int(138,43,226)	
+--- (165,42,42)
+Color.BROWN					= Color.rgba2int(165,42,42)	
+--- (222,184,135)
+Color.BURLYWOOD				= Color.rgba2int(222,184,135)	
+--- (95,158,160)
+Color.CADETBLUE				= Color.rgba2int(95,158,160)	
+--- (127,255,0)
+Color.CHARTREUSE			= Color.rgba2int(127,255,0)	
+--- (210,105,30)
+Color.CHOCOLATE				= Color.rgba2int(210,105,30)	
+--- (255,127,80)
+Color.CORAL					= Color.rgba2int(255,127,80)	
+--- (100,149,237)
+Color.CORNFLOWERBLUE		= Color.rgba2int(100,149,237)	
+--- (255,248,220)
+Color.CORNSILK				= Color.rgba2int(255,248,220)	
+--- (220,20,60)
+Color.CRIMSON				= Color.rgba2int(220,20,60)	
+--- (0,255,255)
+Color.CYAN					= Color.rgba2int(0,255,255)	
+--- (0,0,139)
+Color.DARKBLUE				= Color.rgba2int(0,0,139)		
+--- (0,139,139)
+Color.DARKCYAN				= Color.rgba2int(0,139,139)	
+--- (184,134,11)
+Color.DARKGOLDENROD			= Color.rgba2int(184,134,11)	
+--- (169,169,169)
+Color.DARKGRAY				= Color.rgba2int(169,169,169)	
+--- (169,169,169)
+Color.DARKGREY				= Color.DARKGRAY				
+--- (0,100,0)
+Color.DARKGREEN				= Color.rgba2int(0,100,0)		
+--- (189,183,107)
+Color.DARKKHAKI				= Color.rgba2int(189,183,107)	
+--- (139,0,139)
+Color.DARKMAGENTA			= Color.rgba2int(139,0,139)	
+--- (85,107,47)
+Color.DARKOLIVEGREEN		= Color.rgba2int(85,107,47)	
+--- (255,140,0)
+Color.DARKORANGE			= Color.rgba2int(255,140,0)	
+--- (153,50,204)
+Color.DARKORCHID			= Color.rgba2int(153,50,204)	
+--- (139,0,0)
+Color.DARKRED				= Color.rgba2int(139,0,0)		
+--- (233,150,122)
+Color.DARKSALMON			= Color.rgba2int(233,150,122)	
+--- (143,188,143)
+Color.DARKSEAGREEN			= Color.rgba2int(143,188,143)	
+--- (72,61,139)
+Color.DARKSLATEBLUE			= Color.rgba2int(72,61,139)	
+--- (47,79,79)
+Color.DARKSLATEGRAY			= Color.rgba2int(47,79,79)		
+--- (47,79,79)
+Color.DARKSLATEGREY			= Color.DARKSLATEGRAY			
+--- (0,206,209)
+Color.DARKTURQUOISE			= Color.rgba2int(0,206,209)	
+--- (148,0,211)
+Color.DARKVIOLET			= Color.rgba2int(148,0,211)	
+--- (255,20,147)
+Color.DEEPPINK				= Color.rgba2int(255,20,147)	
+--- (0,191,255)
+Color.DEEPSKYBLUE			= Color.rgba2int(0,191,255)	
+--- (105,105,105)
+Color.DIMGRAY				= Color.rgba2int(105,105,105)	
+--- (105,105,105)
+Color.DIMGREY				= Color.DIMGRAY					
+--- (30,144,255)
+Color.DODGERBLUE			= Color.rgba2int(30,144,255)	
+--- (178,34,34)
+Color.FIREBRICK				= Color.rgba2int(178,34,34)	
+--- (255,250,240)
+Color.FLORALWHITE			= Color.rgba2int(255,250,240)	
+--- (34,139,34)
+Color.FORESTGREEN			= Color.rgba2int(34,139,34)	
+--- (255,0,255)
+Color.FUCHSIA				= Color.rgba2int(255,0,255)	
+--- (220,220,220)
+Color.GAINSBORO				= Color.rgba2int(220,220,220)	
+--- (248,248,255)
+Color.GHOSTWHITE			= Color.rgba2int(248,248,255)	
+--- (255,215,0)
+Color.GOLD					= Color.rgba2int(255,215,0)	
+--- (218,165,32)
+Color.GOLDENROD				= Color.rgba2int(218,165,32) 	
+--- (128,128,128)
+Color.GRAY					= Color.rgba2int(128,128,128)	
+--- (128,128,128)
+Color.GREY					= Color.GRAY
+--- (0,128,0)
+Color.GREEN					= Color.rgba2int(0,128,0)		
+--- (173,255,47)
+Color.GREENYELLOW			= Color.rgba2int(173,255,47)	
+--- (240,255,240)
+Color.HONEYDEW				= Color.rgba2int(240,255,240)	
+--- (255,105,180)
+Color.HOTPINK				= Color.rgba2int(255,105,180)	
+--- (205,92,92)
+Color.INDIANRED				= Color.rgba2int(205,92,92)	
+--- (75,0,130)
+Color.INDIGO				= Color.rgba2int(75,0,130)		
+--- (255,255,240)
+Color.IVORY					= Color.rgba2int(255,255,240)	
+--- (240,230,140)
+Color.KHAKI					= Color.rgba2int(240,230,140)	
+--- (230,230,250)
+Color.LAVENDER				= Color.rgba2int(230,230,250)	
+--- (255,240,245)
+Color.LAVENDERBLUSH			= Color.rgba2int(255,240,245)	
+--- (124,252,0)
+Color.LAWNGREEN				= Color.rgba2int(124,252,0)	
+--- (255,250,205)
+Color.LEMONCHIFFON			= Color.rgba2int(255,250,205)	
+--- (173,216,230)
+Color.LIGHTBLUE				= Color.rgba2int(173,216,230)	
+--- (240,128,128)
+Color.LIGHTCORAL			= Color.rgba2int(240,128,128)	
+--- (224,255,255)
+Color.LIGHTCYAN				= Color.rgba2int(224,255,255)	
+--- (250,250,210)
+Color.LIGHTGOLDENRODYELLOW	= Color.rgba2int(250,250,210)	
+--- (211,211,211)
+Color.LIGHTGRAY				= Color.rgba2int(211,211,211)	
+--- (211,211,211)
+Color.LIGHTGREY				= Color.LIGHTGRAY				
+--- (144,238,144)
+Color.LIGHTGREEN			= Color.rgba2int(144,238,144)	
+--- (255,182,193)
+Color.LIGHTPINK				= Color.rgba2int(255,182,193)	
+--- (255,160,122)
+Color.LIGHTSALMON			= Color.rgba2int(255,160,122)	
+--- (32,178,170)
+Color.LIGHTSEAGREEN			= Color.rgba2int(32,178,170) 	
+--- (135,206,250)
+Color.LIGHTSKYBLUE			= Color.rgba2int(135,206,250)	
+--- (119,136,153)
+Color.LIGHTSLATEGRAY		= Color.rgba2int(119,136,153)	
+--- (119,136,153)
+Color.LIGHTSLATEGREY		= Color.LIGHTSLATEGRAY			
+--- (176,196,222)
+Color.LIGHTSTEELBLUE		= Color.rgba2int(176,196,222)	
+--- (255,255,224)
+Color.LIGHTYELLOW			= Color.rgba2int(255,255,224)	
+--- (0,255,0)
+Color.LIME					= Color.rgba2int(0,255,0)		
+--- (50,205,50)
+Color.LIMEGREEN				= Color.rgba2int(50,205,50)	
+--- (250,240,230)
+Color.LINEN					= Color.rgba2int(250,240,230)	
+--- (255,0,255)
+Color.MAGENTA				= Color.rgba2int(255,0,255)	
+--- (128,0,0)
+Color.MAROON				= Color.rgba2int(128,0,0)		
+--- (102,205,170)
+Color.MEDIUMAQUAMARINE		= Color.rgba2int(102,205,170)	
+--- (0,0,205)
+Color.MEDIUMBLUE			= Color.rgba2int(0,0,205)		
+--- (186,85,211)
+Color.MEDIUMORCHID			= Color.rgba2int(186,85,211)	
+--- (147,112,219)
+Color.MEDIUMPURPLE			= Color.rgba2int(147,112,219)	
+--- (60,179,113)
+Color.MEDIUMSEAGREEN		= Color.rgba2int(60,179,113)	
+--- (123,104,238)
+Color.MEDIUMSLATEBLUE		= Color.rgba2int(123,104,238) 	
+--- (0,250,154)
+Color.MEDIUMSPRINGGREEN		= Color.rgba2int(0,250,154) 	
+--- (72,209,204)
+Color.MEDIUMTURQUOISE		= Color.rgba2int(72,209,204)	
+--- (199,21,133)
+Color.MEDIUMVIOLETRED		= Color.rgba2int(199,21,133)	
+--- (25,25,112)
+Color.MIDNIGHTBLUE			= Color.rgba2int(25,25,112)	
+--- (245,255,250)
+Color.MINTCREAM				= Color.rgba2int(245,255,250)	
+--- (255,228,225)
+Color.MISTYROSE				= Color.rgba2int(255,228,225)	
+--- (255,228,181)
+Color.MOCCASIN				= Color.rgba2int(255,228,181)	
+--- (255,222,173)
+Color.NAVAJOWHITE			= Color.rgba2int(255,222,173)	
+--- (0,0,128)
+Color.NAVY					= Color.rgba2int(0,0,128)		
+--- (253,245,230)
+Color.OLDLACE				= Color.rgba2int(253,245,230)	
+--- (128,128,0)
+Color.OLIVE					= Color.rgba2int(128,128,0)	
+--- (107,142,35)
+Color.OLIVEDRAB				= Color.rgba2int(107,142,35)	
+--- (255,165,0)
+Color.ORANGE				= Color.rgba2int(255,165,0)	
+--- (255,69,0)
+Color.ORANGERED				= Color.rgba2int(255,69,0)		
+--- (218,112,214)
+Color.ORCHID				= Color.rgba2int(218,112,214)	
+--- (238,232,170)
+Color.PALEGOLDENROD			= Color.rgba2int(238,232,170)	
+--- (152,251,152)
+Color.PALEGREEN				= Color.rgba2int(152,251,152)	
+--- (175,238,238)
+Color.PALETURQUOISE			= Color.rgba2int(175,238,238)	
+--- (219,112,147)
+Color.PALEVIOLETRED			= Color.rgba2int(219,112,147)	
+--- (255,239,213)
+Color.PAPAYAWHIP			= Color.rgba2int(255,239,213)	
+--- (255,218,185)
+Color.PEACHPUFF				= Color.rgba2int(255,218,185)	
+--- (205,133,63)
+Color.PERU					= Color.rgba2int(205,133,63)	
+--- (255,192,203)
+Color.PINK					= Color.rgba2int(255,192,203)	
+--- (221,160,221)
+Color.PLUM					= Color.rgba2int(221,160,221)	
+--- (176,224,230)
+Color.POWDERBLUE			= Color.rgba2int(176,224,230)	
+--- (128,0,128)
+Color.PURPLE				= Color.rgba2int(128,0,128)	
+--- (255,0,0)
+Color.RED					= Color.rgba2int(255,0,0)		
+--- (188,143,143)
+Color.ROSYBROWN				= Color.rgba2int(188,143,143)	
+--- (65,105,225)
+Color.ROYALBLUE				= Color.rgba2int(65,105,225)	
+--- (139,69,19)
+Color.SADDLEBROWN			= Color.rgba2int(139,69,19)	
+--- (250,128,114)
+Color.SALMON				= Color.rgba2int(250,128,114)	
+--- (244,164,96)
+Color.SANDYBROWN			= Color.rgba2int(244,164,96)	
+--- (46,139,87)
+Color.SEAGREEN				= Color.rgba2int(46,139,87)	
+--- (255,245,238)
+Color.SEASHELL				= Color.rgba2int(255,245,238)	
+--- (160,82,45)
+Color.SIENNA				= Color.rgba2int(160,82,45)	
+--- (192,192,192)
+Color.SILVER				= Color.rgba2int(192,192,192)	
+--- (135,206,235)
+Color.SKYBLUE				= Color.rgba2int(135,206,235)	
+--- (106,90,205)
+Color.SLATEBLUE				= Color.rgba2int(106,90,205)	
+--- (112,128,144)
+Color.SLATEGRAY				= Color.rgba2int(112,128,144)	
+--- (112,128,144)
+Color.SLATEGREY				= Color.SLATEGRAY				
+--- (255,250,250)
+Color.SNOW					= Color.rgba2int(255,250,250)	
+--- (0,255,127)
+Color.SPRINGGREEN			= Color.rgba2int(0,255,127)	
+--- (70,130,180)
+Color.STEELBLUE				= Color.rgba2int(70,130,180)	
+--- (210,180,140)
+Color.TAN					= Color.rgba2int(210,180,140)	
+--- (0,128,128)
+Color.TEAL					= Color.rgba2int(0,128,128)	
+--- (216,191,216)
+Color.THISTLE				= Color.rgba2int(216,191,216)	
+--- (255,99,71)
+Color.TOMATO				= Color.rgba2int(255,99,71)	
+--- (64,224,208)
+Color.TURQUOISE				= Color.rgba2int(64,224,208)	
+--- (238,130,238)
+Color.VIOLET				= Color.rgba2int(238,130,238)	
+--- (245,222,179)
+Color.WHEAT					= Color.rgba2int(245,222,179)	
+--- (255,255,255)
+Color.WHITE					= Color.rgba2int(255,255,255)	
+--- (245,245,245)
+Color.WHITESMOKE			= Color.rgba2int(245,245,245)	
+--- (255,255,0)
+Color.YELLOW				= Color.rgba2int(255,255,0)	
+--- (154,205,50)
+Color.YELLOWGREEN			= Color.rgba2int(154,205,50)

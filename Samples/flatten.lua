@@ -1,9 +1,18 @@
+--[[
+DisplayObjContainers uses RenderTexture to support flatten logic.
+
+Flatten forces the content of the container to be drawn on a render 
+texture and displayed as an Image in place of it. The render to texture
+is done once so future changes in container content is not shown until 
+the container is unflatten
+ 
+Flatten can be called to increase rendering performances when the content
+doesn't change, at the cost of more GPU memory used for the newly created 
+render texture
+--]]
+
 -- uncomment to debug touch and keyboard callbacks. works with Mobdebug
 --__DEBUG_CALLBACKS__ = true
-
---By default (0,0) is topleft point and y is from top to bottom. Defining this allows to 
---set (0,0) as bottomleft point and having y from bottom to top.
---__USE_SIMULATION_COORDS__ = true
 
 --include Shilke2D lib
 require("Shilke2D/include")
@@ -25,8 +34,8 @@ function setup()
     local shilke = Shilke2D.current
 	
 	--the stage is the base displayObjContainer of the scene. Everything need to be connected to the
-	--stage to be displayed. The stage is a particular displayObjContainer because it can't be moved,scaled
-	--or anyway transformed geometrically.
+	--stage to be displayed. The stage is a particular displayObjContainer because it can't be moved,
+	--scaled or anyway transformed geometrically.
 	local stage = shilke.stage 
 	
 	local juggler = shilke.juggler 
@@ -39,6 +48,7 @@ function setup()
 	
 	--retrieves all the textures contained into the atlas
 	local textures = atlas:getTextures()
+	
 	--takes a reference of all the containers so to be able to set them flatten/unflatten in the touched()
 	--callback
 	containerList = {}
@@ -51,25 +61,24 @@ function setup()
 	for _,texture in ipairs(textures) do
 		local display = DisplayObjContainer()
 		containerList[#containerList+1] = display
-		--create 300 sprites in random position and add them to display
+		
+		--create NUM_IMGS images in random position and add them to display
 		for i=1,NUM_IMGS do
 			local img = Image(texture)
 			numImgs = numImgs +1
-			--[[
-			We put each sprite in random position.
-			We avoid to put imgs with a negative x or y point in display coord system. 
-			That's because the flatten logic create a clirect area with zero coord in the
-			point (0,0) of the displayObjContainer and clips what is behind
-			--]]
+			
+			--Avoid to put images with a negative x or y point in display coord system. 
+			--because the flatten logic create a cliprect area with zero coord in the
+			--point (0,0) of the displayObjContainer
 			img:setPosition(math.random(img:getWidth()/2,SUBDISPLAY_WIDTH-img:getWidth()/2),
 							math.random(img:getHeight()/2,SUBDISPLAY_HEIGHT-img:getHeight()/2))
 			display:addChild(img)
 		end
-		--flatten display to be a single image object
+		
 		stage:addChild(display)
 				
 		--Set display position in a random point inside the screen and make it rotates infinite times
-		--around its center.
+		--around its center using a tweens.
 		display:setPivot(display:getWidth()/2,display:getHeight()/2)
 		display:setPosition(math.random(WIDTH),math.random(HEIGHT))
 		
@@ -97,10 +106,6 @@ function setup()
 	--to be called for every touch.
 	stage:setTouchable(false)
 	
-end
-
---update is called once per frame and allows to logically update status of objects
-function update(elapsedTime)
 end
 
 
