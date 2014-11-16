@@ -91,7 +91,7 @@ used memory)
 @tparam MOAIImage image
 @tparam[opt=nil] BitmapRegion bmpRegion
 --]]
-function Image:enablePixelPreciseHitTest(alphaLevel, image, bmpRegion)
+function Image:enablePixelHitTest(alphaLevel, image, bmpRegion)
 	local alphaLevel = alphaLevel or 0
 	local _w,_h
 	if bmpRegion then
@@ -110,12 +110,26 @@ function Image:enablePixelPreciseHitTest(alphaLevel, image, bmpRegion)
 end
 
 ---Disable the pixel precision hit test 
-function Image:disablePixelPreciseHitTest()
+function Image:disablePixelHitTest()
 	self.ppHitTest = nil
 end
 
+
 --[[---
-If pixelPrecise hitTest is enabled the hitTest is made on texture pixel alpha value
+Returns the pixelHitTest configuration, if set
+@treturn[1] int alphaLevel
+@treturn[1] MOAIImage
+@treturn[1] BitmapRegion
+@return[2] nil
+--]]
+function Image:getPixelHitTestParams()
+	if self.ppHitTest then
+		return self.ppHitTest.alphaLevel, self.ppHitTest.image, self.ppHitTest.bitmapRegion
+	end
+end
+
+--[[---
+If pixelHitTest is enabled the hitTest is made on texture pixel alpha value
 else using normal point into box test
 @param x coordinate in targetSpace system
 @param y coordinate in targetSpace system

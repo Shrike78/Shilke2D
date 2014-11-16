@@ -1,106 +1,117 @@
--- uncomment to debug touch and keyboard callbacks. works with Mobdebug
-__DEBUG_CALLBACKS__ = true
+--[[
+The sample shows the usage of BitmapData hitTest/hitTestEx.
 
---By default (0,0) is topleft point and y is from top to bottom. Defining this allows to 
---set (0,0) as bottomleft point and having y from bottom to top.
---__USE_SIMULATION_COORDS__ = true
+This functions allow to make a per pixel hit test of two MOAIImages 
+(the extended version support also BitampRegions) given their relative
+position and a minimum alpha level (per image) used to identify transparent 
+pixels.
+
+The functions work only with CPU BitmapRegions (MOAIImages), not with textures
+beacuse textures cannot be queried for pixel informations.
+
+If a per pixel collision detection is required then it's possible to keep a 
+reference to the src MOAIImage and use it to make hit tests on Images/Textures.
+
+NB: the functions work only with not scaled and not rotated images
+--]]
+
+-- uncomment to debug touch and keyboard callbacks. works with Mobdebug
+--__DEBUG_CALLBACKS__ = true
 
 --include Shilke2D lib
 require("Shilke2D/include")
 
-local WIDTH,HEIGHT = 1024,680
+local WIDTH,HEIGHT = 512,340
+local SCALEX,SCALEY = 2,2
+
 local FPS = 60
 
+--different alphalevels lead to different collision detection results.
+--this value is used either for pixelHitTest configuration, either for
+--collision detection between images
+local ALPHALEVEL = 0
+
 --the working dir of the application
-IO.setWorkingDir("Assets")
+IO.setWorkingDir("Assets/PlanetCute")
 
--- declared here because visible also in the update() function
-local boy,girl,collisionInfo
-local planetCuteImg
-
---Setup is called once at the beginning of the application, just after Shilke2D initialization phase
---here everything should be set up for the following execution
+--used for collision detection in update call
+local boyImg, girlImg
+	
 function setup()
 	
     local shilke = Shilke2D.current
-	
-	--the stage is the base displayObjContainer of the scene. Everything need to be connected to the
-	--stage to be displayed. The stage is a particular displayObjContainer because it can't be moved,scaled
-	--or anyway transformed geometrically.
-	local stage = shilke.stage 
-	
-	local juggler = shilke.juggler 
-	
 	--show as overlay fps and memory allocation
 	shilke:showStats(true,true)
 	
-	planetCuteImg = BitmapData.fromFile("PlanetCute/PlanetCute.png")
-	--we load the atlas descriptor created with TexturePacker. The data was created with the
-	--sparrow format so we make use of the TexturePacker helper function. Helpers also for corona and 
-	--moai format exists.
-	local atlas = TexturePacker.loadSparrowFormat("PlanetCute/PlanetCute.xml", Texture(planetCuteImg))
+	--the stage is the base displayObjContainer of the scene. Everything need to be connected to the
+	--stage to be displayed.
+	local stage = shilke.stage
+	stage:setBackgroundColor(Color.GREY)
 	
-	--we retrieve the subtexture that was originally "Character Boy".png and that is now a subregion of
-	--the atlas texture
-	local boyTexture = atlas:getTexture("Character Boy.png") 
-	--we create a static img setting the Pivot in bottom center position
-	boy = Image(boyTexture,PivotMode.TOP_LEFT)
-	boy:setPosition(WIDTH/4,2*HEIGHT/4)
-	--we add an event listener for the 'touch' event.
-	boy:addEventListener(Event.TOUCH,onSpriteTouched)
-	--we set a pixel precision hit test for the image with an alpha treshold of 128 to identify transparent pixels
-	boy:enablePixelPreciseHitTest(128, planetCuteImg, boyTexture)
-	stage:addChild(boy)
+	local planetCuteBmp = BitmapData.fromFile("PlanetCute_optimized.png")
+	local planetCuteTxt = Texture(planetCuteBmp)
+		
+	local atlas = TexturePacker.loadSparrowFormat("PlanetCute_optimized.xml", planetCuteTxt)
+	
+	local boyTxt = atlas:getTexture("Character Boy.png") 
+	boyImg = Image(boyTxt)	
+	boyImg:setPosition(WIDTH/4,2*HEIGHT/4)
+	boyImg:addEventListener(Event.TOUCH,onSpriteTouched)
+	stage:addChild(boyImg)
 
 	--we retrieve the subtexture that was originally "Character Cat Girl".png and that is now a subregion of
 	--the atlas texture
-	local girlTexture = atlas:getTexture("Character Cat Girl.png") 
+	local girlTxt = atlas:getTexture("Character Cat Girl.png") 
 	--we create a static img setting the Pivot in top center position
-	girl = Image(girlTexture,PivotMode.TOP_LEFT)
+	girlImg = Image(girlTxt)
 	
-	girl:setPosition(3*WIDTH/4,2*HEIGHT/4)
-	girl:addEventListener(Event.TOUCH,onSpriteTouched)
-	--we set a pixel precision hit test for the image with an alpha treshold of 128 to identify transparent pixels
-	girl:enablePixelPreciseHitTest(128, planetCuteImg, girlTexture)
-	stage:addChild(girl)
+	girlImg:setPosition(3*WIDTH/4,2*HEIGHT/4)
+	girlImg:addEventListener(Event.TOUCH,onSpriteTouched)
+	stage:addChild(girlImg)
 	
-	local info = TextField(WIDTH-40, 300,
-		"Drag and Drop with collision detection sample:\n" ..
-		"\n-Textures in Shilke2D are equivalent to BitmapData in flash and have a similar "..
-		"\n hitTest() method that make a per pixel comparison given 2 texures, space positions "..
-		"\n and alpha thresholds to identify transparent pixels"..
-		"\n\n-If 2 images are not scaled and not rotated it's possibile to use the texture:hitTest()"..		
-		"\n method to compare the images",	
-		nil, 20, 
-		PivotMode.TOP_LEFT)
-	info:setPosition(20,40)
-	info:setTouchable(false)
+	--setting framed to false would lead to higher memory usage (larger bitmaps) and
+	--worste performances (more pixel to test)
+	local framed = true
+	--Create two smaller framed MOAIImages and release larger planetCuteBmp
+	local boyBmp, boyFrame = BitmapData.cloneRegion(planetCuteBmp, boyTxt, framed)
+	local girlBmp, girlFrame = BitmapData.cloneRegion(planetCuteBmp, girlTxt, framed)
+	planetCuteBmp = nil
+
+	--enable pixelPrecisionHitTests using the newly created bitmap regions
+	boyImg:enablePixelHitTest(ALPHALEVEL, boyBmp, boyFrame)
+	girlImg:enablePixelHitTest(ALPHALEVEL, girlBmp, girlFrame)
+
+	local info = TextField(400,40,"Drag the characters and make them overlap.\nAlpha level is " .. ALPHALEVEL)
+	info:setPosition(WIDTH/2,80)
+	info:setHAlignment(TextField.CENTER_JUSTIFY)
 	stage:addChild(info)
 
-	local info2 = TextField(400,20,"Drag the characters and make them overlap")
-	info2:setPosition(WIDTH/2,HEIGHT-120)
-	stage:addChild(info2)
-
-	collisionInfo = TextField(150,20, "")
-	collisionInfo:setPosition(WIDTH/2,HEIGHT-100)
+	collisionInfo = TextField(200,20, "")
+	collisionInfo:setPosition(WIDTH/2,120)
+	collisionInfo:setHAlignment(TextField.CENTER_JUSTIFY)
 	stage:addChild(collisionInfo)
 end
 
 --update is called once per frame and allows to logically update status of objects
 function update(elapsedTime)
+	
+	--the choosen textures have the same size. The images are both created with a default centered
+	--pivot point, so the position can be used to calculate hitTest without any correction, even if
+	--it refers to the center of the texture instead of the top left point
+	--In a different situation the two position should be calculated displacing the imgs position
+	--by their pivot position, or getting the bounds of images in stage target space and using the 
+	--x,y coordinates of the resulting rect
+	local bx,by = boyImg:getPosition()
+	local gx,gy = girlImg:getPosition()
+	local bCollision = false
+	local _, boyBmp, boyRegion = boyImg:getPixelHitTestParams()
+	local _, girlBmp, girlRegion = boyImg:getPixelHitTestParams()
 	--the method accepts a position and an alpha treshold for the first texture and a second texture with
 	--its position and alpha level.
-	--in this sample the position is retrieved by images just because both the images have pivot set as
-	--top_left. In a different situation the two position should be calculated displacing the imgs position
-	--by their pivot position
-	local bx,by = boy:getPosition()
-	local gx,gy = girl:getPosition()
+	bCollision = BitmapData.hitTestEx(boyBmp, bx, by, ALPHALEVEL, girlBmp, gx, gy, ALPHALEVEL, boyFrame, girlFrame, 2)
+	hitTestText = "hitTest"
 	
-	if BitmapData.hitTestEx(planetCuteImg, bx, by, 128, planetCuteImg, gx, gy, 128, boy:getTexture(), girl:getTexture()) then
-		collisionInfo:setText("Collision = true")
-	else
-		collisionInfo:setText("Collision = false")
-	end
+	collisionInfo:setText("hitTest = " .. tostring(bCollision))
 end
 
 
@@ -120,7 +131,7 @@ function onSpriteTouched(e)
 		--check if the target exists: the sender notifies moving events the start inside it even if the 
 		--move ending point is outside it, and so the target it's different or nil.
 		--If it exists and it's the same currently "dragged" by Shilke, then translate it
-		if target and target ==	Shilke2D.current:getDraggedObj(touch) then
+		if target and target == Shilke2D.current:getDraggedObj(touch) then
 			--Global Translate allows to translate an obj based on stage coordinates.
 			target:globalTranslate(touch.deltaX,touch.deltaY)
 		end
@@ -130,11 +141,7 @@ function onSpriteTouched(e)
 	end
 end
 
---called when no object handle the current touch. if stage touch is disabled every touch is 
---redirected here
-function touched(touch)
-end
 
 --shilke2D initialization. it requires width, height and fps. Optional a scale value for x / y.
-shilke2D = Shilke2D(WIDTH,HEIGHT,FPS)
+shilke2D = Shilke2D(WIDTH,HEIGHT,FPS,SCALEX,SCALEY)
 shilke2D:start()

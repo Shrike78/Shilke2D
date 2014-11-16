@@ -80,7 +80,7 @@ function setup()
 	girlImg:setRotation(math.random()*2*math.pi)	
 	--Enable pixel precise hitTest for girl Image, providing the planetCuteBmp as
 	--MOAIImage source and the girlTxt as region
-	girlImg:enablePixelPreciseHitTest(0, planetCuteBmp, girlTxt)
+	girlImg:enablePixelHitTest(0, planetCuteBmp, girlTxt)
 	girlImg:addEventListener(Event.TOUCH,onSpriteTouched)
 	stage:addChild(girlImg)
 	

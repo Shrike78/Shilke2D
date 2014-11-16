@@ -82,13 +82,13 @@ function setup()
 	--Enable pixel precise hitTest for girl Image, providing the planetCuteBmp as
 	--MOAIImage source and the girlTxt as region
 	--alpha level used for hit test is 0
-	girlImg:enablePixelPreciseHitTest(0, planetCuteBmp, girlTxt)
+	girlImg:enablePixelHitTest(0, planetCuteBmp, girlTxt)
 	
 	--replace the previous instruction with the following to see how
-	--different bitmap regions can be used for pixelPreciseHitTest
+	--different bitmap regions can be used for pixelHitTest
 	--[[
 	girlBmp, girlBmpFrame = BitmapData.cloneRegion(planetCuteBmp,girlTxt,true)
-	girlImg:enablePixelPreciseHitTest(0, girlBmp, girlBmpFrame)
+	girlImg:enablePixelHitTest(0, girlBmp, girlBmpFrame)
 	--]]
 	
 	local info = TextField(500, 250, "Touching an Image change it's color to red." ..
