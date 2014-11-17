@@ -41,10 +41,10 @@ function setup()
 	local stage = shilke.stage 
 	
 	--create a sky background using a quad, darker on top and brighter on bottom
-	local fromColor = Color(39, 58, 103, 255)
-	local toColor = Color(29, 27, 38, 255)
+	local topColor = Color(29, 27, 38, 255)
+	local bottomColor = Color(39, 58, 103, 255)
 	local q = Quad(WIDTH,HEIGHT, PivotMode.BOTTOM_LEFT)
-	q:setColors(fromColor, fromColor, toColor, toColor)
+	q:setVerticalGradient(topColor, bottomColor)
 	stage:addChild(q)
 	
 	--create a 64x64 star texture, then rescaled to have a better smooth result

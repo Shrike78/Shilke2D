@@ -5,7 +5,7 @@ fade into each other over the area of the quad. To display a simple
 linear color gradient, assign one color to vertices 1 and 2 and 
 another color to vertices 3 and 4. 
 
-if __USE_SIMULATION_COORDS__ is nil or false then vertex 1 is the top left one, 
+if __USE_SIMULATION_COORDS__ is false then vertex 1 is the top left one, 
 and the vertices follow clockwise order.
 
 v1 -- v2
@@ -253,4 +253,26 @@ function Quad:getColors()
 		colors[#colors+1] = Color.fromNormalizedValues(unpack(c))
 	end
 	return unpack(colors)
+end
+
+--[[---
+Sets an horizontal gradient
+@tparam Color c1 left color
+@tparam Color c2 right color
+--]]
+function Quad:setHorizontalGradient(c1, c2)
+	self:setColors(c1,c2,c2,c1)
+end
+
+--[[---
+Sets a vertical gradient
+@tparam Color c1 top color
+@tparam Color c2 bottom color
+--]]
+function Quad:setVerticalGradient(c1,c2)
+	if __USE_SIMULATION_COORDS__ then
+		self:setColors(c2,c2,c1,c1)
+	else
+		self:setColors(c1,c1,c2,c2)
+	end
 end
