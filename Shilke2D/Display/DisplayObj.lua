@@ -105,6 +105,8 @@ DisplayObj.__defaultUseMultiplyColor = false
 ---Used to define the default alpha behaviour of a displayObj type. That influences blend modes.
 DisplayObj.__defaultHasPremultipliedAlpha = true
 
+local __identityMatrix = MOAITransform.new()
+
 ---Initialization.
 function DisplayObj:init()
     EventDispatcher.init(self)
@@ -114,7 +116,8 @@ function DisplayObj:init()
 	
 	--exact clone of transformation prop, used to calculate transformMatrix depending
 	--on a specific targetSpace
-	self._transformMatrix = MOAITransform.new()
+	self._localMatrix = MOAITransform.new()
+	self._transformMatrix = self._localMatrix
 	
     self._name = nil
     self._parent = nil
@@ -142,6 +145,7 @@ function DisplayObj:dispose()
 	end
 	EventDispatcher.dispose(self)
 	self._transformMatrix = nil
+	self._localMatrix = nil
 	self._prop = nil
 end
 
@@ -557,13 +561,14 @@ function DisplayObj:setRotation(r)
     --move into range [-180 deg, +180 deg]
     while (r < -PI) do r = r + PI2 end
     while (r >  PI) do r = r - PI2 end
-    self._prop:setAttr(MOAITransform.ATTR_Z_ROT,DEG(r)*__rmult)
+	self._prop:setRot(0, 0, DEG(r)*__rmult)
 end
 
 ---Get rotation value
 --@treturn number r [-math.pi, math.pi]
 function DisplayObj:getRotation()
-	return RAD(self._prop:getAttr(MOAITransform.ATTR_Z_ROT)*__rmult)
+	local _,_,r = self._prop:getRot()
+	return RAD(r * __rmult)
 end
 
 ---Set scale
@@ -627,37 +632,45 @@ nil means top most container
 --]]
 function DisplayObj:updateTransformationMatrix(targetSpace)
 	
-	if (targetSpace == self or (not self._parent and not targetSpace) ) then
-		if self._bTransformMatrixIsIdentity then 
-			return
-		else
-			self._transformMatrix:clearAttrLink(MOAITransform.INHERIT_TRANSFORM)
-			self._transformMatrix:setPiv(0,0,0)
-			self._transformMatrix:setLoc(0,0,0)
-			self._transformMatrix:setScl(1,1)
-			self._transformMatrix:setAttr(MOAITransform.ATTR_Z_ROT,0)
-			self._transformMatrix:forceUpdate()
-			self._bTransformMatrixIsIdentity = true
-			return
-		end
+	--if the target is itself, just return an identity matrix (like a costant)
+	if (targetSpace == self or (not targetSpace and not self._parent)) then
+		--it the target space it's the object itself, just return an identity matrix
+		--a global __identityMatrix helper is available for displayObjs
+		self._transformMatrix = __identityMatrix
+		return
 	end
 	
+	--if the target is the root, inner prop is already a valid transform matrix.
+	if not targetSpace or targetSpace == self:getRoot() then
+		self._transformMatrix = self._prop
+		--requires an extra update because prop matrix chain could have been
+		--updated since last usage
+		self._transformMatrix:forceUpdate()
+		return
+	end
+	
+	--if the target is a parent displayObjContainer, but not the root
+	--setup the local matrix to create a chain of matrix transformations
 	if self._parent then
+		--assign local matrix to transformMatrix
+		self._transformMatrix = self._localMatrix
+		--force the update of the parent transformation matrix
 		self._parent:updateTransformationMatrix(targetSpace)
+		--bind matrix to parent matrix
 		self._transformMatrix:setAttrLink(MOAITransform.INHERIT_TRANSFORM,
 			self._parent._transformMatrix, MOAITransform.TRANSFORM_TRAIT)
+		--copy _prop matrix to _transformMatrix 
 		self._transformMatrix:setPiv(self._prop:getPiv())
 		self._transformMatrix:setLoc(self._prop:getLoc())
 		self._transformMatrix:setScl(self._prop:getScl())
-		self._transformMatrix:setAttr(MOAITransform.ATTR_Z_ROT,
-			self._prop:getAttr(MOAITransform.ATTR_Z_ROT))
+		self._transformMatrix:setRot(self._prop:getRot())
 		self._transformMatrix:forceUpdate()
-		self._bTransformMatrixIsIdentity = false
 		return
 	end
 	
 	error("the targetSpace " .. targetSpace .. " is not an ancestor of the current obj")
 end
+	
 
 --[[---
 Transforms a point from the local coordinate system to 
@@ -714,7 +727,6 @@ function DisplayObj:setGlobalPosition(x,y,targetSpace)
 		_x,_y = x,y
 	end
     self._prop:setLoc(_x,_y,0)
-    self._transformMatrix:setLoc(_x,_y,0)
 end
 
 
@@ -888,5 +900,4 @@ function DisplayObj:hitTest(x,y,targetSpace,forTouch)
     end
     return nil
 end
-
 
