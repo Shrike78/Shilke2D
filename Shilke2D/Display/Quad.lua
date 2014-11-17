@@ -54,7 +54,8 @@ function Quad:dispose()
 end
 
 ---override default quad shader
---@tparam MOAIShader shader
+--if no shader is provided it resets to default quad shader
+--@tparam[opt=nil] MOAIShader shader
 function Quad:setShader(shader)
 	if shader then
 		self._prop:setShader(shader)
@@ -102,7 +103,7 @@ end
 function Quad:_updateVertexBuffer()
 	
 	local vcoords 
-	--create with same vertex orders for both coordinate system
+	--create with same vertex orders for both coordinate systems
 	if __USE_SIMULATION_COORDS__ then
 		vcoords = {{ 0, self._height },
 					{ self._width, self._height },
@@ -267,7 +268,7 @@ Sets an horizontal gradient
 @tparam Color c1 left color
 @tparam Color c2 right color
 --]]
-function Quad:setHorizontalGradient(c1, c2)
+function Quad:setHorizontalGradient(c1,c2)
 	self:setColors(c1,c2,c2,c1)
 end
 
