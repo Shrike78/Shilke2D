@@ -42,8 +42,8 @@ end
 --@tparam[opt=true] bool showOrientedBounds
 --@tparam[opt=false] bool showAABounds boolean
 function Stage:showDebugLines(showOrientedBounds,showAABounds)
-	self._showOrientedBounds = showOrientedBounds ~= nil and showOrientedBounds or true
-	self._showAABounds = showAABounds ~= nil and showAABounds or false
+	self._showOrientedBounds = showOrientedBounds ~= false
+	self._showAABounds = showAABounds == true
 	
 	local showDebug = self._showOrientedBounds or self._showAABounds
 	
