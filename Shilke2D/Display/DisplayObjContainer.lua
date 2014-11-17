@@ -25,15 +25,6 @@ local MIN_VALUE = -math.huge
 
 DisplayObjContainer = class(DisplayObj)
 
---[[---
-DisplayObjContainers must notify all interested children into color changes so to be able 
-to correctly react to the events. Used mainly by children objects drawn using pixel shader 
-(like quads)
-Disabling multiplyColor calling useMultiplyColor() makes possible to optimize DisplayObjContainer 
-color / alpha management, but only if sure that no children are using multiplyColor feature
---]]
-DisplayObjContainer.__defaultUseMultiplyColor = true
-
 --[[---iterator for DisplayObjContainer children. 
 It's possible to retrieve only children of a given 'typeFilter' type
 @param displayObjContainer the container of which children must be iterated
@@ -344,58 +335,6 @@ function DisplayObjContainer:swapChildrenAt(index1,index2)
 		self._objRenderTable[index2] = tmp
 	end
 end
-
-
----Set container alpha value
---@param a [0,255]
-function DisplayObjContainer:setAlpha(a)
-	DisplayObj.setAlpha(self,a)
-	if self._useMultiplyColor then
-		self:_updateChildrenColor()
-	end
-end
-
-function DisplayObjContainer:setColor(r,g,b,a)
-	DisplayObj.setColor(self,r,g,b,a)
-	if self._useMultiplyColor then
-		self:_updateChildrenColor()
-	end
-end
-
---[[---
-Inner method. Called by parent container, setMultiplyAlpha set the alpha value of the parent container (already
-modified by his current multiplyalpha value)
-@param r [0,1]
-@param g [0,1]
-@param b [0,1]
-@param a [0,1]
---]]
-function DisplayObjContainer:_setMultiplyColor(r,g,b,a)
-    --DisplayObj._setMultiplyColor(self,c)
-	local mc = self._multiplyColor
-	mc[1] = r
-	mc[2] = g
-	mc[3] = b
-	mc[4] = a
-    self:_updateChildrenColor()
-end
-
----Inner method. Propagate color value to all children, setting "multiplied color" value
---used by object that need it for correct displaying using pixel shaders
-function DisplayObjContainer:_updateChildrenColor()
-	local r,g,b,a = 1,1,1,1
-	
-	if self._useMultiplyColor then
-		r,g,b,a = self:_getMultipliedColor() 
-	end
-	
-    for _,o in pairs(self._displayObjs) do
-		if o._useMultiplyColor then
-			o:_setMultiplyColor(r,g,b,a)
-		end
-    end
-end
-
 
 --[[---
 By default the hitTet over a DisplayObjContainer is an hitTest over

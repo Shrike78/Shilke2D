@@ -93,14 +93,6 @@ local __helperRect = Rect()
 
 DisplayObj = class(EventDispatcher)
 
---[[---
-By default DisplayObjs do not make use of multiplyColor because the
-resulting color on screen is automatically affected by hierarchy colors.
-Special cases are when an object is rendered using a shader that doesn't
-take care of hierarchy, and so it's required to manually modify colors 
-according to multiply value.
---]]
-DisplayObj.__defaultUseMultiplyColor = false
 
 ---Used to define the default alpha behaviour of a displayObj type. That influences blend modes.
 DisplayObj.__defaultHasPremultipliedAlpha = true
@@ -126,15 +118,12 @@ function DisplayObj:init()
     self._touchable = true
 	
 	--set default values for the class
-	self._useMultiplyColor = self.__defaultUseMultiplyColor
 	self._premultipliedAlpha = self.__defaultHasPremultipliedAlpha
 	
 	if not self._premultipliedAlpha then
 		self:setBlendMode(BlendMode.NORMAL)
 	end
 	self._color = {1,1,1,1}
-    self._multiplyColor = {1,1,1,1}
-
 end
 
 ---If a derived object needs to clean up resources it must inherits this method, always remembering to 
@@ -198,15 +187,9 @@ function DisplayObj:_setParent(parent)
 		--if not set before it can raise problems
 		self._prop:setAttrLink(MOAITransform.INHERIT_TRANSFORM, parent._prop, MOAITransform.TRANSFORM_TRAIT)
 		self._prop:setAttrLink(MOAIColor.INHERIT_COLOR, parent._prop, MOAIColor.COLOR_TRAIT)
-       	if self._useMultiplyColor then
-			self:_setMultiplyColor(parent:_getMultipliedColor())
-		end
     else
 		self._prop:clearAttrLink(MOAITransform.INHERIT_TRANSFORM)
 		self._prop:clearAttrLink(MOAIColor.INHERIT_COLOR)
-       	if self._useMultiplyColor then
-			self:_setMultiplyColor(1,1,1,1)
-		end
 	end
 	--force update of transform matrix
 	self._prop:forceUpdate()
@@ -282,62 +265,6 @@ function DisplayObj:isTouchable()
    return self._touchable
 end
 
---[[---
-Used to override default 'useMultiplyColor' class value for a specific instance
-Used for example for images when a pixel shader is set for special effects.
-@param bUse boolean
---]]
-function DisplayObj:useMultiplyColor(bUse)
-	self._useMultiplyColor = bUse
-	if bUse and self._parent then
-		self:_setMultiplyColor(self._parent:_getMultiplyColor())
-	else
-		self:_setMultiplyColor(1,1,1,1)
-	end
-end
-
----Returns if the object is using multiplyColor feature
---@return bool
-function DisplayObj:isMultiplyingColor()
-	return self._useMultiplyColor
-end
-
---[[---
-Inner method.
-Called by parent container, setMultiplyColor set the multiply color value of the parent container 
-(already modified by his current multiplyColor value)
-@param r [0,1]
-@param g [0,1]
-@param b [0,1]
-@param a [0,1]
---]]
-function DisplayObj:_setMultiplyColor(r,g,b,a)
-	local mc = self._multiplyColor
-	mc[1] = r
-	mc[2] = g
-	mc[3] = b
-	mc[4] = a
-end
-
---[[---
-Inner method.
-Returns the color of the object when displayed. 
-This value is obtained multiplying the obj color by the parent multiplyColor value
-@return r [0,1]
-@return g [0,1]
-@return b [0,1]
-@return a [0,1]
---]] 
-function DisplayObj:_getMultipliedColor()
-	local mc = self._multiplyColor
-	local prop = self._prop
-	local c = self._color
-	local r = mc[1] * c[1]  
-	local g = mc[2] * c[2]  
-	local b = mc[3] * c[3]  
-	local a = mc[4] * c[4]  
-    return r,g,b,a
-end
 
 --[[---
 Set the blend mode for the display object. A blend mode can be expressed in terms of
@@ -482,9 +409,9 @@ function DisplayObj:getPivotY()
 end
 
 --[[
-All the following methods set or get the geometric transformation 
+All the following methods sets or get sthe geometric transformation 
 of the object relative to the local coordinates of the parent.
-pos and scale have single coords accessors but also coupled (on x 
+position and scale have single coords accessors but also coupled (on x 
 and y) accessors for performance issues, and "_v2" (vec2) version, 
 usefull in different situation (like tweening)
 --]]

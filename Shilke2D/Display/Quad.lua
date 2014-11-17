@@ -8,8 +8,17 @@ another color to vertices 3 and 4.
 if __USE_SIMULATION_COORDS__ is nil or false then vertex 1 is the top left one, 
 and the vertices follow clockwise order.
 
+v1 -- v2
+|      |
+v4 -- v3
+
 if __USE_SIMULATION_COORDS__ is true then vertex 1 is the bottom left one, 
 and the vertices follow counter clockwise order.
+
+v4 -- v3
+|      |
+v1 -- v2
+
 --]]
 
 --basic math function calls
@@ -19,10 +28,6 @@ local INV_255 = 1/255
 local _quad_shader = nil
 
 Quad = class(BaseQuad)
-
----Quad are drawn using a pixel shader so it's necessary to have
---it enabled to inherits ancestors color values
-Quad.__defaultUseMultiplyColor = true
 
 --[[---
 Constructor.
@@ -45,6 +50,14 @@ function Quad:init(width,height,pivotMode)
 	self._prop:setDeck(self._mesh)
 end
 
+
+---release any used memory
+function Quad:dispose()
+	BaseQuad.dispose(self)
+	self._mesh = nil
+	self._vbo:release()
+	self._vbo = nil
+end
 
 ---override default quad shader
 --@tparam MOAIShader shader
@@ -71,6 +84,8 @@ function Quad:_createMesh()
 	self._mesh = MOAIMesh.new ()
 	self._mesh:setVertexBuffer ( self._vbo )
 	self._mesh:setPrimType ( MOAIMesh.GL_TRIANGLE_FAN )
+	
+	--shader creation is done first time a quad is created. 
 	if not _quad_shader then
 		_quad_shader = MOAIShader.new ()
 		local vsh = IO.getFile("/Shilke2D/Resources/quad.vsh")
@@ -99,7 +114,6 @@ function Quad:_updateVertexBuffer()
 	
 	self._vbo:reset()
 	
-	local mc = self._multiplyColor
 	local c,a
 	for i=1, #vcoords do
 		-- write vertex position
@@ -107,20 +121,10 @@ function Quad:_updateVertexBuffer()
 		-- write RGBA value
 		c = self._colors[i]
 		if self._premultipliedAlpha then
-			a = c[4] * mc[4]
-			self._vbo:writeColor32(
-						c[1] * mc[1] * a, 
-						c[2] * mc[2] * a, 
-						c[3] * mc[3] * a, 
-						a
-					)
+			a = c[4]
+			self._vbo:writeColor32(c[1]*a, c[2]*a, c[3]*a, a)
 		else
-			self._vbo:writeColor32(
-						c[1] * mc[1], 
-						c[2] * mc[2], 
-						c[3] * mc[3], 
-						c[4] * mc[4]
-					)
+			self._vbo:writeColor32(c[1], c[2], c[3], c[4])
 		end
 	end
     
@@ -134,34 +138,6 @@ end
 function Quad:setSize(width,height)
 	BaseQuad.setSize(self,width,height)
 	self:_updateVertexBuffer()
-end
-
---[[---
-Override base method. It calls _updateVertexBuffer
-@param r [0,1]
-@param g [0,1]
-@param b [0,1]
-@param a [0,1]
---]]
-function Quad:_setMultiplyColor(r,g,b,a)
-	local mc = self._multiplyColor
-	mc[1] = r
-	mc[2] = g
-	mc[3] = b
-	mc[4] = a
-	self:_updateVertexBuffer()
-end
-
----Returns the multiplied alpha value as applied to the first vertex. 
---If alpha values is different per vertices the return value has no real meaning
---@return int obtained by Color.rgba2int([0,255],[0,255],[0,255],[0,255])
-function Quad:_getMultipliedColor()
-	local mc = self._multiplyColor
-	local r = mc[1] * self._colors[1][1]  
-	local g = mc[2] * self._colors[1][2]  
-	local b = mc[3] * self._colors[1][3]  
-	local a = mc[4] * self._colors[1][4]
-	return r,g,b,a
 end
 
 ---overrides displayobj method redirecting on _updateVertexBuffer
@@ -278,4 +254,3 @@ function Quad:getColors()
 	end
 	return unpack(colors)
 end
-
