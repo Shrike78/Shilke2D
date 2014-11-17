@@ -1,23 +1,17 @@
 --[[---
 A Quad represents a rectangle with a uniform color or a color gradient.
+
 It's possible to set one color per vertex. The colors will smoothly 
-fade into each other over the area of the quad. To display a simple 
-linear color gradient, assign one color to vertices 1 and 2 and 
-another color to vertices 3 and 4. 
+fade into each other over the area of the quad. 
 
-if __USE_SIMULATION_COORDS__ is false then vertex 1 is the top left one, 
-and the vertices follow clockwise order.
+The quad is implemented using a triangle fan mesh made of two triangles, 
+with the following vertex order (the same in both coordinate systems):
 
-v1 -- v2
-|      |
-v4 -- v3
-
-if __USE_SIMULATION_COORDS__ is true then vertex 1 is the bottom left one, 
-and the vertices follow counter clockwise order.
-
-v4 -- v3
-|      |
-v1 -- v2
+v1---v2
+| \   |
+|  \  |
+|   \ |
+v4---v3
 
 --]]
 
@@ -46,7 +40,6 @@ function Quad:init(width,height,pivotMode)
 	
 	self:_createMesh()
 	self:_updateVertexBuffer()
-	
 	self._prop:setDeck(self._mesh)
 end
 
@@ -57,6 +50,7 @@ function Quad:dispose()
 	self._mesh = nil
 	self._vbo:release()
 	self._vbo = nil
+	self._vertexFormat = nil
 end
 
 ---override default quad shader
@@ -73,12 +67,12 @@ end
 ---Inner method. It creates the quad mesh that will be displayed
 function Quad:_createMesh()
 		
-	local vertexFormat = MOAIVertexFormat.new ()
-	vertexFormat:declareCoord ( 1, MOAIVertexFormat.GL_FLOAT, 2 )
-	vertexFormat:declareColor ( 2, MOAIVertexFormat.GL_UNSIGNED_BYTE )
+	self._vertexFormat = MOAIVertexFormat.new ()
+	self._vertexFormat:declareCoord ( 1, MOAIVertexFormat.GL_FLOAT, 2 )
+	self._vertexFormat:declareColor ( 2, MOAIVertexFormat.GL_UNSIGNED_BYTE )
 
 	self._vbo = MOAIVertexBuffer.new ()
-	self._vbo:setFormat ( vertexFormat )
+	self._vbo:setFormat ( self._vertexFormat )
 	self._vbo:reserveVerts ( 4 )
 
 	self._mesh = MOAIMesh.new ()
@@ -107,11 +101,20 @@ end
 --to update mesh vertices infos.
 function Quad:_updateVertexBuffer()
 	
-	local vcoords = {{ 0, 0 },
+	local vcoords 
+	--create with same vertex orders for both coordinate system
+	if __USE_SIMULATION_COORDS__ then
+		vcoords = {{ 0, self._height },
+					{ self._width, self._height },
+					{ self._width, 0 },
+					{ 0, 0 }}
+	else
+		vcoords = {{ 0, 0 },
 					{ self._width, 0 },
 					{ self._width, self._height },
 					{ 0, self._height }}
-	
+	end
+
 	self._vbo:reset()
 	
 	local c,a
@@ -235,6 +238,10 @@ function Quad:setColors(c1,c2,c3,c4)
 	local r,g,b,a
 	for v = 1,4 do
 		local src = colors[v]
+		--handle colors provided as named colors (os hex strings)
+		if class_type(src) ~= Color then
+			src = Color(src)
+		end
 		local dst = self._colors[v]
 		dst[1], dst[2], dst[3], dst[4] = src:unpack_normalized()
 	end
@@ -270,9 +277,5 @@ Sets a vertical gradient
 @tparam Color c2 bottom color
 --]]
 function Quad:setVerticalGradient(c1,c2)
-	if __USE_SIMULATION_COORDS__ then
-		self:setColors(c2,c2,c1,c1)
-	else
-		self:setColors(c1,c1,c2,c2)
-	end
+	self:setColors(c1,c1,c2,c2)
 end
