@@ -647,13 +647,10 @@ Usefull for drag and drop features
 If nil refers to the top most container
 --]]
 function DisplayObj:setGlobalPosition(x,y,targetSpace)
-	local _x,_y
 	if self._parent then
-		_x,_y = self._parent:globalToLocal(x,y,targetSpace)
-	else
-		_x,_y = x,y
+		x,y = self._parent:globalToLocal(x,y,targetSpace)
 	end
-    self._prop:setLoc(_x,_y,0)
+    self._prop:setLoc(x,y,0)
 end
 
 
@@ -812,19 +809,20 @@ Given a x,y point in targetSpace coordinates it check if it falls inside local b
 @return self if the hitTest is positive else nil 
 --]]
 function DisplayObj:hitTest(x,y,targetSpace,forTouch)
-    if not forTouch or (self._visible and self._touchable) then
-        local _x,_y
-        if targetSpace == self then
-            _x,_y = x,y
-        else
-            _x,_y = self:globalToLocal(x,y,targetSpace)
-        end
-		
-        local r = self:getRect(__helperRect)
-        if r:containsPoint(_x,_y) then
-            return self
-        end
-    end
-    return nil
+    --skip object if the hit test is for touch purpose and the obj is not visible
+	--or not touchable
+	if forTouch and (not self._visible or not self._touchable) then
+		return nil
+	end
+	
+	if targetSpace ~= self then
+		x,y = self:globalToLocal(x,y,targetSpace)
+	end
+	
+	local r = self:getRect(__helperRect)
+	if r:containsPoint(x,y) then
+		return self
+	end
+	return nil
 end
 

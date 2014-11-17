@@ -415,23 +415,35 @@ displayObjContainer.
 @return self if the hitTest is positive else nil 
 --]]
 function DisplayObjContainer:hitTest(x,y,targetSpace,forTouch)
-    if self._hittable then
+	--if the test is done for touch purpose, not visible and not touchable
+	--objects are skipped
+	if forTouch and (not self._visible or not self._touchable) then
+		return nil
+	end
+		
+    --If the container is hittable, the test is done on its own bounding area
+	if self._hittable then
         return DisplayObj.hitTest(self,x,y,targetSpace,forTouch)   
-    elseif not forTouch or (self:isVisible() and self._touchable) then
-        local _x,_y
-        if targetSpace == self then
-            _x,_y = x,y
-        else
-            _x,_y = self:globalToLocal(x,y,targetSpace)
-        end
-        local target = nil
-		for i = #self._displayObjs,1,-1 do
-			target = self._displayObjs[i]:hitTest(_x,_y,self,forTouch)
-			if target then 
-				return target
-			end
+	end
+	
+	local targetSpace = targetSpace
+	--if the target space is one of the parent containers (except for the stage) 
+	--hit test coordinates are recalculated as locally to the current container
+	--and the test is done using it as new target space.
+	--In other cases evaluate the hit test over original coordinate and space
+	--because DisplayObj implementation is optimized for that situation
+	if targetSpace and targetSpace ~= self and targetSpace ~= self:getRoot() then
+		x,y = self:globalToLocal(x,y,targetSpace)
+		targetSpace = self
+	end
+		
+	local target = nil
+	for i = #self._displayObjs,1,-1 do
+		target = self._displayObjs[i]:hitTest(x,y,targetSpace,forTouch)
+		if target then 
+			return target
 		end
-    end
+	end		
     return nil
 end
 
