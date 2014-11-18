@@ -559,39 +559,44 @@ nil means top most container
 --]]
 function DisplayObj:updateTransformationMatrix(targetSpace)
 	
-	--if the target is itself, just return an identity matrix (like a costant)
+	--if the target is itself returns identity matrix
 	if (targetSpace == self or (not targetSpace and not self._parent)) then
-		--it the target space it's the object itself, just return an identity matrix
-		--a global __identityMatrix helper is available for displayObjs
 		self._transformMatrix = __identityMatrix
 		return
 	end
 	
-	--if the target is the root, inner prop is already a valid transform matrix.
-	if not targetSpace or targetSpace == self:getRoot() then
+	local root = self:getRoot()
+	local targetSpace = targetSpace or root
+	
+	--if the target is the root, uses _prop matrix component
+	if targetSpace == root then
 		self._transformMatrix = self._prop
-		--requires an extra update because prop matrix chain could have been
-		--updated since last usage
+		--the matrix chain get usually updated once per frame.
+		--forceUpdate call assure that all components are correctly updated
 		self._transformMatrix:forceUpdate()
 		return
 	end
 	
-	--if the target is a parent displayObjContainer, but not the root
-	--setup the local matrix to create a chain of matrix transformations
+	--if the target is displayObjContainer different from root
+	--uses local matrix as copy of _prop matrix component
 	if self._parent then
 		--assign local matrix to transformMatrix
 		self._transformMatrix = self._localMatrix
-		--force the update of the parent transformation matrix
-		self._parent:updateTransformationMatrix(targetSpace)
-		--bind matrix to parent matrix
-		self._transformMatrix:setAttrLink(MOAITransform.INHERIT_TRANSFORM,
-			self._parent._transformMatrix, MOAITransform.TRANSFORM_TRAIT)
-		--copy _prop matrix to _transformMatrix 
 		self._transformMatrix:setPiv(self._prop:getPiv())
 		self._transformMatrix:setLoc(self._prop:getLoc())
 		self._transformMatrix:setScl(self._prop:getScl())
 		self._transformMatrix:setRot(self._prop:getRot())
-		self._transformMatrix:forceUpdate()
+		--if parent is the targetSpace, skip inheritance 'cause it would 
+		--return an identity matrix
+		if targetSpace ~= self._parent then
+			--force the update of the parent transformation matrix
+			self._parent:updateTransformationMatrix(targetSpace)
+			--set matrices inheritance
+			self._transformMatrix:setAttrLink(MOAITransform.INHERIT_TRANSFORM,
+				self._parent._transformMatrix, MOAITransform.TRANSFORM_TRAIT)
+			--force udpate
+			self._transformMatrix:forceUpdate()
+		end
 		return
 	end
 	
