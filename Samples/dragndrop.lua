@@ -6,20 +6,24 @@ Shilke2D:startDrag(touch, object)
 Shilke2D:stopDrag(touch, object)
 Shilke2D:getDraggedObj(touch)
 
-DisplayObj:globalTranslate(x,y)
+DisplayObj:globalTranslate(dx,dy)
+DisplayObj:setGlobalPosition(x,y)
 
 The startDrag call binds a touch id to an specific object, so from this moment on, all events 
 related to this touch id will be handled directly by registered object until the touch ending
 (because ended or canceled). Without this call it's always the top most obj to be detected as 
 hit.
 
-the getDraggedObj returns the obj bound the the given touch id.
+The getDraggedObj returns the obj bound the the given touch id.
 
-the stopDrag calls unbinds obj and touchid. It's usually not called because when the touch ends
+The stopDrag calls unbinds obj and touchid. It's usually not called because when the touch ends
 the unbind is done automatically.
 
-The globalTranslate method of DisplayObjs it's a translate done in another target space coordinate
-system, by default the stage target space (that is also the touch coordinate system)
+The globalTranslate/setGlobalPosition methods of DisplayObj allow to modify obj position in another 
+target space coordinate system. The default target space is the stage (that is also the default
+touch coordinate system).
+
+The globalTranslate method is usually the best choice because works well with large objects.
 
 Using all this support together it's possible to easily achieve drag and drop features.
 --]]
