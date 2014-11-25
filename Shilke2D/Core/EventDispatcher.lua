@@ -32,15 +32,11 @@ function EventDispatcher:init()
 	self.pendingList = {}
 end
 
---create a single event shared between every EventDispatcher, to avoid fragmentation
-local __event_remove_from_juggler = Event(Event.REMOVE_FROM_JUGGLER)
 
 --[[---
-First it dispatches a REMOVE_FROM_JUGGLER event to be safely detatched by jugglers. 
-Then it remove all the event listeners.
+It remove all the event listeners.
 --]]
 function EventDispatcher:dispose()
-	self:dispatchEvent(__event_remove_from_juggler)
 	self:removeEventListeners()
 end
 
