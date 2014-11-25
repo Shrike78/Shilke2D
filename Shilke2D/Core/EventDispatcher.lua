@@ -15,6 +15,7 @@ of a specific event type for an object that derived from EventDispatcher
 EventDispatcher = class()
 
 local Pending = {ADD = 0, REMOVE = 1, REMOVE_ALL = 2}
+local ACTION, TYPE, FUNC, OBJ = 1, 2, 3, 4
 
 function EventDispatcher:init()
 	--[[
@@ -107,14 +108,28 @@ function EventDispatcher:removeEventListener(eventType, listenerFunc, listenerOb
 	end	
 end
 
+
+
 --[[---
-Remove all the listeners for a specific event
-@param eventType the type of Event for which we want to deregister all the listeners.
-If nil all the listeners of all types of events will be removed.
+Removes all the listeners for a specific event
+@param[opt=nil] eventType the type of Event for which we want to deregister all the listeners.
+If no eventType is provided it removes all the listeners for all the events
 --]]
 function EventDispatcher:removeEventListeners(eventType)
+
 	if self.dispatching then
-		table.insert(self.pendingList, {Pending.REMOVE_ALL, eventType})
+		if eventType then 
+			--remove all the pending operation related to the same eventType
+			for i = #self.pendingList, 1, -1 do
+				if self.pendingList[i][TYPE] == eventType then
+					table.remove(self.pendingList, i)
+				end
+			end
+			table.insert(self.pendingList, {Pending.REMOVE_ALL, eventType})
+		else
+			table.clear(self.pendingList)
+			table.insert(self.pendingList, {Pending.REMOVE_ALL})
+		end
 		return
 	end
 
@@ -174,13 +189,13 @@ function EventDispatcher:dispatchEvent(event)
 	if #self.pendingList > 0 then
 		for _,v in ipairs(self.pendingList) do
 			
-			local action, eventType = v[1], v[2]		
+			local action, eventType = v[ACTION], v[TYPE]		
 			
 			if action == Pending.ADD then
-				self:addEventListener(eventType, v[3], v[4])
+				self:addEventListener(eventType, v[FUNC], v[OBJ])
 			
 			elseif action == Pending.REMOVE then
-				self:removeEventListener(eventType, v[3], v[4])
+				self:removeEventListener(eventType, v[FUNC], v[OBJ])
 			
 			elseif action == Pending.REMOVE_ALL then
 				self:removeEventListeners(eventType)
