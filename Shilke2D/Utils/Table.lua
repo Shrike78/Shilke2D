@@ -165,27 +165,29 @@ end
 "Sorted by key" table iterator 
 Extracted from http://www.lua.org/pil/19.3.html
 @param t the table to iterate
-@param comp[opt] the compare function (see table.sort). 
-by default uses alphabetical comparison
+@param[opt=nil] comp the compare function. The function must be of the type comp(t, a, b)
+with t the table on wich iterating, a and b table keys to compare. If not provided a default
+alphabetical comparison on keys is done
 --]]
 function sortedpairs(t, comp)
-	local a = {}    
-	for n in pairs(t) do
-		table.insert(a, n)
+	local keys = {}    
+	for k,_ in pairs(t) do
+		keys[#keys+1] = k
 	end
-	table.sort(a, comp)
+	if comp then
+        table.sort(keys, function(a,b) return comp(t, a, b) end)
+    else
+        table.sort(keys)
+    end
 
 	-- iterator variable
-	local i = 0      
+	local i = 0     
 	-- iterator function
-	local iter = function ()   
+	return function ()   
 		i = i + 1
-		if a[i] == nil then
-			return nil
-		else
-			return a[i], t[a[i]]
+		if keys[i] then
+			return keys[i], t[keys[i]]
 		end
-	end
-	
-	return iter
+		return nil
+	end	
 end
