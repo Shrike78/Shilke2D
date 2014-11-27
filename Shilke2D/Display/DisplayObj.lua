@@ -569,7 +569,7 @@ function DisplayObj:updateTransformationMatrix(targetSpace)
 	local targetSpace = targetSpace or root
 	
 	--if the target is the root, uses _prop matrix component
-	if targetSpace == root then
+	if targetSpace == root and root:is_a(Stage) then
 		self._transformMatrix = self._prop
 		--the matrix chain get usually updated once per frame.
 		--forceUpdate call assure that all components are correctly updated
