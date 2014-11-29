@@ -15,7 +15,6 @@ of a specific event type for an object that derived from EventDispatcher
 EventDispatcher = class()
 
 local Pending = {ADD = 0, REMOVE = 1, REMOVE_ALL = 2}
-local ACTION, TYPE, FUNC, OBJ = 1, 2, 3, 4
 
 function EventDispatcher:init()
 	--[[
@@ -121,7 +120,8 @@ function EventDispatcher:removeEventListeners(eventType)
 		if eventType then 
 			--remove all the pending operation related to the same eventType
 			for i = #self.pendingList, 1, -1 do
-				if self.pendingList[i][TYPE] == eventType then
+				--check if the pending operation is related to the same eventType
+				if self.pendingList[i][2] == eventType then
 					table.remove(self.pendingList, i)
 				end
 			end
@@ -160,51 +160,60 @@ While dispatching, the lists of listener could be modified by
 actions of a listener callback, so to avoid problem in this 
 phase add and remove operation are queued in a specific list
 and then apply in the same order that were requested.
-@param event the event that will be dispatch to all the registered listener 
-for this type of event
+@param event the event that will be dispatch
 --]]
 function EventDispatcher:dispatchEvent(event)
 	
-	if type(event) == 'string' then
-		event = Event(event)
+	local listeners = self.listeners[event.type]
+	--if there's no listener for this event just return
+	if not listeners then
+		return
 	end
 	
 	--Set itself as sender of the event
 	event.sender = self
 	self.dispatching = true
-	
-	local listeners = self.listeners[event.type]
-	if listeners then
-		for _,k in ipairs(listeners) do
-			--check if the listener is a simple function or a method
-			if type(k) == 'function' then
-				listeners[k](event)
-			else
-				listeners[k](k,event)
-			end
+	for _,k in ipairs(listeners) do
+		--check if the listener is a simple function or a method
+		if type(k) == 'function' then
+			listeners[k](event)
+		else
+			listeners[k](k,event)
 		end
 	end
 	self.dispatching = false
-
+	
+	--if listeners have been added or removed while dispatching, handle the queue of
+	--pending operations
 	if #self.pendingList > 0 then
 		for _,v in ipairs(self.pendingList) do
-			
-			local action, eventType = v[ACTION], v[TYPE]		
-			
+			local action, eventType, func, obj = unpack(v)		
 			if action == Pending.ADD then
-				self:addEventListener(eventType, v[FUNC], v[OBJ])
-			
+				self:addEventListener(eventType, func, obj)
 			elseif action == Pending.REMOVE then
-				self:removeEventListener(eventType, v[FUNC], v[OBJ])
-			
+				self:removeEventListener(eventType, func, obj)
 			elseif action == Pending.REMOVE_ALL then
 				self:removeEventListeners(eventType)
-			
 			else
-				error("illegal operation: " .. v.action)
+				error("illegal operation: " .. action)
 			end
 		end
 		table.clear(self.pendingList)
 	end
 end
 
+--[[---
+Dispatches an event to all the registered listeners. 
+This method can be used only to dispatch base events and 
+it's optimized because it uses a pool of event
+@param eventType the type of the event that will be dispatched
+--]]
+function EventDispatcher:dispatchEventByType(eventType)
+	--if there's no listener for this type just return
+	if self.listeners[eventType] then 
+		local e = ObjectPool.getObj(Event)
+		e.type = eventType
+		self:dispatchEvent(e)
+		ObjectPool.recycleObj(e)
+	end
+end
