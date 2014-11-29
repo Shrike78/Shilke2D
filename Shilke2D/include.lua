@@ -77,6 +77,7 @@ require("Shilke2D/Utils/XmlNode")
 require("Shilke2D/Utils/IniParser")
 require("Shilke2D/Utils/Sound")
 require("Shilke2D/Utils/PerformanceTimer")
+require("Shilke2D/Utils/ObjectPool")
 
 require("Shilke2D/Utils/Polygon")
 require("Shilke2D/Utils/PathFinding")
