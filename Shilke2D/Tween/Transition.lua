@@ -326,11 +326,13 @@ local function registerDefaultTransitions()
     end
 end
 
+registerDefaultTransitions()
+
 --get the transition function registered under a certain name.
 function Transition.getTransition(transitionName)
-    if not _transitions then
-        registerDefaultTransitions()
-    end
+--    if not _transitions then
+ --       registerDefaultTransitions()
+ --   end
     return _transitions[transitionName]
 end
 
