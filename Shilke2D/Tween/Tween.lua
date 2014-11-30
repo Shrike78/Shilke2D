@@ -113,7 +113,7 @@ function Tween:advanceTime(deltaTime)
         if self._onComplete then
             self._onComplete()
         end
-        self:dispatchEvent(Event(Event.REMOVE_FROM_JUGGLER))
+		self:dispatchEventByType(Event.REMOVE_FROM_JUGGLER)
     end
 end
 

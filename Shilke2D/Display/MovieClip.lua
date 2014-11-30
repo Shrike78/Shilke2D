@@ -160,8 +160,8 @@ function MovieClip:advanceTime(deltaTime)
 
 				self.currentCount = self.currentCount + 1
 
-				self:dispatchEvent(self.eventCompleted)
-
+				self:dispatchEventByType(Event.COMPLETED)
+				
 				if self.currentCount == self.repeatCount then
 					self:stop()
 				else
