@@ -19,7 +19,6 @@ Juggler = class(nil,IAnimatable)
 
 ---Used internally to handle pending operation scheduled while "playing"
 local Pending = {ADD = 0, REMOVE = 1, REMOVE_ALL = 2}
-local ACTION, OBJ = 1, 2
 
 function Juggler:init()
 	self.animatedObjs = {}
@@ -69,7 +68,7 @@ function Juggler:advanceTime(deltaTime)
 
 	if #self.pendingList > 0 then
 		for _,v in ipairs(self.pendingList) do
-			local action, obj = v[ACTION], v[OBJ]
+			local action, obj = unpack(v)
 			if action == Pending.ADD then
 				self:add(obj)
 			elseif action == Pending.REMOVE then
