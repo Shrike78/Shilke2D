@@ -213,12 +213,21 @@ function Shilke2D:start()
 			end
         end
         local prevTarget = self.touchIds[touch.id]
-        
+		
+		local touchEvent = nil
+		
+		--get a TouchEvent obj from pool
+		if prevTarget or target then
+			touchEvent = ObjectPool.getObj(TouchEvent)
+			touchEvent.touch = touch
+			touchEvent.target = target
+		end
+	
         if prevTarget and prevTarget ~= target then
-            prevTarget:dispatchEvent(TouchEvent(touch,target))
+            prevTarget:dispatchEvent(touchEvent)
         end
         if target then
-            target:dispatchEvent(TouchEvent(touch,target))
+            target:dispatchEvent(touchEvent)
             if touch.state == Touch.ENDED then
                 if self.touchIds[touch.id] then 
                     self.touchIds[touch.id] = nil
@@ -235,6 +244,14 @@ function Shilke2D:start()
                 __touched(touch)
             end
         end
+		
+		--Recycle the TouchEvent releasing internal touch / target references
+		if touchEvent then
+			touchEvent.touch = nil
+			touchEvent.target = nil
+			ObjectPool.recycleObj(touchEvent)
+		end
+		
     end
 	
 	if(Shilke2D.isDesktop()) then

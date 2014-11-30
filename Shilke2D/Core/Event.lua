@@ -43,7 +43,7 @@ A touch event is generated when a touchable DisplayObj is hit.
 --]]
 function TouchEvent:init(touch,target)
     Event.init(self,Event.TOUCH)
-    self.touch = touch or Touch()
+    self.touch = touch
     self.target = target
 end
 
