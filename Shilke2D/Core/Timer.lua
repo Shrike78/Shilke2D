@@ -12,15 +12,22 @@ Timer initialization.
 @param repeatCount the number of iteration. Defaul is 1. 0 or negative values means Infinite
 --]] 
 function Timer:init(delay,repeatCount)
-    EventDispatcher.init(self)
-    self.delay = delay
-    self.repeatCount = repeatCount or 1
-    self:reset()
+	EventDispatcher.init(self)
+	self.delay = delay
+	self.repeatCount = repeatCount or 1
+	self:reset()
 end
 
 ---Starts the timer, if it is not already running.
 function Timer:start()
-    self.running = true
+	self.running = true
+end
+
+---Resets and start again the timer
+function Timer:restart()
+	self.currentCount = 0
+	self.elapsedTime = 0
+	self.running = true
 end
 
 ---Stops the timer, if it is running.
