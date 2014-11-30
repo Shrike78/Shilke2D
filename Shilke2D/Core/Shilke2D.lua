@@ -120,26 +120,27 @@ function Shilke2D:init(w,h,fps, scaleX,scaleY, soundSampleRate, soundFrames)
 
 	-- create a directDrawLayer where it's possible to just draw rect, circles, lines ecc.
 	local directDrawDeck = MOAIScriptDeck.new ()
-	if __DEBUG_CALLBACKS__ then
-		directDrawDeck:setDrawCallback (function()
+	directDrawDeck:setDrawCallback (function()
+				if __DEBUG_CALLBACKS__ then
 					--[[
 					uses pcall to trap mobdebug absence error.
 					after first call the callback is set to onDirectDraw. Once set here the debug is valid for all 
 					the system callbacks, so for touch, keyboard, ecc.
 					--]]
 					pcall(function() require('mobdebug').on() end )
-					if(onDirectDraw) then
-						onDirectDraw()
-					end
-					directDrawDeck:setDrawCallback(onDirectDraw)
 				end
-		)
-	else
-		directDrawDeck:setDrawCallback ( onDirectDraw )
-	end
+				if(onDirectDraw) then
+					onDirectDraw()
+					directDrawDeck:setDrawCallback(onDirectDraw)
+				else
+					self._directDrawLayer:setDeck(nil)
+				end
+			end
+	)
+	
 	self._directDrawLayer = MOAIProp.new()
 	self._directDrawLayer:setDeck(directDrawDeck)
-
+	
 	self._renderTable = {self.stage._rt,self._directDrawLayer}
 	MOAIRenderMgr.setRenderTable(self._renderTable)
 
