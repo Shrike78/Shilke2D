@@ -57,10 +57,9 @@ OSX, Windows, iOS, Android
 @treturn bool true if brand is iOS o Android
 --]]
 function Shilke2D.isMobile()
-    local brand = MOAIEnvironment.osBrand
-
---    return brand == MOAIEnvironment.OS_BRAND_ANDROID or brand == MOAIEnvironment.OS_BRAND_IOS
-    return brand == "iOS" or brand == "Android"
+	local brand = MOAIEnvironment.osBrand
+	--return brand == MOAIEnvironment.OS_BRAND_ANDROID or brand == MOAIEnvironment.OS_BRAND_IOS
+	return brand == "iOS" or brand == "Android"
 end
 
 --[[---
@@ -69,7 +68,7 @@ Relies on isMobile result
 @treturn bool 
 --]]
 function Shilke2D.isDesktop()
-    return not Shilke2D.isMobile()
+	return not Shilke2D.isMobile()
 end
 
 --[[---
@@ -102,25 +101,25 @@ function Shilke2D:init(w,h,fps, scaleX,scaleY, soundSampleRate, soundFrames)
 	MOAISim.setLoopFlags ( MOAISim.SIM_LOOP_LONG_DELAY )
 	MOAISim.setBoostThreshold ( 0 )
 
-if __USE_SIMULATION_COORDS__ then	
-	self.renderViewport = MOAIViewport.new()
-	self.renderViewport:setScale(self.w, self.h)
-	self.renderViewport:setSize(self.w*self.scaleX, self.h*self.scaleY)
+	if __USE_SIMULATION_COORDS__ then	
+		self.renderViewport = MOAIViewport.new()
+		self.renderViewport:setScale(self.w, self.h)
+		self.renderViewport:setSize(self.w*self.scaleX, self.h*self.scaleY)
 
-	setTouchSensorCorrection(self.scaleX, self.scaleY, self.h)
-	self.renderViewport:setOffset(-1, -1)
-else	
-	self.renderViewport = MOAIViewport.new()
-	self.renderViewport:setScale(self.w, -self.h)
-	self.renderViewport:setSize(self.w*self.scaleX, self.h*self.scaleY)
-	setTouchSensorCorrection(self.scaleX, self.scaleY)
-	self.renderViewport:setOffset(-1, 1)
-end
+		setTouchSensorCorrection(self.scaleX, self.scaleY, self.h)
+		self.renderViewport:setOffset(-1, -1)
+	else	
+		self.renderViewport = MOAIViewport.new()
+		self.renderViewport:setScale(self.w, -self.h)
+		self.renderViewport:setSize(self.w*self.scaleX, self.h*self.scaleY)
+		setTouchSensorCorrection(self.scaleX, self.scaleY)
+		self.renderViewport:setOffset(-1, 1)
+	end
 
 	self.stage = Stage(self.renderViewport)
-	
+
 	-- create a directDrawLayer where it's possible to just draw rect, circles, lines ecc.
-    local directDrawDeck = MOAIScriptDeck.new ()
+	local directDrawDeck = MOAIScriptDeck.new ()
 	if __DEBUG_CALLBACKS__ then
 		directDrawDeck:setDrawCallback (function()
 					--[[
@@ -140,14 +139,14 @@ end
 	end
 	self._directDrawLayer = MOAIProp.new()
 	self._directDrawLayer:setDeck(directDrawDeck)
-	
+
 	self._renderTable = {self.stage._rt,self._directDrawLayer}
-    MOAIRenderMgr.setRenderTable(self._renderTable)
+	MOAIRenderMgr.setRenderTable(self._renderTable)
 
 	self.juggler = Juggler()
 
 	Shilke2D.current = self
-	
+
 	--Stats management
 	self.stats = Stats()
 	self.stats:setHittable(true)
@@ -157,7 +156,7 @@ end
 	else
 		self.stats:setPosition(self.w/2, 20)
 	end
-	
+
 	if MOAIUntzSystem then
 		MOAIUntzSystem.initialize(soundSampleRate, soundFrames)
 	else
@@ -174,19 +173,19 @@ If the application is running on a desktop environment also the keyboard system 
 Juggler and update coroutines are finally created and executed, and the application can run.
 --]]
 function Shilke2D:start()
-    
+
 	--first call setup method
 	setup()
 
 	--setup touch processor
-    self.touchIds = {}
-    self.ownedTouches = {}
+	self.touchIds = {}
+	self.ownedTouches = {}
 	local __touched = touched
-    touched = function(touch)
-        local target = nil
-        if self.ownedTouches[touch.id] then
-            target = self.ownedTouches[touch.id]
-        else
+	touched = function(touch)
+		local target = nil
+		if self.ownedTouches[touch.id] then
+			target = self.ownedTouches[touch.id]
+		else
 			--manually set position because the stats object is not attached to 'stage' so 
 			-- hitTest logic cannot work properly
 			if self.stats and self._statsForceGarbage then
@@ -212,8 +211,8 @@ function Shilke2D:start()
 			else
 				target = self.stage:hitTest(touch.x,touch.y,nil,true)
 			end
-        end
-        local prevTarget = self.touchIds[touch.id]
+		end
+		local prevTarget = self.touchIds[touch.id]
 		
 		local touchEvent = nil
 		
@@ -223,28 +222,28 @@ function Shilke2D:start()
 			touchEvent.touch = touch
 			touchEvent.target = target
 		end
-	
-        if prevTarget and prevTarget ~= target then
-            prevTarget:dispatchEvent(touchEvent)
-        end
-        if target then
-            target:dispatchEvent(touchEvent)
-            if touch.state == Touch.ENDED then
-                if self.touchIds[touch.id] then 
-                    self.touchIds[touch.id] = nil
-                end
-                if self.ownedTouches[touch.id] then 
-                    self.ownedTouches[touch.id] = nil
-                end
-            else
-                self.touchIds[touch.id] = target
-            end
-        else
-            self.touchIds[touch.id] = nil
-            if __touched then
-                __touched(touch)
-            end
-        end
+
+		if prevTarget and prevTarget ~= target then
+			prevTarget:dispatchEvent(touchEvent)
+		end
+		if target then
+			target:dispatchEvent(touchEvent)
+			if touch.state == Touch.ENDED then
+				if self.touchIds[touch.id] then 
+					self.touchIds[touch.id] = nil
+				end
+				if self.ownedTouches[touch.id] then 
+					self.ownedTouches[touch.id] = nil
+				end
+			else
+				self.touchIds[touch.id] = target
+			end
+		else
+			self.touchIds[touch.id] = nil
+			if __touched then
+				__touched(touch)
+			end
+		end
 		
 		--Recycle the TouchEvent releasing internal touch / target references
 		if touchEvent then
@@ -253,12 +252,12 @@ function Shilke2D:start()
 			ObjectPool.recycleObj(touchEvent)
 		end
 		
-    end
-	
+	end
+
 	if(Shilke2D.isDesktop()) then
 		MOAIInputMgr.device.keyboard:setCallback ( onKeyboardEvent )
 	end
-	
+
 	if __JUGGLER_ON_SEPARATE_COROUTINE__ then
 		local mainJuggler = MOAICoroutine.new()
 		mainJuggler:run(
@@ -275,29 +274,29 @@ function Shilke2D:start()
 			end
 		)		
 	end
-	
+
 	--setup main loop
 	local thread = MOAICoroutine.new()
 	thread:run(
-	function()
-		local elapsedTime, prevElapsedTime, currElapsedTime = 0, 0, 0
-		--force to skip a first 0 time frame
-		coroutine.yield()
-		while (true) do
+		function()
+			local elapsedTime, prevElapsedTime, currElapsedTime = 0, 0, 0
+			--force to skip a first 0 time frame
 			coroutine.yield()
-			currElapsedTime = MOAISim.getElapsedTime()
-			elapsedTime = currElapsedTime - prevElapsedTime
-			prevElapsedTime = currElapsedTime
-			--used to have the juggler update into the same coroutine
-			if not __JUGGLER_ON_SEPARATE_COROUTINE__ then
-				self.juggler:advanceTime(elapsedTime)
-			end
-			update(elapsedTime)
-			if(self._showStats) then
-				self.stats:update()
+			while (true) do
+				coroutine.yield()
+				currElapsedTime = MOAISim.getElapsedTime()
+				elapsedTime = currElapsedTime - prevElapsedTime
+				prevElapsedTime = currElapsedTime
+				--used to have the juggler update into the same coroutine
+				if not __JUGGLER_ON_SEPARATE_COROUTINE__ then
+					self.juggler:advanceTime(elapsedTime)
+				end
+				update(elapsedTime)
+				if(self._showStats) then
+					self.stats:update()
+				end
 			end
 		end
-	end
 	)
 end
 
@@ -343,7 +342,7 @@ as listener. The object can release itself event if the touch is not still ended
 method.
 --]]
 function Shilke2D:startDrag(touch,obj)
-    self.ownedTouches[touch.id] = obj
+	self.ownedTouches[touch.id] = obj
 end
 
 --[[---
@@ -352,10 +351,10 @@ touch (id) event.
 If the object was not registered as listener an error raises.
 --]]
 function Shilke2D:stopDrag(touch,obj)
-    if self.ownedTouches[touch.id] ~= obj then
-        error("displayObj is not set as owner for this touch")
-    end
-    self.ownedTouches[touch.id] = nil
+	if self.ownedTouches[touch.id] ~= obj then
+		error("displayObj is not set as owner for this touch")
+	end
+	self.ownedTouches[touch.id] = nil
 end
 
 ---Returns the object that owns a specific touch (id)
