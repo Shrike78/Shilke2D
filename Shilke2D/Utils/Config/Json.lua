@@ -53,7 +53,7 @@ Json.encode(t)
 
 if not __USE_MOAIJSONPARSER__ then
 	--use lua parser implementation, where Json namespace and Json.encode/decode are already defined 
-	require("Shilke2D/Utils/Externals/JsonParser")
+	require("Shilke2D/Utils/Config/Externals/JsonParser")
 else
 	--define Json namespace and remap MOAIJsonParser.encode/decode over Json.encode/decode
 	Json = {}

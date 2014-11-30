@@ -58,31 +58,35 @@ end
 
 require("Shilke2D/Utils/ClassEx")
 require("Shilke2D/Utils/Shape")
-require("Shilke2D/Utils/BitmapRegion")
-require("Shilke2D/Utils/BitmapData")
 require("Shilke2D/Utils/Callbacks")
 require("Shilke2D/Utils/IO")
-require("Shilke2D/Utils/StringBuilder")
-require("Shilke2D/Utils/StringReader")
-require("Shilke2D/Utils/Json")
 require("Shilke2D/Utils/Log")
-require("Shilke2D/Utils/BitOp")
-require("Shilke2D/Utils/Math")
-require("Shilke2D/Utils/Vector")
 require("Shilke2D/Utils/Color")
 require("Shilke2D/Utils/Graphics")
-require("Shilke2D/Utils/String")
 require("Shilke2D/Utils/Table")
-require("Shilke2D/Utils/XmlNode")
-require("Shilke2D/Utils/IniParser")
 require("Shilke2D/Utils/Sound")
 require("Shilke2D/Utils/PerformanceTimer")
 require("Shilke2D/Utils/ObjectPool")
-require("Shilke2D/Utils/Bezier")
 
 require("Shilke2D/Utils/Polygon")
 require("Shilke2D/Utils/PathFinding")
 require("Shilke2D/Utils/Coroutines")
+
+require("Shilke2D/Utils/Bitmap/BitmapRegion")
+require("Shilke2D/Utils/Bitmap/BitmapData")
+
+require("Shilke2D/Utils/Config/IniParser")
+require("Shilke2D/Utils/Config/Json")
+require("Shilke2D/Utils/Config/XmlNode")
+
+require("Shilke2D/Utils/Math/Math")
+require("Shilke2D/Utils/Math/Bezier")
+require("Shilke2D/Utils/Math/BitOp")
+require("Shilke2D/Utils/Math/Vec2")
+
+require("Shilke2D/Utils/String/String")
+require("Shilke2D/Utils/String/StringBuilder")
+require("Shilke2D/Utils/String/StringReader")
 
 --Shilke2D/Core
 require("Shilke2D/Core/Assets")
