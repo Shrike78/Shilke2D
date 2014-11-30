@@ -7,7 +7,7 @@ It works with classes that have a default empty constructor.
 --]]
 ObjectPool = {}
 
-local _pool = {}
+ObjectPool._pool = {}
 
 --[[---
 Inner function get/create the pool for objType 
@@ -15,10 +15,10 @@ Inner function get/create the pool for objType
 @treturn {objType}
 --]]
 function ObjectPool._getPool(objType)
-	if not _pool[objType] then
-		_pool[objType] = {}
+	if not ObjectPool._pool[objType] then
+		ObjectPool._pool[objType] = {}
 	end
-	return _pool[objType]
+	return ObjectPool._pool[objType]
 end
 
 
@@ -126,9 +126,9 @@ function ObjectPool.clear(objType)
 	if objType then
 		table.clear(ObjectPool._getPool(objType))
 	else
-		for _,p in pairs(_pool) do
+		for _,p in pairs(ObjectPool._pool) do
 			table.clear(p)
 		end
-		table.clear(_pool)
+		table.clear(ObjectPool._pool)
 	end
 end
