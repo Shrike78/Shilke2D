@@ -28,9 +28,8 @@ function update(elapsedTime)
 end
 
 ---Called after draw to allow overlay drawing with graphics vetorial functions.
-function onDirectDraw()
-	--override onDirectDraw method
-end
+--@function onDirectDraw
+
 
 --[[---
 Handle keyboard events.
@@ -130,7 +129,9 @@ end
 					the system callbacks, so for touch, keyboard, ecc.
 					--]]
 					pcall(function() require('mobdebug').on() end )
-					onDirectDraw()
+					if(onDirectDraw) then
+						onDirectDraw()
+					end
 					directDrawDeck:setDrawCallback(onDirectDraw)
 				end
 		)
