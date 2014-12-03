@@ -124,7 +124,8 @@ function Shilke2D:init(w,h,fps, scaleX,scaleY, soundSampleRate, soundFrames)
 				if __DEBUG_CALLBACKS__ then
 					--[[
 					uses pcall to trap mobdebug absence error.
-					after first call the callback is set to onDirectDraw. Once set here the debug is valid for all 
+					after first call the callback is set to onDirectDraw. 
+					Once set here the debug is valid for all 
 					the system callbacks, so for touch, keyboard, ecc.
 					--]]
 					pcall(function() require('mobdebug').on() end )
