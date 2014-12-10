@@ -295,3 +295,36 @@ function Polygon:merge(poly)
 	
 	return Polygon(newPoly)
 end
+
+--[[---
+Check if a polygon is convex or concave
+@treturn bool
+--]]
+function Polygon:isConvex()
+	--skip last vertex (because equal to first one)
+	local nvertices = #self.points-1
+	if (nvertices < 4) then 
+		return true 
+	end
+	local prod=0
+	local dx1, dy1, dx2, dy2, zcrossproduct
+	local p1,p2,p3
+	for i=0, nvertices-1 do
+		p1 = self.points[i+1]
+		p2 = self.points[(i+1)%nvertices + 1]
+		p3 = self.points[(i+2)%nvertices + 1]
+		dx1 = p2.x-p1.x
+		dy1 = p2.y-p1.y
+		dx2 = p3.x-p2.x
+		dy2 = p3.y-p2.y
+		zcrossproduct = dx1*dy2 - dy1*dx2
+		--if 3 consecutive vertices lie on x or y axis the crossproduct is 0
+		if prod == 0 then
+			prod = zcrossproduct
+		elseif prod*zcrossproduct < 0 then
+			return false
+		end
+	end
+    return true
+end
+
