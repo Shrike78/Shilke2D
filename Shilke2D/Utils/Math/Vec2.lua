@@ -2,7 +2,7 @@
 
 vec2 class.
 
-Copyright (c) 2010 Matthias Richter
+Original code Copyright (c) 2010 Matthias Richter, changes made by Luca Ferrara
 
 Permission is hereby granted, free of charge, to any person obtaining a copy
 of this software and associated documentation files (the "Software"), to deal
@@ -27,7 +27,7 @@ OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN
 THE SOFTWARE.
 ]]--
 
-local sqrt, cos, sin = math.sqrt, math.cos, math.sin
+local sqrt, cos, sin, atan2 = math.sqrt, math.cos, math.sin, math.atan2
 
 vec2 = class()
 
@@ -142,22 +142,6 @@ function vec2:normalize()
 	return self / self:len()
 end
 
----Rotates the vector of phi radians
---@param phi radians
---@return self
-function vec2:rotate_inplace(phi)
-	local c, s = cos(phi), sin(phi)
-	self.x, self.y = c * self.x - s * self.y, s * self.x + c * self.y
-	return self
-end
-
----Returns a rotated vector
---@param phi radians
---@return vec2
-function vec2:rotated(phi)
-	return self:clone():rotate_inplace(phi)
-end
-
 ---Returns a rotated vector
 --@param phi radians
 --@return vec2
@@ -199,7 +183,63 @@ end
 ---Returns the angle between two vectors
 --@return radians
 function vec2:angleBetween(other)
-	local alpha1 = math.atan2(self.y, self.x)
-	local alpha2 = math.atan2(other.y, other.x)
+	local alpha1 = atan2(self.y, self.x)
+	local alpha2 = atan2(other.y, other.x)
 	return alpha2 - alpha1
 end
+
+
+--Operations that modifies the vector itself. Can be used to avoid 
+--creation of new objects and memory garbage.
+
+---Rotates the vector of phi radians
+--@param phi radians
+--@return self
+function vec2:rotate_inplace(phi)
+	local c, s = cos(phi), sin(phi)
+	self.x, self.y = c * self.x - s * self.y, s * self.x + c * self.y
+	return self
+end
+
+---add v to vec2
+--@return self
+function vec2:add(x,y)
+	local x,y = x,y
+	if type(x) ~= "number" then
+		x,y = x.x, x.y
+	end
+	self.x = self.x + x
+	self.y = self.y + y
+	return self
+end
+
+---Subtraction operator between vec2
+--@return self
+function vec2:sub(x,y)
+	local x,y = x,y
+	if type(x) ~= "number" then
+		x,y = x.x, x.y
+	end
+	self.x = self.x - x
+	self.y = self.y - y
+	return self
+end
+
+---Multiply a vec2 by a number or by another vec2
+--@return self
+function vec2:mul(c)
+	assert(type(c)=="number")
+	self.x = self.x * c
+	self.y = self.y * c
+	return self
+end
+
+---Divides a vec2 by a number
+--@return self
+function vec2.div(c)
+	assert(type(c)=="number")
+	self.x = self.x / c
+	self.y = self.y / c
+	return self
+end
+
