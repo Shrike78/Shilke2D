@@ -467,11 +467,9 @@ end
 --Rotate the obj of the given value
 --@tparam number r radians
 function DisplayObj:rotate(r)
-	local _,_,_r = self._prop:getRot()
+	local _,_,_r = self:getRotation()
 	r = r + _r
-    while (r < -PI) do r = r + PI2 end
-    while (r >  PI) do r = r - PI2 end
-	self._prop:setRot(0, 0, DEG(r)*__rmult)
+	self:setRotation(r)
 end
 
 ---Set scale
@@ -520,6 +518,36 @@ end
 --@treturn number
 function DisplayObj:getScaleY()
     return self._prop:getAttr(MOAITransform.ATTR_Y_SCL)
+end
+
+
+--[[---
+Set all the transform parameters
+@tparam number x x position
+@tparam number y y position
+@tparam number r rotation
+@tparam number sx x scale
+@tparam number sy y scale
+--]]
+function DisplayObj:setTransform(x,y,r,sx,sy)
+	self:setPosition(x,y)
+	self:setRotation(r)
+	self:setScale(sx,sy)
+end
+
+--[[---
+Get all the transform parameters
+@treturn number x x position
+@treturn number y y position
+@treturn number r rotation
+@treturn number sx x scale
+@treturn number sy y scale
+--]]
+function DisplayObj:getTransform()
+	local x,y = self:getPosition()
+	local r = self:getRotation()
+	local sx,sy = self:getScale()
+	return x,y,r,sx,sy
 end
 
 

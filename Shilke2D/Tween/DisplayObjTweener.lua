@@ -103,7 +103,7 @@ seek position, rotation and scale to given values
 @tparam[opt=Transition.LINEAR] Transition transition the transform transition to apply
 @treturn Tween
 --]]
-function DisplayObjTweener.seek(obj,x,y,r,sx,sy,time,transition)
+function DisplayObjTweener.seekTransform(obj,x,y,r,sx,sy,time,transition)
 	local transition = transition or Transition.LINEAR
 	local tween = Tween.ease(obj,time,transition)
 	tween:seekEx(obj.setPositionX,	obj.getPositionX,	x)
@@ -126,7 +126,7 @@ move position, rotation and scale of given delta values
 @tparam[opt=Transition.LINEAR] Transition transition the transform transition to apply
 @treturn Tween
 --]]
-function DisplayObjTweener.move(obj,x,y,r,sx,sy,time,transition)
+function DisplayObjTweener.moveTransform(obj,x,y,r,sx,sy,time,transition)
 	local transition = transition or Transition.LINEAR
 	local tween = Tween.ease(obj,time,transition)
 	tween:moveEx(obj.setPositionX,	obj.getPositionX,	x)
