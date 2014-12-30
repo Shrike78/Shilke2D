@@ -21,6 +21,8 @@ e:seekEx(obj.setter,obj.getter,endValue)
 local TweenEase = class(Tween)
 Tween.ease = TweenEase
 
+local min, max, round = math.min, math.max, math.round
+
 --[[---
 Constructor.
 @param target the object that will be animated
@@ -32,7 +34,7 @@ function TweenEase:init(target,time,transitionName)
     Tween.init(self)
     assert(time>0,"A tween must have a valid time")
     self.target = target
-    self.totalTime = math.max(0.0001, time)
+    self.totalTime = max(0.0001, time)
     self.transition = Transition.getTransition(transitionName)
     assert(self.transition,
         transitionName.." is not a registered transition")
@@ -76,13 +78,13 @@ to be rounded to int values. default is false
 @return self
 --]]
 function TweenEase:seekEx(setter, getter, endValue, roundToInt)
-    table.insert(self.setters,setter)
-    self.tweenInfo[setter] = {
-            getter = getter,
+	table.insert(self.setters,setter)
+	self.tweenInfo[setter] = {
+			getter = getter,
 			endValue = endValue,
-            roundToInt = roundToInt or false
-    }
-    return self
+			roundToInt = roundToInt or false
+	}
+	return self
 end
 
 --[[---
@@ -120,13 +122,13 @@ to be rounded to int values. default is false
 @return self
 --]]
 function TweenEase:moveEx(setter, getter, deltaValue, roundToInt)
-    table.insert(self.setters,setter)
-    self.tweenInfo[setter] = {
-            getter = getter,
+	table.insert(self.setters,setter)
+	self.tweenInfo[setter] = {
+			getter = getter,
 			deltaValue = deltaValue,
-            roundToInt = roundToInt or false
-    }
-    return self
+			roundToInt = roundToInt or false
+	}
+	return self
 end
 
 
@@ -146,14 +148,14 @@ to be rounded to int values. default is false
 @return self
 --]]
 function TweenEase:follow(property, target, targetProp, roundToInt)
-    table.insert(self.setters,setter)
-    self.tweenInfo[setter] = {
-            getter = getter,
+	table.insert(self.setters,setter)
+	self.tweenInfo[setter] = {
+			getter = getter,
 			target = target,
 			targetProp = targetProp,
-            roundToInt = roundToInt or false
-    }
-    return self
+			roundToInt = roundToInt or false
+	}
+	return self
 end
 
 --[[---
@@ -169,70 +171,88 @@ to be rounded to int values. default is false
 @return self
 --]]
 function TweenEase:followEx(setter, getter, target, targetProp, roundToInt)
-    table.insert(self.setters,setter)
-    self.tweenInfo[setter] = {
-            getter = getter,
+	table.insert(self.setters,setter)
+	self.tweenInfo[setter] = {
+			getter = getter,
 			target = target,
 			targetProp = targetProp,
-            roundToInt = roundToInt or false
-    }
-    return self
+			roundToInt = roundToInt or false
+	}
+	return self
 end
 
 --onStart initialize start values of each tweened property
 function TweenEase:_start()
-    for _,property in pairs(self.properties) do
-        local info = self.tweenInfo[property]
+	for i = #self.properties,1,-1 do
+		local property = self.properties[i]
+		local info = self.tweenInfo[property]
 		info.startValue = self.target[property]
 		if info.deltaValue then
 			info.endValue = info.startValue + info.deltaValue
 		end
-    end
-    for _,setter in pairs(self.setters) do
-        local info = self.tweenInfo[setter]
+		if info.startValue == info.endValue then
+			table.remove(self.properties,i)
+			self.tweenInfo[property] = nil
+		end
+	end
+	for i = #self.setters,1,-1 do
+		local setter = self.setters[i]
+		local info = self.tweenInfo[setter]
 		info.startValue = info.getter(self.target)
 		if info.deltaValue then
 			info.endValue = info.startValue + info.deltaValue
 		end
-    end
+		if info.startValue == info.endValue then
+			table.remove(self.setters,i)
+			self.tweenInfo[setter] = nil
+		end
+	end
 end
 
 function TweenEase:_getValue(hash,ratio)
-        local info = self.tweenInfo[hash]
-        local startValue = info.startValue
-        local endValue
-		if info.endValue then 
-			endValue = info.endValue
+	local info = self.tweenInfo[hash]
+	local startValue = info.startValue
+	local endValue
+	if info.endValue then 
+		endValue = info.endValue
+	else
+		if type(info.targetProp) == 'function' then
+			endValue = info.targetProp(info.target)
 		else
-			if type(info.targetProp) == 'function' then
-				endValue = info.targetProp(info.target)
-			else
-				endValue = info.target[info.targetProp]
-			end
+			endValue = info.target[info.targetProp]
 		end
-        local delta = endValue - startValue
-            
-        local currentValue = startValue + self.transition(ratio) * delta
-        if (info.roundToInt) then
-            currentValue = math.round(currentValue)
-        end
-        return currentValue
-    end
+	end
+	local delta = endValue - startValue
+	if delta == 0 then
+		return startValue, false
+	end
+	local currentValue = startValue + self.transition(ratio) * delta
+	if (info.roundToInt) then
+		currentValue = round(currentValue)
+	end
+	local bNeedUpdate = info.lastValue ~= currentValue
+	info.lastValue = currentValue
+	return currentValue, bNeedUpdate
+end
 	
-function TweenEase:_update(deltaTime)
-    
-    local ratio = math.min(self.totalTime, self.currentTime) / 
-        self.totalTime
+function TweenEase:_update(deltaTime) 
+	local ratio = min(self.totalTime, self.currentTime) / self.totalTime
+	local val, bNeedUpdate
+	for _,property in pairs(self.properties) do
+		val, bNeedUpdate = self:_getValue(property,ratio) 
+		if bNeedUpdate then
+			self.target[property] = val
+		end
+	end
 
-    for _,property in pairs(self.properties) do
-        self.target[property] = self:_getValue(property,ratio)
-    end
-    
-    for _,setter in pairs(self.setters) do
-        setter(self.target, self:_getValue(setter,ratio))
-    end
+	for _,setter in pairs(self.setters) do
+		val, bNeedUpdate = self:_getValue(setter,ratio)
+		if bNeedUpdate then
+			setter(self.target, val)
+		end
+	end
 end
 
 function TweenEase:_isCompleted()
-    return (self.currentTime >= self.totalTime)
+	return (self.currentTime >= self.totalTime)
 end

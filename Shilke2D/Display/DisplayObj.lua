@@ -373,19 +373,6 @@ function DisplayObj:getPivot()
     return x,y
 end
 
----Set pivot of the object using a vec2
---@param v vec2 
-function DisplayObj:setPivot_v2(v)
-    self._prop:setPiv(v.x,v.y,0)
-end
-
----Return current pivot position using a vec2
---@return vec2
-function DisplayObj:getPivot_v2()
-    local x,y = self._prop:getPiv()
-    return vec2(x,y)
-end
-
 ---Set Pivot x position
 function DisplayObj:setPivotX(x)
 	self._prop:setAttr(MOAITransform.ATTR_X_PIV,x)
@@ -408,14 +395,6 @@ function DisplayObj:getPivotY()
    return self._prop:getAttr(MOAITransform.ATTR_Y_PIV)
 end
 
---[[
-All the following methods sets or get sthe geometric transformation 
-of the object relative to the local coordinates of the parent.
-position and scale have single coords accessors but also coupled (on x 
-and y) accessors for performance issues, and "_v2" (vec2) version, 
-usefull in different situation (like tweening)
---]]
-
 ---Set object position
 --@tparam number x
 --@tparam number y
@@ -429,19 +408,6 @@ end
 function DisplayObj:getPosition()
     local x,y = self._prop:getLoc()
     return x,y
-end
-
----Set object position using a vec2
---@tparam vec2 v
-function DisplayObj:setPosition_v2(v)
-    self._prop:setLoc(v.x,v.y,0)
-end
-
----Get object position using a vec2
---@treturn vec2
-function DisplayObj:getPosition_v2()
-	local x,y = self._prop:getLoc()
-    return vec2(x,y)
 end
 
 ---Set x position
@@ -530,19 +496,6 @@ end
 function DisplayObj:scale(x,y)
 	local _x,_y = self._prop:getScl()
 	self._prop:setScl(x*_x,y*_y)
-end
-
----Set scale using vec2
---@tparam vec2 v
-function DisplayObj:setScale_v2(v)
-    self._prop:setScl(v.x,v.y)
-end
-
----Get scale using vec2
---@treturn vec2 v
-function DisplayObj:getScale_v2()
-    local x,y = self._prop:getScl()
-    return vec2(x,y)
 end
 
 ---Set scale x value
