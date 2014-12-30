@@ -594,9 +594,9 @@ function DisplayObj:updateTransformationMatrix(targetSpace)
 			--set matrices inheritance
 			self._transformMatrix:setAttrLink(MOAITransform.INHERIT_TRANSFORM,
 				self._parent._transformMatrix, MOAITransform.TRANSFORM_TRAIT)
-			--force udpate
-			self._transformMatrix:forceUpdate()
 		end
+		--force udpate
+		self._transformMatrix:forceUpdate()
 		return
 	end
 	
