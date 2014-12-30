@@ -136,17 +136,17 @@ function Quad:_updateVertexBuffer()
 
 end
 
+---overrides DisplayObj method redirecting on _updateVertexBuffer
+--that already does the same thing for quads
+--@function Quad:_updateColor
+Quad._updateColor = Quad._updateVertexBuffer
+
+
 ---Set the size of the quad
 --@param width quad width
 --@param height quad height
 function Quad:setSize(width,height)
 	BaseQuad.setSize(self,width,height)
-	self:_updateVertexBuffer()
-end
-
----overrides displayobj method redirecting on _updateVertexBuffer
---that already does the same thing for quads
-function Quad:_updateColor()
 	self:_updateVertexBuffer()
 end
 
