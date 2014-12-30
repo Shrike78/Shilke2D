@@ -328,7 +328,7 @@ function DisplayObj:setAlpha(a)
 end
 
 --Return alpha value of the object
---@return alpha [0,255]
+--@treturn int alpha [0,255]
 function DisplayObj:getAlpha()
    return self._color[4] * 255
 end
@@ -498,6 +498,16 @@ function DisplayObj:getRotation()
 	return RAD(r * __rmult)
 end
 
+--Rotate the obj of the given value
+--@tparam number r radians
+function DisplayObj:rotate(r)
+	local _,_,_r = self._prop:getRot()
+	r = r + _r
+    while (r < -PI) do r = r + PI2 end
+    while (r >  PI) do r = r - PI2 end
+	self._prop:setRot(0, 0, DEG(r)*__rmult)
+end
+
 ---Set scale
 --@tparam number x
 --@tparam number y
@@ -509,8 +519,17 @@ end
 --@treturn number x
 --@treturn number y
 function DisplayObj:getScale()
-    local x,y = self._prop:getScl()
-    return x,y
+	local x,y = self._prop:getScl()
+	return x,y
+end
+
+--Scale of factors x,y. if the object was already scaled it applies the new factors over
+--the previous (resulting in a multiply of old and new factors)
+--@tparam number x
+--@tparam number y
+function DisplayObj:scale(x,y)
+	local _x,_y = self._prop:getScl()
+	self._prop:setScl(x*_x,y*_y)
 end
 
 ---Set scale using vec2
