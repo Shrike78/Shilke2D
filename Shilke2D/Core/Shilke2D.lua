@@ -97,8 +97,8 @@ function Shilke2D:init(w,h,fps, scaleX,scaleY, soundSampleRate, soundFrames)
 	--Set fixed performances at specific fps
 	MOAISim.setStep(1/self.fps)
 	MOAISim.clearLoopFlags ()
---	MOAISim.setLoopFlags ( MOAISim.SIM_LOOP_ALLOW_BOOST )
-	MOAISim.setLoopFlags ( MOAISim.SIM_LOOP_LONG_DELAY )
+	MOAISim.setLoopFlags ( MOAISim.SIM_LOOP_ALLOW_BOOST )
+--	MOAISim.setLoopFlags ( MOAISim.SIM_LOOP_LONG_DELAY )
 	MOAISim.setBoostThreshold ( 0 )
 
 	if __USE_SIMULATION_COORDS__ then	
