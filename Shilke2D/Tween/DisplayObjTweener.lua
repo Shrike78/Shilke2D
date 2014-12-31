@@ -19,7 +19,6 @@ used to seek a property to a specific value
 @treturn Tween
 --]]
 function DisplayObjTweener.seekProp(obj,setter,getter,endValue,time,transition)
-	local transition = transition or Transition.LINEAR
 	local tween = Tween.ease(obj,time,transition)
 	tween:seekEx(setter,getter,endValue)
 	return tween
@@ -36,7 +35,6 @@ used to move a property of a specific delta value
 @treturn Tween
 --]]
 function DisplayObjTweener.moveProp(obj,setter,getter,deltaValue,time,transition)	
-	local transition = transition or Transition.LINEAR
 	local tween = Tween.ease(obj,time,transition)
 	tween:moveEx(setter,getter,deltaValue)
 	return tween
@@ -75,7 +73,13 @@ seek color to a given value. it accepts only Colors or int32 values, not rgb
 @treturn Tween
 --]]
 function DisplayObjTweener.seekColor(obj,c,time,transition)
-	return DisplayObjTweener.seekProp(obj,obj.setColor,obj.getColor,Color(c),time,transition)
+	local endColor = Color(c)
+	local tween = Tween.ease(obj,time,transition)
+	tween:seekEx(obj.setRed, obj.getRed, endColor.r)
+	tween:seekEx(obj.setGreen, obj.getGreen, endColor.g)
+	tween:seekEx(obj.setBlue, obj.getBlue, endColor.b)
+	tween:seekEx(obj.setAlpha, obj.getAlpha, endColor.a)
+	return tween
 end
 
 --[[---
@@ -87,7 +91,13 @@ move color of a given delta value. it accepts only Color or int32 values, not rg
 @treturn Tween
 --]]
 function DisplayObjTweener.moveColor(obj,c,time,transition)
-	return DisplayObjTweener.moveProp(obj,obj.setColor,obj.getColor,Color(c),time,transition)
+	local endColor = Color(c)
+	local tween = Tween.ease(obj,time,transition)
+	tween:moveEx(obj.setRed, obj.getRed, endColor.r)
+	tween:moveEx(obj.setGreen, obj.getGreen, endColor.g)
+	tween:moveEx(obj.setBlue, obj.getBlue, endColor.b)
+	tween:moveEx(obj.setAlpha, obj.getAlpha, endColor.a)
+	return tween
 end
 
 
@@ -104,13 +114,12 @@ seek position, rotation and scale to given values
 @treturn Tween
 --]]
 function DisplayObjTweener.seekTransform(obj,x,y,r,sx,sy,time,transition)
-	local transition = transition or Transition.LINEAR
 	local tween = Tween.ease(obj,time,transition)
-	tween:seekEx(obj.setPositionX,	obj.getPositionX,	x)
-	tween:seekEx(obj.setPositionY,	obj.getPositionY,	y)
-	tween:seekEx(obj.setRotation,	obj.getRotation,	r)
-	tween:seekEx(obj.setScaleX,	obj.getScaleX,		sx)
-	tween:seekEx(obj.setScaleY,	obj.getScaleY,		sy)
+	tween:seekEx(obj.setPositionX, obj.getPositionX, x)
+	tween:seekEx(obj.setPositionY, obj.getPositionY, y)
+	tween:seekEx(obj.setRotation, obj.getRotation, r)
+	tween:seekEx(obj.setScaleX, obj.getScaleX, sx)
+	tween:seekEx(obj.setScaleY, obj.getScaleY, sy)
 	return tween
 end
 
@@ -127,13 +136,12 @@ move position, rotation and scale of given delta values
 @treturn Tween
 --]]
 function DisplayObjTweener.moveTransform(obj,x,y,r,sx,sy,time,transition)
-	local transition = transition or Transition.LINEAR
 	local tween = Tween.ease(obj,time,transition)
-	tween:moveEx(obj.setPositionX,	obj.getPositionX,	x)
-	tween:moveEx(obj.setPositionY,	obj.getPositionY,	y)
-	tween:moveEx(obj.setRotation,	obj.getRotation,	r)
-	tween:moveEx(obj.setScaleX,	obj.getScaleX,		sx)
-	tween:moveEx(obj.setScaleY,	obj.getScaleY,		sy)
+	tween:moveEx(obj.setPositionX, obj.getPositionX, x)
+	tween:moveEx(obj.setPositionY, obj.getPositionY, y)
+	tween:moveEx(obj.setRotation, obj.getRotation, r)
+	tween:moveEx(obj.setScaleX, obj.getScaleX, sx)
+	tween:moveEx(obj.setScaleY, obj.getScaleY, sy)
 	return tween
 end
 
@@ -148,7 +156,6 @@ seek position to given value
 @treturn Tween
 --]]
 function DisplayObjTweener.seekPosition(obj,x,y,time,transition)
-	local transition = transition or Transition.LINEAR
 	local tween = Tween.ease(obj,time,transition)
 	tween:seekEx(obj.setPositionX,obj.getPositionX,x)
 	tween:seekEx(obj.setPositionY,obj.getPositionY,y)
@@ -166,7 +173,6 @@ move position of given delta value
 @treturn Tween
 --]]
 function DisplayObjTweener.movePosition(obj,x,y,time,transition)
-	local transition = transition or Transition.LINEAR
 	local tween = Tween.ease(obj,time,transition)
 	tween:moveEx(obj.setPositionX,obj.getPositionX,x)
 	tween:moveEx(obj.setPositionY,obj.getPositionY,y)
@@ -210,7 +216,6 @@ seek scale to given value
 @treturn Tween
 --]]
 function DisplayObjTweener.seekScale(obj,sx,sy,time,transition)
-	local transition = transition or Transition.LINEAR
 	local tween = Tween.ease(obj,time,transition)
 	tween:seekEx(obj.setScaleX,obj.getScaleX,sx)
 	tween:seekEx(obj.setScaleY,obj.getScaleY,sy)
@@ -228,7 +233,6 @@ move scale of given delta value
 @treturn Tween
 --]]
 function DisplayObjTweener.moveScale(obj,sx,sy,time,transition)
-	local transition = transition or Transition.LINEAR
 	local tween = Tween.ease(obj,time,transition)
 	tween:moveEx(obj.setScaleX,obj.getScaleX,sx)
 	tween:moveEx(obj.setScaleY,obj.getScaleY,sy)
@@ -244,7 +248,6 @@ used to follow another displayobj position
 @treturn Tween
 --]]
 function DisplayObjTweener.seekTargetPosition(obj,target,time,transition)
-	local transition = transition or Transition.LINEAR
 	local tween = Tween.ease(obj,time,transition)
 	tween:followEx(obj.setPositionX,obj.getPositionX,target,target.getPositionX)
 	tween:followEx(obj.setPositionY,obj.getPositionY,target,target.getPositionY)

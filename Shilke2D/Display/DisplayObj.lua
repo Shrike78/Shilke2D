@@ -318,10 +318,48 @@ function DisplayObj:_updateColor()
 		self._prop:setColor(c[1],c[2],c[3],a)
 	end
 end
+	
+---Set red color channel
+--@tparam int r red [0,255]
+function DisplayObj:setRed(r)
+	self._color[1] = r * INV_255
+	self:_updateColor()
+end
 
+---Get red color channel
+--@treturn int red [0,255]
+function DisplayObj:getRed()
+   return self._color[1] * 255
+end
+
+---Set green color channel
+--@tparam int g green [0,255]
+function DisplayObj:setGreen(g)
+	self._color[2] = g * INV_255
+	self:_updateColor()
+end
+
+---Gets green color channel
+--@treturn int green [0,255]
+function DisplayObj:getGreen()
+   return self._color[2] * 255
+end
+
+---Set blue color channel
+--@tparam int b blue [0,255]
+function DisplayObj:setBlue(b)
+	self._color[3] = b * INV_255
+	self:_updateColor()
+end
+
+---Get blue color channel
+--@treturn int blue [0,255]
+function DisplayObj:getBlue()
+   return self._color[3] * 255
+end
 
 ---Set alpha value of the object
---@param a alpha value [0,255]
+--@tparam int a alpha value [0,255]
 function DisplayObj:setAlpha(a)
 	self._color[4] = a * INV_255
 	self:_updateColor()
@@ -332,7 +370,6 @@ end
 function DisplayObj:getAlpha()
    return self._color[4] * 255
 end
-
 
 --[[
 Set obj color.

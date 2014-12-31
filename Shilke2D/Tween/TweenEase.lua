@@ -30,11 +30,11 @@ Constructor.
 @param transitionName type of transition that will be applied
 --]]
 function TweenEase:init(target,time,transitionName)
-    assert(transitionName,"a valid transition name must be provided")
     Tween.init(self)
     assert(time>0,"A tween must have a valid time")
     self.target = target
     self.totalTime = max(0.0001, time)
+	local transitionName = transitionName or Transition.LINEAR
     self.transition = Transition.getTransition(transitionName)
     assert(self.transition,
         transitionName.." is not a registered transition")

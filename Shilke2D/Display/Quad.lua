@@ -1,17 +1,24 @@
 --[[---
 A Quad represents a rectangle with a uniform color or a color gradient.
 
-It's possible to set one color per vertex. The colors will smoothly 
-fade into each other over the area of the quad. 
-
 The quad is implemented using a triangle fan mesh made of two triangles, 
 with the following vertex order (the same in both coordinate systems):
 
+<pre class="example">
 v1---v2
 | \   |
 |  \  |
 |   \ |
 v4---v3
+</pre>
+
+It's possible to set different color to each vertex. The colors will smoothly 
+fade into each other over the area of the quad. 
+
+Quad overrides DisplayObj color setter/getter: setters work on all the vertices,
+while getters always return the value of the first vertex
+
+Quad implements also methods to set/get single vertex color.
 
 --]]
 
@@ -150,22 +157,46 @@ function Quad:setSize(width,height)
 	self:_updateVertexBuffer()
 end
 
----Override base method. It calls _updateVertexBuffer
---@param a alpha value [0,255]
-function Quad:setAlpha(a)
+---Set red channel for all vertices
+--@tparam int r red [0,255]
+function Quad:setRed(r)
+	local r = r * INV_255
+	for i = 1,4 do
+		self._colors[i][1] = r
+	end
+	self:_updateVertexBuffer()
+end
+
+---Set green channel for all vertices
+--@tparam int g green [0,255]
+function Quad:setGreen(g)
+	local g = g * INV_255
     for i = 1,4 do
-        self._colors[i][4] = a * INV_255
+        self._colors[i][2] = g
+    end
+	self:_updateVertexBuffer()
+end
+
+
+---Set blue channel for all vertices
+--@tparam int b blue [0,255]
+function Quad:setBlue(b)
+	local b = b * INV_255
+    for i = 1,4 do
+        self._colors[i][3] = b
+    end
+	self:_updateVertexBuffer()
+end
+
+---Set alpha value for all vertices
+--@tparam int a alpha value [0,255]
+function Quad:setAlpha(a)
+    local a = a * INV_255
+    for i = 1,4 do
+        self._colors[i][4] = a
     end
     self:_updateVertexBuffer()
 end
-
----Returns the alpha value as set at the first vertex. 
---If alpha values is different per vertices the return value has no real meaning
---@return alpha value [0,255]
-function Quad:getAlpha()
-   return self._colors[1][4]*255
-end
-
 
 ---Set alpha value for a single vertex
 --@param v index of the vertex [1,4]
