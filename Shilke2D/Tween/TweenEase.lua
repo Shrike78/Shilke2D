@@ -183,28 +183,18 @@ end
 
 --onStart initialize start values of each tweened property
 function TweenEase:_start()
-	for i = #self.properties,1,-1 do
-		local property = self.properties[i]
-		local info = self.tweenInfo[property]
+	for _,property in pairs(self.properties) do
+        local info = self.tweenInfo[property]
 		info.startValue = self.target[property]
 		if info.deltaValue then
 			info.endValue = info.startValue + info.deltaValue
 		end
-		if info.startValue == info.endValue then
-			table.remove(self.properties,i)
-			self.tweenInfo[property] = nil
-		end
 	end
-	for i = #self.setters,1,-1 do
-		local setter = self.setters[i]
-		local info = self.tweenInfo[setter]
+    for _,setter in pairs(self.setters) do
+        local info = self.tweenInfo[setter]
 		info.startValue = info.getter(self.target)
 		if info.deltaValue then
 			info.endValue = info.startValue + info.deltaValue
-		end
-		if info.startValue == info.endValue then
-			table.remove(self.setters,i)
-			self.tweenInfo[setter] = nil
 		end
 	end
 end
