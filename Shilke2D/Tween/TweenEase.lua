@@ -37,10 +37,7 @@ function TweenEase:init(target,time,transitionName)
 	local transitionName = transitionName or Transition.LINEAR
 	self.transition = Transition.getTransition(transitionName)
 	assert(self.transition, transitionName.." is not a registered transition")
-			 
-	self.properties = {}
-	self.setters = {}
-	self.tweenInfo = {}
+	self.tweenInfos = {}
 end
 
 
@@ -57,11 +54,13 @@ to be rounded to int values. default is false
 @return self
 --]]
 function TweenEase:seek(property, endValue, roundToInt)	
-	table.insert(self.properties,property)
-	self.tweenInfo[property] = {
+	table.insert(self.tweenInfos, 
+		{
+			property = property,
 			endValue = endValue,
 			roundToInt = roundToInt or false
-	}
+		}
+	)
 	return self
 end
 
@@ -77,12 +76,14 @@ to be rounded to int values. default is false
 @return self
 --]]
 function TweenEase:seekEx(setter, getter, endValue, roundToInt)
-	table.insert(self.setters,setter)
-	self.tweenInfo[setter] = {
+	table.insert(self.tweenInfos,
+		{
+			setter = setter,
 			getter = getter,
 			endValue = endValue,
 			roundToInt = roundToInt or false
-	}
+		}
+	)
 	return self
 end
 
@@ -99,13 +100,13 @@ to be rounded to int values. default is false
 @return self
 --]]
 function TweenEase:move(property, deltaValue, roundToInt)
-	assert(self.target[property],property..
-		" is not a property of the target of this tween")
-	table.insert(self.properties,property)
-	self.tweenInfo[property] = {
+	table.insert(self.tweenInfos,
+		{
+			property = property,
 			deltaValue = deltaValue,
 			roundToInt = roundToInt or false
-	}
+		}
+	)
 	return self
 end
 
@@ -121,12 +122,14 @@ to be rounded to int values. default is false
 @return self
 --]]
 function TweenEase:moveEx(setter, getter, deltaValue, roundToInt)
-	table.insert(self.setters,setter)
-	self.tweenInfo[setter] = {
+	table.insert(self.tweenInfos,
+		{
+			setter = setter,
 			getter = getter,
 			deltaValue = deltaValue,
 			roundToInt = roundToInt or false
-	}
+		}
+	)
 	return self
 end
 
@@ -147,13 +150,18 @@ to be rounded to int values. default is false
 @return self
 --]]
 function TweenEase:follow(property, target, targetProp, roundToInt)
-	table.insert(self.setters,setter)
-	self.tweenInfo[setter] = {
-			getter = getter,
+	local info = {
+			property = property,
 			target = target,
-			targetProp = targetProp,
 			roundToInt = roundToInt or false
-	}
+		}
+	--check type of provided targetProp (property or method)
+	if type(targetProp) == 'function' then
+		info.targetGetter = targetProp
+	else
+		info.targetProperty = targetProp
+	end
+	table.insert(self.tweenInfos,info)
 	return self
 end
 
@@ -170,74 +178,80 @@ to be rounded to int values. default is false
 @return self
 --]]
 function TweenEase:followEx(setter, getter, target, targetProp, roundToInt)
-	table.insert(self.setters,setter)
-	self.tweenInfo[setter] = {
+	local info = {
+			setter = setter,
 			getter = getter,
 			target = target,
-			targetProp = targetProp,
 			roundToInt = roundToInt or false
-	}
+		}
+	--check type of provided targetProp (property or method)
+	if type(targetProp) == 'function' then
+		info.targetGetter = targetProp
+	else
+		info.targetProperty = targetProp
+	end
+	table.insert(self.tweenInfos,info)
 	return self
 end
 
 --onStart initialize start values of each tweened property
 function TweenEase:_start()
-	for _,property in pairs(self.properties) do
-		local info = self.tweenInfo[property]
-		info.startValue = self.target[property]
+	for _,info in ipairs(self.tweenInfos) do
+		--initialize start value with current property/getter value
+		if info.getter then
+			info.startValue = info.getter(self.target)
+		else
+			info.startValue = self.target[info.property]
+		end		
+		--if possible initialize once per session the delta value (not possible if a 
+		--follow ease is in action, because target changes each frame)
 		if info.deltaValue then
-			info.endValue = info.startValue + info.deltaValue
+			info._delta = info.deltaValue
+		elseif info.endValue then
+			info._delta = info.endValue - info.startValue
 		end
-	end
-	for _,setter in pairs(self.setters) do
-		local info = self.tweenInfo[setter]
-		info.startValue = info.getter(self.target)
-		if info.deltaValue then
-			info.endValue = info.startValue + info.deltaValue
-		end
+		--reset the cached "lastValue" for each tweeninfo
+		info.lastValue = nil
 	end
 end
 
-function TweenEase:_getValue(hash,ratio)
-	local info = self.tweenInfo[hash]
+function TweenEase:_getValue(info, mul)
 	local startValue = info.startValue
-	local endValue
-	if info.endValue then 
-		endValue = info.endValue
-	else
-		if type(info.targetProp) == 'function' then
-			endValue = info.targetProp(info.target)
+	local deltaValue = info._delta
+	--if a follow ease is in action check the target property/getter value and use
+	--it to define current delta value
+	if not deltaValue then
+		if info.targetGetter then
+			deltaValue = info.targetGetter(info.target) - startValue
 		else
-			endValue = info.target[info.targetProp]
+			deltaValue = info.target[info.targetProperty] - startValue
 		end
 	end
-	local delta = endValue - startValue
-	if delta == 0 then
-		return startValue, false
+	if deltaValue == 0 then
+		return startValue
 	end
-	local currentValue = startValue + self.transition(ratio) * delta
+	local currentValue = startValue + mul * deltaValue
 	if (info.roundToInt) then
 		currentValue = round(currentValue)
 	end
-	local bNeedUpdate = info.lastValue ~= currentValue
-	info.lastValue = currentValue
-	return currentValue, bNeedUpdate
+	return currentValue
 end
+	
 	
 function TweenEase:_update(deltaTime) 
 	local ratio = min(self.totalTime, self.currentTime) / self.totalTime
-	local val, bNeedUpdate
-	for _,property in pairs(self.properties) do
-		val, bNeedUpdate = self:_getValue(property,ratio) 
-		if bNeedUpdate then
-			self.target[property] = val
-		end
-	end
-
-	for _,setter in pairs(self.setters) do
-		val, bNeedUpdate = self:_getValue(setter,ratio)
-		if bNeedUpdate then
-			setter(self.target, val)
+	local mul = self.transition(ratio)
+	local val
+	for _,info in ipairs(self.tweenInfos) do
+		val = self:_getValue(info, mul)
+		--avoid continuous set of same value caching last value for each tween info
+		if val ~= info.lastValue then
+			if info.getter then
+				info.setter(self.target, val)
+			else
+				self.target[info.property] = val
+			end
+			info.lastValue = val
 		end
 	end
 end
