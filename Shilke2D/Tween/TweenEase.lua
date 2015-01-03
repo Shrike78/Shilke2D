@@ -30,18 +30,17 @@ Constructor.
 @param transitionName type of transition that will be applied
 --]]
 function TweenEase:init(target,time,transitionName)
-    Tween.init(self)
-    assert(time>0,"A tween must have a valid time")
-    self.target = target
-    self.totalTime = max(0.0001, time)
+	Tween.init(self)
+	assert(time>0,"A tween must have a valid time")
+	self.target = target
+	self.totalTime = max(0.0001, time)
 	local transitionName = transitionName or Transition.LINEAR
-    self.transition = Transition.getTransition(transitionName)
-    assert(self.transition,
-        transitionName.." is not a registered transition")
-             
-    self.properties = {}
-    self.setters = {}
-    self.tweenInfo = {}
+	self.transition = Transition.getTransition(transitionName)
+	assert(self.transition, transitionName.." is not a registered transition")
+			 
+	self.properties = {}
+	self.setters = {}
+	self.tweenInfo = {}
 end
 
 
@@ -58,12 +57,12 @@ to be rounded to int values. default is false
 @return self
 --]]
 function TweenEase:seek(property, endValue, roundToInt)	
-    table.insert(self.properties,property)
-    self.tweenInfo[property] = {
-            endValue = endValue,
-            roundToInt = roundToInt or false
-    }
-    return self
+	table.insert(self.properties,property)
+	self.tweenInfo[property] = {
+			endValue = endValue,
+			roundToInt = roundToInt or false
+	}
+	return self
 end
 
 --[[---
@@ -100,14 +99,14 @@ to be rounded to int values. default is false
 @return self
 --]]
 function TweenEase:move(property, deltaValue, roundToInt)
-    assert(self.target[property],property..
-        " is not a property of the target of this tween")
-    table.insert(self.properties,property)
-    self.tweenInfo[property] = {
-            deltaValue = deltaValue,
-            roundToInt = roundToInt or false
-    }
-    return self
+	assert(self.target[property],property..
+		" is not a property of the target of this tween")
+	table.insert(self.properties,property)
+	self.tweenInfo[property] = {
+			deltaValue = deltaValue,
+			roundToInt = roundToInt or false
+	}
+	return self
 end
 
 --[[---
@@ -184,14 +183,14 @@ end
 --onStart initialize start values of each tweened property
 function TweenEase:_start()
 	for _,property in pairs(self.properties) do
-        local info = self.tweenInfo[property]
+		local info = self.tweenInfo[property]
 		info.startValue = self.target[property]
 		if info.deltaValue then
 			info.endValue = info.startValue + info.deltaValue
 		end
 	end
-    for _,setter in pairs(self.setters) do
-        local info = self.tweenInfo[setter]
+	for _,setter in pairs(self.setters) do
+		local info = self.tweenInfo[setter]
 		info.startValue = info.getter(self.target)
 		if info.deltaValue then
 			info.endValue = info.startValue + info.deltaValue
