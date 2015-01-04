@@ -264,6 +264,10 @@ function Shilke2D:start()
 		local mainJuggler = MOAICoroutine.new()
 		mainJuggler:run(
 			function()
+				--disable debugger from juggler corouting
+				if not __DEBUG_CALLBACKS__ then
+					pcall(function() require('mobdebug').off() end )
+				end
 				local elapsedTime, prevElapsedTime, currElapsedTime = 0, 0, 0
 				coroutine.yield()
 				while (true) do
@@ -274,7 +278,7 @@ function Shilke2D:start()
 					self.juggler:advanceTime(elapsedTime)
 				end
 			end
-		)		
+		)	
 	end
 
 	--setup main loop
