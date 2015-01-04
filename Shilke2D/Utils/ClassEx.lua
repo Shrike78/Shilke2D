@@ -1,9 +1,21 @@
 --[[---
-Class.lua
 Compatible with Lua 5.1 (not 5.0).
 
-Used to implements simple object oriented logic in lua, with single inheritance 
+Used to implement simple object oriented logic in lua, with single inheritance 
 and interface implementation.
+
+It's possible to test instances of classes to check type and inheritance using class_type(),
+implements() and is_a() functions
+
+It's also possible to create particular classes having as instances MOAI objects 
+incapsulated into a full lua class hierarchy. It's so possible to extend moai 
+objects adding custom lua support.
+
+Object created this way are at the same time lua class instances and MOAIObj instances (userdata).
+
+
+The MOAIClass implementation is based on makotok flower library
+(https://github.com/makotok/Hanappe)
 
 @usage
 
@@ -24,11 +36,11 @@ iC = class()
 D = class(B,iC)
 
 d = D()
-d:is_a(A) = true
-d:is_a(B) = true
-d:is_a(iC) = false
-d:is_a(D) = true
-d:implements(iC) = true
+d:is_a(A) -> true
+d:is_a(B) -> true
+d:is_a(iC) -> false
+d:is_a(D) -> true
+d:implements(iC) -> true
 
 - It's also possible to implements one or more interfaces without inheritance:
 
@@ -36,19 +48,33 @@ iE = class()
 F = class(nil,iC,iE)
 
 f = F()
-f:is_a(iC) = false
-f:implements(iC) = true
-f:implements(iE) = true
+f:is_a(iC) -> false
+f:implements(iC) -> true
+f:implements(iE) -> true
+
+
+G = MOAIClass(MOAIProp,F)
+g = G()
+type(g) -> userdata (MOAIProp)
+class_type(g) == G -> true
+g:is_a(G) -> true
+g:is_a(F) -> true
+g:implements(iE) -> true
+
+g:setLoc(0,0,0) -> it works because g is at the same time a G instance and a MOAIProp instance
+
 --]]
 
 
 local reserved =
 {
-    __index		= true,
-    _base		= true,
-    init		= true,
-    is_a		= true,
-    implements	= true			
+    __index			= true,
+	__moai_class 	= true,
+	__interface 	= true,
+    __base			= true,
+    init			= true,
+    is_a			= true,
+    implements		= true			
 }
 
 
@@ -71,10 +97,8 @@ class_type({1,2,3}) -> 'table'
 --]]
 function class_type(o)
 	local t = type(o)
-	if t == 'table' then
-		if o.is_a then
-			return getmetatable(o)
-		end
+	if (t == 'table' or t == 'userdata') and o.is_a then
+		return o.__interface.__index
 	end
 	return t
 end
@@ -85,7 +109,7 @@ It can be used on generic types and on class object instances
 @param o the object to be checked
 @param t the type to be checked
 @return bool true if the object is of the given type, false if not. 
-NB: Even if a class object isntance is always also a table in lua, this function
+NB: Even if a class object instance is always also a table in lua, this function
 return false if trying to check a class object instance over a 'table' type.
 
 @usage
@@ -109,10 +133,8 @@ is_a({1,2,3},'table') -> true
 --]]
 function is_a(o,t)
 	local _t = type(o)
-	if _t == 'table' then
-		if o.is_a then
-			return o:is_a(t)
-		end
+	if (_t == 'table' or t == 'userdata') and o.is_a then
+		return o:is_a(t)
 	end
 	return _t == t
 end
@@ -133,45 +155,43 @@ C = class(nil,iA,iB)
 
 c = C()
 
-implements(c,iA) = true
-implements(c,iB) = true
-implements(c,C) = true
-implements("test",C) = false
-implements("test",'string') = true
+implements(c,iA) -> true
+implements(c,iB) -> true
+implements(c,C) -> true
+implements("test",C) -> false
+implements("test",'string') -> true
 
 --]]
 function implements(o,t)
 	local _t = type(o)
-	if _t == 'table' then
-		if o.implements then
-			return o:implements(t)
-		end
+	if (_t == 'table' or t == 'userdata') and o.implements then
+		return o:implements(t)
 	end
 	return _t == t
 end
 
 
 --[[---
-	Returns the super class of a given class.
-	Useful to create polimorfic calls without caring of the actual superclass
-	that could change in future
-	
-	ex:
-	
-	A = class()
-	B = class(A)
-	C = class(B)
-	o = C()
-	
-	super(C) -> B
-	super(B) -> A
-	super(A) -> nil
-	
-	@param c class
-	@return super super class of c (nil if c is a first class)
+Returns the super class of a given class.
+Useful to create polimorfic calls without caring of the actual superclass
+that could change in future
+
+ex:
+
+A = class()
+B = class(A)
+C = class(B)
+o = C()
+
+super(C) -> B
+super(B) -> A
+super(A) -> nil
+
+@param c class
+@return super super class of c (nil if c is a first class)
 --]]
 function super(c)
-	return c._base
+	return c.__base
 end
 
 --[[---
@@ -192,7 +212,7 @@ function class(...)
             for i,v in pairs(base) do
                 c[i] = v
             end
-            c._base = base
+            c.__base = base
         end
         
         table.remove(args,1)
@@ -212,15 +232,31 @@ function class(...)
         end
     end    
 
-    -- the class will be the metatable for all its objects,
-    -- and they will look up their methods in it.
-    c.__index = c
-
+	-- create an interface table that will be the metatable for all the 
+	-- class objects (and for itself too).
+	-- The interface uses the class as __index, so the objects
+	-- will look up their methods in it
+	c.__interface = {__index = c}
+	-- having the interface as metatable for itself is required only for 
+	-- MOAIClass objects
+	setmetatable(c.__interface, c.__interface)
+	
     -- expose a constructor which can be called by <classname>( <args> )
     local mt = {}
     mt.__call = function(class_tbl, ...)
-        local obj = {}
-        setmetatable(obj,c)
+		local obj
+		--
+		if c.__moai_class then
+			-- create a new object of moai class type
+			obj = c.__moai_class.new()
+			-- set class interface as lua interface for moai objects 
+			obj:setInterface(c.__interface)
+		else
+			-- set class interface as metatable of new objects
+			obj = {}
+			-- uses interface as metatable of the newly created obj
+			setmetatable(obj,c.__interface)
+		end
         if class_tbl.init then
             class_tbl.init(obj,...)
         else 
@@ -236,10 +272,12 @@ function class(...)
 
 	---Allows to check if a class inherits from another
     c.is_a = function(self, klass)
-        local m = getmetatable(self)
-        while m do 
-            if m == klass then return true end
-            m = m._base
+		local m = self.__interface.__index
+        while m do
+            if m == klass then 
+				return true 
+			end
+            m = m.__base
         end
         return false
     end
@@ -255,7 +293,32 @@ function class(...)
         end
         return true
     end
-
+	
+	--inherits moaiinterface from parent if a new MOAIClass is not used
+ 	if c.__moai_class then
+		-- mt is metatable of c. Setting the interfacetable of  
+		-- moai_class as __index of mt allows class to lookup for 
+		-- moai_class interfaceTable methods
+		mt.__index = c.__moai_class.getInterfaceTable()
+	end
     setmetatable(c, mt)
     return c
+end
+
+
+--[[---
+Creates a new class type, allowing single inheritance and multiple interface implementation
+Instances of the new class are not tables but MOAI objects with a given interface table. 
+The extended class version fully supports inheritance and all the other class functionalities
+@param moaiType MOAI class type 
+@param ... p1 is a base class for inheritance (can be null), following are interfaces to implement 
+--]]
+function MOAIClass(moaiType, ...)
+	local c = class(...)
+	c.__moai_class = moaiType
+	-- set moai class interfacetable as __index of class metatable
+	local t = getmetatable(c)
+	t.__index = moaiType.getInterfaceTable()
+	setmetatable(c,t)
+	return c
 end
