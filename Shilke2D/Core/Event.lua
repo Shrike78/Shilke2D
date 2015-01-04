@@ -38,8 +38,8 @@ TouchEvent = class(Event)
 --[[---
 Touch Event.
 A touch event is generated when a touchable DisplayObj is hit.
-@param touch the touch instance that led to the event generation
-@param target the object that has been touched. Can differs from the sender of the event.
+@param[opt=nil] touch the touch instance that led to the event generation
+@param[opt=nil] target the object that has been touched. Can differs from the sender of the event.
 --]]
 function TouchEvent:init(touch,target)
     Event.init(self,Event.TOUCH)
@@ -52,9 +52,9 @@ TimerEvent = class(Event)
 --[[---
 Timer Event.
 A timer event is generated when a timer reach 0.
-@param repeatCount the timer iteration number
+@tparam[opt=0] int repeatCount the timer iteration number
 --]]
 function TimerEvent:init(repeatCount)
     Event.init(self,Event.TIMER)
-    self.repeatCount = repeatCount
+    self.repeatCount = repeatCount or 0
 end

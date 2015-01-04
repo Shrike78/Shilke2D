@@ -6,7 +6,7 @@ It's possible to convert product of XmlParser into an XmlNode.
 It's also possible to add / remove children and attributes from a node.
 --]]
 
-require("Shilke2D/Utils/Externals/XmlParser")
+require("Shilke2D/Utils/Config/Externals/XmlParser")
 
 
 XmlNode = class()

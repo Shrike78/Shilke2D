@@ -42,8 +42,8 @@ end
 --@tparam[opt=true] bool showOrientedBounds
 --@tparam[opt=false] bool showAABounds boolean
 function Stage:showDebugLines(showOrientedBounds,showAABounds)
-	self._showOrientedBounds = showOrientedBounds ~= nil and showOrientedBounds or true
-	self._showAABounds = showAABounds ~= nil and showAABounds or false
+	self._showOrientedBounds = showOrientedBounds ~= false
+	self._showAABounds = showAABounds == true
 	
 	local showDebug = self._showOrientedBounds or self._showAABounds
 	
@@ -122,11 +122,6 @@ function Stage:setPosition(x,y)
 end
 
 ---Raise error if called because stage cannot be geometrically trasnformed
-function Stage:setPosition_v2(v)
-    error("It's not possible to set geometric properties of a Stage")
-end
-
----Raise error if called because stage cannot be geometrically trasnformed
 function Stage:setPositionX(x)
     error("It's not possible to set geometric properties of a Stage")
 end
@@ -148,11 +143,6 @@ end
 
 ---Raise error if called because stage cannot be geometrically trasnformed
 function Stage:setScale(x,y)
-    error("It's not possible to set geometric properties of a Stage")
-end
-
----Raise error if called because stage cannot be geometrically trasnformed
-function Stage:setScale_v2(v)
     error("It's not possible to set geometric properties of a Stage")
 end
 

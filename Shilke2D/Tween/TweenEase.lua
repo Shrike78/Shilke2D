@@ -21,6 +21,8 @@ e:seekEx(obj.setter,obj.getter,endValue)
 local TweenEase = class(Tween)
 Tween.ease = TweenEase
 
+local min, max, round = math.min, math.max, math.round
+
 --[[---
 Constructor.
 @param target the object that will be animated
@@ -28,18 +30,14 @@ Constructor.
 @param transitionName type of transition that will be applied
 --]]
 function TweenEase:init(target,time,transitionName)
-    assert(transitionName,"a valid transition name must be provided")
-    Tween.init(self)
-    assert(time>0,"A tween must have a valid time")
-    self.target = target
-    self.totalTime = math.max(0.0001, time)
-    self.transition = Transition.getTransition(transitionName)
-    assert(self.transition,
-        transitionName.." is not a registered transition")
-             
-    self.properties = {}
-    self.setters = {}
-    self.tweenInfo = {}
+	Tween.init(self)
+	assert(time>0,"A tween must have a valid time")
+	self.target = target
+	self.totalTime = max(0.0001, time)
+	local transitionName = transitionName or Transition.LINEAR
+	self.transition = Transition.getTransition(transitionName)
+	assert(self.transition, transitionName.." is not a registered transition")
+	self.tweenInfos = {}
 end
 
 
@@ -56,12 +54,14 @@ to be rounded to int values. default is false
 @return self
 --]]
 function TweenEase:seek(property, endValue, roundToInt)	
-    table.insert(self.properties,property)
-    self.tweenInfo[property] = {
-            endValue = endValue,
-            roundToInt = roundToInt or false
-    }
-    return self
+	table.insert(self.tweenInfos, 
+		{
+			property = property,
+			endValue = endValue,
+			roundToInt = roundToInt or false
+		}
+	)
+	return self
 end
 
 --[[---
@@ -76,13 +76,15 @@ to be rounded to int values. default is false
 @return self
 --]]
 function TweenEase:seekEx(setter, getter, endValue, roundToInt)
-    table.insert(self.setters,setter)
-    self.tweenInfo[setter] = {
-            getter = getter,
+	table.insert(self.tweenInfos,
+		{
+			setter = setter,
+			getter = getter,
 			endValue = endValue,
-            roundToInt = roundToInt or false
-    }
-    return self
+			roundToInt = roundToInt or false
+		}
+	)
+	return self
 end
 
 --[[---
@@ -98,14 +100,14 @@ to be rounded to int values. default is false
 @return self
 --]]
 function TweenEase:move(property, deltaValue, roundToInt)
-    assert(self.target[property],property..
-        " is not a property of the target of this tween")
-    table.insert(self.properties,property)
-    self.tweenInfo[property] = {
-            deltaValue = deltaValue,
-            roundToInt = roundToInt or false
-    }
-    return self
+	table.insert(self.tweenInfos,
+		{
+			property = property,
+			deltaValue = deltaValue,
+			roundToInt = roundToInt or false
+		}
+	)
+	return self
 end
 
 --[[---
@@ -120,13 +122,15 @@ to be rounded to int values. default is false
 @return self
 --]]
 function TweenEase:moveEx(setter, getter, deltaValue, roundToInt)
-    table.insert(self.setters,setter)
-    self.tweenInfo[setter] = {
-            getter = getter,
+	table.insert(self.tweenInfos,
+		{
+			setter = setter,
+			getter = getter,
 			deltaValue = deltaValue,
-            roundToInt = roundToInt or false
-    }
-    return self
+			roundToInt = roundToInt or false
+		}
+	)
+	return self
 end
 
 
@@ -146,14 +150,19 @@ to be rounded to int values. default is false
 @return self
 --]]
 function TweenEase:follow(property, target, targetProp, roundToInt)
-    table.insert(self.setters,setter)
-    self.tweenInfo[setter] = {
-            getter = getter,
+	local info = {
+			property = property,
 			target = target,
-			targetProp = targetProp,
-            roundToInt = roundToInt or false
-    }
-    return self
+			roundToInt = roundToInt or false
+		}
+	--check type of provided targetProp (property or method)
+	if type(targetProp) == 'function' then
+		info.targetGetter = targetProp
+	else
+		info.targetProperty = targetProp
+	end
+	table.insert(self.tweenInfos,info)
+	return self
 end
 
 --[[---
@@ -169,70 +178,84 @@ to be rounded to int values. default is false
 @return self
 --]]
 function TweenEase:followEx(setter, getter, target, targetProp, roundToInt)
-    table.insert(self.setters,setter)
-    self.tweenInfo[setter] = {
-            getter = getter,
+	local info = {
+			setter = setter,
+			getter = getter,
 			target = target,
-			targetProp = targetProp,
-            roundToInt = roundToInt or false
-    }
-    return self
+			roundToInt = roundToInt or false
+		}
+	--check type of provided targetProp (property or method)
+	if type(targetProp) == 'function' then
+		info.targetGetter = targetProp
+	else
+		info.targetProperty = targetProp
+	end
+	table.insert(self.tweenInfos,info)
+	return self
 end
 
 --onStart initialize start values of each tweened property
 function TweenEase:_start()
-    for _,property in pairs(self.properties) do
-        local info = self.tweenInfo[property]
-		info.startValue = self.target[property]
+	for _,info in ipairs(self.tweenInfos) do
+		--initialize start value with current property/getter value
+		if info.getter then
+			info.startValue = info.getter(self.target)
+		else
+			info.startValue = self.target[info.property]
+		end		
+		--if possible initialize once per session the delta value (not possible if a 
+		--follow ease is in action, because target changes each frame)
 		if info.deltaValue then
-			info.endValue = info.startValue + info.deltaValue
+			info._delta = info.deltaValue
+		elseif info.endValue then
+			info._delta = info.endValue - info.startValue
 		end
-    end
-    for _,setter in pairs(self.setters) do
-        local info = self.tweenInfo[setter]
-		info.startValue = info.getter(self.target)
-		if info.deltaValue then
-			info.endValue = info.startValue + info.deltaValue
-		end
-    end
+		--reset the cached "lastValue" for each tweeninfo
+		info.lastValue = nil
+	end
 end
 
-function TweenEase:_getValue(hash,ratio)
-        local info = self.tweenInfo[hash]
-        local startValue = info.startValue
-        local endValue
-		if info.endValue then 
-			endValue = info.endValue
+function TweenEase:_getValue(info, mul)
+	local startValue = info.startValue
+	local deltaValue = info._delta
+	--if a follow ease is in action check the target property/getter value and use
+	--it to define current delta value
+	if not deltaValue then
+		if info.targetGetter then
+			deltaValue = info.targetGetter(info.target) - startValue
 		else
-			if type(info.targetProp) == 'function' then
-				endValue = info.targetProp(info.target)
-			else
-				endValue = info.target[info.targetProp]
-			end
+			deltaValue = info.target[info.targetProperty] - startValue
 		end
-        local delta = endValue - startValue
-            
-        local currentValue = startValue + self.transition(ratio) * delta
-        if (info.roundToInt) then
-            currentValue = math.round(currentValue)
-        end
-        return currentValue
-    end
+	end
+	if deltaValue == 0 then
+		return startValue
+	end
+	local currentValue = startValue + mul * deltaValue
+	if (info.roundToInt) then
+		currentValue = round(currentValue)
+	end
+	return currentValue
+end
 	
-function TweenEase:_update(deltaTime)
-    
-    local ratio = math.min(self.totalTime, self.currentTime) / 
-        self.totalTime
-
-    for _,property in pairs(self.properties) do
-        self.target[property] = self:_getValue(property,ratio)
-    end
-    
-    for _,setter in pairs(self.setters) do
-        setter(self.target, self:_getValue(setter,ratio))
-    end
+	
+function TweenEase:_update(deltaTime) 
+	local ratio = min(self.totalTime, self.currentTime) / self.totalTime
+	local mul = self.transition(ratio)
+	local val
+	for _,info in ipairs(self.tweenInfos) do
+		val = self:_getValue(info, mul)
+		--avoid continuous set of same value caching last value for each tween info
+		if val ~= info.lastValue then
+			if info.getter then
+				info.setter(self.target, val)
+			else
+				self.target[info.property] = val
+			end
+			info.lastValue = val
+		end
+	end
 end
 
 function TweenEase:_isCompleted()
-    return (self.currentTime >= self.totalTime)
+	return (self.currentTime >= self.totalTime)
 end

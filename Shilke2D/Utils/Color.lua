@@ -419,9 +419,25 @@ function Color._toNormalizedRGBA(r,g,b,a)
 end
 
 
+--[[---
+Returns a Color given it's svg name as string
+@usage
+local c = Color.fromSvgName("aliceblue") === local c = Color(Color.ALICEBLUE)
+@tparam string name name of the required svg color. case insensive
+@treturn[1] Color 
+@return[2] nil if the provided string is not a valid color name 
+--]]
+function Color.fromSvgName(name)
+	local c = Color[string.upper(name)]
+	if c then
+		return Color(c)
+	else
+		return nil
+	end
+end
 
 --- (240,248,255)
-Color.ALICEBLUE				= Color.rgba2int(240,248,255)	
+Color.ALICEBLUE			= Color.rgba2int(240,248,255)	
 --- (250,235,215)
 Color.ANTIQUEWHITE			= Color.rgba2int(250,235,215)	
 --- (0,255,255)

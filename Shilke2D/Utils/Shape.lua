@@ -165,7 +165,7 @@ end
 ---Returns the intersection area between two rects
 --@tparam Rect r2 the second rect
 --@tparam[opt=nil] Rect helperRect if provided is filled and used as return object
---@treturn Rect. if the intersection is nil it returns a defaul 
+--@treturn Rect. if the intersection is nil it returns a default
 ---Rect with each component at 0
 function Rect:intersection(r2, helperRect)
 	res = helperRect or Rect()

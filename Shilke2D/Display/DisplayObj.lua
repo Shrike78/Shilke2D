@@ -93,17 +93,11 @@ local __helperRect = Rect()
 
 DisplayObj = class(EventDispatcher)
 
---[[---
-By default DisplayObjs do not make use of multiplyColor because the
-resulting color on screen is automatically affected by hierarchy colors.
-Special cases are when an object is rendered using a shader that doesn't
-take care of hierarchy, and so it's required to manually modify colors 
-according to multiply value.
---]]
-DisplayObj.__defaultUseMultiplyColor = false
 
 ---Used to define the default alpha behaviour of a displayObj type. That influences blend modes.
 DisplayObj.__defaultHasPremultipliedAlpha = true
+
+local __identityMatrix = MOAITransform.new()
 
 ---Initialization.
 function DisplayObj:init()
@@ -114,7 +108,8 @@ function DisplayObj:init()
 	
 	--exact clone of transformation prop, used to calculate transformMatrix depending
 	--on a specific targetSpace
-	self._transformMatrix = MOAITransform.new()
+	self._localMatrix = MOAITransform.new()
+	self._transformMatrix = self._localMatrix
 	
     self._name = nil
     self._parent = nil
@@ -123,15 +118,12 @@ function DisplayObj:init()
     self._touchable = true
 	
 	--set default values for the class
-	self._useMultiplyColor = self.__defaultUseMultiplyColor
 	self._premultipliedAlpha = self.__defaultHasPremultipliedAlpha
 	
 	if not self._premultipliedAlpha then
 		self:setBlendMode(BlendMode.NORMAL)
 	end
 	self._color = {1,1,1,1}
-    self._multiplyColor = {1,1,1,1}
-
 end
 
 ---If a derived object needs to clean up resources it must inherits this method, always remembering to 
@@ -142,6 +134,7 @@ function DisplayObj:dispose()
 	end
 	EventDispatcher.dispose(self)
 	self._transformMatrix = nil
+	self._localMatrix = nil
 	self._prop = nil
 end
 
@@ -194,15 +187,9 @@ function DisplayObj:_setParent(parent)
 		--if not set before it can raise problems
 		self._prop:setAttrLink(MOAITransform.INHERIT_TRANSFORM, parent._prop, MOAITransform.TRANSFORM_TRAIT)
 		self._prop:setAttrLink(MOAIColor.INHERIT_COLOR, parent._prop, MOAIColor.COLOR_TRAIT)
-       	if self._useMultiplyColor then
-			self:_setMultiplyColor(parent:_getMultipliedColor())
-		end
     else
 		self._prop:clearAttrLink(MOAITransform.INHERIT_TRANSFORM)
 		self._prop:clearAttrLink(MOAIColor.INHERIT_COLOR)
-       	if self._useMultiplyColor then
-			self:_setMultiplyColor(1,1,1,1)
-		end
 	end
 	--force update of transform matrix
 	self._prop:forceUpdate()
@@ -278,62 +265,6 @@ function DisplayObj:isTouchable()
    return self._touchable
 end
 
---[[---
-Used to override default 'useMultiplyColor' class value for a specific instance
-Used for example for images when a pixel shader is set for special effects.
-@param bUse boolean
---]]
-function DisplayObj:useMultiplyColor(bUse)
-	self._useMultiplyColor = bUse
-	if bUse and self._parent then
-		self:_setMultiplyColor(self._parent:_getMultiplyColor())
-	else
-		self:_setMultiplyColor(1,1,1,1)
-	end
-end
-
----Returns if the object is using multiplyColor feature
---@return bool
-function DisplayObj:isMultiplyingColor()
-	return self._useMultiplyColor
-end
-
---[[---
-Inner method.
-Called by parent container, setMultiplyColor set the multiply color value of the parent container 
-(already modified by his current multiplyColor value)
-@param r [0,1]
-@param g [0,1]
-@param b [0,1]
-@param a [0,1]
---]]
-function DisplayObj:_setMultiplyColor(r,g,b,a)
-	local mc = self._multiplyColor
-	mc[1] = r
-	mc[2] = g
-	mc[3] = b
-	mc[4] = a
-end
-
---[[---
-Inner method.
-Returns the color of the object when displayed. 
-This value is obtained multiplying the obj color by the parent multiplyColor value
-@return r [0,1]
-@return g [0,1]
-@return b [0,1]
-@return a [0,1]
---]] 
-function DisplayObj:_getMultipliedColor()
-	local mc = self._multiplyColor
-	local prop = self._prop
-	local c = self._color
-	local r = mc[1] * c[1]  
-	local g = mc[2] * c[2]  
-	local b = mc[3] * c[3]  
-	local a = mc[4] * c[4]  
-    return r,g,b,a
-end
 
 --[[---
 Set the blend mode for the display object. A blend mode can be expressed in terms of
@@ -387,21 +318,58 @@ function DisplayObj:_updateColor()
 		self._prop:setColor(c[1],c[2],c[3],a)
 	end
 end
+	
+---Set red color channel
+--@tparam int r red [0,255]
+function DisplayObj:setRed(r)
+	self._color[1] = r * INV_255
+	self:_updateColor()
+end
 
+---Get red color channel
+--@treturn int red [0,255]
+function DisplayObj:getRed()
+   return self._color[1] * 255
+end
+
+---Set green color channel
+--@tparam int g green [0,255]
+function DisplayObj:setGreen(g)
+	self._color[2] = g * INV_255
+	self:_updateColor()
+end
+
+---Gets green color channel
+--@treturn int green [0,255]
+function DisplayObj:getGreen()
+   return self._color[2] * 255
+end
+
+---Set blue color channel
+--@tparam int b blue [0,255]
+function DisplayObj:setBlue(b)
+	self._color[3] = b * INV_255
+	self:_updateColor()
+end
+
+---Get blue color channel
+--@treturn int blue [0,255]
+function DisplayObj:getBlue()
+   return self._color[3] * 255
+end
 
 ---Set alpha value of the object
---@param a alpha value [0,255]
+--@tparam int a alpha value [0,255]
 function DisplayObj:setAlpha(a)
 	self._color[4] = a * INV_255
 	self:_updateColor()
 end
 
 --Return alpha value of the object
---@return alpha [0,255]
+--@treturn int alpha [0,255]
 function DisplayObj:getAlpha()
    return self._color[4] * 255
 end
-
 
 --[[
 Set obj color.
@@ -442,19 +410,6 @@ function DisplayObj:getPivot()
     return x,y
 end
 
----Set pivot of the object using a vec2
---@param v vec2 
-function DisplayObj:setPivot_v2(v)
-    self._prop:setPiv(v.x,v.y,0)
-end
-
----Return current pivot position using a vec2
---@return vec2
-function DisplayObj:getPivot_v2()
-    local x,y = self._prop:getPiv()
-    return vec2(x,y)
-end
-
 ---Set Pivot x position
 function DisplayObj:setPivotX(x)
 	self._prop:setAttr(MOAITransform.ATTR_X_PIV,x)
@@ -477,14 +432,6 @@ function DisplayObj:getPivotY()
    return self._prop:getAttr(MOAITransform.ATTR_Y_PIV)
 end
 
---[[
-All the following methods set or get the geometric transformation 
-of the object relative to the local coordinates of the parent.
-pos and scale have single coords accessors but also coupled (on x 
-and y) accessors for performance issues, and "_v2" (vec2) version, 
-usefull in different situation (like tweening)
---]]
-
 ---Set object position
 --@tparam number x
 --@tparam number y
@@ -498,19 +445,6 @@ end
 function DisplayObj:getPosition()
     local x,y = self._prop:getLoc()
     return x,y
-end
-
----Set object position using a vec2
---@tparam vec2 v
-function DisplayObj:setPosition_v2(v)
-    self._prop:setLoc(v.x,v.y,0)
-end
-
----Get object position using a vec2
---@treturn vec2
-function DisplayObj:getPosition_v2()
-	local x,y = self._prop:getLoc()
-    return vec2(x,y)
 end
 
 ---Set x position
@@ -557,13 +491,22 @@ function DisplayObj:setRotation(r)
     --move into range [-180 deg, +180 deg]
     while (r < -PI) do r = r + PI2 end
     while (r >  PI) do r = r - PI2 end
-    self._prop:setAttr(MOAITransform.ATTR_Z_ROT,DEG(r)*__rmult)
+	self._prop:setRot(0, 0, DEG(r)*__rmult)
 end
 
 ---Get rotation value
 --@treturn number r [-math.pi, math.pi]
 function DisplayObj:getRotation()
-	return RAD(self._prop:getAttr(MOAITransform.ATTR_Z_ROT)*__rmult)
+	local _,_,r = self._prop:getRot()
+	return RAD(r * __rmult)
+end
+
+--Rotate the obj of the given value
+--@tparam number r radians
+function DisplayObj:rotate(r)
+	local _,_,_r = self:getRotation()
+	r = r + _r
+	self:setRotation(r)
 end
 
 ---Set scale
@@ -577,21 +520,17 @@ end
 --@treturn number x
 --@treturn number y
 function DisplayObj:getScale()
-    local x,y = self._prop:getScl()
-    return x,y
+	local x,y = self._prop:getScl()
+	return x,y
 end
 
----Set scale using vec2
---@tparam vec2 v
-function DisplayObj:setScale_v2(v)
-    self._prop:setScl(v.x,v.y)
-end
-
----Get scale using vec2
---@treturn vec2 v
-function DisplayObj:getScale_v2()
-    local x,y = self._prop:getScl()
-    return vec2(x,y)
+--Scale of factors x,y. if the object was already scaled it applies the new factors over
+--the previous (resulting in a multiply of old and new factors)
+--@tparam number x
+--@tparam number y
+function DisplayObj:scale(x,y)
+	local _x,_y = self._prop:getScl()
+	self._prop:setScl(x*_x,y*_y)
 end
 
 ---Set scale x value
@@ -620,6 +559,36 @@ end
 
 
 --[[---
+Set all the transform parameters
+@tparam number x x position
+@tparam number y y position
+@tparam number r rotation
+@tparam number sx x scale
+@tparam number sy y scale
+--]]
+function DisplayObj:setTransform(x,y,r,sx,sy)
+	self:setPosition(x,y)
+	self:setRotation(r)
+	self:setScale(sx,sy)
+end
+
+--[[---
+Get all the transform parameters
+@treturn number x x position
+@treturn number y y position
+@treturn number r rotation
+@treturn number sx x scale
+@treturn number sy y scale
+--]]
+function DisplayObj:getTransform()
+	local x,y = self:getPosition()
+	local r = self:getRotation()
+	local sx,sy = self:getScale()
+	return x,y,r,sx,sy
+end
+
+
+--[[---
 Inner method, called to force update of transformation matrix used 
 to calculate relative position into the displayList
 @param targetSpace could be self, nil or an ancestor displayObj.
@@ -627,37 +596,50 @@ nil means top most container
 --]]
 function DisplayObj:updateTransformationMatrix(targetSpace)
 	
-	if (targetSpace == self or (not self._parent and not targetSpace) ) then
-		if self._bTransformMatrixIsIdentity then 
-			return
-		else
-			self._transformMatrix:clearAttrLink(MOAITransform.INHERIT_TRANSFORM)
-			self._transformMatrix:setPiv(0,0,0)
-			self._transformMatrix:setLoc(0,0,0)
-			self._transformMatrix:setScl(1,1)
-			self._transformMatrix:setAttr(MOAITransform.ATTR_Z_ROT,0)
-			self._transformMatrix:forceUpdate()
-			self._bTransformMatrixIsIdentity = true
-			return
-		end
+	--if the target is itself returns identity matrix
+	if (targetSpace == self or (not targetSpace and not self._parent)) then
+		self._transformMatrix = __identityMatrix
+		return
 	end
 	
+	local root = self:getRoot()
+	local targetSpace = targetSpace or root
+	
+	--if the target is the root, uses _prop matrix component
+	if targetSpace == root and root:is_a(Stage) then
+		self._transformMatrix = self._prop
+		--the matrix chain get usually updated once per frame.
+		--forceUpdate call assure that all components are correctly updated
+		self._transformMatrix:forceUpdate()
+		return
+	end
+	
+	--if the target is displayObjContainer different from root
+	--uses local matrix as copy of _prop matrix component
 	if self._parent then
-		self._parent:updateTransformationMatrix(targetSpace)
-		self._transformMatrix:setAttrLink(MOAITransform.INHERIT_TRANSFORM,
-			self._parent._transformMatrix, MOAITransform.TRANSFORM_TRAIT)
+		--assign local matrix to transformMatrix
+		self._transformMatrix = self._localMatrix
 		self._transformMatrix:setPiv(self._prop:getPiv())
 		self._transformMatrix:setLoc(self._prop:getLoc())
 		self._transformMatrix:setScl(self._prop:getScl())
-		self._transformMatrix:setAttr(MOAITransform.ATTR_Z_ROT,
-			self._prop:getAttr(MOAITransform.ATTR_Z_ROT))
+		self._transformMatrix:setRot(self._prop:getRot())
+		--if parent is the targetSpace, skip inheritance 'cause it would 
+		--return an identity matrix
+		if targetSpace ~= self._parent then
+			--force the update of the parent transformation matrix
+			self._parent:updateTransformationMatrix(targetSpace)
+			--set matrices inheritance
+			self._transformMatrix:setAttrLink(MOAITransform.INHERIT_TRANSFORM,
+				self._parent._transformMatrix, MOAITransform.TRANSFORM_TRAIT)
+		end
+		--force udpate
 		self._transformMatrix:forceUpdate()
-		self._bTransformMatrixIsIdentity = false
 		return
 	end
 	
 	error("the targetSpace " .. targetSpace .. " is not an ancestor of the current obj")
 end
+	
 
 --[[---
 Transforms a point from the local coordinate system to 
@@ -707,14 +689,10 @@ Usefull for drag and drop features
 If nil refers to the top most container
 --]]
 function DisplayObj:setGlobalPosition(x,y,targetSpace)
-	local _x,_y
 	if self._parent then
-		_x,_y = self._parent:globalToLocal(x,y,targetSpace)
-	else
-		_x,_y = x,y
+		x,y = self._parent:globalToLocal(x,y,targetSpace)
 	end
-    self._prop:setLoc(_x,_y,0)
-    self._transformMatrix:setLoc(_x,_y,0)
+    self._prop:setLoc(x,y,0)
 end
 
 
@@ -873,20 +851,20 @@ Given a x,y point in targetSpace coordinates it check if it falls inside local b
 @return self if the hitTest is positive else nil 
 --]]
 function DisplayObj:hitTest(x,y,targetSpace,forTouch)
-    if not forTouch or (self._visible and self._touchable) then
-        local _x,_y
-        if targetSpace == self then
-            _x,_y = x,y
-        else
-            _x,_y = self:globalToLocal(x,y,targetSpace)
-        end
-		
-        local r = self:getRect(__helperRect)
-        if r:containsPoint(_x,_y) then
-            return self
-        end
-    end
-    return nil
+    --skip object if the hit test is for touch purpose and the obj is not visible
+	--or not touchable
+	if forTouch and (not self._visible or not self._touchable) then
+		return nil
+	end
+	
+	if targetSpace ~= self then
+		x,y = self:globalToLocal(x,y,targetSpace)
+	end
+	
+	local r = self:getRect(__helperRect)
+	if r:containsPoint(x,y) then
+		return self
+	end
+	return nil
 end
-
 

@@ -149,7 +149,7 @@ function Button:onTouch(e)
         
         self:resetContents()
         if e.target == self then
-            self:dispatchEvent(Event(Event.TRIGGERED))
+            self:dispatchEventByType(Event.TRIGGERED)
         end
     end
 end

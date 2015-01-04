@@ -63,7 +63,7 @@ Callback = class()
 
 ---Constructor of the Callback object.
 --@param func the function to call back
---@param ... list of parameters (optiona). if func is a method the first parameter must be the
+--@param ... list of parameters (optional). if func is a method the first parameter must be the
 --related object
 function Callback:init(func,...)
 	assert(is_function(func))

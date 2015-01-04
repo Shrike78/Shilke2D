@@ -4,7 +4,7 @@ This is the Shilke2D version of the Flash class with the same name.
 Objects can communicate with each other through events. 
 
 Compared the the Flash event system, Shilke2D's event system 
-was highly simplified. They are simply dispatched at the target. 
+was highly simplified. They are simply dispatched to the target. 
 As in the conventional Flash classes, display objects inherit
 from EventDispatcher and can thus dispatch events. 
 
@@ -17,122 +17,132 @@ EventDispatcher = class()
 local Pending = {ADD = 0, REMOVE = 1, REMOVE_ALL = 2}
 
 function EventDispatcher:init()
-    --use 2 list with different index logic to store
-    --functions event listener and methods event listener
-    self.eventListenersFunc = {}
-    self.eventListenersMethods = {}
-    self.dispatching = false
-    self.pendingList = {}
+	--[[
+	Stores all the registered listeners for all the events.
+	The table is used as dictionary for event type. For each
+	event type a table is used at the same time as array and as 
+	a function map. The array part is used to make calls sorted 
+	by registering order, the map to store functions. 
+	Array stores map keys that can be either functions or objects,
+	depending on registration logic
+	--]]
+	self.listeners = {}
+	
+	self.dispatching = false
+	self.pendingList = {}
 end
 
---create a single event shared between every EventDispatcher, to avoid fragmentation
-local __event_remove_from_juggler = Event(Event.REMOVE_FROM_JUGGLER)
 
 --[[---
-First it dispatches a REMOVE_FROM_JUGGLER event to be safely detatched by jugglers. 
-Then it remove all the event listeners.
+It remove all the event listeners.
 --]]
 function EventDispatcher:dispose()
-	self:dispatchEvent(__event_remove_from_juggler)
 	self:removeEventListeners()
 end
 
 --[[---
-Register a function or a method as listener of a certain type of event.
+Register a function as listener of a certain type of event.
+It's not possible to register twice the same function as listener of the same event type
+@function EventDispatcher:addEventListener
 @param eventType the type of event for which the listener is registering
-@param listenerFunc function registered as callback for the event
-@param listenerObj if provided, listenerFunc is considered as a method of listenerObj. 
-If nil listenerFunc is considered as a function
+@param listenerFunc function registered as listener
 --]]
-function EventDispatcher:addEventListener(eventType, listenerFunc, 
-		listenerObj)
-        
-    if self.dispatching then
-        table.insert(self.pendingList,{
-            action = Pending.ADD, 
-            eventType = eventType, 
-            listenerFunc = listenerFunc, 
-            listenerObj = listenerObj
-        })
-        return
-    end
+
+--[[---
+Register an obj method as listener of a certain type of event.
+It's not possible to register twice the same object as listener of the same event type
+@param eventType the type of event for which the listener is registering
+@param listenerFunc the method registered as listener
+@param listenerObj the obj registered as listener
+--]]
+function EventDispatcher:addEventListener(eventType, listenerFunc, listenerObj)
+	
+	if self.dispatching then
+		table.insert(self.pendingList, {Pending.ADD, eventType, listenerFunc, listenerObj})
+		return
+	end
     
-    if not listenerObj then
-        if not self.eventListenersFunc[eventType] then
-            self.eventListenersFunc[eventType] = {}
-        end
-        table.insert(self.eventListenersFunc[eventType], listenerFunc)
-    else
-        if not self.eventListenersMethods[eventType] then
-            self.eventListenersMethods[eventType] = {}
-        end
-        self.eventListenersMethods[eventType][listenerObj] = listenerFunc
-    end
+	if not self.listeners[eventType] then
+		self.listeners[eventType] = {}
+	end
+	--if registering a method listenerObj is defined, else is nil
+	local key = listenerObj or listenerFunc
+	local listeners = self.listeners[eventType]
+
+	if not listeners[key] then
+		listeners[#listeners+1] = key
+		listeners[key] = listenerFunc
+	end
 end
 
 --[[---
-Deregister a function or a method as listener of a certain type of event.
+Deregister a function as listener of a certain type of event.
+@function EventDispatcher:removeEventListener
 @param eventType the type of event for which the stop listening
-@param listenerFunc function registered as callback for the event
-@param listenerObj if provided, listenerFunc is considered as a method of listenerObj. 
-If nil listenerFunc is considered as a function
+@param listenerFunc function registered as listener
 --]]
-function EventDispatcher:removeEventListener(eventType, listenerFunc, 
-		listenerObj)
-    
-    if self.dispatching then
-        table.insert(self.pendingList,{
-            action = Pending.REMOVE, 
-            eventType = eventType, 
-            listenerFunc = listenerFunc, 
-            listenerObj = listenerObj
-        })
-        return
-    end
-    
-    if not listenerObj then
-        local obj = table.removeObj(self.eventListenersFunc[eventType], 
-            listenerFunc)
-            --assert(obj,
-            --    "listenerFunc not registered to this eventDispatcher")
-    else
-        --assert(self.eventListenersMethods[eventType][listenerObj],
-        --    "listenerMethod not registered to this eventDispatcher")
-         self.eventListenersMethods[eventType][listenerObj] = nil
-    end
-end
 
 --[[---
-Remove all the listeners for a specific event
-@param eventType the type of Event for which we want to deregister all the listeners.
-If nil all the listeners of all types of events will be removed.
+Deregister a method as listener of a certain type of event.
+@param eventType the type of event for which the stop listening
+@param listenerFunc the method registered as listener
+@param listenerObj the obj registered as listener
+--]]
+function EventDispatcher:removeEventListener(eventType, listenerFunc, listenerObj)
+	if self.dispatching then
+		table.insert(self.pendingList, {Pending.REMOVE, eventType, listenerFunc, listenerObj})
+		return
+	end
+
+	if not self.listeners[eventType] then
+		return
+	end
+	--if unregistering a method listenerObj is defined, else is nil
+	local key = listenerObj or listenerFunc	
+	local listeners = self.listeners[eventType]
+	
+	if listeners[key] then
+		table.removeObj(listeners,key)
+		listeners[key] = nil
+	end	
+end
+
+
+
+--[[---
+Removes all the listeners for a specific event
+@param[opt=nil] eventType the type of Event for which we want to deregister all the listeners.
+If no eventType is provided it removes all the listeners for all the events
 --]]
 function EventDispatcher:removeEventListeners(eventType)
-    if self.dispatching then
-        table.insert(self.pendingList,{
-            action = Pending.REMOVE_ALL, 
-            eventType = eventType
-        })
-        return
-    end
-    
-    if eventType then
-        if self.eventListenersFunc[eventType] then
-            table.clear(self.eventListenersFunc[eventType])
-        end
-        if self.eventListenersMethods[eventType] then
-            table.clear(self.eventListenersMethods[eventType])
-        end
-    else
-        for _,v in pairs(self.eventListenersFunc) do
-            table.clear(v)
-        end
-        for _,v in pairs(self.eventListenersMethods) do
-            table.clear(v)
-        end
-        table.clear(self.eventListenersFunc)
-        table.clear(self.eventListenersMethods)
-    end
+
+	if self.dispatching then
+		if eventType then 
+			--remove all the pending operation related to the same eventType
+			for i = #self.pendingList, 1, -1 do
+				--check if the pending operation is related to the same eventType
+				if self.pendingList[i][2] == eventType then
+					table.remove(self.pendingList, i)
+				end
+			end
+			table.insert(self.pendingList, {Pending.REMOVE_ALL, eventType})
+		else
+			table.clear(self.pendingList)
+			table.insert(self.pendingList, {Pending.REMOVE_ALL})
+		end
+		return
+	end
+
+	if eventType then
+		if self.listeners[eventType] then
+			table.clear(self.listeners[eventType])
+		end
+	else
+		for _,v in pairs(self.listeners) do
+			table.clear(v)
+		end
+		table.clear(self.listeners)
+	end
 end
 
 --[[---
@@ -141,15 +151,7 @@ Check if there's at least one eventListener for a specific type of event
 @return bool
 --]]
 function EventDispatcher:hasEventListener(eventType)
-    if self.eventListenersFunc[eventType] and 
-        #self.eventListeners[eventType]>0 then
-            return true
-    elseif self.eventListenersMethods[eventType] then
-        for _,_ in self.eventListenersMethods[eventType] do
-            return true
-        end
-    end
-    return false
+	return self.listeners[eventType] and #self.listeners[eventType]>0
 end
 
 --[[---
@@ -158,40 +160,60 @@ While dispatching, the lists of listener could be modified by
 actions of a listener callback, so to avoid problem in this 
 phase add and remove operation are queued in a specific list
 and then apply in the same order that were requested.
-@param event the event that will be dispatch to all the registered listener 
-for this type of event
+@param event the event that will be dispatch
 --]]
 function EventDispatcher:dispatchEvent(event)
-    --Set itself as sender of the event
-    event.sender = self
-    self.dispatching = true
-    if self.eventListenersFunc[event.type] then
-        for _,func in ipairs(self.eventListenersFunc[event.type]) do
-            func(event)
-        end
-    end
-    if self.eventListenersMethods[event.type] then
-        for obj,func in pairs(self.eventListenersMethods[event.type]) do
-            func(obj,event)
-        end
-    end
-    self.dispatching = false
-    
-    if #self.pendingList > 0 then
-        for _,v in ipairs(self.pendingList) do
-            if v.action == Pending.ADD then
-                self:addEventListener(v.eventType,
-                    v.listenerFunc,v.listenerObj)
-            elseif v.action == Pending.REMOVE then
-                self:removeEventListener(v.eventType,
-                    v.listenerFunc,v.listenerObj)
-            elseif v.action == Pending.REMOVE_ALL then
-                self:removeEventListeners(v.eventType)
-            else
-                error("illegal operation: " .. v.action)
-            end
-        end
-        table.clear(self.pendingList)
-    end
+	
+	local listeners = self.listeners[event.type]
+	--if there's no listener for this event just return
+	if not listeners then
+		return
+	end
+	
+	--Set itself as sender of the event
+	event.sender = self
+	self.dispatching = true
+	for _,k in ipairs(listeners) do
+		--check if the listener is a simple function or a method
+		if type(k) == 'function' then
+			listeners[k](event)
+		else
+			listeners[k](k,event)
+		end
+	end
+	self.dispatching = false
+	
+	--if listeners have been added or removed while dispatching, handle the queue of
+	--pending operations
+	if #self.pendingList > 0 then
+		for _,v in ipairs(self.pendingList) do
+			local action, eventType, func, obj = unpack(v)		
+			if action == Pending.ADD then
+				self:addEventListener(eventType, func, obj)
+			elseif action == Pending.REMOVE then
+				self:removeEventListener(eventType, func, obj)
+			elseif action == Pending.REMOVE_ALL then
+				self:removeEventListeners(eventType)
+			else
+				error("illegal operation: " .. action)
+			end
+		end
+		table.clear(self.pendingList)
+	end
 end
 
+--[[---
+Dispatches an event to all the registered listeners. 
+This method can be used only to dispatch base events and 
+it's optimized because it uses a pool of event
+@param eventType the type of the event that will be dispatched
+--]]
+function EventDispatcher:dispatchEventByType(eventType)
+	--if there's no listener for this type just return
+	if self.listeners[eventType] then 
+		local e = ObjectPool.getObj(Event)
+		e.type = eventType
+		self:dispatchEvent(e)
+		ObjectPool.recycleObj(e)
+	end
+end

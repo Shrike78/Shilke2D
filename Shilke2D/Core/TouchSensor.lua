@@ -8,12 +8,22 @@ Touch phases are {BEGAN, MOVING, ENDED, CANCELLED}
 --]]
 
 ---Touch states
-Touch = {
-	BEGAN		= "began",
-	MOVING		= "moving",
-	ENDED		= "ended",
-	CANCELLED	= "cancelled"
-}
+Touch = class()
+
+Touch.BEGAN			= "began"
+Touch.MOVING		= "moving"
+Touch.ENDED			= "ended"
+Touch.CANCELLED	= "cancelled"
+
+function Touch:init()
+	self.id = -1
+	self.tapCount = 0
+	self.x, self.y = 0, 0
+	self.prevX, self.prevY = 0, 0
+	self.deltaX, self.deltaY = 0,0		
+	self.state = Touch.ENDED
+end
+
 
 local pointerX, pointerY = 0,0
 local isTOUCHING = false
@@ -59,7 +69,7 @@ Inner event handling method to which touch and mouse events are redirected
 function onEvent(eventType, idx, x, y, tapCount)
 	
 	local x, y = convertXY(x, y)
-	local touch = {}
+	local touch = ObjectPool.getObj(Touch)
 	
 	
 	touch.id = idx
@@ -68,27 +78,35 @@ function onEvent(eventType, idx, x, y, tapCount)
 	--TODO: check the "prev / delta logic when not TOUCH_MOVE"
 	
 	if (eventType == MOAITouchSensor.TOUCH_DOWN) then
-		touchBuffer[idx] = {x,y}
+		touchBuffer[idx] = ObjectPool.getObj(vec2)
+		touchBuffer[idx].x,touchBuffer[idx].y = x,y
 		touch.prevX, touch.prevY = x,y		
 		touch.deltaX, touch.deltaY = 0,0		
 		touch.state = Touch.BEGAN
 	elseif (eventType == MOAITouchSensor.TOUCH_MOVE) then
-		touch.prevX, touch.prevY = touchBuffer[idx][1],touchBuffer[idx][2]
+		touch.prevX, touch.prevY = touchBuffer[idx].x,touchBuffer[idx].y
 		touch.deltaX, touch.deltaY = x - touch.prevX, y - touch.prevY		
 		touch.state = Touch.MOVING
-		touchBuffer[idx] = {x,y}
+		touchBuffer[idx].x,touchBuffer[idx].y = x,y
 	elseif (eventType == MOAITouchSensor.TOUCH_UP) then
-		touch.prevX, touch.prevY = touchBuffer[idx][1],touchBuffer[idx][2]
+		touch.prevX, touch.prevY = touchBuffer[idx].x,touchBuffer[idx].y
 		touch.deltaX, touch.deltaY = x - touch.prevX, y - touch.prevY		
 		touch.state = Touch.ENDED
-		touchBuffer[idx] = nil
+		if touchBuffer[idx] then
+			ObjectPool.recycleObj(touchBuffer[idx])
+			touchBuffer[idx] = nil
+		end
 	elseif (eventType == MOAITouchSensor.TOUCH_CANCEL) then
-		touch.prevX, touch.prevY = touchBuffer[idx][1],touchBuffer[idx][2]
+		touch.prevX, touch.prevY = touchBuffer[idx].x,touchBuffer[idx].y
 		touch.deltaX, touch.deltaY = x - touch.prevX, y - touch.prevY		
 		touch.state = Touch.CANCELLED
-		touchBuffer[idx] = nil
+		if touchBuffer[idx] then
+			ObjectPool.recycleObj(touchBuffer[idx])
+			touchBuffer[idx] = nil
+		end
 	end
 	touched(touch)
+	ObjectPool.recycleObj(touch)
 end
 
 ---Inner function. Mouse position event handler

@@ -14,8 +14,8 @@ function findLineIntersection(start1, end1, start2, end2)
 	local xi = ((x3-x4)*(x1*y2-y1*x2)-(x1-x2)*(x3*y4-y3*x4))/d
 	local yi = ((y3-y4)*(x1*y2-y1*x2)-(y1-y2)*(x3*y4-y3*x4))/d
 	
-	if (xi < math.min(x1,x2) or xi > math.max(x1,x2)) then return nil end
-	if (xi < math.min(x3,x4) or xi > math.max(x3,x4)) then return nil end
+	if (xi <= math.min(x1,x2) or xi >= math.max(x1,x2)) then return nil end
+	if (xi <= math.min(x3,x4) or xi >= math.max(x3,x4)) then return nil end
 	return vec2(xi,yi)
 end
 
@@ -60,6 +60,10 @@ function Polygon:init(p,...)
 	self.points = toVec2(points)
 	self._rect = Rect()
 	self._invalidRect = true
+end
+
+function Polygon:clone()
+	return Polygon(self:unpack())
 end
 
 ---Calculates / Updates bounding rect of the polygon
@@ -294,4 +298,90 @@ function Polygon:merge(poly)
 	end
 	
 	return Polygon(newPoly)
+end
+
+--[[---
+Check if a polygon is simple (has no intersection with itself)
+@treturn bool
+--]]
+function Polygon:isSimple()
+	local nvertices = #self.points
+	if nvertices < 4 then
+		return true
+	end
+	for i=1, nvertices-3 do
+		for j=i+2, nvertices-1 do
+			if findLineIntersection(self.points[i],self.points[i+1],
+										self.points[j],self.points[j+1]) then
+				return false
+			end
+		end
+	end
+	return true
+end
+
+--[[---
+Check if a polygon is convex or concave
+@treturn bool
+--]]
+function Polygon:isConvex()
+	--skip last vertex (because equal to first one)
+	local nvertices = #self.points-1
+	if (nvertices < 4) then 
+		return true 
+	end
+	local prod=0
+	local dx1, dy1, dx2, dy2, zcrossproduct
+	local p1,p2,p3
+	for i=0, nvertices-1 do
+		p1 = self.points[i+1]
+		p2 = self.points[(i+1)%nvertices + 1]
+		p3 = self.points[(i+2)%nvertices + 1]
+		dx1 = p2.x-p1.x
+		dy1 = p2.y-p1.y
+		dx2 = p3.x-p2.x
+		dy2 = p3.y-p2.y
+		zcrossproduct = dx1*dy2 - dy1*dx2
+		--if 3 consecutive vertices lie on x or y axis the crossproduct is 0
+		if prod == 0 then
+			prod = zcrossproduct
+		elseif prod*zcrossproduct < 0 then
+			return false
+		end
+	end
+    return true
+end
+
+
+
+-- split polygon into convex polygons.
+-- note that this won't be the optimal split in most cases, as
+-- finding the optimal split is a really hard problem.
+-- the method is to first triangulate and then greedily merge
+-- the triangles.
+function Polygon:splitConvex()
+	-- edge case: polygon is a triangle or already convex
+	if #self.vertices <= 3 or self:isConvex() then 
+		return {self:clone()} 
+	end
+
+	local convex = self:triangulate()
+	local i = 1
+	repeat
+		local p = convex[i]
+		local k = i + 1
+		while k <= #convex do
+			local success, merged = pcall(function() return p:mergedWith(convex[k]) end)
+			if success and merged:isConvex() then
+				convex[i] = merged
+				p = convex[i]
+				table.remove(convex, k)
+			else
+				k = k + 1
+			end
+		end
+		i = i + 1
+	until i >= #convex
+	
+	return convex
 end

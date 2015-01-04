@@ -9,101 +9,247 @@ Default transition for each transiformation is Transition.LINEAR
 DisplayObjTweener = {}
 
 --[[---
-used to seek a properties to a specific value
+used to seek a property to a specific value
 @param obj the displayObj to animate
 @param setter the setter method to handle
 @param getter the getter method to handle
 @param endValue endValue of the animation
 @param time duration of the animation
 @param transition type of transition to apply. Default is LINEAR
+@treturn Tween
 --]]
 function DisplayObjTweener.seekProp(obj,setter,getter,endValue,time,transition)
-	local transition = transition or Transition.LINEAR
 	local tween = Tween.ease(obj,time,transition)
 	tween:seekEx(setter,getter,endValue)
 	return tween
 end
 
 --[[---
-used to move a properties of specific value
+used to move a property of a specific delta value
 @param obj the displayObj to animate
 @param setter the setter method to handle
 @param getter the getter method to handle
 @param deltaValue offset of the animation
 @param time duration of the animation
 @param transition type of transition to apply. Default is LINEAR
+@treturn Tween
 --]]
-function DisplayObjTweener.moveProp(obj, setter,getter,deltaValue,time,transition)	
-	local transition = transition or Transition.LINEAR
+function DisplayObjTweener.moveProp(obj,setter,getter,deltaValue,time,transition)	
 	local tween = Tween.ease(obj,time,transition)
 	tween:moveEx(setter,getter,deltaValue)
 	return tween
 end
 
----seek animation of alpha value
+--[[---
+seek alpha to a given value
+@tparam DisplayObj obj the displayObj to animate
+@tparam int a [0,255] end value of the animation
+@tparam number time duration of the animation
+@tparam[opt=Transition.LINEAR] Transition transition the transform transition to apply
+@treturn Tween
+--]]
 function DisplayObjTweener.seekAlpha(obj,a,time,transition)
 	return DisplayObjTweener.seekProp(obj,obj.setAlpha,obj.getAlpha,a,time,transition)
 end
 
----move animation of alpha value
+--[[---
+move alpha of a given delta value
+@tparam DisplayObj obj the displayObj to animate
+@tparam int a [0,255] offset value of the animation
+@tparam number time duration of the animation
+@tparam[opt=Transition.LINEAR] Transition transition the transform transition to apply
+@treturn Tween
+--]]
 function DisplayObjTweener.moveAlpha(obj,a,time,transition)
 	return DisplayObjTweener.moveProp(obj,obj.setAlpha,obj.getAlpha,a,time,transition)
 end
 
----seek animation of color value. it accepts only Color, not rgb
+--[[---
+seek color to a given value. it accepts only Colors or int32 values, not rgb
+@tparam DisplayObj obj the displayObj to animate
+@tparam Color c end value of the animation
+@tparam number time duration of the animation
+@tparam[opt=Transition.LINEAR] Transition transition the transform transition to apply
+@treturn Tween
+--]]
 function DisplayObjTweener.seekColor(obj,c,time,transition)
-	return DisplayObjTweener.seekProp(obj,obj.setColor,obj.getColor,Color(c),time,transition)
+	local endColor = Color(c)
+	local tween = Tween.ease(obj,time,transition)
+	tween:seekEx(obj.setRed, obj.getRed, endColor.r)
+	tween:seekEx(obj.setGreen, obj.getGreen, endColor.g)
+	tween:seekEx(obj.setBlue, obj.getBlue, endColor.b)
+	tween:seekEx(obj.setAlpha, obj.getAlpha, endColor.a)
+	return tween
 end
 
----move animation of color value. it accepts only Color, not rgb
---@param obj the displayObj to animate
---@param c can be composed also by negative values but the end animation color must be a valid Color
---@param time duration of the animation
---@param transition type of transition. default is LINEAR
+--[[---
+move color of a given delta value. it accepts only Color or int32 values, not rgb
+@tparam DisplayObj obj the displayObj to animate
+@tparam Color c offset value of the animation
+@tparam number time duration of the animation
+@tparam[opt=Transition.LINEAR] Transition transition the transform transition to apply
+@treturn Tween
+--]]
 function DisplayObjTweener.moveColor(obj,c,time,transition)
-	return DisplayObjTweener.moveProp(obj,obj.setColor,obj.getColor,Color(c),time,transition)
+	local endColor = Color(c)
+	local tween = Tween.ease(obj,time,transition)
+	tween:moveEx(obj.setRed, obj.getRed, endColor.r)
+	tween:moveEx(obj.setGreen, obj.getGreen, endColor.g)
+	tween:moveEx(obj.setBlue, obj.getBlue, endColor.b)
+	tween:moveEx(obj.setAlpha, obj.getAlpha, endColor.a)
+	return tween
 end
 
 
----seek animation of position
+--[[---
+seek position, rotation and scale to given values
+@tparam DisplayObj obj the displayObj to animate
+@tparam number x end x position value
+@tparam number y end y position value
+@tparam number r end rotation value
+@tparam number sx end x scale value
+@tparam number sy end y scale value
+@tparam number time duration of the animation
+@tparam[opt=Transition.LINEAR] Transition transition the transform transition to apply
+@treturn Tween
+--]]
+function DisplayObjTweener.seekTransform(obj,x,y,r,sx,sy,time,transition)
+	local tween = Tween.ease(obj,time,transition)
+	tween:seekEx(obj.setPositionX, obj.getPositionX, x)
+	tween:seekEx(obj.setPositionY, obj.getPositionY, y)
+	tween:seekEx(obj.setRotation, obj.getRotation, r)
+	tween:seekEx(obj.setScaleX, obj.getScaleX, sx)
+	tween:seekEx(obj.setScaleY, obj.getScaleY, sy)
+	return tween
+end
+
+--[[---
+move position, rotation and scale of given delta values
+@tparam DisplayObj obj the displayObj to animate
+@tparam number x delta x position value
+@tparam number y delta y position value
+@tparam number r delta rotation value
+@tparam number sx delta x scale value
+@tparam number sy delta y scale value
+@tparam number time duration of the animation
+@tparam[opt=Transition.LINEAR] Transition transition the transform transition to apply
+@treturn Tween
+--]]
+function DisplayObjTweener.moveTransform(obj,x,y,r,sx,sy,time,transition)
+	local tween = Tween.ease(obj,time,transition)
+	tween:moveEx(obj.setPositionX, obj.getPositionX, x)
+	tween:moveEx(obj.setPositionY, obj.getPositionY, y)
+	tween:moveEx(obj.setRotation, obj.getRotation, r)
+	tween:moveEx(obj.setScaleX, obj.getScaleX, sx)
+	tween:moveEx(obj.setScaleY, obj.getScaleY, sy)
+	return tween
+end
+
+
+--[[---
+seek position to given value
+@tparam DisplayObj obj the displayObj to animate
+@tparam number x end x position value
+@tparam number y end y position value
+@tparam number time duration of the animation
+@tparam[opt=Transition.LINEAR] Transition transition the transform transition to apply
+@treturn Tween
+--]]
 function DisplayObjTweener.seekPosition(obj,x,y,time,transition)
-	return DisplayObjTweener.seekProp(obj,obj.setPosition_v2,obj.getPosition_v2,vec2(x,y),time,transition)
+	local tween = Tween.ease(obj,time,transition)
+	tween:seekEx(obj.setPositionX,obj.getPositionX,x)
+	tween:seekEx(obj.setPositionY,obj.getPositionY,y)
+	return tween
 end
 
----move animation of position
+
+--[[---
+move position of given delta value
+@tparam DisplayObj obj the displayObj to animate
+@tparam number x delta x position value
+@tparam number y delta y position value
+@tparam number time duration of the animation
+@tparam[opt=Transition.LINEAR] Transition transition the transform transition to apply
+@treturn Tween
+--]]
 function DisplayObjTweener.movePosition(obj,x,y,time,transition)
-	return DisplayObjTweener.moveProp(obj,obj.setPosition_v2,obj.getPosition_v2,vec2(x,y),time,transition)
+	local tween = Tween.ease(obj,time,transition)
+	tween:moveEx(obj.setPositionX,obj.getPositionX,x)
+	tween:moveEx(obj.setPositionY,obj.getPositionY,y)
+	return tween
 end
 
----seek animation of rotation
+
+--[[---
+seek rotation to given value
+@tparam DisplayObj obj the displayObj to animate
+@tparam number r end rotation value
+@tparam number time duration of the animation
+@tparam[opt=Transition.LINEAR] Transition transition the transform transition to apply
+@treturn Tween
+--]]
 function DisplayObjTweener.seekRotation(obj,r,time,transition)
 	return DisplayObjTweener.seekProp(obj,obj.setRotation,obj.getRotation,r,time,transition)
 end
 
----move animation of rotation
+
+--[[---
+move rotation of given delta values
+@tparam DisplayObj obj the displayObj to animate
+@tparam number r delta rotation value
+@tparam number time duration of the animation
+@tparam[opt=Transition.LINEAR] Transition transition the transform transition to apply
+@treturn Tween
+--]]
 function DisplayObjTweener.moveRotation(obj,r,time,transition)
 	return DisplayObjTweener.moveProp(obj,obj.setRotation,obj.getRotation,r,time,transition)
 end
 
----seek animation of scale values
+
+--[[---
+seek scale to given value
+@tparam DisplayObj obj the displayObj to animate
+@tparam number sx end x scale value
+@tparam number sy end y scale value
+@tparam number time duration of the animation
+@tparam[opt=Transition.LINEAR] Transition transition the transform transition to apply
+@treturn Tween
+--]]
 function DisplayObjTweener.seekScale(obj,sx,sy,time,transition)
-	return DisplayObjTweener.seekProp(obj,obj.setScale_v2,obj.getScale_v2,vec2(sx,sy),time,transition)
-end
-
----move animation of scale values
-function DisplayObjTweener.moveScale(obj,sx,sy,time,transition)
-	return DisplayObjTweener.moveProp(obj,obj.setScale_v2,obj.getScale_v2,vec2(sx,sy),time,transition)
-end
-
----used to follow another displayobj position
---@param obj the displayObj to animate
---@param target the displayObj to follow
---@param time time into which reach the target
---@param transition type of transition. default is LINEAR
-function DisplayObjTweener.seekTargetPosition(obj,target,time,transition)
-	local transition = transition or Transition.LINEAR
-	local juggler = juggler or Shilke2D.current.juggler
 	local tween = Tween.ease(obj,time,transition)
-	tween:followEx(obj.setPosition_v2,obj.getPosition_v2,target,target.getPosition_v2)
+	tween:seekEx(obj.setScaleX,obj.getScaleX,sx)
+	tween:seekEx(obj.setScaleY,obj.getScaleY,sy)
+	return tween
+end
+
+
+--[[---
+move scale of given delta value
+@tparam DisplayObj obj the displayObj to animate
+@tparam number sx delta x scale value
+@tparam number sy delta y scale value
+@tparam number time duration of the animation
+@tparam[opt=Transition.LINEAR] Transition transition the transform transition to apply
+@treturn Tween
+--]]
+function DisplayObjTweener.moveScale(obj,sx,sy,time,transition)
+	local tween = Tween.ease(obj,time,transition)
+	tween:moveEx(obj.setScaleX,obj.getScaleX,sx)
+	tween:moveEx(obj.setScaleY,obj.getScaleY,sy)
+	return tween
+end
+
+--[[---
+used to follow another displayobj position
+@tparam DisplayObj obj the displayObj to animate
+@tparam DisplayObj target the displayObj to follow
+@tparam number time time into which reach the target
+@tparam[opt=Transition.LINEAR] Transition transition the transform transition to apply
+@treturn Tween
+--]]
+function DisplayObjTweener.seekTargetPosition(obj,target,time,transition)
+	local tween = Tween.ease(obj,time,transition)
+	tween:followEx(obj.setPositionX,obj.getPositionX,target,target.getPositionX)
+	tween:followEx(obj.setPositionY,obj.getPositionY,target,target.getPositionY)
 	return tween
 end

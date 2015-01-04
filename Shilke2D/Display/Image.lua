@@ -128,6 +128,8 @@ function Image:getPixelHitTestParams()
 	end
 end
 
+local __helperRect = Rect()
+
 --[[---
 If pixelHitTest is enabled the hitTest is made on texture pixel alpha value
 else using normal point into box test
