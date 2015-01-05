@@ -1,59 +1,63 @@
 --[[---
 Shilke2D/include is the entry point for each project based on Shilke2D.
-There are some specific Shilke2D configuration options that must be set before to include
-this file.
+
+There are some specific Shilke2D configuration options that can be set before including
+this file. 
+
+All the following options by default are set to false. Setting them to true allows to 
+change default Shilke2D behaviour.
 --]]
 
-if __DEBUG_CALLBACKS__ == nil then
-	--[[---
-	Used to enable debug of default Shilke2D callbacks  (post draw and input callbacks)
-	This feature relies on ZeroBraneStudio mobdebug feature so it can be enabled only
-	when debugging from this IDE. By default is set to false
-	--]]
-	__DEBUG_CALLBACKS__ = false
-end
+
+--[[---
+Select coordinate system.
+
+Shilke2D default coordinate system has (0,0) as topleft point and y grows from top to bottom. 
+It's possible to change coordinate system having (0,0) as bottomleft point and y growing from 
+bottom to top (so called coordinate system) setting this option to true
+By default is set to false
+--]]
+__USE_SIMULATION_COORDS__ = __USE_SIMULATION_COORDS__ == true
+
+--[[---
+Select if rotation are expressed in degrees or radians.
+
+By default Shilke2D uses radians for rotations. It's possible to switch to degrees 
+(the default MOAI behaviour) setting this option to true. 
+--]]
+__USE_DEGREES_FOR_ROTATIONS__ = __USE_DEGREES_FOR_ROTATIONS__ == true
 
 
-if __USE_SIMULATION_COORDS__ == nil then
-	--[[---
-	--Shilke2D default coordinate system has (0,0) as topleft point and y grows from top to bottom. 
-	It's possible to change coordinate system having (0,0) as bottomleft point and y growing from 
-	bottom to top (so called coordinate system) setting this option to true
-	By default is set to false
-	--]]
-	__USE_SIMULATION_COORDS__ = false
-end
+--[[---
+Choose between MOAIJsonParser and Shaun Brown lua Json parser module.
 
-if __SHILKE2D_TWEEN__ == nil then
-	--[[---
-	Used to selective include tween library.
-	By default tween library is loaded. 
-	Define __SHILKE2D_TWEEN__ = false before include to disable it
-	--]]
-	__SHILKE2D_TWEEN__ = true
-end
+By default MOAI native parser is used.
+It's possible to use Shaun Brown lua json parser setting this option to true
+--]]
+__USE_LUAJSONPARSER__ = __USE_LUAJSONPARSER__ == true
 
 
-if __USE_MOAIJSONPARSER__ == nil then
-	--[[---
-	It's possible to use either native MOAIJsonParser or Shaun Brown lua 
-	Json parser module
-	
-	By default MOAI native parser is used.
-	Define __USE_MOAIJSONPARSER__ = false before include to disable MOAIJsonParser usage
-	--]]
-	__USE_MOAIJSONPARSER__ = true
-end
+-- debug features
+
+--[[---
+Enable debug of callbacks.
+
+This feature relies on ZeroBraneStudio mobdebug feature so it can be enabled only
+when debugging from this IDE. By default is set to false
+--]]
+__DEBUG_CALLBACKS__ = __DEBUG_CALLBACKS__ == true
 
 
-if __JUGGLER_ON_SEPARATE_COROUTINE__ == nil then
-	--[[---	
-	By default the main juggler is updated in the mainLoop coroutine, before the update function call.
-	Setting this to true forces the main juggler to be updated on a separate coroutine executed 
-	before the mainLoop coroutine. 
-	--]]
-	__JUGGLER_ON_SEPARATE_COROUTINE__ = false
-end
+--[[---	
+Put juggler on a separate coroutine. 
+
+By default the main juggler is updated in the mainLoop coroutine, before the update function call.
+Setting this to true forces the main juggler to be updated on a separate coroutine executed 
+before the mainLoop coroutine. Can be usefull for debug purposes, in order to avoid debug of juggler
+update if __DEBUG_CALLBACKS__ is set to false.
+--]]
+__JUGGLER_ON_SEPARATE_COROUTINE__ = __JUGGLER_ON_SEPARATE_COROUTINE__ == true
+
 
 require("Shilke2D/Utils/MOAIVersion")
 require("Shilke2D/Utils/ClassEx")
@@ -125,15 +129,12 @@ require("Shilke2D/Texture/TextureAtlasComposer")
 require("Shilke2D/Texture/TexturePacker")
 require("Shilke2D/Texture/TextureManager")
 
---Shilke2D/Tween
-if __SHILKE2D_TWEEN__ then
-	require("Shilke2D/Tween/Tween")
-	require("Shilke2D/Tween/TweenDelay")
-	require("Shilke2D/Tween/Transition")
-	require("Shilke2D/Tween/TweenEase")
-	require("Shilke2D/Tween/TweenBezier")
-	require("Shilke2D/Tween/TweenParallel")
-	require("Shilke2D/Tween/TweenLoop")
-	require("Shilke2D/Tween/TweenSequence")
-	require("Shilke2D/Tween/DisplayObjTweener")
-end
+require("Shilke2D/Tween/Tween")
+require("Shilke2D/Tween/TweenDelay")
+require("Shilke2D/Tween/Transition")
+require("Shilke2D/Tween/TweenEase")
+require("Shilke2D/Tween/TweenBezier")
+require("Shilke2D/Tween/TweenParallel")
+require("Shilke2D/Tween/TweenLoop")
+require("Shilke2D/Tween/TweenSequence")
+require("Shilke2D/Tween/DisplayObjTweener")

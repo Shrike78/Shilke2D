@@ -24,6 +24,8 @@ Within the display tree, each object has its own local coordinate
 system. If you rotate a container, you rotate that coordinate system
 and thus all the children of the container.
 
+Depending on __USE_DEGREES_FOR_ROTATIONS__ value, rotation is expressed 
+in radians or degrees (default is radians)
 
 - Color, Alpha and BlendModes
 
@@ -484,35 +486,49 @@ function DisplayObj:translate(x,y)
 end
 
 --used to force rotation to be clock wise in both coordinate systems
-local __rmult = 1
-if __USE_SIMULATION_COORDS__ then __rmult = -1 end
+local __rmult = __USE_SIMULATION_COORDS__ and -1 or 1
 
---[[---
-Set rotation value.
-Rotation is expressed in radians and is applied clock wise.
-@tparam number r radians
---]]
-function DisplayObj:setRotation(r)
-    --move into range [-180 deg, +180 deg]
-    while (r < -PI) do r = r + PI2 end
-    while (r >  PI) do r = r - PI2 end
-	self._prop:setRot(0, 0, DEG * r *__rmult)
+if not __USE_DEGREES_FOR_ROTATIONS__ then
+	
+	--[[---
+	Set rotation value.
+	Rotation is always applied clock wise.
+	@tparam number r radians/degrees
+	--]]
+	function DisplayObj:setRotation(r)
+		self._prop:setRot(0, 0, DEG * r * __rmult)
+	end
+
+	---Get rotation value
+	--@treturn number r radians/degrees
+	function DisplayObj:getRotation()
+		local _,_,r = self._prop:getRot()
+		return RAD * r * __rmult
+	end
+
+	--Rotate the obj of the given value
+	--@tparam number r radians/degrees
+	function DisplayObj:rotate(r)
+		self._prop:addRot(0,0, DEG * r * __rmult)
+	end
+	
+else
+	
+	function DisplayObj:setRotation(r)
+		self._prop:setRot(0, 0, r *__rmult)
+	end
+
+	function DisplayObj:getRotation()
+		local _,_,r = self._prop:getRot()
+		return r * __rmult
+	end
+	
+	function DisplayObj:rotate(r)
+		self._prop:addRot(0, 0, r * __rmult)
+	end
+
 end
 
----Get rotation value
---@treturn number r [-math.pi, math.pi]
-function DisplayObj:getRotation()
-	local _,_,r = self._prop:getRot()
-	return RAD * r * __rmult
-end
-
---Rotate the obj of the given value
---@tparam number r radians
-function DisplayObj:rotate(r)
-	local _,_,_r = self:getRotation()
-	r = r + _r
-	self:setRotation(r)
-end
 
 ---Set scale
 --@tparam number x

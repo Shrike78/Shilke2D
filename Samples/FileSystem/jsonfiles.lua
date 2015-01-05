@@ -1,4 +1,4 @@
-__USE_MOAIJSONPARSER__ = false
+__USE_LUAJSONPARSER__ = true
 
 require("Shilke2D/include")
 

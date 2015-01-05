@@ -4,11 +4,11 @@ Json module allows to encode/decode tables to/from json.
 The encode and decode functions works with strings, but deafult file handling functions
 are provided (for load / save)
 
-Infinite loops are not handled, so a table containing a reference to itself cannot be encoded:
+Infinite loops are not handled, so a table containing a reference to itself cannot be encoded.
 
-MOAI offers a default Json parser (MOAIJsonParser) with similar functionalities. 
-Shilke2D can rely on MOAI native C++ implementation or on a lua implementation done by
-Shaun Brown, using the <b>__USE_MOAIJSONPARSER__</b> include directive.
+Shilke2D can rely on MOAI native C++ implementation or on the lua json parser created by
+Shaun Brown. The used parser is configured using the <b>__USE_LUAJSONPARSER__</b> include 
+option.
 
 Results are not exactly the same, in particular float are encoded slightly differently 
 (approximation differences). Decoding an encoded float anyway gives always the same result.
@@ -51,7 +51,7 @@ Json.encode(t)
  
 --]]
 
-if not __USE_MOAIJSONPARSER__ then
+if __USE_LUAJSONPARSER__ then
 	--use lua parser implementation, where Json namespace and Json.encode/decode are already defined 
 	require("Shilke2D/Utils/Config/Externals/JsonParser")
 else
