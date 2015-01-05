@@ -73,47 +73,82 @@ function TextField:_createProp()
 	return MOAITextBox.new()
 end
 
----Sets horizontal and vertical alignment
---@param hAlign  
---@param vAlign 
-function TextField:setAlignment(hAlign, vAlign)
-	self.hAlign = hAlign
-	self.vAlign = vAlign
-	self._prop:setAlignment( self.hAlign, self.vAlign)
+--MOAITextBox.getAlignment is defined since MOAI v1.5
+--With previous sdks v/h alignement values are stored internally
+if MOAITextBox.getInterfaceTable().getAlignment then
+	
+	---Sets horizontal and vertical alignment
+	--@param hAlign  
+	--@param vAlign 
+	function TextField:setAlignment(hAlign, vAlign)
+		self._prop:setAlignment( self.hAlign, self.vAlign)
+	end
+
+	---Returns horizontal and vertical alignment
+	--@return hAlign  
+	--@return vAlign 
+	function TextField:getAlignment()
+		return self._prop:getAlignment()
+	end
+
+	---Sets horizontal alignment
+	--@param hAlign
+	function TextField:setHAlignment(hAlign)
+		local _,vAlign = self._prop:getAlignment()
+		self._prop:setAlignment(hAlign, vAlign)
+	end
+
+	---Returns horizontal alignment
+	--@return hAlign  
+	function TextField:getHAlignment()
+		local hAlign,_ = self._prop:getAlignment()
+		return hAlign
+	end
+
+	---Sets vertical alignment
+	--@param vAlign
+	function TextField:setVAlignment(vAlign)
+		local hAlign,_ = self._prop:getAlignment()
+		self._prop:setAlignment(hAlign, vAlign)
+	end
+
+	---Returns vertical alignment
+	--@return vAlign  
+	function TextField:getVAlignment()
+		local _,vAlign = self._prop:getAlignment()
+		return vAlign
+	end
+else
+	
+	function TextField:setAlignment(hAlign, vAlign)
+		self.hAlign = hAlign
+		self.vAlign = vAlign
+		self._prop:setAlignment( self.hAlign, self.vAlign)
+	end
+
+	function TextField:getAlignment()
+		return self.hAlign, self.vAlign
+	end
+
+	function TextField:setHAlignment(hAlign)
+		self.hAlign = hAlign
+		self._prop:setAlignment(self.hAlign, self.vAlign)
+	end
+
+	function TextField:getHAlignment()
+		return self.hAlign
+	end
+
+	function TextField:setVAlignment(vAlign)
+		self.vAlign = vAlign
+		self._prop:setAlignment( self.hAlign, self.vAlign)
+	end
+
+	function TextField:getVAlignment()
+		return self.vAlign
+	end
 end
 
----Returns horizontal and vertical alignment
---@return hAlign  
---@return vAlign 
-function TextField:getAlignment()
-	return self.hAlign, self.vAlign
-end
-
----Sets horizontal alignment
---@param hAlign
-function TextField:setHAlignment(hAlign)
-	self.hAlign = hAlign
-	self._prop:setAlignment(self.hAlign, self.vAlign)
-end
-
----Returns horizontal alignment
---@return hAlign  
-function TextField:getHAlignment()
-	return self.hAlign
-end
-
----Sets vertical alignment
---@param vAlign
-function TextField:setVAlignment(vAlign)
-	self.vAlign = vAlign
-	self._prop:setAlignment( self.hAlign, self.vAlign)
-end
-
----Returns vertical alignment
---@return vAlign  
-function TextField:getVAlignment()
-	return self.vAlign
-end
 
 ---Sets size of the textfield
 --@param width
