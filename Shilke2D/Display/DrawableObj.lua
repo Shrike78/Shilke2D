@@ -72,13 +72,11 @@ When the object is set as not visible the scriptDeck is removed from MOAIProp
 @param visible boolean value
 --]]
 function DrawableObj:setVisible(visible)
-	if self._visible ~= visible then
-		self._visible = visible 
-		if visible then
-			self._prop:setDeck(self._scriptDeck)
-		else
-			self._prop:setDeck(nil)
-		end
+	DisplayObj.setVisible(self, visible)
+	if visible then
+		self._prop:setDeck(self._scriptDeck)
+	else
+		self._prop:setDeck(nil)
 	end
 end
 

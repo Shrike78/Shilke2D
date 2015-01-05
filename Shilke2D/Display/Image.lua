@@ -140,7 +140,7 @@ else using normal point into box test
 @return self if the hitTest is positive else nil 
 --]]
 function Image:hitTest(x,y,targetSpace,forTouch)
-	if not forTouch or (self._visible and self._touchable) then
+	if not forTouch or (self._touchable and self:isVisible()) then
 		local _x,_y
 		if targetSpace == self then
 			_x,_y = x,y

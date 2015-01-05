@@ -355,18 +355,16 @@ end
 ---Change visibility status of the container
 --@param visible boolean
 function DisplayObjContainer:setVisible(visible)
-	if self._visible ~= visible then
-		DisplayObj.setVisible(self,visible)
-		
-		if visible and not self._renderTable[2] then
-			if self._frameBufferData then
-				self._renderTable[2] = self._frameBufferData.frameBufferImg._prop
-			else
-				self._renderTable[2] = self._objRenderTable
-			end
-		elseif not visible and self._renderTable[2] then
-			self._renderTable[2] = nil
+	DisplayObj.setVisible(self,visible)
+	
+	if visible and not self._renderTable[2] then
+		if self._frameBufferData then
+			self._renderTable[2] = self._frameBufferData.frameBufferImg._prop
+		else
+			self._renderTable[2] = self._objRenderTable
 		end
+	elseif not visible and self._renderTable[2] then
+		self._renderTable[2] = nil
 	end
 end
 
@@ -417,7 +415,7 @@ displayObjContainer.
 function DisplayObjContainer:hitTest(x,y,targetSpace,forTouch)
 	--if the test is done for touch purpose, not visible and not touchable
 	--objects are skipped
-	if forTouch and (not self._visible or not self._touchable) then
+	if forTouch and (not self._touchable or not self:isVisible()) then
 		return nil
 	end
 		

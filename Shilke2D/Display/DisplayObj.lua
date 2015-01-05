@@ -75,8 +75,8 @@ function DisplayObj:getRect(resultRect)
 --]]
 
 --basic math function calls
-local DEG = math.deg
-local RAD = math.rad
+local DEG = math.deg(1)
+local RAD = math.rad(1)
 local ABS = math.abs
 local PI = math.pi
 local PI2 = math.pi * 2
@@ -114,7 +114,6 @@ function DisplayObj:init()
     self._name = nil
     self._parent = nil
     
-	self._visible = true
     self._touchable = true
 	
 	--set default values for the class
@@ -158,7 +157,7 @@ function DisplayObj:dbgInfo(recursive)
     sb:writeln("scale = ",self._prop:getScl())
     sb:writeln("rotation = ",self._prop:getRot())
     sb:writeln("color = ",self._prop:getColor())
-    sb:writeln("visible = ",(self._visible))
+    sb:writeln("visible = ",(self:isVisible()))
     sb:writeln("touchable = ",self._touchable)
 	
     return sb:toString(true)
@@ -187,9 +186,13 @@ function DisplayObj:_setParent(parent)
 		--if not set before it can raise problems
 		self._prop:setAttrLink(MOAITransform.INHERIT_TRANSFORM, parent._prop, MOAITransform.TRANSFORM_TRAIT)
 		self._prop:setAttrLink(MOAIColor.INHERIT_COLOR, parent._prop, MOAIColor.COLOR_TRAIT)
+		--the Attr visible is not handled because displayObjContainer uses a different logic 
+		--for visibility
+		--self._prop:setAttrLink(MOAIProp.INHERIT_VISIBLE, parent._prop, MOAIProp.ATTR_VISIBLE)
     else
 		self._prop:clearAttrLink(MOAITransform.INHERIT_TRANSFORM)
 		self._prop:clearAttrLink(MOAIColor.INHERIT_COLOR)
+		--self._prop:clearAttrLink(MOAIProp.INHERIT_VISIBLE)
 	end
 	--force update of transform matrix
 	self._prop:forceUpdate()
@@ -234,19 +237,23 @@ end
 ---Set visibility status of this object
 --@tparam[opt=true] bool visible set visible or hidden the displayObj
 function DisplayObj:setVisible(visible)
-	local visible = visible ~= false
-	if self._visible ~= visible then
-		self._visible = visible 
-		self._prop:setVisible(visible)
+	self._prop:setVisible(visible)
+end
+
+
+--MOAIProp.isVisible is defined since MOAI v1.5
+if MOAIProp.getInterfaceTable().isVisible then
+	---Get visibility status of the displayObj
+	--@treturn bool
+	function DisplayObj:isVisible()
+	   return self._prop:isVisible()
+	end
+else
+	function DisplayObj:isVisible()
+	   return self._prop:getAttr(MOAIProp.ATTR_VISIBLE) > 0
 	end
 end
 
----Get visibility status of the displayObj
---@treturn bool
-function DisplayObj:isVisible()
-   return self._visible
-end
-    
 --[[---
 Set touchable status of the obj.
 Objects by default are touchable, this method is mainly use to remove touchable status.
@@ -491,14 +498,14 @@ function DisplayObj:setRotation(r)
     --move into range [-180 deg, +180 deg]
     while (r < -PI) do r = r + PI2 end
     while (r >  PI) do r = r - PI2 end
-	self._prop:setRot(0, 0, DEG(r)*__rmult)
+	self._prop:setRot(0, 0, DEG * r *__rmult)
 end
 
 ---Get rotation value
 --@treturn number r [-math.pi, math.pi]
 function DisplayObj:getRotation()
 	local _,_,r = self._prop:getRot()
-	return RAD(r * __rmult)
+	return RAD * r * __rmult
 end
 
 --Rotate the obj of the given value
@@ -853,10 +860,10 @@ Given a x,y point in targetSpace coordinates it check if it falls inside local b
 function DisplayObj:hitTest(x,y,targetSpace,forTouch)
     --skip object if the hit test is for touch purpose and the obj is not visible
 	--or not touchable
-	if forTouch and (not self._visible or not self._touchable) then
+	if forTouch and (not self._touchable or not self:isVisible()) then
 		return nil
 	end
-	
+
 	if targetSpace ~= self then
 		x,y = self:globalToLocal(x,y,targetSpace)
 	end
