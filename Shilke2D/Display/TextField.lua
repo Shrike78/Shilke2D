@@ -81,7 +81,7 @@ if MOAITextBox.getInterfaceTable().getAlignment then
 	--@param hAlign  
 	--@param vAlign 
 	function TextField:setAlignment(hAlign, vAlign)
-		self._prop:setAlignment( self.hAlign, self.vAlign)
+		self._prop:setAlignment( hAlign, vAlign)
 	end
 
 	---Returns horizontal and vertical alignment
