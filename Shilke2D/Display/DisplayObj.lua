@@ -128,9 +128,7 @@ end
 ---If a derived object needs to clean up resources it must inherits this method, always remembering to 
 --call also parent dispose method
 function DisplayObj:dispose()
-	if self._parent then
-		self._parent:removeChild(self)
-	end
+	self:removeFromParent()
 	EventDispatcher.dispose(self)
 	self._transformMatrix = nil
 	self._localMatrix = nil
@@ -151,14 +149,14 @@ end
 --@return string
 function DisplayObj:dbgInfo(recursive)
     local sb = StringBuilder()
-    sb:writeln("name = ",self._name)
-    sb:writeln("pivot = ",self._prop:getPiv())
-    sb:writeln("position = ",self._prop:getLoc())
-    sb:writeln("scale = ",self._prop:getScl())
-    sb:writeln("rotation = ",self._prop:getRot())
-    sb:writeln("color = ",self._prop:getColor())
-    sb:writeln("visible = ",(self:isVisible()))
-    sb:writeln("touchable = ",self._touchable)
+    sb:writeln("name = ", self._name)
+    sb:writeln("pivot = ", self:getPivot())
+    sb:writeln("position = ", self:getPosition())
+    sb:writeln("scale = ", self:getScale())
+    sb:writeln("rotation = ", self:getRotation())
+    sb:writeln("color = ", self:getColor())
+    sb:writeln("visible = ", self:isVisible())
+    sb:writeln("touchable = ", self:isTouchable())
 	
     return sb:toString(true)
 end
@@ -662,7 +660,7 @@ if nil refers to the top most container
 --]]
 function DisplayObj:localToGlobal(x,y,targetSpace)
     self:updateTransformationMatrix(targetSpace)
-    local x,y,z = self._transformMatrix:modelToWorld(x,y,0)
+    local x,y,_ = self._transformMatrix:modelToWorld(x,y,0)
 	return x,y
 end
 
@@ -680,7 +678,7 @@ If nil refers to the top most container
 --]]
 function DisplayObj:globalToLocal(x,y,targetSpace)
     self:updateTransformationMatrix(targetSpace)
-    local x,y,z = self._transformMatrix:worldToModel(x,y,0)
+    local x,y,_ = self._transformMatrix:worldToModel(x,y,0)
 	return x,y
 end
 
@@ -803,7 +801,7 @@ function DisplayObj:getBounds(targetSpace,resultRect)
 						{r.x + r.w, r.y }}
         
         for i = 1,4 do
-            x,y = self._transformMatrix:modelToWorld(_rect[i][1],_rect[i][2],0)      
+            x,y,_ = self._transformMatrix:modelToWorld(_rect[i][1],_rect[i][2],0)      
             xmin = min(xmin,x)
             xmax = max(xmax,x)
             ymin = min(ymin,y)
@@ -829,7 +827,7 @@ function DisplayObj:getOrientedBounds(targetSpace)
 	if targetSpace ~= self then
 		self:updateTransformationMatrix(targetSpace)
 		for i = 1,4 do
-			vs[(i-1)*2+1], vs[(i-1)*2+2] = self._transformMatrix:modelToWorld(vs[(i-1)*2+1], vs[(i-1)*2+2],0)
+			vs[(i-1)*2+1], vs[(i-1)*2+2],_ = self._transformMatrix:modelToWorld(vs[(i-1)*2+1], vs[(i-1)*2+2],0)
 		end
 	end
 	vs[#vs+1] = vs[1]
