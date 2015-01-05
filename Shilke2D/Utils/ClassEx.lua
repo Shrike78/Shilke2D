@@ -173,7 +173,7 @@ end
 
 
 --[[---
-Returns the super class of a given class.
+Returns the super class of a given class / class instance.
 Useful to create polimorfic calls without caring of the actual superclass
 that could change in future
 
@@ -187,18 +187,37 @@ o = C()
 super(C) -> B
 super(B) -> A
 super(A) -> nil
+super(o) -> B
 
-@param c class
+@param c class or class instance
 @return super super class of c (nil if c is a first class)
 --]]
 function super(c)
 	return c.__super
 end
 
+--[[---
+returns the moai interface of the given moai class / moai class instance
+@usage
+A = class(MOAIProp)
+a = A()
+moai_interface(A).setLoc(a,x,y) -> a:setLoc(x,y)
+moai_interface(a).setLoc(a,x,y) -> a:setLoc(x,y)
+
+@param c moai_class or moai_class instance 
+@return the moai interface of the given class / class instance
+--]]
 function moai_interface(c)
 	return c.__moai_interface
 end
 
+---Utility function. can be used in debugger to inspect
+--MOAI_class objects. It shows the lua members of the 
+--given obj
+--@param o a MOAI_class instance
+function moai_inspect(o)
+	return getmetatable(o).__index
+end
 
 --[[---
 Creates a new class type, allowing single inheritance and multiple interface implementation
@@ -243,9 +262,6 @@ function class(...)
 	-- The interface uses the class as __index, so the objects
 	-- will look up their methods in it
 	c.__interface = {__index = c}
-	-- having the interface as metatable for itself is required only for 
-	-- MOAI_class objects
-	setmetatable(c.__interface, c.__interface)
 	
     -- expose a constructor which can be called by <classname>( <args> )
     local mt = {}
@@ -306,6 +322,11 @@ function class(...)
 		-- moai_class as __index of mt allows class to lookup for 
 		-- moai_class interfaceTable methods
 		mt.__index = c.__moai_class.getInterfaceTable()
+		if MOAIVersion.current < MOAIVersion.v1_5 then
+			-- having the interface as metatable for itself is required only for 
+			-- MOAI_class objects if moai version < 1.5
+			setmetatable(c.__interface, c.__interface)
+		end
 	end
     setmetatable(c, mt)
     return c
@@ -328,9 +349,13 @@ function MOAI_class(moaiType, ...)
 	--set moai interface as class property in order to have faster access
 	c.__moai_interface = t.__index
 	setmetatable(c,t)
+	if MOAIVersion.current < MOAIVersion.v1_5 then
+		-- having the interface as metatable for itself is required only for 
+		-- MOAI_class objects if moai version < 1.5
+		setmetatable(c.__interface, c.__interface)
+	end
 	return c
 end
-
 
 --[[---
 Utility function. Can be used to check if lua class override moai interface methods.
