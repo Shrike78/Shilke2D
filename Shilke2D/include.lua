@@ -55,7 +55,7 @@ if __JUGGLER_ON_SEPARATE_COROUTINE__ == nil then
 	__JUGGLER_ON_SEPARATE_COROUTINE__ = false
 end
 
-
+require("Shilke2D/Utils/MOAIVersion")
 require("Shilke2D/Utils/ClassEx")
 require("Shilke2D/Utils/Shape")
 require("Shilke2D/Utils/Callbacks")

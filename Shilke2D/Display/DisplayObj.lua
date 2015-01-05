@@ -240,7 +240,7 @@ end
 
 
 --MOAIProp.isVisible is defined since MOAI v1.5
-if MOAIProp.getInterfaceTable().isVisible then
+if MOAIVersion.current >= MOAIVersion.v1_5 then
 	---Get visibility status of the displayObj
 	--@treturn bool
 	function DisplayObj:isVisible()

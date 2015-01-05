@@ -55,23 +55,26 @@ function Stage:showDebugLines(showOrientedBounds,showAABounds)
 	end
 end
 
+
 --[[---
-Inner method.
+Inner function.
 With moai 1.4 clearColor function has been moved to frameBuffer and removed from GfxDevice.
-The call checks which method is available and make the proper moai call.
+@function __setClearColor
 @tparam number r (0,1)
 @tparam number g (0,1)
 @tparam number b (0,1)
 @tparam number a (0,1)
 --]]
-local function __setClearColor(r,g,b,a)
-	if MOAIGfxDevice.getFrameBuffer then
+local __setClearColor
+if MOAIVersion.current >= MOAIVersion.v1_4 then
+	__setClearColor = function(r,g,b,a)
 		MOAIGfxDevice.getFrameBuffer():setClearColor(r,g,b,a)
-	else
+	end
+else
+	__setClearColor = function(r,g,b,a)
 		MOAIGfxDevice.setClearColor(r,g,b,a)
 	end
 end
-
 
 --[[---
 Set background color.
