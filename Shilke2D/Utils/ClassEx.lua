@@ -14,7 +14,7 @@ objects adding custom lua support.
 Object created this way are at the same time lua class instances and MOAIObj instances (userdata).
 
 
-The MOAIClass implementation is based on makotok flower library
+The MOAI_class implementation is based on makotok flower library
 (https://github.com/makotok/Hanappe)
 
 @usage
@@ -53,7 +53,7 @@ f:implements(iC) -> true
 f:implements(iE) -> true
 
 
-G = MOAIClass(MOAIProp,F)
+G = MOAI_class(MOAIProp,F)
 g = G()
 type(g) -> userdata (MOAIProp)
 class_type(g) == G -> true
@@ -68,13 +68,14 @@ g:setLoc(0,0,0) -> it works because g is at the same time a G instance and a MOA
 
 local reserved =
 {
-    __index			= true,
-	__moai_class 	= true,
-	__interface 	= true,
-    __base			= true,
-    init			= true,
-    is_a			= true,
-    implements		= true			
+    __index	 = true,
+	__moai_class = true,
+	__moai_interface = true,
+	__interface = true,
+    __super = true,
+    init = true,
+    is_a = true,
+    implements = true			
 }
 
 
@@ -191,8 +192,13 @@ super(A) -> nil
 @return super super class of c (nil if c is a first class)
 --]]
 function super(c)
-	return c.__base
+	return c.__super
 end
+
+function moai_interface(c)
+	return c.__moai_interface
+end
+
 
 --[[---
 Creates a new class type, allowing single inheritance and multiple interface implementation
@@ -212,7 +218,7 @@ function class(...)
             for i,v in pairs(base) do
                 c[i] = v
             end
-            c.__base = base
+            c.__super = base
         end
         
         table.remove(args,1)
@@ -238,7 +244,7 @@ function class(...)
 	-- will look up their methods in it
 	c.__interface = {__index = c}
 	-- having the interface as metatable for itself is required only for 
-	-- MOAIClass objects
+	-- MOAI_class objects
 	setmetatable(c.__interface, c.__interface)
 	
     -- expose a constructor which can be called by <classname>( <args> )
@@ -277,7 +283,7 @@ function class(...)
             if m == klass then 
 				return true 
 			end
-            m = m.__base
+            m = m.__super
         end
         return false
     end
@@ -294,7 +300,7 @@ function class(...)
         return true
     end
 	
-	--inherits moaiinterface from parent if a new MOAIClass is not used
+	--inherits moaiinterface from parent if a new MOAI_class is not used
  	if c.__moai_class then
 		-- mt is metatable of c. Setting the interfacetable of  
 		-- moai_class as __index of mt allows class to lookup for 
@@ -313,12 +319,37 @@ The extended class version fully supports inheritance and all the other class fu
 @param moaiType MOAI class type 
 @param ... p1 is a base class for inheritance (can be null), following are interfaces to implement 
 --]]
-function MOAIClass(moaiType, ...)
+function MOAI_class(moaiType, ...)
 	local c = class(...)
 	c.__moai_class = moaiType
 	-- set moai class interfacetable as __index of class metatable
 	local t = getmetatable(c)
 	t.__index = moaiType.getInterfaceTable()
+	--set moai interface as class property in order to have faster access
+	c.__moai_interface = t.__index
 	setmetatable(c,t)
 	return c
 end
+
+
+--[[---
+Utility function. Can be used to check if lua class override moai interface methods.
+There're situation where this is can be a design choice. When override occurs it's 
+always possible to call the moai interface original method using:
+
+self.__moai_interface."method"(self)
+
+or using moai_interface helper function:
+
+moai_interface(self)."mehotd"(self)
+--]]
+function check_moai_class(c)
+	for k,v in pairs(c) do
+		if type(v) == 'function' then
+			if c.__moai_class.getInterfaceTable()[k] then
+				print('WARNING',k,'alread defined')
+			end
+		end
+	end
+end
+
