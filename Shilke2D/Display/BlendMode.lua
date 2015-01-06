@@ -34,9 +34,8 @@ at setup time once.
 --]]
 
 
---[[---
-The different blend equation that can be used to define a blend mode
---]]
+---
+-- The different blend equation that can be used to define a blend mode
 BlendEquation = 
 {
 	GL_FUNC_ADD 				= MOAIProp.GL_FUNC_ADD,
@@ -44,11 +43,10 @@ BlendEquation =
 	GL_FUNC_REVERSE_SUBTRACT 	= MOAIProp.GL_FUNC_REVERSE_SUBTRACT,
 }
 
---[[---
-return the name of a given blend equation
-@param equation a BlendEquation enum
-@return string blend equation name
---]]
+---
+-- Return the name of a given blend equation
+-- @param equation a BlendEquation enum
+-- @return string blend equation name
 function BlendEquation.toString(equation)
 	local _names = {}
 	_names[MOAIProp.GL_FUNC_ADD] 					= "GL_FUNC_ADD"
@@ -59,10 +57,9 @@ end
 
 
 
---[[---
-The different blend factor that can be used as source and destination factors 
-to define a blend mode
---]]
+---
+-- The different blend factor that can be used as source and destination factors 
+-- to define a blend mode
 BlendFactor = 
 {
 	GL_ONE 						= MOAIProp.GL_ONE,
@@ -78,11 +75,10 @@ BlendFactor =
 	GL_SRC_ALPHA_SATURATE 		= MOAIProp.GL_SRC_ALPHA_SATURATE,	
 }
 
---[[---
-return the name of a given blend factor
-@param factor a BlendFactor enum
-@return string blend factor name
---]]
+---
+-- Return the name of a given blend factor
+-- @param factor a BlendFactor enum
+-- @return string blend factor name
 function BlendFactor.toString(factor)
 	local _names = {}
 	_names[MOAIProp.GL_ONE] 					= "GL_ONE"
@@ -101,23 +97,22 @@ end
 
 
 
---[[---
-BlendMode namespace contains a list of blend mode presets and functionalities to register / retrieve
-blend modes
---]]
+---
+-- BlendMode namespace contains a list of blend mode presets and functionalities to register / retrieve
+-- blend modes
 BlendMode = {
-	NONE 		= "none",		---Deactivates blending disabling any transparency.
-	NORMAL 		= "normal",		---The display object appears in front of the background.
-	ADD 		= "add", 		---Adds the values of the colors of the display object to the colors of its background.
-	MULTIPLY 	= "multiply", 	---Multiplies the values of the display object colors with the the background color.
-	SCREEN 		= "screen",		---Multiplies the complement of the display object color with the complement of the background color, resulting in a bleaching effect.
-	ERASE 		= "erase",		---Erases the background when drawn.
-	BELOW 		= "below"		---Draws under/below existing objects.
+	NONE 		= "none",		--- Deactivates blending disabling any transparency.
+	NORMAL 		= "normal",		--- The display object appears in front of the background.
+	ADD 		= "add", 		--- Adds the values of the colors of the display object to the colors of its background.
+	MULTIPLY 	= "multiply", 	--- Multiplies the values of the display object colors with the the background color.
+	SCREEN 		= "screen",		--- Multiplies the complement of the display object color with the complement of the background color, resulting in a bleaching effect.
+	ERASE 		= "erase",		--- Erases the background when drawn.
+	BELOW 		= "below"		--- Draws under/below existing objects.
 }
 
 local _blendModes = 
 {
-	--no premultiplied alpha
+	-- no premultiplied alpha
 	[0] = 
 	{
 		none		= 	{BlendEquation.GL_FUNC_ADD,	BlendFactor.GL_SRC_ALPHA, 	BlendFactor.GL_ZERO},
@@ -128,7 +123,7 @@ local _blendModes =
 		erase 		= 	{BlendEquation.GL_FUNC_ADD,	BlendFactor.GL_ZERO, 		BlendFactor.GL_ONE_MINUS_SRC_ALPHA},
 		below 		= 	{BlendEquation.GL_FUNC_ADD,	BlendFactor.GL_ONE_MINUS_DST_ALPHA, BlendFactor.GL_DST_ALPHA}
 	},
-	--premultiplied alpha
+	-- premultiplied alpha
 	[1] = 
 	{
 		none 		= 	{BlendEquation.GL_FUNC_ADD,	BlendFactor.GL_ONE, 		BlendFactor.GL_ZERO},
@@ -142,17 +137,16 @@ local _blendModes =
 	}
 }
 
---[[---
-allow to register a named blend mode. A named blend mode is registered only for a specific
-alpha mode (premultiplied or straight)
-@param blendmode the name to register with the new blend mode
-@param pma bool if the blendmode is registered for premultiplied or straight alpha
-@param blendEquation the blend equation
-@param srcFactor the the src blend factor
-@param dstFactor the the dst blend factor
-@return bool true if the new mode is registered, false if a blend mode with the provided name already 
-exist for choosen alpha mode
---]]
+---
+-- Allow to register a named blend mode. A named blend mode is registered only for a specific
+-- alpha mode (premultiplied or straight)
+-- @param blendmode the name to register with the new blend mode
+-- @param pma bool if the blendmode is registered for premultiplied or straight alpha
+-- @param blendEquation the blend equation
+-- @param srcFactor the the src blend factor
+-- @param dstFactor the the dst blend factor
+-- @return bool true if the new mode is registered, false if a blend mode with the provided name already 
+-- exist for choosen alpha mode
 function  BlendMode.register(blendmode, pma, blendEquation, srcFactor, dstFactor)
 	local pma = (pma == false) and 0 or 1
 	local res = _blendModes[pma][blendmode]
@@ -163,11 +157,10 @@ function  BlendMode.register(blendmode, pma, blendEquation, srcFactor, dstFactor
 	return true
 end
 
---[[---
-Enumerate all the available registered blend modes for choosen alpha mode
-@param pma boolean value, if for premultiplied or straight alpha mode
-@return table a list of all the available blendmode names
---]]
+---
+-- Enumerate all the available registered blend modes for choosen alpha mode
+-- @param pma boolean value, if for premultiplied or straight alpha mode
+-- @return table a list of all the available blendmode names
 function BlendMode.getRegisteredModes(pma)
 	local pma = (pma == false) and 0 or 1
 	local modes = {}
@@ -177,14 +170,13 @@ function BlendMode.getRegisteredModes(pma)
 	return modes
 end
 
---[[---
-Returns blend equation and blend factors of a registered (or preset) blendmode
-@param blendmode the enum blendmode needed.
-@param pma [optional] Used to select if with premultipied alpha or not. Default is true.
-@return blendEquation
-@return srcBlendFactor
-@return dstBlendFactor
---]]
+---
+-- Returns blend equation and blend factors of a registered (or preset) blendmode
+-- @param blendmode the enum blendmode needed.
+-- @param pma [optional] Used to select if with premultipied alpha or not. Default is true.
+-- @return blendEquation
+-- @return srcBlendFactor
+-- @return dstBlendFactor
 function BlendMode.getParams(blendmode, pma)
 	local pma = (pma == false) and 0 or 1
 	local res = _blendModes[pma][blendmode]

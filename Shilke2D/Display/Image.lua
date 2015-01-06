@@ -5,11 +5,10 @@ It's possible to see Image and Texture as equivalent of flash's Bitmap / BitmapD
 
 Image = class(BaseQuad)
 
---[[---
-At init phase it's possible to set a texture and a pivotMode.
-@param texture a Texture or nil.
-@param pivotMode default pivotMode is CENTER
---]]
+---
+-- At init phase it's possible to set a texture and a pivotMode.
+-- @param texture a Texture or nil.
+-- @param pivotMode default pivotMode is CENTER
 function Image:init(texture, pivotMode)
 	if texture then
 		BaseQuad.init(self,texture:getWidth(),texture:getHeight(),pivotMode)
@@ -23,18 +22,18 @@ function Image:init(texture, pivotMode)
 end
 
 
----clear inner structs
+---
+-- Clear inner structs
 function Image:dispose()
 	BaseQuad.dispose(self)
 	self.texture = nil
 end
 
---[[---
-Return a new Image that shares the same texture
-@param bClonePivot boolean if true set the same pivotMode / pivot point, 
-else set defaul pivotMode CENTER
-@return Image
---]]
+---
+-- Return a new Image that shares the same texture
+-- @param bClonePivot boolean if true set the same pivotMode / pivot point, 
+-- else set defaul pivotMode CENTER
+-- @return Image
 function Image:clone(bClonePivot)
     if not bClonePivot then
         return Image(self.texture)
@@ -47,17 +46,15 @@ function Image:clone(bClonePivot)
     end
 end
 
---[[---
-Set a new texture.
-
-If the new and the old textures shared the same textureData
-the switch is just an uv switch, else a full texture switch
-
-It would be preferrable that all the textures that can 
-be assigned to a specific image belongs to the same 
-texture atlas.
-@param texture the new texture to be set for the image
---]]
+---
+-- Set a new texture.
+-- If the new and the old textures shared the same textureData
+-- the switch is just an uv switch, else a full texture switch
+-- 
+-- It would be preferrable that all the textures that can 
+-- be assigned to a specific image belongs to the same 
+-- texture atlas.
+-- @param texture the new texture to be set for the image
 function Image:setTexture(texture)
     if self.texture ~= texture then
 		if not texture then
@@ -75,22 +72,22 @@ function Image:setTexture(texture)
 	end
 end
 
----Returns the current texture
---@return texture
+---
+-- Returns the current texture
+-- @return texture
 function Image:getTexture()
 	return self.texture
 end
 
 
---[[---
-For images is possible to force the hitTest to be pixel precise on texture pixels
-Usually an image of the same size of the wrapped texture should be provide, but
-it's also possible to provide an image of different size (usually smaller to reduce 
-used memory)
-@tparam int alphaLevel alpha treshold to consider a pixel as invisible pixel
-@tparam MOAIImage image
-@tparam[opt=nil] BitmapRegion bmpRegion
---]]
+---
+-- For images is possible to force the hitTest to be pixel precise on texture pixels
+-- Usually an image of the same size of the wrapped texture should be provide, but
+-- it's also possible to provide an image of different size (usually smaller to reduce 
+-- used memory)
+-- @tparam int alphaLevel alpha treshold to consider a pixel as invisible pixel
+-- @tparam MOAIImage image
+-- @tparam[opt=nil] BitmapRegion bmpRegion
 function Image:enablePixelHitTest(alphaLevel, image, bmpRegion)
 	local alphaLevel = alphaLevel or 0
 	local _w,_h
@@ -109,19 +106,19 @@ function Image:enablePixelHitTest(alphaLevel, image, bmpRegion)
 	}
 end
 
----Disable the pixel precision hit test 
+---
+-- Disable the pixel precision hit test 
 function Image:disablePixelHitTest()
 	self.ppHitTest = nil
 end
 
 
---[[---
-Returns the pixelHitTest configuration, if set
-@treturn[1] int alphaLevel
-@treturn[1] MOAIImage
-@treturn[1] BitmapRegion
-@return[2] nil
---]]
+---
+-- Returns the pixelHitTest configuration, if set
+-- @treturn[1] int alphaLevel
+-- @treturn[1] MOAIImage
+-- @treturn[1] BitmapRegion
+-- @return[2] nil
 function Image:getPixelHitTestParams()
 	if self.ppHitTest then
 		return self.ppHitTest.alphaLevel, self.ppHitTest.image, self.ppHitTest.bitmapRegion
@@ -130,15 +127,14 @@ end
 
 local __helperRect = Rect()
 
---[[---
-If pixelHitTest is enabled the hitTest is made on texture pixel alpha value
-else using normal point into box test
-@param x coordinate in targetSpace system
-@param y coordinate in targetSpace system
-@param targetSpace the referred coorindate system. If nil the top most container / stage
-@param forTouch boolean. If true the check is done only for visible and touchable object
-@return self if the hitTest is positive else nil 
---]]
+---
+-- If pixelHitTest is enabled the hitTest is made on texture pixel alpha value
+-- else using normal point into box test
+-- @param x coordinate in targetSpace system
+-- @param y coordinate in targetSpace system
+-- @param targetSpace the referred coorindate system. If nil the top most container / stage
+-- @param forTouch boolean. If true the check is done only for visible and touchable object
+-- @return self if the hitTest is positive else nil 
 function Image:hitTest(x,y,targetSpace,forTouch)
 	if not forTouch or (self._touchable and self:isVisible()) then
 		local _x,_y

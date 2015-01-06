@@ -18,22 +18,23 @@ pen handling
 DrawableObj = class(DisplayObj)
 
 
---[[---
-Create a DrawableObj subclass starting from a draw function and a rect definition
-@tparam function drawFunc the function used to draw
-@tparam int width
-@tparam int height
-@tparam[opt=0] int x
-@tparam[opt=0] int y
-@treturn class class(DrawableObj)
---]]
+---
+-- Create a DrawableObj subclass starting from a draw function and a rect definition
+-- @tparam function drawFunc the function used to draw
+-- @tparam int width
+-- @tparam int height
+-- @tparam[opt=0] int x
+-- @tparam[opt=0] int y
+-- @treturn class class(DrawableObj)
 function DrawableObj.fromDrawFunction(drawFunc, width, height, x, y)
 	local x = x or 0
 	local y = y or 0
 	local T = class(DrawableObj)
+	
 	function T:init()
 		DrawableObj.init(self)
 	end
+	
 	function T:getRect(r)
 		local res = r or Rect()
 		res.x = x
@@ -42,13 +43,16 @@ function DrawableObj.fromDrawFunction(drawFunc, width, height, x, y)
 		res.h = height 
 		return res
 	end
+	
 	function T:_innerDraw()
 		drawFunc()
 	end
+	
 	return T
 end
 
----constructor
+---
+-- Constructor
 function DrawableObj:init()
 	DisplayObj.init(self)
 	self._scriptDeck = MOAIScriptDeck.new()
@@ -66,11 +70,10 @@ function DrawableObj:init()
 	end
 end
 
---[[---
-Override DisplayObj method to implement a specific visibility logic.
-When the object is set as not visible the scriptDeck is removed from MOAIProp
-@param visible boolean value
---]]
+---
+-- Override DisplayObj method to implement a specific visibility logic.
+-- When the object is set as not visible the scriptDeck is removed from MOAIProp
+-- @param visible boolean value
 function DrawableObj:setVisible(visible)
 	DisplayObj.setVisible(self, visible)
 	if visible then
@@ -80,18 +83,17 @@ function DrawableObj:setVisible(visible)
 	end
 end
 
---[[---
-Calls the Graphics.setPenColor forcing to use the alpha mode
-accordingly to displayObj configuration. After it restores original
-alpha mode
-@param r red value [0,255] or a Color or hex string or int32 color
-@param g green value [0,255] or nil
-@param b blue value [0,255] or nil
-@param a alpha value [0,255] or nil
---]]
+---
+-- Calls the Graphics.setPenColor forcing to use the alpha mode
+-- accordingly to displayObj configuration. After it restores original
+-- alpha mode
+-- @param r red value [0,255] or a Color or hex string or int32 color
+-- @param g green value [0,255] or nil
+-- @param b blue value [0,255] or nil
+-- @param a alpha value [0,255] or nil
 function DrawableObj:setPenColor(r,g,b,a)
-	--use a direct implementation avoiding to rely on Graphics
-	--more performant and anyway detatched from global Graphics setup
+	-- use a direct implementation avoiding to rely on Graphics
+	-- more performant and anyway detatched from global Graphics setup
 	local r,g,b,a = Color._toNormalizedRGBA(r,g,b,a)
 	if self._premultipliedAlpha and a ~= 1 then
 		r,g,b = r*a, g*a, b*a
@@ -99,11 +101,10 @@ function DrawableObj:setPenColor(r,g,b,a)
 	MOAIGfxDevice.setPenColor(r,g,b,a)
 end
 
---[[---
-Called each frame, contains specific object draw calls.
-Registered drawCallback of the scriptDeck object.
-Objects that inherits from this class must override this method.
---]]
+---
+-- Called each frame, contains specific object draw calls.
+-- Registered drawCallback of the scriptDeck object.
+-- Objects that inherits from this class must override this method.
 function DrawableObj:_innerDraw()
 	error("DrawableObj:draw must be overridden")
 end
