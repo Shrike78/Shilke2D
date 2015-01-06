@@ -61,6 +61,15 @@ function Quad:dispose()
 end
 
 ---
+-- Set the size of the quad
+-- @param width quad width
+-- @param height quad height
+function Quad:setSize(width,height)
+	BaseQuad.setSize(self,width,height)
+	self:_updateVertexBuffer()
+end
+
+---
 -- override default quad shader
 -- if no shader is provided it resets to default quad shader
 -- @tparam[opt=nil] MOAIShader shader
@@ -147,67 +156,6 @@ function Quad:_updateVertexBuffer()
 end
 
 ---
--- overrides DisplayObj method redirecting on _updateVertexBuffer
--- that already does the same thing for quads
--- @function Quad:_updateColor
-Quad._updateColor = Quad._updateVertexBuffer
-
-
----
--- Set the size of the quad
--- @param width quad width
--- @param height quad height
-function Quad:setSize(width,height)
-	BaseQuad.setSize(self,width,height)
-	self:_updateVertexBuffer()
-end
-
----
--- Set red channel for all vertices
--- @tparam int r red [0,255]
-function Quad:setRed(r)
-	local r = r * INV_255
-	for i = 1,4 do
-		self._colors[i][1] = r
-	end
-	self:_updateVertexBuffer()
-end
-
----
--- Set green channel for all vertices
--- @tparam int g green [0,255]
-function Quad:setGreen(g)
-	local g = g * INV_255
-    for i = 1,4 do
-        self._colors[i][2] = g
-    end
-	self:_updateVertexBuffer()
-end
-
-
----
--- Set blue channel for all vertices
--- @tparam int b blue [0,255]
-function Quad:setBlue(b)
-	local b = b * INV_255
-    for i = 1,4 do
-        self._colors[i][3] = b
-    end
-	self:_updateVertexBuffer()
-end
-
----
--- Set alpha value for all vertices
--- @tparam int a alpha value [0,255]
-function Quad:setAlpha(a)
-    local a = a * INV_255
-    for i = 1,4 do
-        self._colors[i][4] = a
-    end
-    self:_updateVertexBuffer()
-end
-
----
 -- Set alpha value for a single vertex
 -- @param v index of the vertex [1,4]
 -- @param a alpha value [0,255]
@@ -224,31 +172,6 @@ function Quad:getVertexAlpha(v)
    return self._colors[v][4]*255
 end
 
-
----
--- Set obj color.
--- @param r (0,255) value or Color object or hex string or int32 color
--- @param g (0,255) value or nil
--- @param b (0,255) value or nil
--- @param a[opt=nil] (0,255) value or nil
-function Quad:setColor(r,g,b,a)
-	local r,g,b,a = Color._toNormalizedRGBA(r,g,b,a)	
-	for i = 1,4 do
-		self._colors[i][1] = r
-		self._colors[i][2] = g
-		self._colors[i][3] = b
-		self._colors[i][4] = a
-	end
-	self:_updateVertexBuffer()
-end
-
----
--- Returns the color of the first vertex. 
--- If color value is per vertices the return value has no real meaning
--- @return Color
-function Quad:getColor()
-	return Color.fromNormalizedValues(unpack(self._colors[1]))
-end
 
 ---
 -- Set vertex color.
@@ -321,4 +244,89 @@ end
 -- @tparam Color c2 bottom color
 function Quad:setVerticalGradient(c1,c2)
 	self:setColors(c1,c1,c2,c2)
+end
+
+
+-- the quad vertex color only (default disabled) allows to 
+-- override normal set/get color logic using only vertex
+-- color (and leaving always prop color white)
+if __QUAD_VERTEX_COLOR_ONLY__ then
+
+	---
+	-- overrides DisplayObj method redirecting on _updateVertexBuffer
+	-- that already does the same thing for quads
+	-- @function Quad:_updateColor
+	Quad._updateColor = Quad._updateVertexBuffer
+
+	---
+	-- Set red channel for all vertices
+	-- @tparam int r red [0,255]
+	function Quad:setRed(r)
+		local r = r * INV_255
+		for i = 1,4 do
+			self._colors[i][1] = r
+		end
+		self:_updateVertexBuffer()
+	end
+
+	---
+	-- Set green channel for all vertices
+	-- @tparam int g green [0,255]
+	function Quad:setGreen(g)
+		local g = g * INV_255
+		for i = 1,4 do
+			self._colors[i][2] = g
+		end
+		self:_updateVertexBuffer()
+	end
+
+
+	---
+	-- Set blue channel for all vertices
+	-- @tparam int b blue [0,255]
+	function Quad:setBlue(b)
+		local b = b * INV_255
+		for i = 1,4 do
+			self._colors[i][3] = b
+		end
+		self:_updateVertexBuffer()
+	end
+
+	---
+	-- Set alpha value for all vertices
+	-- @tparam int a alpha value [0,255]
+	function Quad:setAlpha(a)
+		local a = a * INV_255
+		for i = 1,4 do
+			self._colors[i][4] = a
+		end
+		self:_updateVertexBuffer()
+	end
+
+
+	---
+	-- Set obj color.
+	-- @param r (0,255) value or Color object or hex string or int32 color
+	-- @param g (0,255) value or nil
+	-- @param b (0,255) value or nil
+	-- @param a[opt=nil] (0,255) value or nil
+	function Quad:setColor(r,g,b,a)
+		local r,g,b,a = Color._toNormalizedRGBA(r,g,b,a)	
+		for i = 1,4 do
+			self._colors[i][1] = r
+			self._colors[i][2] = g
+			self._colors[i][3] = b
+			self._colors[i][4] = a
+		end
+		self:_updateVertexBuffer()
+	end
+
+	---
+	-- Returns the color of the first vertex. 
+	-- If color value is per vertices the return value has no real meaning
+	-- @return Color
+	function Quad:getColor()
+		return Color.fromNormalizedValues(unpack(self._colors[1]))
+	end
+	
 end

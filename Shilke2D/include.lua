@@ -37,6 +37,13 @@ It's possible to use Shaun Brown lua json parser setting this option to true
 __USE_LUAJSONPARSER__ = __USE_LUAJSONPARSER__ == true
 
 
+--[[---
+By deafult Quads support both vertex color and "prop" color, so final color result
+is obtained as combination of the two color info. It's possible to override this
+behaviour forcing to use only vertex color setting this option to true
+--]]
+__QUAD_VERTEX_COLOR_ONLY__ = __QUAD_VERTEX_COLOR_ONLY__ == true
+
 -- debug features
 
 --[[---
