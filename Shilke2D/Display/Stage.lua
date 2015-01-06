@@ -6,12 +6,11 @@ are override and raise errors if called.
 --]]
 Stage = class(DisplayObjContainer)
 
---[[---
-Called from Shilke2D, it sets the viewport for the scene, the renderTable and 
-initializes the 'debug' drawCallback used to show bounding boxes of objects in 
-the displayList 
-@param viewport the viewport of the scene
---]]
+---
+-- Called from Shilke2D, it sets the viewport for the scene, the renderTable and 
+-- initializes the 'debug' drawCallback used to show bounding boxes of objects in 
+-- the displayList 
+-- @param viewport the viewport of the scene
 function Stage:init(viewport)
 	DisplayObjContainer.init(self)
     self._prop:setViewport(viewport)
@@ -33,14 +32,16 @@ function Stage:init(viewport)
     self._rt = {self._renderTable}
 end
 
----Stage prop is a MOAILayer, not a generic MOAIProp like all the others displayObjs
+---
+-- Stage prop is a MOAILayer, not a generic MOAIProp like all the others displayObjs
 function Stage:_createProp()
     return MOAILayer.new()
 end
 
----Debug function. Used to show bounding box while rendering.
---@tparam[opt=true] bool showOrientedBounds
---@tparam[opt=false] bool showAABounds boolean
+---
+-- Debug function. Used to show bounding box while rendering.
+-- @tparam[opt=true] bool showOrientedBounds
+-- @tparam[opt=false] bool showAABounds boolean
 function Stage:showDebugLines(showOrientedBounds,showAABounds)
 	self._showOrientedBounds = showOrientedBounds ~= false
 	self._showAABounds = showAABounds == true
@@ -56,15 +57,14 @@ function Stage:showDebugLines(showOrientedBounds,showAABounds)
 end
 
 
---[[---
-Inner function.
-With moai 1.4 clearColor function has been moved to frameBuffer and removed from GfxDevice.
-@function __setClearColor
-@tparam number r (0,1)
-@tparam number g (0,1)
-@tparam number b (0,1)
-@tparam number a (0,1)
---]]
+---
+-- Inner function.
+-- With moai 1.4 clearColor function has been moved to frameBuffer and removed from GfxDevice.
+-- @function __setClearColor
+-- @tparam number r (0,1)
+-- @tparam number g (0,1)
+-- @tparam number b (0,1)
+-- @tparam number a (0,1)
 local __setClearColor
 if MOAIVersion.current >= MOAIVersion.v1_4 then
 	__setClearColor = function(r,g,b,a)
@@ -76,13 +76,12 @@ else
 	end
 end
 
---[[---
-Set background color.
-@param r (0,255) value or Color object or hex string or int32 color
-@param g (0,255) value or nil
-@param b (0,255) value or nil
-@param a[opt=nil] (0,255) value or nil
---]]
+---
+-- Set background color.
+-- @param r (0,255) value or Color object or hex string or int32 color
+-- @param g (0,255) value or nil
+-- @param b (0,255) value or nil
+-- @param a[opt=nil] (0,255) value or nil
 function Stage:setBackgroundColor(r,g,b,a)
 	local r,g,b,a = Color._toNormalizedRGBA(r,g,b,a)
 	local c = self._bkgColor
@@ -90,91 +89,35 @@ function Stage:setBackgroundColor(r,g,b,a)
 	__setClearColor(r,g,b,a)
 end
 
---[[---
-Get background color.
-@treturn Color
---]]
+---
+-- Get background color.
+-- @treturn Color
 function Stage:getBackgroundColor()
 	return Color.fromNormalizedValues(unpack(self._bkgColor))
 end
 
-
----Raise error if called because stage cannot be added as child to other containers
+-- Raise error if called because stage cannot be added as child to other containers
 function Stage:_setParent(parent)
     error("Stage cannot be child of another DisplayObjContainer")
 end
 
----Raise error if called because stage cannot be geometrically trasnformed
-function Stage:setPivot(x,y)
+-- Raise an error if any 'transform' function is called
+local function overrideError()
     error("It's not possible to set geometric properties of a Stage")
 end
 
----Raise error if called because stage cannot be geometrically trasnformed
-function Stage:setPivotX(x)
-    error("It's not possible to set geometric properties of a Stage")
-end
-
----Raise error if called because stage cannot be geometrically trasnformed
-function Stage:setPivotY(y)
-    error("It's not possible to set geometric properties of a Stage")
-end
-
----Raise error if called because stage cannot be geometrically trasnformed
-function Stage:setPosition(x,y)
-    error("It's not possible to set geometric properties of a Stage")
-end
-
----Raise error if called because stage cannot be geometrically trasnformed
-function Stage:setPositionX(x)
-    error("It's not possible to set geometric properties of a Stage")
-end
-
----Raise error if called because stage cannot be geometrically trasnformed
-function Stage:setPositionY(y)
-    error("It's not possible to set geometric properties of a Stage")
-end
-
----Raise error if called because stage cannot be geometrically trasnformed
-function Stage:translate(x,y)
-    error("It's not possible to set geometric properties of a Stage")
-end
-
----Raise error if called because stage cannot be geometrically trasnformed
-function Stage:setRotation(r)
-    error("It's not possible to set geometric properties of a Stage")
-end
-
----Raise error if called because stage cannot be geometrically trasnformed
-function Stage:rotate(r)
-    error("It's not possible to set geometric properties of a Stage")
-end
-
----Raise error if called because stage cannot be geometrically trasnformed
-function Stage:setScale(x,y)
-    error("It's not possible to set geometric properties of a Stage")
-end
-
----Raise error if called because stage cannot be geometrically trasnformed
-function Stage:setScaleX(s)
-    error("It's not possible to set geometric properties of a Stage")
-end
-
----Raise error if called because stage cannot be geometrically trasnformed
-function Stage:setScaleY(s)
-    error("It's not possible to set geometric properties of a Stage")
-end
-
----Raise error if called because stage cannot be geometrically trasnformed
-function Stage:scale(x,y)
-    error("It's not possible to set geometric properties of a Stage")
-end
-
----Raise error if called because stage cannot be geometrically trasnformed
-function Stage:setGlobalPosition(x,y,targetSpace)
-    error("It's not possible to set geometric properties of a Stage")
-end
-
----Raise error if called because stage cannot be geometrically trasnformed
-function Stage:globalTranslate(dx,dy,targetSpace)	
-    error("It's not possible to set geometric properties of a Stage")
-end
+Stage.setPivot = overrideError
+Stage.setPivotX = overrideError
+Stage.setPivotY = overrideError
+Stage.setPosition = overrideError
+Stage.setPositionX = overrideError
+Stage.setPositionY = overrideError
+Stage.translate = overrideError
+Stage.setRotation = overrideError
+Stage.rotate = overrideError
+Stage.setScale = overrideError
+Stage.setScaleX = overrideError
+Stage.setScaleY = overrideError
+Stage.scale = overrideError
+Stage.setGlobalPosition = overrideError
+Stage.globalTranslate = overrideError
