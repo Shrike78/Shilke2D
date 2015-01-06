@@ -9,11 +9,10 @@ ObjectPool = {}
 
 ObjectPool._pool = {}
 
---[[---
-Inner function get/create the pool for objType 
-@tparam class objType the class of the pooled objects 
-@treturn {objType}
---]]
+---
+-- Inner function get/create the pool for objType 
+-- @tparam class objType the class of the pooled objects 
+-- @treturn {objType}
 function ObjectPool._getPool(objType)
 	if not ObjectPool._pool[objType] then
 		ObjectPool._pool[objType] = {}
@@ -22,20 +21,18 @@ function ObjectPool._getPool(objType)
 end
 
 
---[[---
-Gets the number of available pooled objects of a given type
-@tparam class objType the class of the pooled objects 
-@treturn int the number of the available objects for the given type
---]]
+---
+-- Gets the number of available pooled objects of a given type
+-- @tparam class objType the class of the pooled objects 
+-- @treturn int the number of the available objects for the given type
 function ObjectPool.getAvailableObjs(objType)
 	return #ObjectPool._getPool(objType)
 end
 
---[[---
-Reserves a certain number of pooled objects of a given type
-@tparam class objType
-@tparam int number
---]]
+---
+-- Reserves a certain number of pooled objects of a given type
+-- @tparam class objType
+-- @tparam int number
 function ObjectPool.reserve(objType, number)
 	local pool = ObjectPool._getPool(objType)
 	local needed = number - #pool
@@ -44,13 +41,12 @@ function ObjectPool.reserve(objType, number)
 	end
 end
 
---[[---
-Force the size of the pool for a given object type. 
-It can be used in replace of 'reserve' or to clean memory
-after an heavy usage of resources
-@tparam class objType
-@tparam int number
---]]
+---
+-- Force the size of the pool for a given object type. 
+-- It can be used in replace of 'reserve' or to clean memory
+-- after an heavy usage of resources
+-- @tparam class objType
+-- @tparam int number
 function ObjectPool.resize(objType, number)
 	local pool = ObjectPool._getPool(objType)
 	local free = #pool
@@ -70,13 +66,12 @@ function ObjectPool.resize(objType, number)
 end
 
 
---[[---
-Return an object of the given type. 
-If not available in pool it creats a new one 
-(requires default constructor)
-@tparam class objType
-@treturn objType instance
---]]
+---
+-- Return an object of the given type. 
+-- If not available in pool it creats a new one 
+-- (requires default constructor)
+-- @tparam class objType
+-- @treturn objType instance
 function ObjectPool.getObj(objType)
 	local pool = ObjectPool._getPool(objType)
 	if #pool > 0 then
@@ -87,41 +82,38 @@ function ObjectPool.getObj(objType)
 end
 
 
---[[---
-Puts a given object into a pool based on its class
-@param obj a generic class object
---]]
+---
+-- Puts a given object into a pool based on its class
+-- @param obj a generic class object
 function ObjectPool.recycleObj(obj)
-	--getmetatable is faster then class_type, but correct get should be 
-	--class_type
-	local objType = getmetatable(obj)
+	local objType = class_type(obj)
 	local pool = ObjectPool._getPool(objType)
 	pool[#pool+1] = obj
 end
 
 
---[[---
-Puts given objects into pools based on theirs classes
-@param ... generic class objects
---]]
+---
+-- Puts given objects into pools based on theirs classes
+-- @param ... generic class objects
 function ObjectPool.recycleObjs(...)
 	local num = select('#', ...)
 	local obj
+	local objType
 	for i=1,num do
 		obj = select(i, ...)
 		if obj then
-			local pool = ObjectPool._getPool(getmetatable(obj))
+			objType = class_type(obj)
+			local pool = ObjectPool._getPool(objType)
 			pool[#pool+1] = obj
 		end
 	end
 end
 
 
---[[---
-Remove all the pooled objects of a given type. If no type is provided, 
-it clears all the pooled objects.
-@param[opt=nil] objType a generic class object
---]]
+---
+-- Remove all the pooled objects of a given type. If no type is provided, 
+-- it clears all the pooled objects.
+-- @param[opt=nil] objType a generic class object
 function ObjectPool.clear(objType)
 	if objType then
 		table.clear(ObjectPool._getPool(objType))
