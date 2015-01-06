@@ -214,6 +214,7 @@ function EventDispatcher:dispatchEventByType(eventType)
 		local e = ObjectPool.getObj(Event)
 		e.type = eventType
 		self:dispatchEvent(e)
+		e.sender = nil
 		ObjectPool.recycleObj(e)
 	end
 end
