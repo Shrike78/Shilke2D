@@ -145,6 +145,11 @@ function Stage:setRotation(r)
 end
 
 ---Raise error if called because stage cannot be geometrically trasnformed
+function Stage:rotate(r)
+    error("It's not possible to set geometric properties of a Stage")
+end
+
+---Raise error if called because stage cannot be geometrically trasnformed
 function Stage:setScale(x,y)
     error("It's not possible to set geometric properties of a Stage")
 end
@@ -156,6 +161,11 @@ end
 
 ---Raise error if called because stage cannot be geometrically trasnformed
 function Stage:setScaleY(s)
+    error("It's not possible to set geometric properties of a Stage")
+end
+
+---Raise error if called because stage cannot be geometrically trasnformed
+function Stage:scale(x,y)
     error("It's not possible to set geometric properties of a Stage")
 end
 
