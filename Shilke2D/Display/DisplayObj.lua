@@ -327,13 +327,11 @@ end
 -- Need to be called every time color or alpha information change 
 -- (including premultiplied/straight setting)
 function DisplayObj:_updateColor()
-	local c = self._color
-	local a = c[4]
-	if self._premultipliedAlpha and a ~= 1 then
-		self._prop:setColor(c[1]*a,c[2]*a,c[3]*a,a)
-	else
-		self._prop:setColor(c[1],c[2],c[3],a)
+	local r,g,b,a = unpack(self._color)
+	if self._premultipliedAlpha then
+		r,g,b = r*a, g*a, b*a
 	end
+	self._prop:setColor(r,g,b,a)
 end
 	
 ---
