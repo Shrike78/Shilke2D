@@ -76,7 +76,7 @@ function DisplayObj:getRect(resultRect)
 
 --]]
 
---basic math function calls
+-- basic math function calls
 local DEG = math.deg(1)
 local RAD = math.rad(1)
 local ABS = math.abs
@@ -90,26 +90,26 @@ local MAX_VALUE = math.huge
 local MIN_VALUE = -math.huge
 
 
---helper for getBound / rect calls
+-- helper for getBound / rect calls
 local __helperRect = Rect()
 
 DisplayObj = class(EventDispatcher)
 
 
----Used to define the default alpha behaviour of a displayObj type. That influences blend modes.
+--- Used to define the default alpha behaviour of a displayObj type. That influences blend modes.
 DisplayObj.__defaultHasPremultipliedAlpha = true
 
 local __identityMatrix = MOAITransform.new()
 
----Initialization.
+--- Initialization.
 function DisplayObj:init()
     EventDispatcher.init(self)
     	
     self._prop = self:_createProp()
 	self._renderTable = self._prop
 	
-	--exact clone of transformation prop, used to calculate transformMatrix depending
-	--on a specific targetSpace
+	-- exact clone of transformation prop, used to calculate 
+	-- transformMatrix depending on a specific targetSpace
 	self._localMatrix = MOAITransform.new()
 	self._transformMatrix = self._localMatrix
 	
@@ -118,7 +118,7 @@ function DisplayObj:init()
     
     self._touchable = true
 	
-	--set default values for the class
+	-- set default values for the class
 	self._premultipliedAlpha = self.__defaultHasPremultipliedAlpha
 	
 	if not self._premultipliedAlpha then
@@ -127,8 +127,9 @@ function DisplayObj:init()
 	self._color = {1,1,1,1}
 end
 
----If a derived object needs to clean up resources it must inherits this method, always remembering to 
---call also parent dispose method
+---
+-- If a derived object needs to clean up resources it must inherits this method, 
+-- always remembering to call also parent dispose method
 function DisplayObj:dispose()
 	self:removeFromParent()
 	EventDispatcher.dispose(self)
@@ -137,18 +138,20 @@ function DisplayObj:dispose()
 	self._prop = nil
 end
 
----create a MOAI prop that the current DisplayObj is going to wrap.
---Generic displayObjs create generic MOAIProps. If a specific prop is needed
---just override this method for specific DisplayObj class.
---@treturn MOAIProp
+---
+-- Create a MOAI prop that the current DisplayObj is going to wrap.
+-- Generic displayObjs create generic MOAIProps. If a specific prop is needed
+-- just override this method for specific DisplayObj class.
+-- @treturn MOAIProp
 function DisplayObj:_createProp()
     return MOAIProp.new()
 end
 
----Debug Infos.
---Can be used to create a description of the single displayObj or of a whole displayList
---@param recursive has meaning only if the displayObj is a DisplayObjContainer.
---@return string
+---
+-- Debug Infos.
+-- Can be used to create a description of the single displayObj or of a whole displayList
+-- @param recursive has meaning only if the displayObj is a DisplayObjContainer.
+-- @return string
 function DisplayObj:dbgInfo(recursive)
     local sb = StringBuilder()
     sb:writeln("name = ", self._name)
@@ -163,57 +166,63 @@ function DisplayObj:dbgInfo(recursive)
     return sb:toString(true)
 end
 
----It's possible (but optional) to set a name to a display obj.
---@tparam string name the name of the object. Can be nil
+---
+-- It's possible (but optional) to set a name to a display obj.
+-- @tparam string name the name of the object. Can be nil
 function DisplayObj:setName(name)
     self._name = name
 end
 
----Get the name of the current obj.
---@treturn string or nil if a name has not been set
+---
+-- Get the name of the current obj.
+-- @treturn string or nil if a name has not been set
 function DisplayObj:getName()
     return self._name
 end
 
----Internal method.
---Called by a DisplayObjContainer when the DisplayObj is added as child
---@tparam DisplayObjContainer parent if nil the obj is detached from any parent 
+---
+-- Internal method.
+-- Called by a DisplayObjContainer when the DisplayObj is added as child
+-- @tparam DisplayObjContainer parent if nil the obj is detached from any parent 
 function DisplayObj:_setParent(parent)
-    --assert(not parent or parent:is_a(DisplayObjContainer))
+    -- assert(not parent or parent:is_a(DisplayObjContainer))
     
     self._parent = parent
     if parent then
-		--if not set before it can raise problems
+		-- if not set before it can raise problems
 		self._prop:setAttrLink(MOAITransform.INHERIT_TRANSFORM, parent._prop, MOAITransform.TRANSFORM_TRAIT)
 		self._prop:setAttrLink(MOAIColor.INHERIT_COLOR, parent._prop, MOAIColor.COLOR_TRAIT)
-		--the Attr visible is not handled because displayObjContainer uses a different logic 
-		--for visibility
-		--self._prop:setAttrLink(MOAIProp.INHERIT_VISIBLE, parent._prop, MOAIProp.ATTR_VISIBLE)
+		-- the Attr visible is not handled because displayObjContainer uses a different logic 
+		-- for visibility
+		-- self._prop:setAttrLink(MOAIProp.INHERIT_VISIBLE, parent._prop, MOAIProp.ATTR_VISIBLE)
     else
 		self._prop:clearAttrLink(MOAITransform.INHERIT_TRANSFORM)
 		self._prop:clearAttrLink(MOAIColor.INHERIT_COLOR)
-		--self._prop:clearAttrLink(MOAIProp.INHERIT_VISIBLE)
+		-- self._prop:clearAttrLink(MOAIProp.INHERIT_VISIBLE)
 	end
-	--force update of transform matrix
+	-- force update of transform matrix
 	self._prop:forceUpdate()
 end
 
----Remove a displayObject from the parent container
+---
+-- Remove a displayObject from the parent container
 function DisplayObj:removeFromParent()
     if self._parent then
         self._parent:removeChild(self)
     end
 end
 
----Return the parent DisplayObjContainer
---treturn DisplayObjContainer or nil if not attached to any container
+---
+-- Return the parent DisplayObjContainer
+-- @treturn DisplayObjContainer or nil if not attached to any container
 function DisplayObj:getParent()
     return self._parent
 end
 
----Return the top most displayObjContainer in the display tree.
---For all the displayed object the root is Stage
---@treturn DisplayObjContainer displayObject container or nil if the object has not parent
+---
+-- Return the top most displayObjContainer in the display tree.
+-- For all the displayed object the root is Stage
+-- @treturn DisplayObjContainer displayObject container or nil if the object has not parent
 function DisplayObj:getRoot()
     local root = self
     while(root._parent) do
@@ -222,8 +231,9 @@ function DisplayObj:getRoot()
     return root
 end
 
----If the displayList containing the object is attached to the stage, return the stage, else nil
---@treturn Stage nil if the obj has not the stage as ancestor
+---
+-- If the displayList containing the object is attached to the stage, return the stage, else nil
+-- @treturn Stage nil if the obj has not the stage as ancestor
 function DisplayObj:getStage()
 	local root = self:getRoot()
 	if root:is_a(Stage) then
@@ -232,19 +242,21 @@ function DisplayObj:getStage()
 	return nil
 end
 
--- Setter and Getter
+-- Setters and Getters
 
----Set visibility status of this object
---@tparam[opt=true] bool visible set visible or hidden the displayObj
+---
+-- Set visibility status of this object
+-- @tparam[opt=true] bool visible set visible or hidden the displayObj
 function DisplayObj:setVisible(visible)
 	self._prop:setVisible(visible)
 end
 
 
---MOAIProp.isVisible is defined since MOAI v1.5
+-- MOAIProp.isVisible is defined since MOAI v1.5
 if MOAIVersion.current >= MOAIVersion.v1_5 then
-	---Get visibility status of the displayObj
-	--@treturn bool
+	---
+	-- Get visibility status of the displayObj
+	-- @treturn bool
 	function DisplayObj:isVisible()
 	   return self._prop:isVisible()
 	end
@@ -254,33 +266,32 @@ else
 	end
 end
 
---[[---
-Set touchable status of the obj.
-Objects by default are touchable, this method is mainly use to remove touchable status.
-If objects or whole part of displayList doesn't need touch event handling is better to remove set 
-this to false to increase performance. If a container is not touchable all its children are not 
-tested too
-@tparam[opt=true] bool touchable enable / disable touchable status
---]]
+---
+-- Set touchable status of the obj.
+-- Objects by default are touchable, this method is mainly use to remove touchable status.
+-- If objects or whole part of displayList doesn't need touch event handling is better to remove set 
+-- this to false to increase performance. If a container is not touchable all its children are not 
+-- tested too
+-- @tparam[opt=true] bool touchable enable / disable touchable status
 function DisplayObj:setTouchable(touchable)
     self._touchable = (touchable ~= false)
 end
 
----Get touchable status of the object
---@treturn bool
+---
+-- Get touchable status of the object
+-- @treturn bool
 function DisplayObj:isTouchable()
    return self._touchable
 end
 
 
---[[---
-Set the blend mode for the display object. A blend mode can be expressed in terms of
-blend equation plus src & dst blend factors or as named preset (must be a valid 
-registerd name)
-@param blendEquation BlendEquation or preset string
-@param srcFactor BlendFactor or nil
-@param dstFactor BlendFactor or nil
---]]
+---
+-- Set the blend mode for the display object. A blend mode can be expressed in terms of
+-- blend equation plus src & dst blend factors or as named preset (must be a valid 
+-- registerd name)
+-- @param blendEquation BlendEquation or preset string
+-- @param srcFactor BlendFactor or nil
+-- @param dstFactor BlendFactor or nil
 function DisplayObj:setBlendMode(blendEquation, srcFactor, dstFactor)
 	local blendEquation, srcFactor, dstFactor = blendEquation, srcFactor, dstFactor
 	if type(blendEquation) == "string" then
@@ -290,12 +301,11 @@ function DisplayObj:setBlendMode(blendEquation, srcFactor, dstFactor)
 	self._prop:setBlendMode(srcFactor, dstFactor)
 end
 
---[[---
-Defines if alpha value has to be used as straight or premultiplied.
-When the value change the blendMode is reset to NORMAL preset 
-(whith blend factors depending on alpha mode)
-@tparam[opt=true] bool bUse
---]]
+---
+-- Defines if alpha value has to be used as straight or premultiplied.
+-- When the value change the blendMode is reset to NORMAL preset 
+--(whith blend factors depending on alpha mode)
+-- @tparam[opt=true] bool bUse
 function DisplayObj:setPremultipliedAlpha(bUse)
 	local bPremultipliedAlpha = bUse ~= false
 	if self._premultipliedAlpha ~= bPremultipliedAlpha then 
@@ -305,17 +315,17 @@ function DisplayObj:setPremultipliedAlpha(bUse)
 	end
 end
 
----Returns if alpha is used as straight or premultiplied
---@treturn bool
+---
+-- Returns if alpha is used as straight or premultiplied
+-- @treturn bool
 function DisplayObj:hasPremultipliedAlpha()
 	return self._premultipliedAlpha
 end
 
---[[
-Inner function used to update color after changing in color / alpha
-Need to be called every time color or alpha information change 
-(including premultiplied/straight setting)
---]]
+
+-- Inner function used to update color after changing in color / alpha
+-- Need to be called every time color or alpha information change 
+-- (including premultiplied/straight setting)
 function DisplayObj:_updateColor()
 	local c = self._color
 	local a = c[4]
@@ -326,188 +336,210 @@ function DisplayObj:_updateColor()
 	end
 end
 	
----Set red color channel
---@tparam int r red [0,255]
+---
+-- Set red color channel
+-- @tparam int r red [0,255]
 function DisplayObj:setRed(r)
 	self._color[1] = r * INV_255
 	self:_updateColor()
 end
 
----Get red color channel
---@treturn int red [0,255]
+---
+-- Get red color channel
+-- @treturn int red [0,255]
 function DisplayObj:getRed()
    return self._color[1] * 255
 end
 
----Set green color channel
---@tparam int g green [0,255]
+---
+-- Set green color channel
+-- @tparam int g green [0,255]
 function DisplayObj:setGreen(g)
 	self._color[2] = g * INV_255
 	self:_updateColor()
 end
 
----Gets green color channel
---@treturn int green [0,255]
+---
+-- Gets green color channel
+-- @treturn int green [0,255]
 function DisplayObj:getGreen()
    return self._color[2] * 255
 end
 
----Set blue color channel
---@tparam int b blue [0,255]
+---
+-- Set blue color channel
+-- @tparam int b blue [0,255]
 function DisplayObj:setBlue(b)
 	self._color[3] = b * INV_255
 	self:_updateColor()
 end
 
----Get blue color channel
---@treturn int blue [0,255]
+---
+-- Get blue color channel
+-- @treturn int blue [0,255]
 function DisplayObj:getBlue()
    return self._color[3] * 255
 end
 
----Set alpha value of the object
---@tparam int a alpha value [0,255]
+---
+-- Set alpha value of the object
+-- @tparam int a alpha value [0,255]
 function DisplayObj:setAlpha(a)
 	self._color[4] = a * INV_255
 	self:_updateColor()
 end
 
---Return alpha value of the object
---@treturn int alpha [0,255]
+---
+-- Return alpha value of the object
+-- @treturn int alpha [0,255]
 function DisplayObj:getAlpha()
    return self._color[4] * 255
 end
 
---[[
-Set obj color.
-@param r (0,255) value or Color object or hex string or int32 color
-@param g (0,255) value or nil
-@param b (0,255) value or nil
-@param a[opt=nil] (0,255) value or nil
---]]
+---
+-- Set obj color.
+-- @param r (0,255) value or Color object or hex string or int32 color
+-- @param g (0,255) value or nil
+-- @param b (0,255) value or nil
+-- @param a[opt=nil] (0,255) value or nil
 function DisplayObj:setColor(r,g,b,a)
 	local c = self._color
 	c[1], c[2], c[3], c[4] = Color._toNormalizedRGBA(r,g,b,a)
 	self:_updateColor()
 end
 
----Return the current Color of the object
---@return Color
+---
+-- Return the current Color of the object
+-- @return Color
 function DisplayObj:getColor()
 	return Color.fromNormalizedValues(unpack(self._color))
 end
 
 
---[[---
-Set pivot of the object.
-Pivot point is the point to which transformation are applied, so position, scaling, rotation are all calculated
-keeping pivot point as center. By default pivot point is (0,0), depending on coordinats system
-@param x pivot x position
-@param y pivot y position
---]]
+---
+-- Set pivot of the object.
+-- Pivot point is the point to which transformation are applied, so position, scaling, rotation are all calculated
+-- keeping pivot point as center. By default pivot point is (0,0), depending on coordinats system
+-- @param x pivot x position
+-- @param y pivot y position
 function DisplayObj:setPivot(x,y)
     self._prop:setPiv(x,y,0)
 end
 
----Return current pivot position
---@return x
---@return y
+---
+-- Return current pivot position
+-- @return x
+-- @return y
 function DisplayObj:getPivot()
     local x,y = self._prop:getPiv()
     return x,y
 end
 
----Set Pivot x position
+---
+-- Set Pivot x position
+-- @tparam number x
 function DisplayObj:setPivotX(x)
 	self._prop:setAttr(MOAITransform.ATTR_X_PIV,x)
 end
 
----Get Pivot x position
---@return x
+---
+-- Get Pivot x position
+-- @return x
 function DisplayObj:getPivotX()
    return self._prop:getAttr(MOAITransform.ATTR_X_PIV)
 end
 
----Set Pivot y position
+---
+-- Set Pivot y position
+-- @tparam number y
 function DisplayObj:setPivotY(y)
 	self._prop:setAttr(MOAITransform.ATTR_Y_PIV,y)
 end
 
----Get Pivot y position
---@return y
+---
+-- Get Pivot y position
+-- @return y
 function DisplayObj:getPivotY()
    return self._prop:getAttr(MOAITransform.ATTR_Y_PIV)
 end
 
----Set object position
---@tparam number x
---@tparam number y
+---
+-- Set object position
+-- @tparam number x
+-- @tparam number y
 function DisplayObj:setPosition(x,y)
     self._prop:setLoc(x,y,0)
 end
 
----Get object position
---@treturn number x
---@treturn number y
+---
+-- Get object position
+-- @treturn number x
+-- @treturn number y
 function DisplayObj:getPosition()
     local x,y = self._prop:getLoc()
     return x,y
 end
 
----Set x position
---@tparam number x
+---
+-- Set x position
+-- @tparam number x
 function DisplayObj:setPositionX(x)
     self._prop:setAttr(MOAITransform.ATTR_X_LOC,x)
 end
 
----Get x position
---@treturn number x
+---
+-- Get x position
+-- @treturn number x
 function DisplayObj:getPositionX()
     return self._prop:getAttr(MOAITransform.ATTR_X_LOC)
 end
 
----Set y position
---@tparam number y
+---
+-- Set y position
+-- @tparam number y
 function DisplayObj:setPositionY(y)
     self._prop:setAttr(MOAITransform.ATTR_Y_LOC,y)
 end
 
----Get y position
---@treturn number y
+---
+-- Get y position
+-- @treturn number y
 function DisplayObj:getPositionY()
     return self._prop:getAttr(MOAITransform.ATTR_Y_LOC)
 end 
 
----Move the obj by x,y units
---@tparam number x
---@tparam number y
+---
+-- Move the obj by x,y units
+-- @tparam number x
+-- @tparam number y
 function DisplayObj:translate(x,y)
     self._prop:addLoc(x,y,0)
 end
 
---used to force rotation to be clock wise in both coordinate systems
+-- used to force rotation to be clock wise in both coordinate systems
 local __rmult = __USE_SIMULATION_COORDS__ and -1 or 1
 
 if not __USE_DEGREES_FOR_ROTATIONS__ then
 	
-	--[[---
-	Set rotation value.
-	Rotation is always applied clock wise.
-	@tparam number r radians/degrees
-	--]]
+	---
+	-- Set rotation value.
+	-- Rotation is always applied clock wise.
+	-- @tparam number r radians/degrees
 	function DisplayObj:setRotation(r)
 		self._prop:setRot(0, 0, DEG * r * __rmult)
 	end
 
-	---Get rotation value
-	--@treturn number r radians/degrees
+	---
+	-- Get rotation value
+	-- @treturn number r radians/degrees
 	function DisplayObj:getRotation()
 		local _,_,r = self._prop:getRot()
 		return RAD * r * __rmult
 	end
 
-	--Rotate the obj of the given value
-	--@tparam number r radians/degrees
+	--- 
+	-- Rotate the obj of the given value
+	-- @tparam number r radians/degrees
 	function DisplayObj:rotate(r)
 		self._prop:addRot(0,0, DEG * r * __rmult)
 	end
@@ -530,77 +562,83 @@ else
 end
 
 
----Set scale
---@tparam number x
---@tparam number y
+---
+-- Set scale
+-- @tparam number x
+-- @tparam number y
 function DisplayObj:setScale(x,y)
     self._prop:setScl(x,y)
 end
 
----Get scale value
---@treturn number x
---@treturn number y
+---
+-- Get scale value
+-- @treturn number x
+-- @treturn number y
 function DisplayObj:getScale()
 	local x,y = self._prop:getScl()
 	return x,y
 end
 
---Scale of factors x,y. if the object was already scaled it applies the new factors over
---the previous (resulting in a multiply of old and new factors)
---@tparam number x
---@tparam number y
+--- 
+-- Scale of factors x,y. if the object was already scaled it applies 
+-- the new factors over the previous (resulting in a multiply of old 
+-- and new factors)
+-- @tparam number x
+-- @tparam number y
 function DisplayObj:scale(x,y)
 	local _x,_y = self._prop:getScl()
 	self._prop:setScl(x*_x,y*_y)
 end
 
----Set scale x value
---@tparam number s
+---
+-- Set scale x value
+-- @tparam number s
 function DisplayObj:setScaleX(s)
     self._prop:setAttr(MOAITransform.ATTR_X_SCL,s)
 end
 
----Get scale x value
---@treturn number
+---
+-- Get scale x value
+-- @treturn number
 function DisplayObj:getScaleX()
     return self._prop:getAttr(MOAITransform.ATTR_X_SCL)
 end
 
----Set scale y value
---@tparam number s
+---
+-- Set scale y value
+-- @tparam number s
 function DisplayObj:setScaleY(s)
     self._prop:setAttr(MOAITransform.ATTR_Y_SCL,s)
 end
 
----Get scale y value
---@treturn number
+---
+-- Get scale y value
+-- @treturn number
 function DisplayObj:getScaleY()
     return self._prop:getAttr(MOAITransform.ATTR_Y_SCL)
 end
 
 
---[[---
-Set all the transform parameters
-@tparam number x x position
-@tparam number y y position
-@tparam number r rotation
-@tparam number sx x scale
-@tparam number sy y scale
---]]
+---
+-- Set all the transform parameters
+-- @tparam number x x position
+-- @tparam number y y position
+-- @tparam number r rotation
+-- @tparam number sx x scale
+-- @tparam number sy y scale
 function DisplayObj:setTransform(x,y,r,sx,sy)
 	self:setPosition(x,y)
 	self:setRotation(r)
 	self:setScale(sx,sy)
 end
 
---[[---
-Get all the transform parameters
-@treturn number x x position
-@treturn number y y position
-@treturn number r rotation
-@treturn number sx x scale
-@treturn number sy y scale
---]]
+---
+-- Get all the transform parameters
+-- @treturn number x x position
+-- @treturn number y y position
+-- @treturn number r rotation
+-- @treturn number sx x scale
+-- @treturn number sy y scale
 function DisplayObj:getTransform()
 	local x,y = self:getPosition()
 	local r = self:getRotation()
@@ -609,15 +647,14 @@ function DisplayObj:getTransform()
 end
 
 
---[[---
-Inner method, called to force update of transformation matrix used 
-to calculate relative position into the displayList
-@param targetSpace could be self, nil or an ancestor displayObj.
-nil means top most container
---]]
+---
+-- Inner method, called to force update of transformation matrix used 
+-- to calculate relative position into the displayList
+-- @param targetSpace could be self, nil or an ancestor displayObj.
+-- nil means top most container
 function DisplayObj:updateTransformationMatrix(targetSpace)
 	
-	--if the target is itself returns identity matrix
+	-- if the target is itself returns identity matrix
 	if (targetSpace == self or (not targetSpace and not self._parent)) then
 		self._transformMatrix = __identityMatrix
 		return
@@ -626,34 +663,34 @@ function DisplayObj:updateTransformationMatrix(targetSpace)
 	local root = self:getRoot()
 	local targetSpace = targetSpace or root
 	
-	--if the target is the root, uses _prop matrix component
+	-- if the target is the root, uses _prop matrix component
 	if targetSpace == root and root:is_a(Stage) then
 		self._transformMatrix = self._prop
-		--the matrix chain get usually updated once per frame.
-		--forceUpdate call assure that all components are correctly updated
+		-- the matrix chain get usually updated once per frame.
+		-- forceUpdate call assure that all components are correctly updated
 		self._transformMatrix:forceUpdate()
 		return
 	end
 	
-	--if the target is displayObjContainer different from root
-	--uses local matrix as copy of _prop matrix component
+	-- if the target is displayObjContainer different from root
+	-- uses local matrix as copy of _prop matrix component
 	if self._parent then
-		--assign local matrix to transformMatrix
+		-- assign local matrix to transformMatrix
 		self._transformMatrix = self._localMatrix
 		self._transformMatrix:setPiv(self._prop:getPiv())
 		self._transformMatrix:setLoc(self._prop:getLoc())
 		self._transformMatrix:setScl(self._prop:getScl())
 		self._transformMatrix:setRot(self._prop:getRot())
-		--if parent is the targetSpace, skip inheritance 'cause it would 
-		--return an identity matrix
+		-- if parent is the targetSpace, skip inheritance 'cause it would 
+		-- return an identity matrix
 		if targetSpace ~= self._parent then
-			--force the update of the parent transformation matrix
+			-- force the update of the parent transformation matrix
 			self._parent:updateTransformationMatrix(targetSpace)
-			--set matrices inheritance
+			-- set matrices inheritance
 			self._transformMatrix:setAttrLink(MOAITransform.INHERIT_TRANSFORM,
 				self._parent._transformMatrix, MOAITransform.TRANSFORM_TRAIT)
 		end
-		--force udpate
+		-- force udpate
 		self._transformMatrix:forceUpdate()
 		return
 	end
@@ -662,36 +699,32 @@ function DisplayObj:updateTransformationMatrix(targetSpace)
 end
 	
 
---[[---
-Transforms a point from the local coordinate system to 
-global coordinates. targetSpace define the destination 
-space of the transformation. If nil is considerede to be 
-the top most container (for displayed object the 
-screenspace / stage)
-
-@param x coordinate in local system
-@param y coordinate in local system
-@param targetSpace destination space of the trasnformation
-if nil refers to the top most container
---]]
+---
+-- Transforms a point from the local coordinate system to 
+-- global coordinates. targetSpace define the destination 
+-- space of the transformation. If nil is considerede to be 
+-- the top most container (for displayed object the 
+-- screenspace / stage)
+-- @param x coordinate in local system
+-- @param y coordinate in local system
+-- @param targetSpace destination space of the trasnformation
+-- if nil refers to the top most container
 function DisplayObj:localToGlobal(x,y,targetSpace)
     self:updateTransformationMatrix(targetSpace)
     local x,y,_ = self._transformMatrix:modelToWorld(x,y,0)
 	return x,y
 end
 
---[[---
-Transforms a point from the global coordinate system to 
-local coordinates system. targetSpace define the source 
-space of the transformation, to where x,y belongs. 
-If nil is considered to be the the top most container 
-(for displayed object the screenspace / stage)
-
-@param x coordinate in global system
-@param y coordinate in global system
-@param targetSpace source space of the trasnformation
-If nil refers to the top most container
---]]
+---
+-- Transforms a point from the global coordinate system to 
+-- local coordinates system. targetSpace define the source 
+-- space of the transformation, to where x,y belongs. 
+-- If nil is considered to be the the top most container 
+--(for displayed object the screenspace / stage)
+-- @param x coordinate in global system
+-- @param y coordinate in global system
+-- @param targetSpace source space of the trasnformation
+-- If nil refers to the top most container
 function DisplayObj:globalToLocal(x,y,targetSpace)
     self:updateTransformationMatrix(targetSpace)
     local x,y,_ = self._transformMatrix:worldToModel(x,y,0)
@@ -699,16 +732,14 @@ function DisplayObj:globalToLocal(x,y,targetSpace)
 end
 
 
---[[---
-Used to set an absolute position related to targetSpace 
-container coordinates (usually the stage).
-Usefull for drag and drop features
-
-@param x global coordinate
-@param y global coordinate
-@param targetSpace the coordinate system to which x,y belongs. 
-If nil refers to the top most container
---]]
+---
+-- Used to set an absolute position related to targetSpace 
+-- container coordinates (usually the stage).
+-- Usefull for drag and drop features
+-- @param x global coordinate
+-- @param y global coordinate
+-- @param targetSpace the coordinate system to which x,y belongs. 
+-- If nil refers to the top most container
 function DisplayObj:setGlobalPosition(x,y,targetSpace)
 	if self._parent then
 		x,y = self._parent:globalToLocal(x,y,targetSpace)
@@ -717,25 +748,22 @@ function DisplayObj:setGlobalPosition(x,y,targetSpace)
 end
 
 
---[[---
-Return global position of the object related to the targetSpace provided
-(usually the stage)
-
-@param targetSpace related to which position has to be transformed.
-If nil refers to the top most container
-@return x
-@return y
---]]
+---
+-- Return global position of the object related to the targetSpace provided
+--(usually the stage)
+-- @param targetSpace related to which position has to be transformed.
+-- If nil refers to the top most container
+-- @return x
+-- @return y
 function DisplayObj:getGlobalPosition(targetSpace)
 	return self:localToGlobal(self._prop:getLoc(),targetSpace)
 end
 
---[[---
-Apply a translation based on targetSpace coordinates(usually the stage)
-@param dx x translation
-@param dy y translation
-@param targetSpace in which translation has to been applied. If nil refers to the top most container
---]]
+---
+-- Apply a translation based on targetSpace coordinates(usually the stage)
+-- @param dx x translation
+-- @param dy y translation
+-- @param targetSpace in which translation has to been applied. If nil refers to the top most container
 function DisplayObj:globalTranslate(dx,dy,targetSpace)
 	local px,py = self._prop:getPiv()
 	local x,y = self:localToGlobal(px,py,targetSpace)
@@ -744,61 +772,56 @@ function DisplayObj:globalTranslate(dx,dy,targetSpace)
 	self:setGlobalPosition(x,y,targetSpace)
 end
 
---[[---
-Bounding rect in local coordinates of the displayObj.
-Width, Height, hitTest, Bounds all rely on this method that must be
-defined for concrete displayObj classes.
-@param resultRect if provided is filled and returned
-@return Rect 
---]]
+---
+-- Bounding rect in local coordinates of the displayObj.
+-- Width, Height, hitTest, Bounds all rely on this method that must be
+-- defined for concrete displayObj classes.
+-- @param resultRect if provided is filled and returned
+-- @return Rect 
 function DisplayObj:getRect(resultRect)
 	error("method must be overridden")
 	return resultRect
 end
 
---[[---
-Get width of the object as it appears in another target space (width is calculated as
-width of the axis aligned bounding box of the object in that space)
-@param targetSpace (optional) the object related to which we want to calculate width. default value is 'self'
-@return width
---]]
+---
+-- Get width of the object as it appears in another target space (width is calculated as
+-- width of the axis aligned bounding box of the object in that space)
+-- @param targetSpace (optional) the object related to which we want to calculate width. default value is 'self'
+-- @return width
 function DisplayObj:getWidth(targetSpace)
 	local targetSpace = targetSpace or self
 	return self:getBounds(targetSpace,__helperRect).w
 end
 
---[[---
-Get height of the object as it appears in another target space (height is calculated as
-height of the axis aligned bounding box of the object in that space)
-@param targetSpace (optional) the object related to which we want to calculate height. default value is 'self'
-@return height
---]]
+---
+-- Get height of the object as it appears in another target space (height is calculated as
+-- height of the axis aligned bounding box of the object in that space)
+-- @param targetSpace (optional) the object related to which we want to calculate height. default value is 'self'
+-- @return height
 function DisplayObj:getHeight(targetSpace)
 	local targetSpace = targetSpace or self
 	return self:getBounds(targetSpace,__helperRect).h
 end
 
---[[---
-Get width and height of the object as it appears in another target space (calculated as
-size of the axis aligned bounding box of the object in that space)
-@param targetSpace (optional) the object related to which we want to calculate height. default value is 'self'
-@return width
-@return height
---]]
+---
+-- Get width and height of the object as it appears in another target space (calculated as
+-- size of the axis aligned bounding box of the object in that space)
+-- @param targetSpace (optional) the object related to which we want to calculate height. default value is 'self'
+-- @return width
+-- @return height
 function DisplayObj:getSize(targetSpace)
 	local targetSpace = targetSpace or self
 	local r = self:getBounds(targetSpace,__helperRect)
 	return r.w, r.h
 end
 
---[[---
-Returns a rectangle that completely encloses the object as it 
-appears in another coordinate system.
-@param targetSpace (optional) the object related to which we want to calculate bounds. 
-default value is the top most container
-@param resultRect (optional) if provided is filled and returned
-@return Rect
---]]
+---
+-- Returns a rectangle that completely encloses the object as it 
+-- appears in another coordinate system.
+-- @param targetSpace (optional) the object related to which we want to calculate bounds. 
+-- default value is the top most container
+-- @param resultRect (optional) if provided is filled and returned
+-- @return Rect
 function DisplayObj:getBounds(targetSpace,resultRect)
     local r = self:getRect(resultRect)
 	
@@ -828,14 +851,13 @@ function DisplayObj:getBounds(targetSpace,resultRect)
     return r
 end
 
- --[[---
-Returns an array of vertices describing a quad that rapresents object bounding rect as it appears into 
-another coordinate system
-@param targetSpace the object related to which we want to calculate the oriented bounds. 
-default value refers to the top most container
-@return array of position [x,y,...] for 4 points plus first point replicated. 
-The array can be directely used for rendering
---]]
+---
+-- Returns an array of vertices describing a quad that rapresents object bounding rect as it appears into 
+-- another coordinate system
+-- @param targetSpace the object related to which we want to calculate the oriented bounds. 
+-- default value refers to the top most container
+-- @return array of position [x,y,...] for 4 points plus first point replicated. 
+-- The array can be directely used for rendering
 function DisplayObj:getOrientedBounds(targetSpace)
 	local r = self:getRect(__helperRect)
     local vs = {r.x, r.y, r.x, r.y + r.h, r.x + r.w, r.y + r.h, r.x + r.w, r.y }
@@ -851,29 +873,30 @@ function DisplayObj:getOrientedBounds(targetSpace)
 	return unpack(vs)
 end
 
----Draw the oriented bounding box. Usefull for debug purpose
+---
+-- Draw the oriented bounding box. Usefull for debug purpose
 function DisplayObj:drawOrientedBounds()
 	MOAIDraw.drawLine(self:getOrientedBounds(nil))
 end
 
----Draw the axis aligned bound of the object as appears into top most container / stage coords
+---
+-- Draw the axis aligned bound of the object as appears into top most container / stage coords
 function DisplayObj:drawAABounds(drawContainer)
-	--drawContainer is unused -> used only by displayObjContainer
+	-- drawContainer is unused -> used only by displayObjContainer
 	local r = self:getBounds(nil,__helperRect)
     MOAIDraw.drawRect(r.x,r.y,r.x+r.w,r.y+r.h)
 end
 
---[[---
-Given a x,y point in targetSpace coordinates it check if it falls inside local bounds.
-@param x coordinate in targetSpace system
-@param y coordinate in targetSpace system
-@param targetSpace the referred coorindate system. If nil the top most container / stage
-@param forTouch boolean. If true the check is done only for visible and touchable object
-@return self if the hitTest is positive else nil 
---]]
+---
+-- Given a x,y point in targetSpace coordinates it check if it falls inside local bounds.
+-- @param x coordinate in targetSpace system
+-- @param y coordinate in targetSpace system
+-- @param targetSpace the referred coorindate system. If nil the top most container / stage
+-- @param forTouch boolean. If true the check is done only for visible and touchable object
+-- @return self if the hitTest is positive else nil 
 function DisplayObj:hitTest(x,y,targetSpace,forTouch)
-    --skip object if the hit test is for touch purpose and the obj is not visible
-	--or not touchable
+    -- skip object if the hit test is for touch purpose and the obj is not visible
+	-- or not touchable
 	if forTouch and (not self._touchable or not self:isVisible()) then
 		return nil
 	end
