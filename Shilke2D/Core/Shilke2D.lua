@@ -251,6 +251,7 @@ function Shilke2D:start()
 		if touchEvent then
 			touchEvent.touch = nil
 			touchEvent.target = nil
+			touchEvent.sender = nil
 			ObjectPool.recycleObj(touchEvent)
 		end
 		
