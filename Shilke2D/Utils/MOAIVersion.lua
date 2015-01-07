@@ -13,31 +13,42 @@ MOAIVersion =
 {
 	v1_3 = 0,
 	v1_4 = 1,
-	v1_5 = 2
+	v1_5_1 = 2,
+	v1_5_2 = 3
 }
 
 ---Current moai version.
 MOAIVersion.current = -1
 
-if MOAIProp.getInterfaceTable().isVisible then
+if MOAIColor.getInterfaceTable().getColor then
+	
+	-- MOAIColor:getColor
+	MOAIVersion.current = MOAIVersion.v1_5_2
+
+elseif MOAIProp.getInterfaceTable().isVisible then
+
 	--[[
 	v1.5 add the following changes used by Shilke2D:
 	- MOAIProp:isVisible()
 	- MOAITextBox:getAlignment()
 	- different behavior for moai setInterface call (MOAI_class implementation)
 	--]]
-	MOAIVersion.current = MOAIVersion.v1_5
+	MOAIVersion.current = MOAIVersion.v1_5_1
 
 elseif MOAIGfxDevice.getFrameBuffer then
+
 	-- clear color moved from gfxdevice to frame buffer 
 	MOAIVersion.current = MOAIVersion.v1_4
 
 else
+
 	MOAIVersion.current = MOAIVersion.v1_3
+
 end
 	
 
 if MOAIVersion.current < MOAIVersion.v1_4 then
+	
 	---
 	-- Set the screen clear color
 	-- @function MOAI_setClearColor
@@ -50,12 +61,30 @@ if MOAIVersion.current < MOAIVersion.v1_4 then
 	end
 	
 else
+	
 	MOAI_setClearColor = function(r,g,b,a)
 		MOAIGfxDevice.getFrameBuffer():setClearColor(r,g,b,a)
 	end
+
 end
 
-if MOAIVersion.current < MOAIVersion.v1_5 then
+if MOAIVersion.current < MOAIVersion.v1_5_1 then
+	
+	---
+	-- Get the visibility status of a moai prop
+	-- @tparam MOAIProp moai_prop the moai prop object
+	-- @treturn bool
+	function MOAI_isVisible(moai_prop)
+		return moai_prop:getAttr(MOAIProp.ATTR_VISIBLE) > 0
+	end
+	
+else
+	
+	MOAI_isVisible = MOAIProp.getInterfaceTable().isVisible	
+
+end
+
+if MOAIVersion.current < MOAIVersion.v1_5_2 then
 	
 	---
 	-- get the color of a MOAIColor object
@@ -72,18 +101,8 @@ if MOAIVersion.current < MOAIVersion.v1_5 then
 		return r,g,b,a
 	end
 	
-	---
-	-- Get the visibility status of a moai prop
-	-- @tparam MOAIProp moai_prop the moai prop object
-	-- @treturn bool
-	function MOAI_isVisible(moai_prop)
-		return moai_prop:getAttr(MOAIProp.ATTR_VISIBLE) > 0
-	end
-	
 else
 	
 	MOAI_getColor = MOAIColor.getInterfaceTable().getColor
-	MOAI_isVisible = MOAIProp.getInterfaceTable().isVisible
 	
 end
-

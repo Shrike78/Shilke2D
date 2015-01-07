@@ -83,7 +83,7 @@ end
 
 --MOAITextBox.getAlignment is defined since MOAI v1.5
 --With previous sdks v/h alignement values are stored internally
-if MOAIVersion.current >= MOAIVersion.v1_5 then
+if MOAIVersion.current >= MOAIVersion.v1_5_1 then
 	
 	--- 
 	-- Sets horizontal and vertical alignment
