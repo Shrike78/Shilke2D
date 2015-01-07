@@ -313,7 +313,8 @@ end
 ---
 -- Creates a new class type, allowing single inheritance and multiple interface implementation
 -- Instances of the new class are not tables but MOAI objects with a given interface table. 
--- The extended class version fully supports inheritance and all the other class functionalities
+-- The extended class version supports inheritance and all the other class functionalities,
+-- except for metatable functions (like operators) that are not correctly handled.
 -- @param moaiType MOAI class type 
 -- @param ... p1 is a base class for inheritance (can be null), following are interfaces to implement 
 function MOAI_class(moaiType, ...)
@@ -358,6 +359,8 @@ end
 -- @param o a MOAI_class instance
 function membertable(o)
 	if type(o) == 'userdata' and o.is_a then
+		-- this works on all moai version. 
+		-- After v1_5_1 it's possible to use getmetatable(getmetatable(o))
 		return getmetatable(o).__index
 	else
 		return tostring(q) .. " is not a valid MOAI_class"
