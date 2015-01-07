@@ -196,33 +196,10 @@ function super(c)
 	return c.__super
 end
 
---[[---
-returns the moai interface of the given moai class / moai class instance
-@usage
-A = class(MOAIProp)
-a = A()
-moai_interface(A).setLoc(a,x,y) -> a:setLoc(x,y)
-moai_interface(a).setLoc(a,x,y) -> a:setLoc(x,y)
 
-@param c moai_class or moai_class instance 
-@return the moai interface of the given class / class instance
---]]
-function moai_interface(c)
-	return c.__moai_interface
-end
-
----Utility function. can be used in debugger to inspect
---MOAI_class objects. It shows the lua members of the 
---given obj
---@param o a MOAI_class instance
-function moai_inspect(o)
-	return getmetatable(o).__index
-end
-
---[[---
-Creates a new class type, allowing single inheritance and multiple interface implementation
-@param ... p1 is a base class for inheritance (can be null), following are interface to implement 
---]]
+---
+-- Creates a new class type, allowing single inheritance and multiple interface implementation
+-- @param ... p1 is a base class for inheritance (can be null), following are interface to implement 
 function class(...)
     
     local c = {}    -- a new class instance
@@ -295,7 +272,8 @@ function class(...)
         return obj
     end
 
-	---Allows to check if a class inherits from another
+	---
+	-- Allows to check if a class inherits from another
     c.is_a = function(self, klass)
 		local m = self.__interface.__index
         while m do
@@ -307,7 +285,8 @@ function class(...)
         return false
     end
     
-	---Allows to check if a class implements a specific interface
+	--- 
+	-- Allows to check if a class implements a specific interface
     c.implements = function(self, interface)
             -- Check we have all the target's callables
         for k, v in pairs(interface) do
@@ -319,30 +298,24 @@ function class(...)
         return true
     end
 	
-	--inherits moaiinterface from parent if a new MOAI_class is not used
+	-- inherits moaiinterface from parent if a new MOAI_class is not used
  	if c.__moai_class then
 		-- mt is metatable of c. Setting the interfacetable of  
 		-- moai_class as __index of mt allows class to lookup for 
 		-- moai_class interfaceTable methods
 		mt.__index = c.__moai_class.getInterfaceTable()
-		if MOAIVersion.current < MOAIVersion.v1_5 then
-			-- having the interface as metatable for itself is required only for 
-			-- MOAI_class objects if moai version < 1.5
-			setmetatable(c.__interface, c.__interface)
-		end
 	end
     setmetatable(c, mt)
     return c
 end
 
 
---[[---
-Creates a new class type, allowing single inheritance and multiple interface implementation
-Instances of the new class are not tables but MOAI objects with a given interface table. 
-The extended class version fully supports inheritance and all the other class functionalities
-@param moaiType MOAI class type 
-@param ... p1 is a base class for inheritance (can be null), following are interfaces to implement 
---]]
+---
+-- Creates a new class type, allowing single inheritance and multiple interface implementation
+-- Instances of the new class are not tables but MOAI objects with a given interface table. 
+-- The extended class version fully supports inheritance and all the other class functionalities
+-- @param moaiType MOAI class type 
+-- @param ... p1 is a base class for inheritance (can be null), following are interfaces to implement 
 function MOAI_class(moaiType, ...)
 	local c = class(...)
 	c.__moai_class = moaiType
@@ -352,25 +325,63 @@ function MOAI_class(moaiType, ...)
 	--set moai interface as class property in order to have faster access
 	c.__moai_interface = t.__index
 	setmetatable(c,t)
-	if MOAIVersion.current < MOAIVersion.v1_5 then
-		-- having the interface as metatable for itself is required only for 
-		-- MOAI_class objects if moai version < 1.5
-		setmetatable(c.__interface, c.__interface)
-	end
 	return c
 end
 
+
 --[[---
-Utility function. Can be used to check if lua class override moai interface methods.
-There're situation where this is can be a design choice. When override occurs it's 
-always possible to call the moai interface original method using:
+Returns the moai interface of the given moai class / moai class instance
+Usefull expecially when a lua class overrides a moai interface method
 
-self.__moai_interface."method"(self)
+@usage
+A = class(MOAIProp)
+a = A()
+moai_interface(A).setLoc(a,x,y) -> a:setLoc(x,y)
+moai_interface(a).setLoc(a,x,y) -> a:setLoc(x,y)
 
-or using moai_interface helper function:
+It's also possible to use directly inner __moai_interface class property:
 
-moai_interface(self)."mehotd"(self)
+a.__moai_interface.setLoc(a,x,y)-> a:setLoc(x,y)
+
+@param c moai_class or moai_class instance 
+@return[1] the moai interface of the given class / class instance. 
+@return[2] nil if the object is not a MOAI_class instance 
 --]]
+function moai_interface(c)
+	return c.__moai_interface
+end
+
+---
+-- Utility function. can be used in debugger to inspect
+-- MOAI_class objects. It shows the lua members of the 
+-- given obj
+-- @param o a MOAI_class instance
+function membertable(o)
+	if type(o) == 'userdata' and o.is_a then
+		return getmetatable(o).__index
+	else
+		return tostring(q) .. " is not a valid MOAI_class"
+	end
+end
+
+
+--- 
+-- Utility function. can be used in debugger to inspect
+-- MOAI_class objects. It shows the lua interface of the 
+-- given obj
+-- @param o a MOAI_class instance
+function interfacetable(o)
+	if type(o) == 'userdata' and o.is_a then
+		return getmetatable(getmetatable(getmetatable(o)))
+	else
+		return tostring(q) .. " is not a valid MOAI_class"
+	end
+end
+
+
+---
+-- Utility function. Can be used to check if a lua class override 
+-- moai interface methods.
 function check_moai_class(c)
 	for k,v in pairs(c) do
 		if type(v) == 'function' then
