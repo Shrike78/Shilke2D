@@ -58,25 +58,6 @@ end
 
 
 ---
--- Inner function.
--- With moai 1.4 clearColor function has been moved to frameBuffer and removed from GfxDevice.
--- @function __setClearColor
--- @tparam number r (0,1)
--- @tparam number g (0,1)
--- @tparam number b (0,1)
--- @tparam number a (0,1)
-local __setClearColor
-if MOAIVersion.current >= MOAIVersion.v1_4 then
-	__setClearColor = function(r,g,b,a)
-		MOAIGfxDevice.getFrameBuffer():setClearColor(r,g,b,a)
-	end
-else
-	__setClearColor = function(r,g,b,a)
-		MOAIGfxDevice.setClearColor(r,g,b,a)
-	end
-end
-
----
 -- Set background color.
 -- @param r (0,255) value or Color object or hex string or int32 color
 -- @param g (0,255) value or nil
@@ -86,7 +67,7 @@ function Stage:setBackgroundColor(r,g,b,a)
 	local r,g,b,a = Color._toNormalizedRGBA(r,g,b,a)
 	local c = self._bkgColor
 	c[1],c[2],c[3],c[4] = r,g,b,a
-	__setClearColor(r,g,b,a)
+	MOAI_setClearColor(r,g,b,a)
 end
 
 ---
