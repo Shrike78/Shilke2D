@@ -261,7 +261,10 @@ function class(...)
 	-- class objects (and for itself too).
 	-- The interface uses the class as __index, so the objects
 	-- will look up their methods in it
-	c.__interface = {__index = c}
+	c.__interface = c
+	-- the class has itself as index. That allows normal class objects to 
+	-- correctly handle metaclass functions, like operators.
+	c.__index = c
 	
     -- expose a constructor which can be called by <classname>( <args> )
     local mt = {}
