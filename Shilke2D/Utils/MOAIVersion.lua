@@ -7,7 +7,7 @@ different implementation depending on sdk version.
 
 The module expose also a set of functions to make transparent the current used module
 --]]
-
+	
 ---Supported MOAI Sdk versions
 MOAIVersion = 
 {
@@ -22,21 +22,21 @@ MOAIVersion.current = -1
 
 if MOAIColor.getInterfaceTable().getColor then
 	
+	-- list of v1.5.2 new functionalities:
 	-- MOAIColor:getColor
 	MOAIVersion.current = MOAIVersion.v1_5_2
 
 elseif MOAIProp.getInterfaceTable().isVisible then
 
-	--[[
-	v1.5 add the following changes used by Shilke2D:
-	- MOAIProp:isVisible()
-	- MOAITextBox:getAlignment()
-	- different behavior for moai setInterface call (MOAI_class implementation)
-	--]]
+	-- list of v1.5.1 new functionalities:
+	-- MOAIProp:isVisible()
+	-- MOAITextBox:getAlignment()
+	-- Different behavior for moai setInterface call
 	MOAIVersion.current = MOAIVersion.v1_5_1
 
 elseif MOAIGfxDevice.getFrameBuffer then
 
+	-- list of v1.4 new functionalities:
 	-- clear color moved from gfxdevice to frame buffer 
 	MOAIVersion.current = MOAIVersion.v1_4
 
