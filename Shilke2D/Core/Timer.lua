@@ -46,6 +46,14 @@ function Timer:reset()
 	self.elapsedTime = 0
 end
 
+function Timer:getTime()
+	return self.elapsedTime
+end
+
+function Timer:getTimesExecuted()
+	return self.currentCount
+end
+
 ---IAnimatable update method
 function Timer:advanceTime(deltaTime)
 	if self.running then
