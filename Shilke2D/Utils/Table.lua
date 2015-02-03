@@ -161,6 +161,23 @@ function table.random(t)
 end
 
 
+--[[--
+Returns a sorted list of provided table keys.
+Defualt sorting is alphabetical but a custom 
+sort function can be provided.
+@tparam table t
+@tparam[opt=nil] sort sort function
+@treturn table list of sorted keys
+--]]
+function table.keys(t, sort)
+	local keys = {}
+	for k,_ in pairs(t) do
+		keys[#keys+1] = k
+	end
+	table.sort(keys, sort)
+	return keys
+end
+
 --[[---
 "Sorted by key" table iterator 
 Extracted from http://www.lua.org/pil/19.3.html
