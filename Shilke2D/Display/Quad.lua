@@ -25,8 +25,28 @@ Quad implements also methods to set/get single vertex color.
 -- basic math function calls
 local INV_255 = 1/255
 
+-- helper table for vertex buffer creation
+local _vcoords = {{0,0},{0,0},{0,0},{0,0}}
+
 -- default quad shader, created first time a quad is created
 local _quad_shader = nil
+
+local function getDefaultQuadShader()
+	-- the default quad shader is created the first time a quad is created. 
+	if not _quad_shader then
+		_quad_shader = MOAIShader.new()
+		local vsh = IO.getFile("/Shilke2D/Resources/quad.vsh")
+		local fsh = IO.getFile("/Shilke2D/Resources/quad.fsh")
+		_quad_shader:reserveUniforms(2)
+		_quad_shader:declareUniform(1, 'transform', MOAIShader.UNIFORM_WORLD_VIEW_PROJ )
+		_quad_shader:declareUniform(2, 'ucolor', MOAIShader.UNIFORM_PEN_COLOR )
+		_quad_shader:setVertexAttribute( 1, 'position' )
+		_quad_shader:setVertexAttribute( 2, 'color' )
+		_quad_shader:load( vsh, fsh )
+	end
+	return _quad_shader
+end
+
 
 Quad = class(BaseQuad)
 
@@ -37,16 +57,16 @@ Quad = class(BaseQuad)
 -- @param pivotMode optional, defaul value is CENTER
 function Quad:init(width,height,pivotMode)
 	BaseQuad.init(self,width,height,pivotMode)
-	
 	-- use the base color as first of the 4 colors of the quad
-	self._colors = {self._color,
-					{1,1,1,1},
-					{1,1,1,1},
-					{1,1,1,1}}
-	
+	self._vcolors = {
+		self._color,
+		{1,1,1,1},
+		{1,1,1,1},
+		{1,1,1,1}
+	}
 	self:_createMesh()
 	self:_updateVertexBuffer()
-	self._prop:setDeck(self._mesh)
+	self:setShader(getDefaultQuadShader())
 end
 
 
@@ -77,7 +97,7 @@ function Quad:setShader(shader)
 	if shader then
 		self._prop:setShader(shader)
 	else
-		self._prop:setShader(_quad_shader)
+		self._prop:setShader(getDefaultQuadShader())
 	end
 end
 
@@ -85,65 +105,58 @@ end
 ---
 -- Inner method. It creates the quad mesh that will be displayed
 function Quad:_createMesh()
-		
-	self._vertexFormat = MOAIVertexFormat.new ()
-	self._vertexFormat:declareCoord ( 1, MOAIVertexFormat.GL_FLOAT, 2 )
-	self._vertexFormat:declareColor ( 2, MOAIVertexFormat.GL_UNSIGNED_BYTE )
-
-	self._vbo = MOAIVertexBuffer.new ()
-	self._vbo:setFormat ( self._vertexFormat )
-	self._vbo:reserveVerts ( 4 )
-
-	self._mesh = MOAIMesh.new ()
-	self._mesh:setVertexBuffer ( self._vbo )
-	self._mesh:setPrimType ( MOAIMesh.GL_TRIANGLE_FAN )
+	self._vertexFormat = MOAIVertexFormat.new()
+	self._vertexFormat:declareCoord( 1, MOAIVertexFormat.GL_FLOAT, 2 )
+	self._vertexFormat:declareColor( 2, MOAIVertexFormat.GL_UNSIGNED_BYTE )
 	
-	-- shader creation is done first time a quad is created. 
-	if not _quad_shader then
-		_quad_shader = MOAIShader.new ()
-		local vsh = IO.getFile("/Shilke2D/Resources/quad.vsh")
-		local fsh = IO.getFile("/Shilke2D/Resources/quad.fsh")
-		_quad_shader:reserveUniforms(2)
-		_quad_shader:declareUniform(1, 'transform', MOAIShader.UNIFORM_WORLD_VIEW_PROJ )
-		_quad_shader:declareUniform(2, 'ucolor', MOAIShader.UNIFORM_PEN_COLOR )
-
-		_quad_shader:setVertexAttribute ( 1, 'position' )
-		_quad_shader:setVertexAttribute ( 2, 'color' )
-		_quad_shader:load ( vsh, fsh )
-	end
+	self._vbo = MOAIVertexBuffer.new()
+	self._vbo:setFormat( self._vertexFormat )
+	self._vbo:reserveVerts( 4 )
 	
-	self._mesh:setShader(_quad_shader)
+	self._mesh = MOAIMesh.new()
+	self._mesh:setVertexBuffer( self._vbo )
+	self._mesh:setPrimType( MOAIMesh.GL_TRIANGLE_FAN )
+	
+	self._prop:setDeck(self._mesh)
 end
+
 
 ---
 -- Inner methods. 
 -- Called everytime geometric or color information are changed, 
 -- to update mesh vertices infos.
 function Quad:_updateVertexBuffer()
-	
-	local vcoords 
 	-- create with same vertex orders for both coordinate systems
 	if __USE_SIMULATION_COORDS__ then
-		vcoords = {{ 0, self._height },
-					{ self._width, self._height },
-					{ self._width, 0 },
-					{ 0, 0 }}
+		--_vcoords[1][1] = 0
+		_vcoords[1][2] = self._height
+		_vcoords[2][1] = self._width
+		_vcoords[2][2] = self._height
+		_vcoords[3][1] = self._width
+		_vcoords[3][2] = 0
+		--_vcoords[4][1] = 0
+		_vcoords[4][2] = 0
 	else
-		vcoords = {{ 0, 0 },
-					{ self._width, 0 },
-					{ self._width, self._height },
-					{ 0, self._height }}
+		--_vcoords[1][1] = 0
+		_vcoords[1][2] = 0
+		_vcoords[2][1] = self._width
+		_vcoords[2][2] = 0
+		_vcoords[3][1] = self._width
+		_vcoords[3][2] = self._height
+		--_vcoords[4][1] = 0
+		_vcoords[4][2] = self._height
 	end
 
 	self._vbo:reset()
 	
 	local c,a
-	for i=1, #vcoords do
+	local pma = self:hasPremultipliedAlpha()
+	for i=1,4 do
 		--  write vertex position
-		self._vbo:writeFloat ( vcoords[i][1], vcoords[i][2] )              
+		self._vbo:writeFloat ( _vcoords[i][1], _vcoords[i][2] )              
 		--  write RGBA value
-		c = self._colors[i]
-		if self._premultipliedAlpha then
+		c = self._vcolors[i]
+		if pma then
 			a = c[4]
 			self._vbo:writeColor32(c[1]*a, c[2]*a, c[3]*a, a)
 		else
@@ -160,7 +173,7 @@ end
 -- @param v index of the vertex [1,4]
 -- @param a alpha value [0,255]
 function Quad:setVertexAlpha(v,a) 
-	self._colors[v][4] = a * INV_255
+	self._vcolors[v][4] = a * INV_255
 	self:_updateVertexBuffer()
 end
 
@@ -169,7 +182,7 @@ end
 -- @param v index of the vertex [1,4]
 -- @return alpha value [0,255]
 function Quad:getVertexAlpha(v)
-   return self._colors[v][4]*255
+   return self._vcolors[v][4]*255
 end
 
 
@@ -181,7 +194,7 @@ end
 -- @param b (0,255) value or nil
 -- @param a[opt=nil] (0,255) value or nil
 function Quad:setVertexColor(v,r,g,b,a) 
-	local c = self._colors[v]
+	local c = self._vcolors[v]
 	c[1], c[2], c[3], c[4] = Color._toNormalizedRGBA(r,g,b,a)
 	self:_updateVertexBuffer()
 end
@@ -191,7 +204,7 @@ end
 -- @param v index of the vertex [1,4]
 -- @return Color
 function Quad:getVertexColor(v)
-  return Color.fromNormalizedValues(unpack(self._colors[v]))
+  return Color.fromNormalizedValues(unpack(self._vcolors[v]))
 end
 
 ---
@@ -205,11 +218,11 @@ function Quad:setColors(c1,c2,c3,c4)
 	local r,g,b,a
 	for v = 1,4 do
 		local src = colors[v]
-		-- handle colors provided as named colors (os hex strings)
+		-- handle colors provided as named colors (or hex strings)
 		if class_type(src) ~= Color then
 			src = Color(src)
 		end
-		local dst = self._colors[v]
+		local dst = self._vcolors[v]
 		dst[1], dst[2], dst[3], dst[4] = src:unpack_normalized()
 	end
 	self:_updateVertexBuffer()
@@ -224,7 +237,7 @@ end
 function Quad:getColors()
 	local colors = {}
 	for v = 1,4 do
-		local c = self._colors[v]
+		local c = self._vcolors[v]
 		colors[#colors+1] = Color.fromNormalizedValues(unpack(c))
 	end
 	return unpack(colors)
@@ -264,7 +277,7 @@ if __QUAD_VERTEX_COLOR_ONLY__ then
 	function Quad:setRed(r)
 		local r = r * INV_255
 		for i = 1,4 do
-			self._colors[i][1] = r
+			self._vcolors[i][1] = r
 		end
 		self:_updateVertexBuffer()
 	end
@@ -275,7 +288,7 @@ if __QUAD_VERTEX_COLOR_ONLY__ then
 	function Quad:setGreen(g)
 		local g = g * INV_255
 		for i = 1,4 do
-			self._colors[i][2] = g
+			self._vcolors[i][2] = g
 		end
 		self:_updateVertexBuffer()
 	end
@@ -287,7 +300,7 @@ if __QUAD_VERTEX_COLOR_ONLY__ then
 	function Quad:setBlue(b)
 		local b = b * INV_255
 		for i = 1,4 do
-			self._colors[i][3] = b
+			self._vcolors[i][3] = b
 		end
 		self:_updateVertexBuffer()
 	end
@@ -298,7 +311,7 @@ if __QUAD_VERTEX_COLOR_ONLY__ then
 	function Quad:setAlpha(a)
 		local a = a * INV_255
 		for i = 1,4 do
-			self._colors[i][4] = a
+			self._vcolors[i][4] = a
 		end
 		self:_updateVertexBuffer()
 	end
@@ -313,10 +326,10 @@ if __QUAD_VERTEX_COLOR_ONLY__ then
 	function Quad:setColor(r,g,b,a)
 		local r,g,b,a = Color._toNormalizedRGBA(r,g,b,a)	
 		for i = 1,4 do
-			self._colors[i][1] = r
-			self._colors[i][2] = g
-			self._colors[i][3] = b
-			self._colors[i][4] = a
+			self._vcolors[i][1] = r
+			self._vcolors[i][2] = g
+			self._vcolors[i][3] = b
+			self._vcolors[i][4] = a
 		end
 		self:_updateVertexBuffer()
 	end
@@ -326,7 +339,7 @@ if __QUAD_VERTEX_COLOR_ONLY__ then
 	-- If color value is per vertices the return value has no real meaning
 	-- @return Color
 	function Quad:getColor()
-		return Color.fromNormalizedValues(unpack(self._colors[1]))
+		return Color.fromNormalizedValues(unpack(self._vcolors[1]))
 	end
 	
 end
