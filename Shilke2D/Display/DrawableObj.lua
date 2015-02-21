@@ -95,7 +95,7 @@ function DrawableObj:setPenColor(r,g,b,a)
 	-- use a direct implementation avoiding to rely on Graphics
 	-- more performant and anyway detatched from global Graphics setup
 	local r,g,b,a = Color._toNormalizedRGBA(r,g,b,a)
-	if self._premultipliedAlpha and a ~= 1 then
+	if self:hasPremultipliedAlpha() and a ~= 1 then
 		r,g,b = r*a, g*a, b*a
 	end
 	MOAIGfxDevice.setPenColor(r,g,b,a)
