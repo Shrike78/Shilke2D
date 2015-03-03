@@ -8,16 +8,18 @@ different implementation depending on sdk version.
 The module expose also a set of functions to make transparent the current used module
 --]]
 	
----Supported MOAI Sdk versions
+---
+-- Supported MOAI Sdk versions
 MOAIVersion = 
 {
-	v1_3 = 0,
-	v1_4 = 1,
-	v1_5_1 = 2,
-	v1_5_2 = 3
+	v1_3 = 1,
+	v1_4 = 2,
+	v1_5_1 = 3,
+	v1_5_2 = 4
 }
 
----Current moai version.
+---
+-- Current moai version.
 MOAIVersion.current = -1
 
 if MOAIColor.getInterfaceTable().getColor then
@@ -68,6 +70,7 @@ else
 
 end
 
+
 if MOAIVersion.current < MOAIVersion.v1_5_1 then
 	
 	---
@@ -87,7 +90,7 @@ end
 if MOAIVersion.current < MOAIVersion.v1_5_2 then
 	
 	---
-	-- get the color of a MOAIColor object
+	-- Get the color of a MOAIColor object
 	-- @tparam MOAIColor moai_color the moai color object
 	-- @treturn number r (0,1)
 	-- @treturn number g (0,1)
@@ -100,9 +103,27 @@ if MOAIVersion.current < MOAIVersion.v1_5_2 then
 		local a = moai_color:getAttr(MOAIColor.ATTR_A_COL)
 		return r,g,b,a
 	end
-	
+		
 else
 	
 	MOAI_getColor = MOAIColor.getInterfaceTable().getColor
 	
 end
+
+---
+-- Create a moai property of type T. 
+-- On old sdk add the isVisible and getColor 
+-- method to newly created property (expecting T 
+-- as a color prop)
+-- @param T type of the moai prop to create (expects to be a color prop)
+-- @return MOAIProp of type T
+function createMoaiProp(T)
+	local p = T.new()
+	-- Do not check moai version / method existance. 
+	-- If isVisible and getColor functions are already defined
+	-- resetting to themself has no effect at all
+	p.isVisible = MOAI_isVisible
+	p.getColor = MOAI_getColor
+	return p
+end
+
