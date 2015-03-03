@@ -12,13 +12,20 @@ v1---v2
 v4---v3
 </pre>
 
-It's possible to set different color to each vertex. The colors will smoothly 
-fade into each other over the area of the quad. 
+- Color
 
-Quad overrides DisplayObj color setter/getter: setters work on all the vertices,
-while getters always return the value of the first vertex
+Quad implements methods to set/get single vertex color, and helpers to set horizontal 
+and vertical color gradients.
 
-Quad implements also methods to set/get single vertex color.
+By default Quad uses both vertex color and property color, so the resulting color 
+is obtained multiplying the two color information (at least using default
+quad shader)
+
+Setting __QUAD_VERTEX_COLOR_ONLY__ config directive to true it's possible to force
+quads to use only vertex color, leaving property color always to white.
+
+In this configuration Quad overrides DisplayObj color setter/getter: setters work on 
+all the vertices, while getters always return the value of the first vertex
 
 --]]
 
@@ -57,13 +64,24 @@ Quad = class(BaseQuad)
 -- @param pivotMode optional, defaul value is CENTER
 function Quad:init(width,height,pivotMode)
 	BaseQuad.init(self,width,height,pivotMode)
-	-- use the base color as first of the 4 colors of the quad
-	self._vcolors = {
-		self._color,
-		{1,1,1,1},
-		{1,1,1,1},
-		{1,1,1,1}
-	}
+	-- if quad completely overrides base color property,
+	-- use displayobj _color as first of the 4 vertex colors
+	-- to reduce memory allocation
+	if __QUAD_VERTEX_COLOR_ONLY__ then
+		self._vcolors = {
+			self._color,
+			{1,1,1,1},
+			{1,1,1,1},
+			{1,1,1,1}
+		}
+	else
+		self._vcolors = {
+			{1,1,1,1},
+			{1,1,1,1},
+			{1,1,1,1},
+			{1,1,1,1}
+		}
+	end
 	self:_createMesh()
 	self:_updateVertexBuffer()
 	self:setShader(getDefaultQuadShader())
@@ -265,59 +283,83 @@ end
 -- color (and leaving always prop color white)
 if __QUAD_VERTEX_COLOR_ONLY__ then
 
-	---
+	--
 	-- overrides DisplayObj method redirecting on _updateVertexBuffer
 	-- that already does the same thing for quads
 	-- @function Quad:_updateColor
 	Quad._updateColor = Quad._updateVertexBuffer
 
-	---
+	-- closure helper for color channel setters
+	local function _setColorChannel(channel)
+		return function(self, v)
+			local v = v * INV_255
+			for i = 1,4 do
+				self._vcolors[i][channel] = v
+			end
+			self:_updateVertexBuffer()
+		end
+	end
+	
+	-- closure helper for color channel getters
+	-- NB: to optimize memory self._vcolors[1] reuses self._color, 
+	-- so the color getters could be the same of DisplayObj,
+	-- but in future the logic could change..
+	local function _getColorChannel(channel)
+		return function(self)
+			return self._vcolors[1][channel] * 255
+		end
+	end
+			
+	--
 	-- Set red channel for all vertices
+	-- @function Quad:setRed
 	-- @tparam int r red [0,255]
-	function Quad:setRed(r)
-		local r = r * INV_255
-		for i = 1,4 do
-			self._vcolors[i][1] = r
-		end
-		self:_updateVertexBuffer()
-	end
+	Quad.setRed = _setColorChannel(1)
 
-	---
+	--
+	-- Get red color channel
+	-- @function Quad:getRed
+	-- @treturn int red [0,255]
+	Quad.getRed = _getColorChannel(1)
+	
+	--
 	-- Set green channel for all vertices
+	-- @function Quad:setGreen
 	-- @tparam int g green [0,255]
-	function Quad:setGreen(g)
-		local g = g * INV_255
-		for i = 1,4 do
-			self._vcolors[i][2] = g
-		end
-		self:_updateVertexBuffer()
-	end
+	Quad.setGreen = _setColorChannel(2)
 
-
-	---
+	--
+	-- Get green color channel
+	-- @function Quad:getGreen
+	-- @treturn int green [0,255]
+	Quad.getGreen = _getColorChannel(2)
+	
+	--
 	-- Set blue channel for all vertices
+	-- @function Quad:setBlue
 	-- @tparam int b blue [0,255]
-	function Quad:setBlue(b)
-		local b = b * INV_255
-		for i = 1,4 do
-			self._vcolors[i][3] = b
-		end
-		self:_updateVertexBuffer()
-	end
+	Quad.setBlue = _setColorChannel(3)
 
-	---
+	--
+	-- Get blue color channel
+	-- @function Quad:getBlue
+	-- @treturn int blue [0,255]
+	Quad.getBlue = _getColorChannel(3)
+	
+	--
 	-- Set alpha value for all vertices
+	-- @function Quad:setAlpha
 	-- @tparam int a alpha value [0,255]
-	function Quad:setAlpha(a)
-		local a = a * INV_255
-		for i = 1,4 do
-			self._vcolors[i][4] = a
-		end
-		self:_updateVertexBuffer()
-	end
+	Quad.setAlpha = _setColorChannel(4)
+	
+	--
+	-- Return alpha value of the object
+	-- @function Quad:getAlpha
+	-- @treturn int alpha [0,255]
+	Quad.getAlpha = _getColorChannel(4)
 
 
-	---
+	--
 	-- Set obj color.
 	-- @param r (0,255) value or Color object or hex string or int32 color
 	-- @param g (0,255) value or nil
@@ -333,13 +375,12 @@ if __QUAD_VERTEX_COLOR_ONLY__ then
 		end
 		self:_updateVertexBuffer()
 	end
-
-	---
+	
+	--
 	-- Returns the color of the first vertex. 
-	-- If color value is per vertices the return value has no real meaning
 	-- @return Color
 	function Quad:getColor()
 		return Color.fromNormalizedValues(unpack(self._vcolors[1]))
 	end
-	
+
 end

@@ -4,13 +4,14 @@
 --By default (0,0) is topleft point and y is from top to bottom. Defining this allows to 
 --set (0,0) as bottomleft point and having y from bottom to top.
 --__USE_SIMULATION_COORDS__ = true
+--__USE_DEGREES_FOR_ROTATIONS__ = true
 
 --include Shilke2D lib
 require("Shilke2D/include")
 
 local WIDTH,HEIGHT = 1024,680
 local FPS = 60
-local PI2 = math.pi * 2
+local PI2 = __USE_DEGREES_FOR_ROTATIONS__ and 360 or math.pi * 2
 
 --the working dir of the application
 IO.setWorkingDir("Assets")

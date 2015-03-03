@@ -77,8 +77,6 @@ function DisplayObj:getRect(resultRect)
 --]]
 
 -- basic math function calls
-local DEG = math.deg(1)
-local RAD = math.rad(1)
 local ABS = math.abs
 local PI = math.pi
 local PI2 = math.pi * 2
@@ -330,65 +328,68 @@ function DisplayObj:_updateColor()
 	self._prop:setColor(r,g,b,a)
 end
 	
+-- closure helper for color channel getters
+local function _setColorChannel(channel)
+	return function(self, v)
+		self._color[channel] = v * INV_255
+		self:_updateColor()
+	end
+end
+
+-- closure helper for color channel getters
+local function _getColorChannel(channel)
+	return function(self)
+		return self._color[channel] * 255
+	end
+end
+
 ---
 -- Set red color channel
+-- @function DisplayObj:setRed
 -- @tparam int r red [0,255]
-function DisplayObj:setRed(r)
-	self._color[1] = r * INV_255
-	self:_updateColor()
-end
+DisplayObj.setRed = _setColorChannel(1)
 
 ---
 -- Get red color channel
+-- @function DisplayObj:getRed
 -- @treturn int red [0,255]
-function DisplayObj:getRed()
-   return self._color[1] * 255
-end
+DisplayObj.getRed = _getColorChannel(1)
 
 ---
 -- Set green color channel
+-- @function DisplayObj:setGreen
 -- @tparam int g green [0,255]
-function DisplayObj:setGreen(g)
-	self._color[2] = g * INV_255
-	self:_updateColor()
-end
+DisplayObj.setGreen = _setColorChannel(2)
 
 ---
 -- Gets green color channel
+-- @function DisplayObj:getGreen
 -- @treturn int green [0,255]
-function DisplayObj:getGreen()
-   return self._color[2] * 255
-end
+DisplayObj.getGreen = _getColorChannel(2)
 
 ---
 -- Set blue color channel
+-- @function DisplayObj:setBlue
 -- @tparam int b blue [0,255]
-function DisplayObj:setBlue(b)
-	self._color[3] = b * INV_255
-	self:_updateColor()
-end
+DisplayObj.setBlue = _setColorChannel(3)
 
 ---
 -- Get blue color channel
+-- @function DisplayObj:getBlue
 -- @treturn int blue [0,255]
-function DisplayObj:getBlue()
-   return self._color[3] * 255
-end
+DisplayObj.getBlue = _getColorChannel(3)
 
 ---
 -- Set alpha value of the object
+-- @function DisplayObj:setAlpha
 -- @tparam int a alpha value [0,255]
-function DisplayObj:setAlpha(a)
-	self._color[4] = a * INV_255
-	self:_updateColor()
-end
+DisplayObj.setAlpha = _setColorChannel(4)
 
 ---
 -- Return alpha value of the object
+-- @function DisplayObj:getAlpha
 -- @treturn int alpha [0,255]
-function DisplayObj:getAlpha()
-   return self._color[4] * 255
-end
+DisplayObj.getAlpha = _getColorChannel(4)
 
 ---
 -- Set obj color.
@@ -510,49 +511,36 @@ function DisplayObj:translate(x,y)
     self._prop:addLoc(x,y,0)
 end
 
--- used to force rotation to be clock wise in both coordinate systems
-local __rmult = __USE_SIMULATION_COORDS__ and -1 or 1
+-- rotation can be expressed in radians (default) or degrees
+-- and is always applied clock wise in both coordinate system
+local _DEG = __USE_DEGREES_FOR_ROTATIONS__ and 1 or math.deg(1) 
+local _RAD = __USE_DEGREES_FOR_ROTATIONS__ and 1 or math.rad(1)
+--multiplier for rotation setters
+local __rsmult = __USE_SIMULATION_COORDS__ and -_DEG or _DEG
+--multiplier for rotation getters
+local __rgmult = __USE_SIMULATION_COORDS__ and -_RAD or _RAD
 
-if not __USE_DEGREES_FOR_ROTATIONS__ then
-	
-	---
-	-- Set rotation value.
-	-- Rotation is always applied clock wise.
-	-- @tparam number r radians/degrees
-	function DisplayObj:setRotation(r)
-		self._prop:setRot(0, 0, DEG * r * __rmult)
-	end
+---
+-- Set rotation value.
+-- Rotation is always applied clock wise.
+-- @tparam number r radians/degrees
+function DisplayObj:setRotation(r)
+	self._prop:setRot(0, 0, r * __rsmult)
+end
 
-	---
-	-- Get rotation value
-	-- @treturn number r radians/degrees
-	function DisplayObj:getRotation()
-		local _,_,r = self._prop:getRot()
-		return RAD * r * __rmult
-	end
+---
+-- Get rotation value
+-- @treturn number r radians/degrees
+function DisplayObj:getRotation()
+	local _,_,r = self._prop:getRot()
+	return r * __rgmult
+end
 
-	--- 
-	-- Rotate the obj of the given value
-	-- @tparam number r radians/degrees
-	function DisplayObj:rotate(r)
-		self._prop:addRot(0,0, DEG * r * __rmult)
-	end
-	
-else
-	
-	function DisplayObj:setRotation(r)
-		self._prop:setRot(0, 0, r *__rmult)
-	end
-
-	function DisplayObj:getRotation()
-		local _,_,r = self._prop:getRot()
-		return r * __rmult
-	end
-	
-	function DisplayObj:rotate(r)
-		self._prop:addRot(0, 0, r * __rmult)
-	end
-
+--- 
+-- Rotate the obj of the given value
+-- @tparam number r radians/degrees
+function DisplayObj:rotate(r)
+	self._prop:addRot(0,0, r * __rsmult)
 end
 
 
