@@ -119,9 +119,9 @@ function DisplayObj:init()
     self._touchable = true
 	
 	-- set default values for the class
-	self._premultipliedAlpha = self.__defaultHasPremultipliedAlpha
+	self._pma = self.__defaultHasPremultipliedAlpha
 	
-	if not self._premultipliedAlpha then
+	if not self._pma then
 		self:setBlendMode(BlendMode.NORMAL)
 	end
 	self._color = {1,1,1,1}
@@ -185,8 +185,6 @@ end
 -- Called by a DisplayObjContainer when the DisplayObj is added as child
 -- @tparam DisplayObjContainer parent if nil the obj is detached from any parent 
 function DisplayObj:_setParent(parent)
-    -- assert(not parent or parent:is_a(DisplayObjContainer))
-    
     self._parent = parent
     if parent then
 		-- if not set before it can raise problems
@@ -242,8 +240,6 @@ function DisplayObj:getStage()
 	return nil
 end
 
--- Setters and Getters
-
 ---
 -- Set visibility status of this object
 -- @tparam[opt=true] bool visible set visible or hidden the displayObj
@@ -295,7 +291,7 @@ end
 function DisplayObj:setBlendMode(blendEquation, srcFactor, dstFactor)
 	local blendEquation, srcFactor, dstFactor = blendEquation, srcFactor, dstFactor
 	if type(blendEquation) == "string" then
-		blendEquation, srcFactor, dstFactor = BlendMode.getParams(blendEquation, self._premultipliedAlpha)
+		blendEquation, srcFactor, dstFactor = BlendMode.getParams(blendEquation, self._pma)
 	end
 	self._prop:setBlendEquation(blendEquation)
 	self._prop:setBlendMode(srcFactor, dstFactor)
@@ -305,11 +301,11 @@ end
 -- Defines if alpha value has to be used as straight or premultiplied.
 -- When the value change the blendMode is reset to NORMAL preset 
 --(whith blend factors depending on alpha mode)
--- @tparam[opt=true] bool bUse
-function DisplayObj:setPremultipliedAlpha(bUse)
-	local bPremultipliedAlpha = bUse ~= false
-	if self._premultipliedAlpha ~= bPremultipliedAlpha then 
-		self._premultipliedAlpha = bPremultipliedAlpha
+-- @tparam[opt=true] bool enable
+function DisplayObj:setPremultipliedAlpha(enable)
+	local pma = enable ~= false
+	if self._pma ~= pma then 
+		self._pma = pma
 		self:_updateColor()
 		self:setBlendMode(BlendMode.NORMAL)
 	end
@@ -319,7 +315,7 @@ end
 -- Returns if alpha is used as straight or premultiplied
 -- @treturn bool
 function DisplayObj:hasPremultipliedAlpha()
-	return self._premultipliedAlpha
+	return self._pma
 end
 
 
@@ -328,7 +324,7 @@ end
 -- (including premultiplied/straight setting)
 function DisplayObj:_updateColor()
 	local r,g,b,a = unpack(self._color)
-	if self._premultipliedAlpha then
+	if self._pma then
 		r,g,b = r*a, g*a, b*a
 	end
 	self._prop:setColor(r,g,b,a)
